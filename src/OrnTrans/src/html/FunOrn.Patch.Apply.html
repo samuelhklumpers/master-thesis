@@ -1,0 +1,564 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >FunOrn.Patch.Apply</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="FunOrn.Patch.Apply.html#1" class="Module"
+      >FunOrn.Patch.Apply</a
+      ><a name="26"
+      > </a
+      ><a name="27" class="Keyword"
+      >where</a
+      ><a name="32"
+      >
+
+
+
+</a
+      ><a name="36" class="Keyword"
+      >open</a
+      ><a name="40"
+      > </a
+      ><a name="41" class="Keyword"
+      >import</a
+      ><a name="47"
+      > </a
+      ><a name="48" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="57"
+      >
+</a
+      ><a name="58" class="Keyword"
+      >open</a
+      ><a name="62"
+      > </a
+      ><a name="63" class="Keyword"
+      >import</a
+      ><a name="69"
+      > </a
+      ><a name="70" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="82"
+      >
+
+</a
+      ><a name="84" class="Keyword"
+      >open</a
+      ><a name="88"
+      > </a
+      ><a name="89" class="Keyword"
+      >import</a
+      ><a name="95"
+      > </a
+      ><a name="96" href="Logic.Logic.html#1" class="Module"
+      >Logic.Logic</a
+      ><a name="107"
+      >
+
+</a
+      ><a name="109" class="Keyword"
+      >open</a
+      ><a name="113"
+      > </a
+      ><a name="114" class="Keyword"
+      >import</a
+      ><a name="120"
+      > </a
+      ><a name="121" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="135"
+      >
+
+</a
+      ><a name="137" class="Keyword"
+      >open</a
+      ><a name="141"
+      > </a
+      ><a name="142" class="Keyword"
+      >import</a
+      ><a name="148"
+      > </a
+      ><a name="149" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="161"
+      >
+</a
+      ><a name="162" class="Keyword"
+      >open</a
+      ><a name="166"
+      > </a
+      ><a name="167" class="Keyword"
+      >import</a
+      ><a name="173"
+      > </a
+      ><a name="174" href="Orn.Ornament.Algebra.html#1" class="Module"
+      >Orn.Ornament.Algebra</a
+      ><a name="194"
+      > 
+</a
+      ><a name="196" class="Keyword"
+      >open</a
+      ><a name="200"
+      > </a
+      ><a name="201" class="Keyword"
+      >import</a
+      ><a name="207"
+      > </a
+      ><a name="208" href="Orn.Reornament.html#1" class="Module"
+      >Orn.Reornament</a
+      ><a name="222"
+      >
+</a
+      ><a name="223" class="Keyword"
+      >open</a
+      ><a name="227"
+      > </a
+      ><a name="228" class="Keyword"
+      >import</a
+      ><a name="234"
+      > </a
+      ><a name="235" href="Orn.Reornament.Make.html#1" class="Module"
+      >Orn.Reornament.Make</a
+      ><a name="254"
+      >
+</a
+      ><a name="255" class="Keyword"
+      >open</a
+      ><a name="259"
+      > </a
+      ><a name="260" class="Keyword"
+      >import</a
+      ><a name="266"
+      > </a
+      ><a name="267" href="Orn.Reornament.Algebra.html#1" class="Module"
+      >Orn.Reornament.Algebra</a
+      ><a name="289"
+      >
+
+</a
+      ><a name="291" class="Keyword"
+      >open</a
+      ><a name="295"
+      > </a
+      ><a name="296" class="Keyword"
+      >import</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="FunOrn.Functions.html#1" class="Module"
+      >FunOrn.Functions</a
+      ><a name="319"
+      >
+</a
+      ><a name="320" class="Keyword"
+      >open</a
+      ><a name="324"
+      > </a
+      ><a name="325" class="Keyword"
+      >import</a
+      ><a name="331"
+      > </a
+      ><a name="332" href="FunOrn.FunOrnament.html#1" class="Module"
+      >FunOrn.FunOrnament</a
+      ><a name="350"
+      >
+</a
+      ><a name="351" class="Keyword"
+      >open</a
+      ><a name="355"
+      > </a
+      ><a name="356" class="Keyword"
+      >import</a
+      ><a name="362"
+      > </a
+      ><a name="363" href="FunOrn.Patch.html#1" class="Module"
+      >FunOrn.Patch</a
+      ><a name="375"
+      >
+
+</a
+      ><a name="377" class="Comment"
+      >-- Paper: Definition 5.22</a
+      ><a name="402"
+      >
+</a
+      ><a name="403" href="FunOrn.Patch.Apply.html#403" class="Function"
+      >patch</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="Symbol"
+      >:</a
+      ><a name="410"
+      > </a
+      ><a name="411" class="Symbol"
+      >{</a
+      ><a name="412" href="FunOrn.Patch.Apply.html#412" class="Bound"
+      >T</a
+      ><a name="413"
+      > </a
+      ><a name="414" class="Symbol"
+      >:</a
+      ><a name="415"
+      > </a
+      ><a name="416" href="FunOrn.Functions.html#200" class="Datatype"
+      >Type</a
+      ><a name="420"
+      > </a
+      ><a name="421" class="Symbol"
+      >}</a
+      ><a name="422"
+      > </a
+      ><a name="423" class="Symbol"
+      >&#8594;</a
+      ><a name="424"
+      > </a
+      ><a name="425" class="Symbol"
+      >(</a
+      ><a name="426" href="FunOrn.Patch.Apply.html#426" class="Bound"
+      >fo</a
+      ><a name="428"
+      > </a
+      ><a name="429" class="Symbol"
+      >:</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="FunOrn.FunOrnament.html#354" class="Datatype"
+      >FunctionOrn</a
+      ><a name="442"
+      > </a
+      ><a name="443" href="FunOrn.Patch.Apply.html#412" class="Bound"
+      >T</a
+      ><a name="444" class="Symbol"
+      >)(</a
+      ><a name="446" href="FunOrn.Patch.Apply.html#446" class="Bound"
+      >f</a
+      ><a name="447"
+      > </a
+      ><a name="448" class="Symbol"
+      >:</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="FunOrn.Functions.html#356" class="Function Operator"
+      >&#10214;</a
+      ><a name="451"
+      > </a
+      ><a name="452" href="FunOrn.Patch.Apply.html#412" class="Bound"
+      >T</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="FunOrn.Functions.html#356" class="Function Operator"
+      >&#10215;Type</a
+      ><a name="459" class="Symbol"
+      >)</a
+      ><a name="460"
+      > </a
+      ><a name="461" class="Symbol"
+      >&#8594;</a
+      ><a name="462"
+      > 
+        </a
+      ><a name="472" href="FunOrn.Patch.html#271" class="Function"
+      >Patch</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="FunOrn.Patch.Apply.html#446" class="Bound"
+      >f</a
+      ><a name="479"
+      > </a
+      ><a name="480" href="FunOrn.Patch.Apply.html#426" class="Bound"
+      >fo</a
+      ><a name="482"
+      > </a
+      ><a name="483" class="Symbol"
+      >&#8594;</a
+      ><a name="484"
+      > </a
+      ><a name="485" href="FunOrn.FunOrnament.html#873" class="Function Operator"
+      >&#10214;</a
+      ><a name="486"
+      > </a
+      ><a name="487" href="FunOrn.Patch.Apply.html#426" class="Bound"
+      >fo</a
+      ><a name="489"
+      > </a
+      ><a name="490" href="FunOrn.FunOrnament.html#873" class="Function Operator"
+      >&#10215;FunctionOrn</a
+      ><a name="502"
+      >
+</a
+      ><a name="503" href="FunOrn.Patch.Apply.html#403" class="Function"
+      >patch</a
+      ><a name="508"
+      > </a
+      ><a name="509" class="Symbol"
+      >(</a
+      ><a name="510" href="FunOrn.FunOrnament.html#389" class="InductiveConstructor Operator"
+      >&#956;&#8314;</a
+      ><a name="512"
+      > </a
+      ><a name="513" href="FunOrn.Patch.Apply.html#513" class="Bound"
+      >o</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="FunOrn.FunOrnament.html#389" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="516"
+      > </a
+      ><a name="517" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="520"
+      > </a
+      ><a name="521" href="FunOrn.Patch.Apply.html#521" class="Bound"
+      >i&#8314;</a
+      ><a name="523"
+      > </a
+      ><a name="524" href="FunOrn.FunOrnament.html#389" class="InductiveConstructor Operator"
+      >]&#8594;</a
+      ><a name="526"
+      > </a
+      ><a name="527" href="FunOrn.Patch.Apply.html#527" class="Bound"
+      >T&#8314;</a
+      ><a name="529" class="Symbol"
+      >)</a
+      ><a name="530"
+      > </a
+      ><a name="531" href="FunOrn.Patch.Apply.html#531" class="Bound"
+      >f</a
+      ><a name="532"
+      > </a
+      ><a name="533" href="FunOrn.Patch.Apply.html#533" class="Bound"
+      >p</a
+      ><a name="534"
+      > </a
+      ><a name="535" class="Symbol"
+      >=</a
+      ><a name="536"
+      > 
+  </a
+      ><a name="540" class="Symbol"
+      >&#955;</a
+      ><a name="541"
+      > </a
+      ><a name="542" href="FunOrn.Patch.Apply.html#542" class="Bound"
+      >x</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Symbol"
+      >&#8594;</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="FunOrn.Patch.Apply.html#403" class="Function"
+      >patch</a
+      ><a name="551"
+      > </a
+      ><a name="552" href="FunOrn.Patch.Apply.html#527" class="Bound"
+      >T&#8314;</a
+      ><a name="554"
+      > </a
+      ><a name="555" class="Symbol"
+      >(</a
+      ><a name="556" href="FunOrn.Patch.Apply.html#531" class="Bound"
+      >f</a
+      ><a name="557"
+      > </a
+      ><a name="558" class="Symbol"
+      >(</a
+      ><a name="559" href="Orn.Ornament.Algebra.html#580" class="Function"
+      >forget</a
+      ><a name="565"
+      > </a
+      ><a name="566" href="FunOrn.Patch.Apply.html#513" class="Bound"
+      >o</a
+      ><a name="567"
+      > </a
+      ><a name="568" href="FunOrn.Patch.Apply.html#542" class="Bound"
+      >x</a
+      ><a name="569" class="Symbol"
+      >))</a
+      ><a name="571"
+      > 
+                 </a
+      ><a name="590" class="Symbol"
+      >(</a
+      ><a name="591" href="FunOrn.Patch.Apply.html#533" class="Bound"
+      >p</a
+      ><a name="592"
+      > </a
+      ><a name="593" class="Symbol"
+      >(</a
+      ><a name="594" href="Orn.Ornament.Algebra.html#580" class="Function"
+      >forget</a
+      ><a name="600"
+      > </a
+      ><a name="601" href="FunOrn.Patch.Apply.html#513" class="Bound"
+      >o</a
+      ><a name="602"
+      > </a
+      ><a name="603" href="FunOrn.Patch.Apply.html#542" class="Bound"
+      >x</a
+      ><a name="604" class="Symbol"
+      >)</a
+      ><a name="605"
+      >
+                    </a
+      ><a name="626" class="Symbol"
+      >(</a
+      ><a name="627" href="Orn.Reornament.Make.html#524" class="Function"
+      >make</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="FunOrn.Patch.Apply.html#513" class="Bound"
+      >o</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="FunOrn.Patch.Apply.html#542" class="Bound"
+      >x</a
+      ><a name="635" class="Symbol"
+      >))</a
+      ><a name="637"
+      >
+</a
+      ><a name="638" href="FunOrn.Patch.Apply.html#403" class="Function"
+      >patch</a
+      ><a name="643"
+      > </a
+      ><a name="644" class="Symbol"
+      >(</a
+      ><a name="645" href="FunOrn.FunOrnament.html#588" class="InductiveConstructor Operator"
+      >&#956;&#8314;</a
+      ><a name="647"
+      > </a
+      ><a name="648" href="FunOrn.Patch.Apply.html#648" class="Bound"
+      >o</a
+      ><a name="649"
+      > </a
+      ><a name="650" href="FunOrn.FunOrnament.html#588" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="651"
+      > </a
+      ><a name="652" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="655"
+      > </a
+      ><a name="656" href="FunOrn.Patch.Apply.html#656" class="Bound"
+      >i&#8314;</a
+      ><a name="658"
+      > </a
+      ><a name="659" href="FunOrn.FunOrnament.html#588" class="InductiveConstructor Operator"
+      >]&#215;</a
+      ><a name="661"
+      > </a
+      ><a name="662" href="FunOrn.Patch.Apply.html#662" class="Bound"
+      >T&#8314;</a
+      ><a name="664" class="Symbol"
+      >)</a
+      ><a name="665"
+      > </a
+      ><a name="666" class="Symbol"
+      >(</a
+      ><a name="667" href="FunOrn.Patch.Apply.html#667" class="Bound"
+      >x</a
+      ><a name="668"
+      > </a
+      ><a name="669" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="FunOrn.Patch.Apply.html#671" class="Bound"
+      >xs</a
+      ><a name="673" class="Symbol"
+      >)</a
+      ><a name="674"
+      > </a
+      ><a name="675" class="Symbol"
+      >(</a
+      ><a name="676" href="FunOrn.Patch.Apply.html#676" class="Bound"
+      >x&#8314;&#8314;</a
+      ><a name="679"
+      > </a
+      ><a name="680" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="681"
+      > </a
+      ><a name="682" href="FunOrn.Patch.Apply.html#682" class="Bound"
+      >p</a
+      ><a name="683" class="Symbol"
+      >)</a
+      ><a name="684"
+      > </a
+      ><a name="685" class="Symbol"
+      >=</a
+      ><a name="686"
+      >
+  </a
+      ><a name="689" href="Orn.Reornament.Algebra.html#525" class="Function"
+      >forgetReornament</a
+      ><a name="705"
+      > </a
+      ><a name="706" href="FunOrn.Patch.Apply.html#648" class="Bound"
+      >o</a
+      ><a name="707"
+      > </a
+      ><a name="708" href="FunOrn.Patch.Apply.html#676" class="Bound"
+      >x&#8314;&#8314;</a
+      ><a name="711"
+      > </a
+      ><a name="712" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="713"
+      > </a
+      ><a name="714" href="FunOrn.Patch.Apply.html#403" class="Function"
+      >patch</a
+      ><a name="719"
+      > </a
+      ><a name="720" href="FunOrn.Patch.Apply.html#662" class="Bound"
+      >T&#8314;</a
+      ><a name="722"
+      > </a
+      ><a name="723" href="FunOrn.Patch.Apply.html#671" class="Bound"
+      >xs</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="FunOrn.Patch.Apply.html#682" class="Bound"
+      >p</a
+      ><a name="727"
+      >
+</a
+      ><a name="728" href="FunOrn.Patch.Apply.html#403" class="Function"
+      >patch</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="FunOrn.FunOrnament.html#786" class="InductiveConstructor"
+      >`&#8868;</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="739"
+      > </a
+      ><a name="740" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="742"
+      > </a
+      ><a name="743" class="Symbol"
+      >=</a
+      ><a name="744"
+      > </a
+      ><a name="745" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="747"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

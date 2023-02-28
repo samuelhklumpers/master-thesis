@@ -1,0 +1,116 @@
+@misc{agda,
+  author       = {Agda Development Team},
+  title        = {Agda},
+  year         = {2023},
+  url          = {https://agda.readthedocs.io/en/v2.6.3/}
+}
+
+@article{orntrans,
+	doi = {10.1017/s0956796814000069},
+  
+	url = {https://doi.org/10.1017%2Fs0956796814000069},
+  
+	year = 2014,
+	month = {4},
+  
+	publisher = {Cambridge University Press ({CUP})},
+  
+	volume = {24},
+  
+	number = {2-3},
+  
+	pages = {316--383},
+  
+	author = {PIERRE-{\'{E}}VARISTE DAGAND and CONOR McBRIDE},
+  
+	title = {Transporting functions across ornaments},
+  
+	journal = {Journal of Functional Programming}
+}
+
+@article{progorn,
+    title = {Programming with ornaments},
+    volume = {27},
+    DOI={10.1017/S0956796816000307},
+    journal={Journal of Functional Programming},
+    publisher={Cambridge University Press},
+    author={KO, HSIANG-SHANG and GIBBONS, JEREMY},
+    year={2016},
+    pages={e2}
+}
+
+@inproceedings{algorn,
+  title={Ornamental Algebras, Algebraic Ornaments},
+  author={Conor McBride},
+  year={2014}
+}
+
+@article{practgen,
+author = {Escot, Lucas and Cockx, Jesper},
+title = {Practical Generic Programming over a Universe of Native Datatypes},
+year = {2022},
+issue_date = {August 2022},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {6},
+number = {ICFP},
+url = {https://doi.org/10.1145/3547644},
+doi = {10.1145/3547644},
+abstract = {Datatype-generic programming makes it possible to define a construction once and apply it to a large class of datatypes. It is often used to avoid code duplication in languages that encourage the definition of custom datatypes, in particular state-of-the-art dependently typed languages where one can have many variants of the same datatype with different type-level invariants. In addition to giving access to familiar programming constructions for free, datatype-generic programming in the dependently typed setting also allows for the construction of generic proofs. However, the current interfaces available for this purpose are needlessly hard to use or are limited in the range of datatypes they handle. In this paper, we describe the design of a library for safe and user-friendly datatype-generic programming in the Agda language. Generic constructions in our library are regular Agda functions over a broad universe of datatypes, yet they can be specialized to native Agda datatypes with a simple one-liner. Furthermore, we provide building blocks so that library designers can too define their own datatype-generic constructions.},
+journal = {Proc. ACM Program. Lang.},
+month = {8},
+articleno = {113},
+numpages = {25},
+keywords = {Dependent types, Generic programming}
+}
+
+@InProceedings{calcdata,
+author="Hinze, Ralf
+and Swierstra, Wouter",
+editor="Komendantskaya, Ekaterina",
+title="Calculating Datastructures",
+booktitle="Mathematics of Program Construction",
+year="2022",
+publisher="Springer International Publishing",
+address="Cham",
+pages="62--101",
+abstract="Where do datastructures come from? This paper explores how to systematically derive implementations of one-sided flexible arrays from a simple reference implementation. Using the dependently typed programming language Agda, each calculation constructs an isomorphic---yet more efficient---datastructure using only a handful of laws relating types and arithmetic. Although these calculations do not generally produce novel datastructures they do give insight into how certain datastructures arise and how different implementations are related.",
+isbn="978-3-031-16912-0"
+}
+
+@misc{iri,
+  doi = {10.48550/ARXIV.2009.05547},
+  
+  url = {https://arxiv.org/abs/2009.05547},
+  
+  author = {Angiuli, Carlo and Cavallo, Evan and Mörtberg, Anders and Zeuner, Max},
+  
+  keywords = {Programming Languages (cs.PL), Logic in Computer Science (cs.LO), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  
+  title = {Internalizing Representation Independence with Univalence},
+  
+  publisher = {arXiv},
+  
+  year = {2020},
+  
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+@article{cuagda,
+author = {Vezzosi, Andrea and M\"{o}rtberg, Anders and Abel, Andreas},
+title = {Cubical Agda: A Dependently Typed Programming Language with Univalence and Higher Inductive Types},
+year = {2019},
+issue_date = {August 2019},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {3},
+number = {ICFP},
+url = {https://doi.org/10.1145/3341691},
+doi = {10.1145/3341691},
+abstract = {Proof assistants based on dependent type theory provide expressive languages for both programming and proving within the same system. However, all of the major implementations lack powerful extensionality principles for reasoning about equality, such as function and propositional extensionality. These principles are typically added axiomatically which disrupts the constructive properties of these systems. Cubical type theory provides a solution by giving computational meaning to Homotopy Type Theory and Univalent Foundations, in particular to the univalence axiom and higher inductive types. This paper describes an extension of the dependently typed functional programming language Agda with cubical primitives, making it into a full-blown proof assistant with native support for univalence and a general schema of higher inductive types. These new primitives make function and propositional extensionality as well as quotient types directly definable with computational content. Additionally, thanks also to copatterns, bisimilarity is equivalent to equality for coinductive types. This extends Agda with support for a wide range of extensionality principles, without sacrificing type checking and constructivity.},
+journal = {Proc. ACM Program. Lang.},
+month = {7},
+articleno = {87},
+numpages = {29},
+keywords = {Higher Inductive Types, Dependent Pattern Matching, Cubical Type Theory, Univalence}
+}

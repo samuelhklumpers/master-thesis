@@ -1,0 +1,1989 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Orn.Reornament.Examples.Iterative</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Orn.Reornament.Examples.Iterative.html#1" class="Module"
+      >Orn.Reornament.Examples.Iterative</a
+      ><a name="41"
+      > </a
+      ><a name="42" class="Symbol"
+      >(</a
+      ><a name="43" href="Orn.Reornament.Examples.Iterative.html#43" class="Bound"
+      >A</a
+      ><a name="44"
+      > </a
+      ><a name="45" href="Orn.Reornament.Examples.Iterative.html#45" class="Bound"
+      >B</a
+      ><a name="46"
+      > </a
+      ><a name="47" href="Orn.Reornament.Examples.Iterative.html#47" class="Bound"
+      >C</a
+      ><a name="48"
+      > </a
+      ><a name="49" class="Symbol"
+      >:</a
+      ><a name="50"
+      > </a
+      ><a name="51" class="PrimitiveType"
+      >Set</a
+      ><a name="54" class="Symbol"
+      >)</a
+      ><a name="55"
+      > </a
+      ><a name="56" class="Keyword"
+      >where</a
+      ><a name="61"
+      >
+
+
+
+</a
+      ><a name="65" class="Keyword"
+      >open</a
+      ><a name="69"
+      > </a
+      ><a name="70" class="Keyword"
+      >import</a
+      ><a name="76"
+      > </a
+      ><a name="77" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="86"
+      >
+</a
+      ><a name="87" class="Keyword"
+      >open</a
+      ><a name="91"
+      > </a
+      ><a name="92" class="Keyword"
+      >import</a
+      ><a name="98"
+      > </a
+      ><a name="99" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="107"
+      >
+</a
+      ><a name="108" class="Keyword"
+      >open</a
+      ><a name="112"
+      > </a
+      ><a name="113" class="Keyword"
+      >import</a
+      ><a name="119"
+      > </a
+      ><a name="120" href="Data.Bool.html#1" class="Module"
+      >Data.Bool</a
+      ><a name="129"
+      >
+</a
+      ><a name="130" class="Keyword"
+      >open</a
+      ><a name="134"
+      > </a
+      ><a name="135" class="Keyword"
+      >import</a
+      ><a name="141"
+      > </a
+      ><a name="142" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="154"
+      >
+
+</a
+      ><a name="156" class="Keyword"
+      >open</a
+      ><a name="160"
+      > </a
+      ><a name="161" class="Keyword"
+      >import</a
+      ><a name="167"
+      > </a
+      ><a name="168" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="205"
+      >
+
+</a
+      ><a name="207" class="Keyword"
+      >open</a
+      ><a name="211"
+      > </a
+      ><a name="212" class="Keyword"
+      >import</a
+      ><a name="218"
+      > </a
+      ><a name="219" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="224"
+      > </a
+      ><a name="225" class="Keyword"
+      >renaming</a
+      ><a name="233"
+      > </a
+      ><a name="234" class="Symbol"
+      >(</a
+      ><a name="235"
+      >zero </a
+      ><a name="240" class="Symbol"
+      >to</a
+      ><a name="242"
+      > zeroL </a
+      ><a name="249" class="Symbol"
+      >;</a
+      ><a name="250"
+      > suc </a
+      ><a name="255" class="Symbol"
+      >to</a
+      ><a name="257"
+      > sucL</a
+      ><a name="262" class="Symbol"
+      >)</a
+      ><a name="263"
+      >
+
+</a
+      ><a name="265" class="Keyword"
+      >open</a
+      ><a name="269"
+      > </a
+      ><a name="270" class="Keyword"
+      >import</a
+      ><a name="276"
+      > </a
+      ><a name="277" href="Logic.Logic.html#1" class="Module"
+      >Logic.Logic</a
+      ><a name="288"
+      >
+</a
+      ><a name="289" class="Keyword"
+      >open</a
+      ><a name="293"
+      > </a
+      ><a name="294" class="Keyword"
+      >import</a
+      ><a name="300"
+      > </a
+      ><a name="301" href="Logic.IProp.html#1" class="Module"
+      >Logic.IProp</a
+      ><a name="312"
+      >
+</a
+      ><a name="313" class="Keyword"
+      >open</a
+      ><a name="317"
+      > </a
+      ><a name="318" href="Logic.IProp.html#81" class="Module"
+      >Logic.</a
+      ><a name="324" href="Logic.IProp.html#87" class="Module"
+      >IProp.</a
+      ><a name="330" href="Logic.IProp.html#790" class="Module"
+      >Applicative</a
+      ><a name="341"
+      > </a
+      ><a name="342" class="Symbol"
+      >{</a
+      ><a name="343" href="Agda.Primitive.html#273" class="Primitive"
+      >zeroL</a
+      ><a name="348" class="Symbol"
+      >}</a
+      ><a name="349"
+      >
+
+</a
+      ><a name="351" class="Keyword"
+      >open</a
+      ><a name="355"
+      > </a
+      ><a name="356" class="Keyword"
+      >import</a
+      ><a name="362"
+      > </a
+      ><a name="363" href="IDesc.IDesc.html#1" class="Module"
+      >IDesc.IDesc</a
+      ><a name="374"
+      >
+</a
+      ><a name="375" class="Keyword"
+      >open</a
+      ><a name="379"
+      > </a
+      ><a name="380" class="Keyword"
+      >import</a
+      ><a name="386"
+      > </a
+      ><a name="387" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="401"
+      >
+
+</a
+      ><a name="403" class="Keyword"
+      >open</a
+      ><a name="407"
+      > </a
+      ><a name="408" class="Keyword"
+      >import</a
+      ><a name="414"
+      > </a
+      ><a name="415" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="427"
+      >
+</a
+      ><a name="428" class="Keyword"
+      >open</a
+      ><a name="432"
+      > </a
+      ><a name="433" class="Keyword"
+      >import</a
+      ><a name="439"
+      > </a
+      ><a name="440" href="Orn.Reornament.html#1" class="Module"
+      >Orn.Reornament</a
+      ><a name="454"
+      >
+
+</a
+      ><a name="456" class="Comment"
+      >-- Paper: Remark 4.33</a
+      ><a name="477"
+      >
+
+</a
+      ><a name="479" href="Orn.Reornament.Examples.Iterative.html#479" class="Function"
+      >test</a
+      ><a name="483"
+      > </a
+      ><a name="484" class="Symbol"
+      >:</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="IDesc.IDesc.html#1286" class="Record"
+      >func</a
+      ><a name="490"
+      > </a
+      ><a name="491" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="494"
+      >
+</a
+      ><a name="495" href="Orn.Reornament.Examples.Iterative.html#479" class="Function"
+      >test</a
+      ><a name="499"
+      > </a
+      ><a name="500" class="Symbol"
+      >=</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="IDesc.IDesc.html#1330" class="InductiveConstructor"
+      >mk</a
+      ><a name="504"
+      > </a
+      ><a name="505" class="Symbol"
+      >(&#955;</a
+      ><a name="507"
+      > </a
+      ><a name="508" href="Orn.Reornament.Examples.Iterative.html#508" class="Bound"
+      >x</a
+      ><a name="509"
+      > </a
+      ><a name="510" class="Symbol"
+      >&#8594;</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="IDesc.IDesc.html#292" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="Orn.Reornament.Examples.Iterative.html#43" class="Bound"
+      >A</a
+      ><a name="516"
+      > </a
+      ><a name="517" class="Symbol"
+      >(&#955;</a
+      ><a name="519"
+      > </a
+      ><a name="520" href="Orn.Reornament.Examples.Iterative.html#520" class="Bound"
+      >a</a
+      ><a name="521"
+      > </a
+      ><a name="522" class="Symbol"
+      >&#8594;</a
+      ><a name="523"
+      > 
+                 </a
+      ><a name="542" href="IDesc.IDesc.html#337" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="544"
+      > </a
+      ><a name="545" href="Orn.Reornament.Examples.Iterative.html#45" class="Bound"
+      >B</a
+      ><a name="546"
+      > </a
+      ><a name="547" class="Symbol"
+      >&#955;</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Orn.Reornament.Examples.Iterative.html#549" class="Bound"
+      >b</a
+      ><a name="550"
+      > </a
+      ><a name="551" class="Symbol"
+      >&#8594;</a
+      ><a name="552"
+      > 
+                 </a
+      ><a name="571" href="IDesc.IDesc.html#292" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="573"
+      > </a
+      ><a name="574" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="578"
+      > </a
+      ><a name="579" class="Symbol"
+      >&#955;</a
+      ><a name="580"
+      > </a
+      ><a name="581" href="Orn.Reornament.Examples.Iterative.html#581" class="Bound"
+      >x</a
+      ><a name="582"
+      > </a
+      ><a name="583" class="Symbol"
+      >&#8594;</a
+      ><a name="584"
+      > 
+                 </a
+      ><a name="603" href="IDesc.IDesc.html#250" class="InductiveConstructor"
+      >`var</a
+      ><a name="607"
+      > </a
+      ><a name="608" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="610" class="Symbol"
+      >))</a
+      ><a name="612"
+      >
+
+</a
+      ><a name="614" href="Orn.Reornament.Examples.Iterative.html#614" class="Function"
+      >forget</a
+      ><a name="620"
+      > </a
+      ><a name="621" class="Symbol"
+      >:</a
+      ><a name="622"
+      > </a
+      ><a name="623" href="Data.Nat.html#698" class="Datatype"
+      >&#8469;</a
+      ><a name="624"
+      > </a
+      ><a name="625" class="Symbol"
+      >&#8594;</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="628"
+      >
+</a
+      ><a name="629" href="Orn.Reornament.Examples.Iterative.html#614" class="Function"
+      >forget</a
+      ><a name="635"
+      > </a
+      ><a name="636" href="Orn.Reornament.Examples.Iterative.html#636" class="Bound"
+      >n</a
+      ><a name="637"
+      > </a
+      ><a name="638" class="Symbol"
+      >=</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="642"
+      >
+
+</a
+      ><a name="644" href="Orn.Reornament.Examples.Iterative.html#644" class="Function"
+      >testO</a
+      ><a name="649"
+      > </a
+      ><a name="650" class="Symbol"
+      >:</a
+      ><a name="651"
+      > </a
+      ><a name="652" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="655"
+      > </a
+      ><a name="656" href="Orn.Reornament.Examples.Iterative.html#479" class="Function"
+      >test</a
+      ><a name="660"
+      > </a
+      ><a name="661" href="Orn.Reornament.Examples.Iterative.html#614" class="Function"
+      >forget</a
+      ><a name="667"
+      > </a
+      ><a name="668" href="Orn.Reornament.Examples.Iterative.html#614" class="Function"
+      >forget</a
+      ><a name="674"
+      >
+</a
+      ><a name="675" href="Orn.Reornament.Examples.Iterative.html#644" class="Function"
+      >testO</a
+      ><a name="680"
+      > </a
+      ><a name="681" class="Symbol"
+      >=</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="Orn.Ornament.html#1654" class="InductiveConstructor"
+      >mk</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Symbol"
+      >(&#955;</a
+      ><a name="688"
+      > </a
+      ><a name="689" href="Orn.Reornament.Examples.Iterative.html#689" class="Bound"
+      >n</a
+      ><a name="690"
+      > </a
+      ><a name="691" class="Symbol"
+      >&#8594;</a
+      ><a name="692"
+      > </a
+      ><a name="693" href="Orn.Ornament.html#532" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="Symbol"
+      >(&#955;</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="Orn.Reornament.Examples.Iterative.html#699" class="Bound"
+      >a</a
+      ><a name="700"
+      > </a
+      ><a name="701" class="Symbol"
+      >&#8594;</a
+      ><a name="702"
+      > 
+                  </a
+      ><a name="722" href="Orn.Ornament.html#251" class="InductiveConstructor"
+      >insert</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="Orn.Reornament.Examples.Iterative.html#47" class="Bound"
+      >C</a
+      ><a name="730"
+      > </a
+      ><a name="731" class="Symbol"
+      >(&#955;</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Orn.Reornament.Examples.Iterative.html#734" class="Bound"
+      >c</a
+      ><a name="735"
+      > </a
+      ><a name="736" class="Symbol"
+      >&#8594;</a
+      ><a name="737"
+      > 
+                  </a
+      ><a name="757" href="Orn.Ornament.html#594" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="759"
+      > </a
+      ><a name="760" class="Symbol"
+      >(&#955;</a
+      ><a name="762"
+      > </a
+      ><a name="763" href="Orn.Reornament.Examples.Iterative.html#763" class="Bound"
+      >b</a
+      ><a name="764"
+      > </a
+      ><a name="765" class="Symbol"
+      >&#8594;</a
+      ><a name="766"
+      > 
+                  </a
+      ><a name="786" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Data.Bool.html#622" class="InductiveConstructor"
+      >true</a
+      ><a name="798"
+      > 
+                         </a
+      ><a name="825" class="Symbol"
+      >(</a
+      ><a name="826" href="Orn.Ornament.html#321" class="InductiveConstructor"
+      >`var</a
+      ><a name="830"
+      > </a
+      ><a name="831" class="Symbol"
+      >(</a
+      ><a name="832" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="835"
+      > </a
+      ><a name="836" class="Symbol"
+      >(</a
+      ><a name="837" href="Data.Nat.html#725" class="InductiveConstructor"
+      >&#8469;.suc</a
+      ><a name="842"
+      > </a
+      ><a name="843" href="Orn.Reornament.Examples.Iterative.html#689" class="Bound"
+      >n</a
+      ><a name="844" class="Symbol"
+      >)))))))</a
+      ><a name="851"
+      >
+
+</a
+      ><a name="853" class="Keyword"
+      >postulate</a
+      ><a name="862"
+      > 
+  </a
+      ><a name="866" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="867"
+      > </a
+      ><a name="868" class="Symbol"
+      >:</a
+      ><a name="869"
+      > </a
+      ><a name="870" href="Orn.Reornament.Examples.Iterative.html#43" class="Bound"
+      >A</a
+      ><a name="871"
+      >
+  </a
+      ><a name="874" href="Orn.Reornament.Examples.Iterative.html#874" class="Postulate"
+      >b</a
+      ><a name="875"
+      > </a
+      ><a name="876" class="Symbol"
+      >:</a
+      ><a name="877"
+      > </a
+      ><a name="878" href="Orn.Reornament.Examples.Iterative.html#45" class="Bound"
+      >B</a
+      ><a name="879"
+      >
+  </a
+      ><a name="882" href="Orn.Reornament.Examples.Iterative.html#882" class="Postulate"
+      >c</a
+      ><a name="883"
+      > </a
+      ><a name="884" class="Symbol"
+      >:</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Orn.Reornament.Examples.Iterative.html#47" class="Bound"
+      >C</a
+      ><a name="887"
+      >
+  </a
+      ><a name="890" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="891"
+      > </a
+      ><a name="892" class="Symbol"
+      >:</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Data.Nat.html#698" class="Datatype"
+      >&#8469;</a
+      ><a name="895"
+      >
+  </a
+      ><a name="898" href="Orn.Reornament.Examples.Iterative.html#898" class="Postulate"
+      >x</a
+      ><a name="899"
+      > </a
+      ><a name="900" class="Symbol"
+      >:</a
+      ><a name="901"
+      > </a
+      ><a name="902" href="Data.Bool.html#603" class="Datatype"
+      >Bool</a
+      ><a name="906"
+      >
+  </a
+      ><a name="909" href="Orn.Reornament.Examples.Iterative.html#909" class="Postulate"
+      >xs</a
+      ><a name="911"
+      > </a
+      ><a name="912" class="Symbol"
+      >:</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="915"
+      > </a
+      ><a name="916" href="Orn.Reornament.Examples.Iterative.html#479" class="Function"
+      >test</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="923"
+      >
+
+</a
+      ><a name="925" href="Orn.Reornament.Examples.Iterative.html#925" class="Function"
+      >reorn1</a
+      ><a name="931"
+      > </a
+      ><a name="932" class="Symbol"
+      >:</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="939"
+      > </a
+      ><a name="940" href="Orn.Reornament.Examples.Iterative.html#644" class="Function"
+      >testO</a
+      ><a name="945"
+      > </a
+      ><a name="946" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="956"
+      > </a
+      ><a name="957" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="962"
+      >
+</a
+      ><a name="963" href="Orn.Reornament.Examples.Iterative.html#925" class="Function"
+      >reorn1</a
+      ><a name="969"
+      > </a
+      ><a name="970" class="Symbol"
+      >=</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8968;</a
+      ><a name="973"
+      > </a
+      ><a name="974" href="Orn.Reornament.Examples.Iterative.html#644" class="Function"
+      >testO</a
+      ><a name="979"
+      > </a
+      ><a name="980" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8969;</a
+      ><a name="981"
+      >
+
+</a
+      ><a name="983" href="Orn.Reornament.Examples.Iterative.html#983" class="Function"
+      >reorn1O</a
+      ><a name="990"
+      > </a
+      ><a name="991" class="Symbol"
+      >:</a
+      ><a name="992"
+      > </a
+      ><a name="993" href="Orn.Ornament.html#187" class="Datatype"
+      >Orn</a
+      ><a name="996"
+      > </a
+      ><a name="997" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" class="Symbol"
+      >(</a
+      ><a name="1004" href="IDesc.IDesc.html#1345" class="Field"
+      >func.out</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" href="Orn.Reornament.Examples.Iterative.html#644" class="Function"
+      >testO</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1027" class="Symbol"
+      >)</a
+      ><a name="1028"
+      >
+</a
+      ><a name="1029" href="Orn.Reornament.Examples.Iterative.html#983" class="Function"
+      >reorn1O</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" class="Symbol"
+      >=</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="Orn.Ornament.html#1670" class="Field"
+      >orn.out</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="Orn.Reornament.Examples.Iterative.html#925" class="Function"
+      >reorn1</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" class="Symbol"
+      >(</a
+      ><a name="1055" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1056"
+      > </a
+      ><a name="1057" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1058"
+      > </a
+      ><a name="1059" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" class="Symbol"
+      >(&#955;</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Orn.Reornament.Examples.Iterative.html#1068" class="Bound"
+      >_</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" class="Symbol"
+      >&#8594;</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="Orn.Reornament.Examples.Iterative.html#898" class="Postulate"
+      >x</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" href="Orn.Reornament.Examples.Iterative.html#909" class="Postulate"
+      >xs</a
+      ><a name="1078" class="Symbol"
+      >)</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1081" class="Symbol"
+      >)</a
+      ><a name="1082"
+      >
+
+</a
+      ><a name="1084" class="Comment"
+      >{-
+ reorn1 (n , &#10216; a , (&#955; _ &#8594; x , xs) &#10217; )  &#8605; 
+     delete&#931; a
+       (`&#931; (&#955; c &#8594;
+        `&#928; (&#955; b &#8594;
+          insert (x &#8801; true) (&#955; q &#8594;
+          `var (inv (&#8469;.suc n , xs))))))
+-}</a
+      ><a name="1257"
+      >
+
+</a
+      ><a name="1259" href="Orn.Reornament.Examples.Iterative.html#1259" class="Function"
+      >reorn2</a
+      ><a name="1265"
+      > </a
+      ><a name="1266" class="Symbol"
+      >:</a
+      ><a name="1267"
+      > </a
+      ><a name="1268" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" href="Orn.Reornament.Examples.Iterative.html#925" class="Function"
+      >reorn1</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1285"
+      > </a
+      ><a name="1286" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="1297"
+      >
+</a
+      ><a name="1298" href="Orn.Reornament.Examples.Iterative.html#1259" class="Function"
+      >reorn2</a
+      ><a name="1304"
+      > </a
+      ><a name="1305" class="Symbol"
+      >=</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8968;</a
+      ><a name="1308"
+      > </a
+      ><a name="1309" href="Orn.Reornament.Examples.Iterative.html#925" class="Function"
+      >reorn1</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8969;</a
+      ><a name="1317"
+      >
+
+</a
+      ><a name="1319" class="Keyword"
+      >postulate</a
+      ><a name="1328"
+      >
+  </a
+      ><a name="1331" href="Orn.Reornament.Examples.Iterative.html#1331" class="Postulate"
+      >a'</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" class="Symbol"
+      >:</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" href="Orn.Reornament.Examples.Iterative.html#43" class="Bound"
+      >A</a
+      ><a name="1337"
+      >
+  </a
+      ><a name="1340" href="Orn.Reornament.Examples.Iterative.html#1340" class="Postulate"
+      >xs&#8314;</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" class="Symbol"
+      >:</a
+      ><a name="1345"
+      > </a
+      ><a name="1346" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1347"
+      > </a
+      ><a name="1348" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Orn.Reornament.Examples.Iterative.html#644" class="Function"
+      >testO</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" class="Symbol"
+      >(</a
+      ><a name="1362" href="Data.Nat.html#725" class="InductiveConstructor"
+      >&#8469;.suc</a
+      ><a name="1367"
+      > </a
+      ><a name="1368" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1369" class="Symbol"
+      >)</a
+      ><a name="1370"
+      >
+
+</a
+      ><a name="1372" href="Orn.Reornament.Examples.Iterative.html#1372" class="Function"
+      >reorn2O</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" class="Symbol"
+      >:</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" href="Orn.Ornament.html#187" class="Datatype"
+      >Orn</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" class="Symbol"
+      >(</a
+      ><a name="1393" href="IDesc.IDesc.html#1345" class="Field"
+      >func.out</a
+      ><a name="1401"
+      > </a
+      ><a name="1402" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1403"
+      > </a
+      ><a name="1404" href="Orn.Reornament.Examples.Iterative.html#925" class="Function"
+      >reorn1</a
+      ><a name="1410"
+      > </a
+      ><a name="1411" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" class="Symbol"
+      >(</a
+      ><a name="1417" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1418"
+      > </a
+      ><a name="1419" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1420"
+      > </a
+      ><a name="1421" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1422"
+      > </a
+      ><a name="1423" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="1424"
+      > </a
+      ><a name="1425" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1426"
+      > </a
+      ><a name="1427" class="Symbol"
+      >(&#955;</a
+      ><a name="1429"
+      > </a
+      ><a name="1430" href="Orn.Reornament.Examples.Iterative.html#1430" class="Bound"
+      >_</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" class="Symbol"
+      >&#8594;</a
+      ><a name="1433"
+      > </a
+      ><a name="1434" href="Orn.Reornament.Examples.Iterative.html#898" class="Postulate"
+      >x</a
+      ><a name="1435"
+      > </a
+      ><a name="1436" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" href="Orn.Reornament.Examples.Iterative.html#909" class="Postulate"
+      >xs</a
+      ><a name="1440" class="Symbol"
+      >)</a
+      ><a name="1441"
+      > </a
+      ><a name="1442" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1443" class="Symbol"
+      >))</a
+      ><a name="1445"
+      >
+</a
+      ><a name="1446" href="Orn.Reornament.Examples.Iterative.html#1372" class="Function"
+      >reorn2O</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" class="Symbol"
+      >=</a
+      ><a name="1455"
+      > </a
+      ><a name="1456" href="Orn.Ornament.html#1670" class="Field"
+      >orn.out</a
+      ><a name="1463"
+      > </a
+      ><a name="1464" href="Orn.Reornament.Examples.Iterative.html#1259" class="Function"
+      >reorn2</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" class="Symbol"
+      >((</a
+      ><a name="1473" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1474"
+      > </a
+      ><a name="1475" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1476"
+      > </a
+      ><a name="1477" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1478"
+      > </a
+      ><a name="1479" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1482"
+      > </a
+      ><a name="1483" class="Symbol"
+      >(&#955;</a
+      ><a name="1485"
+      > </a
+      ><a name="1486" href="Orn.Reornament.Examples.Iterative.html#1486" class="Bound"
+      >_</a
+      ><a name="1487"
+      > </a
+      ><a name="1488" class="Symbol"
+      >&#8594;</a
+      ><a name="1489"
+      > </a
+      ><a name="1490" href="Orn.Reornament.Examples.Iterative.html#898" class="Postulate"
+      >x</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" href="Orn.Reornament.Examples.Iterative.html#909" class="Postulate"
+      >xs</a
+      ><a name="1496" class="Symbol"
+      >)</a
+      ><a name="1497"
+      > </a
+      ><a name="1498" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1499" class="Symbol"
+      >)</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1502"
+      > </a
+      ><a name="1503" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" href="Orn.Reornament.Examples.Iterative.html#1331" class="Postulate"
+      >a'</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1509"
+      > </a
+      ><a name="1510" href="Orn.Reornament.Examples.Iterative.html#882" class="Postulate"
+      >c</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1513"
+      > </a
+      ><a name="1514" class="Symbol"
+      >(&#955;</a
+      ><a name="1516"
+      > </a
+      ><a name="1517" href="Orn.Reornament.Examples.Iterative.html#1517" class="Bound"
+      >_</a
+      ><a name="1518"
+      > </a
+      ><a name="1519" class="Symbol"
+      >&#8594;</a
+      ><a name="1520"
+      > </a
+      ><a name="1521" href="Orn.Reornament.Examples.Iterative.html#1340" class="Postulate"
+      >xs&#8314;</a
+      ><a name="1524" class="Symbol"
+      >)</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1527" class="Symbol"
+      >)</a
+      ><a name="1528"
+      >
+
+</a
+      ><a name="1530" class="Comment"
+      >{-
+ reorn2 ((n , &#10216; a , (&#955; _ &#8594; x , xs) &#10217;) , &#10216; a , c , (&#955; _ &#8594; xs&#8314;) &#10217; ) &#8605;
+     insert (a' &#8801; a) (&#955; qa &#8594;
+     delete&#931; c
+       (`&#928; (&#955; b &#8594;
+        `&#931; (&#955; qx &#8594;
+          `var (inv ((&#8469;.suc n , xs) , xs&#8314; b))))))
+-}</a
+      ><a name="1734"
+      >
+
+</a
+      ><a name="1736" href="Orn.Reornament.Examples.Iterative.html#1736" class="Function"
+      >reorn3</a
+      ><a name="1742"
+      > </a
+      ><a name="1743" class="Symbol"
+      >:</a
+      ><a name="1744"
+      > </a
+      ><a name="1745" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" href="Orn.Reornament.Examples.Iterative.html#1259" class="Function"
+      >reorn2</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1762"
+      > </a
+      ><a name="1763" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="1768"
+      > </a
+      ><a name="1769" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="1774"
+      >
+</a
+      ><a name="1775" href="Orn.Reornament.Examples.Iterative.html#1736" class="Function"
+      >reorn3</a
+      ><a name="1781"
+      > </a
+      ><a name="1782" class="Symbol"
+      >=</a
+      ><a name="1783"
+      > </a
+      ><a name="1784" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8968;</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" href="Orn.Reornament.Examples.Iterative.html#1259" class="Function"
+      >reorn2</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8969;</a
+      ><a name="1794"
+      >
+
+</a
+      ><a name="1796" class="Keyword"
+      >postulate</a
+      ><a name="1805"
+      > 
+  </a
+      ><a name="1809" href="Orn.Reornament.Examples.Iterative.html#1809" class="Postulate"
+      >c'</a
+      ><a name="1811"
+      > </a
+      ><a name="1812" class="Symbol"
+      >:</a
+      ><a name="1813"
+      > </a
+      ><a name="1814" href="Orn.Reornament.Examples.Iterative.html#47" class="Bound"
+      >C</a
+      ><a name="1815"
+      >
+  </a
+      ><a name="1818" href="Orn.Reornament.Examples.Iterative.html#1818" class="Postulate"
+      >xs&#8314;&#8314;</a
+      ><a name="1822"
+      > </a
+      ><a name="1823" class="Symbol"
+      >:</a
+      ><a name="1824"
+      > </a
+      ><a name="1825" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1826"
+      > </a
+      ><a name="1827" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1828"
+      > </a
+      ><a name="1829" href="Orn.Reornament.Examples.Iterative.html#925" class="Function"
+      >reorn1</a
+      ><a name="1835"
+      > </a
+      ><a name="1836" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1840"
+      > </a
+      ><a name="1841" class="Symbol"
+      >(</a
+      ><a name="1842" href="Data.Nat.html#725" class="InductiveConstructor"
+      >&#8469;.suc</a
+      ><a name="1847"
+      > </a
+      ><a name="1848" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1849"
+      > </a
+      ><a name="1850" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1851"
+      > </a
+      ><a name="1852" href="Orn.Reornament.Examples.Iterative.html#909" class="Postulate"
+      >xs</a
+      ><a name="1854" class="Symbol"
+      >)</a
+      ><a name="1855"
+      >
+
+</a
+      ><a name="1857" href="Orn.Reornament.Examples.Iterative.html#1857" class="Function"
+      >reorn3O</a
+      ><a name="1864"
+      > </a
+      ><a name="1865" class="Symbol"
+      >:</a
+      ><a name="1866"
+      > </a
+      ><a name="1867" href="Orn.Ornament.html#187" class="Datatype"
+      >Orn</a
+      ><a name="1870"
+      > </a
+      ><a name="1871" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="1876"
+      >  </a
+      ><a name="1878" class="Symbol"
+      >(</a
+      ><a name="1879" href="IDesc.IDesc.html#1345" class="Field"
+      >func.out</a
+      ><a name="1887"
+      > </a
+      ><a name="1888" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1889"
+      > </a
+      ><a name="1890" href="Orn.Reornament.Examples.Iterative.html#1259" class="Function"
+      >reorn2</a
+      ><a name="1896"
+      > </a
+      ><a name="1897" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1901"
+      > </a
+      ><a name="1902" class="Symbol"
+      >((</a
+      ><a name="1904" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1905"
+      > </a
+      ><a name="1906" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1907"
+      > </a
+      ><a name="1908" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1909"
+      > </a
+      ><a name="1910" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="1911"
+      > </a
+      ><a name="1912" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1913"
+      > </a
+      ><a name="1914" class="Symbol"
+      >(&#955;</a
+      ><a name="1916"
+      > </a
+      ><a name="1917" href="Orn.Reornament.Examples.Iterative.html#1917" class="Bound"
+      >_</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" class="Symbol"
+      >&#8594;</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" href="Data.Bool.html#622" class="InductiveConstructor"
+      >true</a
+      ><a name="1925"
+      > </a
+      ><a name="1926" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1927"
+      > </a
+      ><a name="1928" href="Orn.Reornament.Examples.Iterative.html#909" class="Postulate"
+      >xs</a
+      ><a name="1930" class="Symbol"
+      >)</a
+      ><a name="1931"
+      > </a
+      ><a name="1932" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1933" class="Symbol"
+      >)</a
+      ><a name="1934"
+      > </a
+      ><a name="1935" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1936"
+      > </a
+      ><a name="1937" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1938"
+      > </a
+      ><a name="1939" class="Symbol"
+      >(</a
+      ><a name="1940" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1943"
+      > </a
+      ><a name="1944" class="Symbol"
+      >(</a
+      ><a name="1945" href="Orn.Reornament.Examples.Iterative.html#882" class="Postulate"
+      >c</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1948"
+      > </a
+      ><a name="1949" class="Symbol"
+      >(&#955;</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" href="Orn.Reornament.Examples.Iterative.html#1952" class="Bound"
+      >_</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" class="Symbol"
+      >&#8594;</a
+      ><a name="1955"
+      > </a
+      ><a name="1956" href="Orn.Reornament.Examples.Iterative.html#1340" class="Postulate"
+      >xs&#8314;</a
+      ><a name="1959" class="Symbol"
+      >)))</a
+      ><a name="1962"
+      > </a
+      ><a name="1963" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1964" class="Symbol"
+      >))</a
+      ><a name="1966"
+      >
+</a
+      ><a name="1967" href="Orn.Reornament.Examples.Iterative.html#1857" class="Function"
+      >reorn3O</a
+      ><a name="1974"
+      > </a
+      ><a name="1975" class="Symbol"
+      >=</a
+      ><a name="1976"
+      > </a
+      ><a name="1977" href="Orn.Ornament.html#1670" class="Field"
+      >orn.out</a
+      ><a name="1984"
+      > </a
+      ><a name="1985" href="Orn.Reornament.Examples.Iterative.html#1736" class="Function"
+      >reorn3</a
+      ><a name="1991"
+      > </a
+      ><a name="1992" class="Symbol"
+      >(((</a
+      ><a name="1995" href="Orn.Reornament.Examples.Iterative.html#890" class="Postulate"
+      >n</a
+      ><a name="1996"
+      > </a
+      ><a name="1997" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1998"
+      > </a
+      ><a name="1999" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2000"
+      > </a
+      ><a name="2001" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="2002"
+      > </a
+      ><a name="2003" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2004"
+      > </a
+      ><a name="2005" class="Symbol"
+      >(&#955;</a
+      ><a name="2007"
+      > </a
+      ><a name="2008" href="Orn.Reornament.Examples.Iterative.html#2008" class="Bound"
+      >_</a
+      ><a name="2009"
+      > </a
+      ><a name="2010" class="Symbol"
+      >&#8594;</a
+      ><a name="2011"
+      > </a
+      ><a name="2012" href="Data.Bool.html#622" class="InductiveConstructor"
+      >true</a
+      ><a name="2016"
+      > </a
+      ><a name="2017" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2018"
+      > </a
+      ><a name="2019" href="Orn.Reornament.Examples.Iterative.html#909" class="Postulate"
+      >xs</a
+      ><a name="2021" class="Symbol"
+      >)</a
+      ><a name="2022"
+      > </a
+      ><a name="2023" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2024" class="Symbol"
+      >)</a
+      ><a name="2025"
+      > </a
+      ><a name="2026" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2027"
+      > </a
+      ><a name="2028" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2029"
+      > </a
+      ><a name="2030" href="Orn.Reornament.Examples.Iterative.html#866" class="Postulate"
+      >a</a
+      ><a name="2031"
+      > </a
+      ><a name="2032" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2033"
+      > </a
+      ><a name="2034" href="Orn.Reornament.Examples.Iterative.html#882" class="Postulate"
+      >c</a
+      ><a name="2035"
+      > </a
+      ><a name="2036" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2037"
+      > </a
+      ><a name="2038" class="Symbol"
+      >(&#955;</a
+      ><a name="2040"
+      > </a
+      ><a name="2041" href="Orn.Reornament.Examples.Iterative.html#2041" class="Bound"
+      >_</a
+      ><a name="2042"
+      > </a
+      ><a name="2043" class="Symbol"
+      >&#8594;</a
+      ><a name="2044"
+      > </a
+      ><a name="2045" href="Orn.Reornament.Examples.Iterative.html#1340" class="Postulate"
+      >xs&#8314;</a
+      ><a name="2048" class="Symbol"
+      >)</a
+      ><a name="2049"
+      > </a
+      ><a name="2050" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2051" class="Symbol"
+      >)</a
+      ><a name="2052"
+      > </a
+      ><a name="2053" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2054"
+      > </a
+      ><a name="2055" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2056"
+      > </a
+      ><a name="2057" class="Symbol"
+      >(</a
+      ><a name="2058" href="Orn.Reornament.Examples.Iterative.html#1809" class="Postulate"
+      >c'</a
+      ><a name="2060"
+      > </a
+      ><a name="2061" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2062"
+      > </a
+      ><a name="2063" class="Symbol"
+      >(&#955;</a
+      ><a name="2065"
+      > </a
+      ><a name="2066" href="Orn.Reornament.Examples.Iterative.html#2066" class="Bound"
+      >b</a
+      ><a name="2067"
+      > </a
+      ><a name="2068" class="Symbol"
+      >&#8594;</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2074"
+      > </a
+      ><a name="2075" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2076"
+      > </a
+      ><a name="2077" href="Orn.Reornament.Examples.Iterative.html#1818" class="Postulate"
+      >xs&#8314;&#8314;</a
+      ><a name="2081" class="Symbol"
+      >))</a
+      ><a name="2083"
+      > </a
+      ><a name="2084" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2085" class="Symbol"
+      >)</a
+      ><a name="2086"
+      >
+
+</a
+      ><a name="2088" class="Comment"
+      >{-
+ reorn3 (((n , &#10216; a , (&#955; _ &#8594; true , xs) &#10217;) , &#10216; a , c , (&#955; _ &#8594; xs&#8314;) &#10217; ) , &#10216; c' , &#955; b &#8594; refl , xs&#8314;&#8314; &#10217; ) &#8605;
+    `&#931; (&#955; q&#8321; &#8594;
+    insert (c' &#8801; c) (&#955; q&#8322; &#8594;
+    `&#928; (&#955; b &#8594;
+    delete&#931; refl 
+     (`var (inv (((&#8469;.suc n , xs) , xs&#8314; b , xs&#8314;&#8314; b)))))))
+-}</a
+      ><a name="2328"
+      >
+
+
+</a
+      ><a name="2331" href="Orn.Reornament.Examples.Iterative.html#2331" class="Function"
+      >lemma</a
+      ><a name="2336"
+      > </a
+      ><a name="2337" class="Symbol"
+      >:</a
+      ><a name="2338"
+      > </a
+      ><a name="2339" class="Symbol"
+      >&#8704;{</a
+      ><a name="2341" href="Orn.Reornament.Examples.Iterative.html#2341" class="Bound"
+      >i&#8321;</a
+      ><a name="2343"
+      > </a
+      ><a name="2344" href="Orn.Reornament.Examples.Iterative.html#2344" class="Bound"
+      >i&#8322;</a
+      ><a name="2346"
+      > </a
+      ><a name="2347" href="Orn.Reornament.Examples.Iterative.html#2347" class="Bound"
+      >i&#8323;</a
+      ><a name="2349"
+      > </a
+      ><a name="2350" href="Orn.Reornament.Examples.Iterative.html#2350" class="Bound"
+      >i&#8324;</a
+      ><a name="2352" class="Symbol"
+      >}</a
+      ><a name="2353"
+      > </a
+      ><a name="2354" class="Symbol"
+      >&#8594;</a
+      ><a name="2355"
+      > </a
+      ><a name="2356" class="Symbol"
+      >(</a
+      ><a name="2357" href="Orn.Reornament.Examples.Iterative.html#2357" class="Bound"
+      >x</a
+      ><a name="2358"
+      > </a
+      ><a name="2359" href="Orn.Reornament.Examples.Iterative.html#2359" class="Bound"
+      >y</a
+      ><a name="2360"
+      > </a
+      ><a name="2361" class="Symbol"
+      >:</a
+      ><a name="2362"
+      > </a
+      ><a name="2363" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="2364"
+      > </a
+      ><a name="2365" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="2366"
+      > </a
+      ><a name="2367" href="Orn.Reornament.Examples.Iterative.html#1736" class="Function"
+      >reorn3</a
+      ><a name="2373"
+      > </a
+      ><a name="2374" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="2378"
+      > </a
+      ><a name="2379" class="Symbol"
+      >(((</a
+      ><a name="2382" href="Orn.Reornament.Examples.Iterative.html#2341" class="Bound"
+      >i&#8321;</a
+      ><a name="2384"
+      > </a
+      ><a name="2385" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2386"
+      > </a
+      ><a name="2387" href="Orn.Reornament.Examples.Iterative.html#2344" class="Bound"
+      >i&#8322;</a
+      ><a name="2389" class="Symbol"
+      >)</a
+      ><a name="2390"
+      > </a
+      ><a name="2391" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" href="Orn.Reornament.Examples.Iterative.html#2347" class="Bound"
+      >i&#8323;</a
+      ><a name="2395" class="Symbol"
+      >)</a
+      ><a name="2396"
+      > </a
+      ><a name="2397" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2398"
+      > </a
+      ><a name="2399" href="Orn.Reornament.Examples.Iterative.html#2350" class="Bound"
+      >i&#8324;</a
+      ><a name="2401" class="Symbol"
+      >))</a
+      ><a name="2403"
+      > </a
+      ><a name="2404" class="Symbol"
+      >&#8594;</a
+      ><a name="2405"
+      > </a
+      ><a name="2406" href="Logic.IProp.html#448" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2407"
+      > </a
+      ><a name="2408" href="Orn.Reornament.Examples.Iterative.html#2357" class="Bound"
+      >x</a
+      ><a name="2409"
+      > </a
+      ><a name="2410" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2411"
+      > </a
+      ><a name="2412" href="Orn.Reornament.Examples.Iterative.html#2359" class="Bound"
+      >y</a
+      ><a name="2413"
+      >
+</a
+      ><a name="2414" href="Orn.Reornament.Examples.Iterative.html#2331" class="Function"
+      >lemma</a
+      ><a name="2419"
+      > </a
+      ><a name="2420" class="Symbol"
+      >{</a
+      ><a name="2421"
+      >i&#8322; </a
+      ><a name="2424" class="Symbol"
+      >=</a
+      ><a name="2425"
+      > </a
+      ><a name="2426" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2427"
+      > </a
+      ><a name="2428" href="Orn.Reornament.Examples.Iterative.html#2428" class="Bound"
+      >i&#8322;&#8321;</a
+      ><a name="2431"
+      > </a
+      ><a name="2432" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2433"
+      > </a
+      ><a name="2434" href="Orn.Reornament.Examples.Iterative.html#2434" class="Bound"
+      >i&#8322;&#8322;</a
+      ><a name="2437"
+      > </a
+      ><a name="2438" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2439" class="Symbol"
+      >}</a
+      ><a name="2440"
+      >
+      </a
+      ><a name="2447" class="Symbol"
+      >{</a
+      ><a name="2448" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2449"
+      > </a
+      ><a name="2450" class="DottedPattern Symbol"
+      >.</a
+      ><a name="2451" href="Orn.Reornament.Examples.Iterative.html#2428" class="DottedPattern Bound"
+      >i&#8322;&#8321;</a
+      ><a name="2454"
+      > </a
+      ><a name="2455" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2456"
+      > </a
+      ><a name="2457" href="Orn.Reornament.Examples.Iterative.html#2457" class="Bound"
+      >i&#8324;&#8321;</a
+      ><a name="2460"
+      > </a
+      ><a name="2461" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2462"
+      > </a
+      ><a name="2463" href="Orn.Reornament.Examples.Iterative.html#2463" class="Bound"
+      >i&#8323;&#8323;</a
+      ><a name="2466"
+      > </a
+      ><a name="2467" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2468" class="Symbol"
+      >}</a
+      ><a name="2469"
+      > 
+      </a
+      ><a name="2477" class="Symbol"
+      >{</a
+      ><a name="2478" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2479"
+      > </a
+      ><a name="2480" class="DottedPattern Symbol"
+      >.</a
+      ><a name="2481" href="Orn.Reornament.Examples.Iterative.html#2457" class="DottedPattern Bound"
+      >i&#8324;&#8321;</a
+      ><a name="2484"
+      > </a
+      ><a name="2485" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2486"
+      > </a
+      ><a name="2487" href="Orn.Reornament.Examples.Iterative.html#2487" class="Bound"
+      >i&#8324;&#8322;</a
+      ><a name="2490"
+      > </a
+      ><a name="2491" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2492" class="Symbol"
+      >}</a
+      ><a name="2493"
+      > 
+      </a
+      ><a name="2501" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2502"
+      > </a
+      ><a name="2503" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2507"
+      > </a
+      ><a name="2508" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2509"
+      > </a
+      ><a name="2510" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2514"
+      > </a
+      ><a name="2515" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2516"
+      > </a
+      ><a name="2517" href="Orn.Reornament.Examples.Iterative.html#2517" class="Bound"
+      >x</a
+      ><a name="2518"
+      > </a
+      ><a name="2519" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2520"
+      > 
+      </a
+      ><a name="2528" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2529"
+      > </a
+      ><a name="2530" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2534"
+      > </a
+      ><a name="2535" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2536"
+      > </a
+      ><a name="2537" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2541"
+      > </a
+      ><a name="2542" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2543"
+      > </a
+      ><a name="2544" href="Orn.Reornament.Examples.Iterative.html#2544" class="Bound"
+      >y</a
+      ><a name="2545"
+      > </a
+      ><a name="2546" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2547"
+      > </a
+      ><a name="2548" class="Symbol"
+      >=</a
+      ><a name="2549"
+      > </a
+      ><a name="2550" href="Relation.Binary.PropositionalEquality.html#1034" class="Function"
+      >cong</a
+      ><a name="2554"
+      > </a
+      ><a name="2555" class="Symbol"
+      >(&#955;</a
+      ><a name="2557"
+      > </a
+      ><a name="2558" href="Orn.Reornament.Examples.Iterative.html#2558" class="Bound"
+      >x</a
+      ><a name="2559"
+      > </a
+      ><a name="2560" class="Symbol"
+      >&#8594;</a
+      ><a name="2561"
+      > </a
+      ><a name="2562" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="2563"
+      > </a
+      ><a name="2564" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2568"
+      > </a
+      ><a name="2569" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2570"
+      > </a
+      ><a name="2571" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2575"
+      > </a
+      ><a name="2576" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2577"
+      > </a
+      ><a name="2578" href="Orn.Reornament.Examples.Iterative.html#2558" class="Bound"
+      >x</a
+      ><a name="2579"
+      > </a
+      ><a name="2580" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="2581" class="Symbol"
+      >)</a
+      ><a name="2582"
+      > </a
+      ><a name="2583" href="Category.Functor.html#424" class="Function Operator"
+      >&lt;$&gt;</a
+      ><a name="2586"
+      >
+                                 </a
+      ><a name="2620" href="Logic.IProp.html#652" class="Postulate"
+      >extensionality</a
+      ><a name="2634"
+      > </a
+      ><a name="2635" class="Symbol"
+      >(&#955;</a
+      ><a name="2637"
+      > </a
+      ><a name="2638" href="Orn.Reornament.Examples.Iterative.html#2638" class="Bound"
+      >b</a
+      ><a name="2639"
+      > </a
+      ><a name="2640" class="Symbol"
+      >&#8594;</a
+      ><a name="2641"
+      > </a
+      ><a name="2642" href="Orn.Reornament.Examples.Iterative.html#2331" class="Function"
+      >lemma</a
+      ><a name="2647"
+      > </a
+      ><a name="2648" class="Symbol"
+      >(</a
+      ><a name="2649" href="Orn.Reornament.Examples.Iterative.html#2517" class="Bound"
+      >x</a
+      ><a name="2650"
+      > </a
+      ><a name="2651" href="Orn.Reornament.Examples.Iterative.html#2638" class="Bound"
+      >b</a
+      ><a name="2652" class="Symbol"
+      >)</a
+      ><a name="2653"
+      > </a
+      ><a name="2654" class="Symbol"
+      >(</a
+      ><a name="2655" href="Orn.Reornament.Examples.Iterative.html#2544" class="Bound"
+      >y</a
+      ><a name="2656"
+      > </a
+      ><a name="2657" href="Orn.Reornament.Examples.Iterative.html#2638" class="Bound"
+      >b</a
+      ><a name="2658" class="Symbol"
+      >))</a
+      ><a name="2660"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

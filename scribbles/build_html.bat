@@ -1,0 +1,1 @@
+agda-2.6.2 --html --html-dir="C:\Users\samue\Desktop\programming\calc-alot-of-things-html\html" src\Drafting.lagda.md

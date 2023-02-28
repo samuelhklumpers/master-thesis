@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Orn.AlgebraicOrnament.Examples.Vec</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Orn.AlgebraicOrnament.Examples.Vec.html#1" class="Module"
+      >Orn.AlgebraicOrnament.Examples.Vec</a
+      ><a name="42"
+      > 
+         </a
+      ><a name="53" class="Symbol"
+      >(</a
+      ><a name="54" href="Orn.AlgebraicOrnament.Examples.Vec.html#54" class="Bound"
+      >A</a
+      ><a name="55"
+      > </a
+      ><a name="56" class="Symbol"
+      >:</a
+      ><a name="57"
+      > </a
+      ><a name="58" class="PrimitiveType"
+      >Set</a
+      ><a name="61" class="Symbol"
+      >)</a
+      ><a name="62"
+      >
+       </a
+      ><a name="70" class="Keyword"
+      >where</a
+      ><a name="75"
+      >
+
+</a
+      ><a name="77" class="Keyword"
+      >open</a
+      ><a name="81"
+      > </a
+      ><a name="82" class="Keyword"
+      >import</a
+      ><a name="88"
+      > </a
+      ><a name="89" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="97"
+      >
+
+</a
+      ><a name="99" class="Keyword"
+      >open</a
+      ><a name="103"
+      > </a
+      ><a name="104" class="Keyword"
+      >import</a
+      ><a name="110"
+      > </a
+      ><a name="111" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="120"
+      >
+</a
+      ><a name="121" class="Keyword"
+      >open</a
+      ><a name="125"
+      > </a
+      ><a name="126" class="Keyword"
+      >import</a
+      ><a name="132"
+      > </a
+      ><a name="133" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="141"
+      >
+</a
+      ><a name="142" class="Keyword"
+      >open</a
+      ><a name="146"
+      > </a
+      ><a name="147" class="Keyword"
+      >import</a
+      ><a name="153"
+      > </a
+      ><a name="154" href="Data.Fin.html#1" class="Module"
+      >Data.Fin</a
+      ><a name="162"
+      > </a
+      ><a name="163" class="Keyword"
+      >hiding</a
+      ><a name="169"
+      > </a
+      ><a name="170" class="Symbol"
+      >(</a
+      ><a name="171"
+      >lift</a
+      ><a name="175" class="Symbol"
+      >)</a
+      ><a name="176"
+      >
+</a
+      ><a name="177" class="Keyword"
+      >open</a
+      ><a name="181"
+      > </a
+      ><a name="182" class="Keyword"
+      >import</a
+      ><a name="188"
+      > </a
+      ><a name="189" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="201"
+      >
+
+</a
+      ><a name="203" class="Keyword"
+      >open</a
+      ><a name="207"
+      > </a
+      ><a name="208" class="Keyword"
+      >import</a
+      ><a name="214"
+      > </a
+      ><a name="215" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="252"
+      >
+
+</a
+      ><a name="254" class="Keyword"
+      >open</a
+      ><a name="258"
+      > </a
+      ><a name="259" class="Keyword"
+      >import</a
+      ><a name="265"
+      > </a
+      ><a name="266" href="IDesc.IDesc.html#1" class="Module"
+      >IDesc.IDesc</a
+      ><a name="277"
+      >
+</a
+      ><a name="278" class="Keyword"
+      >open</a
+      ><a name="282"
+      > </a
+      ><a name="283" class="Keyword"
+      >import</a
+      ><a name="289"
+      > </a
+      ><a name="290" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="304"
+      >
+</a
+      ><a name="305" class="Keyword"
+      >open</a
+      ><a name="309"
+      > </a
+      ><a name="310" class="Keyword"
+      >import</a
+      ><a name="316"
+      > </a
+      ><a name="317" href="IDesc.InitialAlgebra.html#1" class="Module"
+      >IDesc.InitialAlgebra</a
+      ><a name="337"
+      >
+</a
+      ><a name="338" class="Keyword"
+      >open</a
+      ><a name="342"
+      > </a
+      ><a name="343" class="Keyword"
+      >import</a
+      ><a name="349"
+      > </a
+      ><a name="350" href="IDesc.Examples.Nat.html#1" class="Module"
+      >IDesc.Examples.Nat</a
+      ><a name="368"
+      >
+
+</a
+      ><a name="370" class="Keyword"
+      >open</a
+      ><a name="374"
+      > </a
+      ><a name="375" class="Keyword"
+      >import</a
+      ><a name="381"
+      > </a
+      ><a name="382" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="394"
+      >
+</a
+      ><a name="395" class="Keyword"
+      >open</a
+      ><a name="399"
+      > </a
+      ><a name="400" class="Keyword"
+      >import</a
+      ><a name="406"
+      > </a
+      ><a name="407" href="Orn.Ornament.Examples.List.html#1" class="Module"
+      >Orn.Ornament.Examples.List</a
+      ><a name="433"
+      >
+
+</a
+      ><a name="435" class="Keyword"
+      >open</a
+      ><a name="439"
+      > </a
+      ><a name="440" class="Keyword"
+      >import</a
+      ><a name="446"
+      > </a
+      ><a name="447" href="Orn.Ornament.Algebra.html#1" class="Module"
+      >Orn.Ornament.Algebra</a
+      ><a name="467"
+      > </a
+      ><a name="468" class="Symbol"
+      >(</a
+      ><a name="469" href="Orn.Ornament.Examples.List.html#325" class="Function"
+      >ListO</a
+      ><a name="474"
+      > </a
+      ><a name="475" href="Orn.AlgebraicOrnament.Examples.Vec.html#54" class="Bound"
+      >A</a
+      ><a name="476" class="Symbol"
+      >)</a
+      ><a name="477"
+      >
+</a
+      ><a name="478" class="Keyword"
+      >import</a
+      ><a name="484"
+      > </a
+      ><a name="485" href="Orn.AlgebraicOrnament.html#1" class="Module"
+      >Orn.AlgebraicOrnament</a
+      ><a name="506"
+      >
+</a
+      ><a name="507" class="Keyword"
+      >open</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="Orn.AlgebraicOrnament.html#379" class="Module"
+      >Orn.</a
+      ><a name="516" href="Orn.AlgebraicOrnament.html#383" class="Module"
+      >AlgebraicOrnament.</a
+      ><a name="534" href="Orn.AlgebraicOrnament.html#779" class="Module"
+      >Func</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="Symbol"
+      >(</a
+      ><a name="540" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="541"
+      > </a
+      ><a name="542" href="Orn.Ornament.Examples.List.html#325" class="Function"
+      >ListO</a
+      ><a name="547"
+      > </a
+      ><a name="548" href="Orn.AlgebraicOrnament.Examples.Vec.html#54" class="Bound"
+      >A</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="554" class="Symbol"
+      >)</a
+      ><a name="555"
+      > </a
+      ><a name="556" href="Orn.Ornament.Algebra.html#486" class="Function"
+      >forgetAlg</a
+      ><a name="565"
+      >
+
+</a
+      ><a name="567" href="Orn.AlgebraicOrnament.Examples.Vec.html#567" class="Function"
+      >Vec</a
+      ><a name="570"
+      > </a
+      ><a name="571" class="Symbol"
+      >:</a
+      ><a name="572"
+      > </a
+      ><a name="573" href="IDesc.Examples.Nat.html#411" class="Function"
+      >Nat</a
+      ><a name="576"
+      > </a
+      ><a name="577" class="Symbol"
+      >&#8594;</a
+      ><a name="578"
+      > </a
+      ><a name="579" class="PrimitiveType"
+      >Set</a
+      ><a name="582"
+      >
+</a
+      ><a name="583" href="Orn.AlgebraicOrnament.Examples.Vec.html#567" class="Function"
+      >Vec</a
+      ><a name="586"
+      > </a
+      ><a name="587" href="Orn.AlgebraicOrnament.Examples.Vec.html#587" class="Bound"
+      >n</a
+      ><a name="588"
+      > </a
+      ><a name="589" class="Symbol"
+      >=</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="592"
+      > </a
+      ><a name="593" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="600"
+      > </a
+      ><a name="601" class="Symbol"
+      >(</a
+      ><a name="602" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="606"
+      > </a
+      ><a name="607" href="Orn.AlgebraicOrnament.Examples.Vec.html#587" class="Bound"
+      >n</a
+      ><a name="608" class="Symbol"
+      >)</a
+      ><a name="609"
+      >
+
+</a
+      ><a name="611" href="Orn.AlgebraicOrnament.Examples.Vec.html#611" class="Function"
+      >vnil</a
+      ><a name="615"
+      > </a
+      ><a name="616" class="Symbol"
+      >:</a
+      ><a name="617"
+      > </a
+      ><a name="618" href="Orn.AlgebraicOrnament.Examples.Vec.html#567" class="Function"
+      >Vec</a
+      ><a name="621"
+      > </a
+      ><a name="622" href="IDesc.Examples.Nat.html#438" class="Function"
+      >ze</a
+      ><a name="624"
+      >
+</a
+      ><a name="625" href="Orn.AlgebraicOrnament.Examples.Vec.html#611" class="Function"
+      >vnil</a
+      ><a name="629"
+      > </a
+      ><a name="630" class="Symbol"
+      >=</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="633"
+      > </a
+      ><a name="634" class="Symbol"
+      >(</a
+      ><a name="635" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="641"
+      > </a
+      ><a name="642" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="644" class="Symbol"
+      >)</a
+      ><a name="645"
+      > </a
+      ><a name="646" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="647"
+      > </a
+      ><a name="648" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="652"
+      > </a
+      ><a name="653" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="654"
+      > </a
+      ><a name="655" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="657"
+      > </a
+      ><a name="658" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="659"
+      >
+
+</a
+      ><a name="661" href="Orn.AlgebraicOrnament.Examples.Vec.html#661" class="Function"
+      >vcons</a
+      ><a name="666"
+      > </a
+      ><a name="667" class="Symbol"
+      >:</a
+      ><a name="668"
+      > </a
+      ><a name="669" class="Symbol"
+      >&#8704;{</a
+      ><a name="671" href="Orn.AlgebraicOrnament.Examples.Vec.html#671" class="Bound"
+      >n</a
+      ><a name="672" class="Symbol"
+      >}</a
+      ><a name="673"
+      > </a
+      ><a name="674" class="Symbol"
+      >&#8594;</a
+      ><a name="675"
+      > </a
+      ><a name="676" href="Orn.AlgebraicOrnament.Examples.Vec.html#54" class="Bound"
+      >A</a
+      ><a name="677"
+      > </a
+      ><a name="678" class="Symbol"
+      >&#8594;</a
+      ><a name="679"
+      > </a
+      ><a name="680" href="Orn.AlgebraicOrnament.Examples.Vec.html#567" class="Function"
+      >Vec</a
+      ><a name="683"
+      > </a
+      ><a name="684" href="Orn.AlgebraicOrnament.Examples.Vec.html#671" class="Bound"
+      >n</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Symbol"
+      >&#8594;</a
+      ><a name="687"
+      > </a
+      ><a name="688" href="Orn.AlgebraicOrnament.Examples.Vec.html#567" class="Function"
+      >Vec</a
+      ><a name="691"
+      > </a
+      ><a name="692" class="Symbol"
+      >(</a
+      ><a name="693" href="IDesc.Examples.Nat.html#467" class="Function"
+      >su</a
+      ><a name="695"
+      > </a
+      ><a name="696" href="Orn.AlgebraicOrnament.Examples.Vec.html#671" class="Bound"
+      >n</a
+      ><a name="697" class="Symbol"
+      >)</a
+      ><a name="698"
+      >
+</a
+      ><a name="699" href="Orn.AlgebraicOrnament.Examples.Vec.html#661" class="Function"
+      >vcons</a
+      ><a name="704"
+      > </a
+      ><a name="705" class="Symbol"
+      >{</a
+      ><a name="706" href="Orn.AlgebraicOrnament.Examples.Vec.html#706" class="Bound"
+      >n</a
+      ><a name="707" class="Symbol"
+      >}</a
+      ><a name="708"
+      > </a
+      ><a name="709" href="Orn.AlgebraicOrnament.Examples.Vec.html#709" class="Bound"
+      >a</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Orn.AlgebraicOrnament.Examples.Vec.html#711" class="Bound"
+      >xs</a
+      ><a name="713"
+      > </a
+      ><a name="714" class="Symbol"
+      >=</a
+      ><a name="715"
+      > </a
+      ><a name="716" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="717"
+      > </a
+      ><a name="718" class="Symbol"
+      >(</a
+      ><a name="719" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="722"
+      > </a
+      ><a name="723" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="727"
+      > </a
+      ><a name="728" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Orn.AlgebraicOrnament.Examples.Vec.html#709" class="Bound"
+      >a</a
+      ><a name="731"
+      > </a
+      ><a name="732" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Orn.AlgebraicOrnament.Examples.Vec.html#706" class="Bound"
+      >n</a
+      ><a name="735" class="Symbol"
+      >)</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="738"
+      > 
+                   </a
+      ><a name="759" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="Orn.AlgebraicOrnament.Examples.Vec.html#711" class="Bound"
+      >xs</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="770"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

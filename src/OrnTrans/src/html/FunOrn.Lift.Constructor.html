@@ -1,0 +1,646 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >FunOrn.Lift.Constructor</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1"
+      >
+
+</a
+      ><a name="3" class="Keyword"
+      >open</a
+      ><a name="7"
+      > </a
+      ><a name="8" class="Keyword"
+      >import</a
+      ><a name="14"
+      > </a
+      ><a name="15" href="IDesc.IDesc.html#1" class="Module"
+      >IDesc.IDesc</a
+      ><a name="26"
+      >
+
+</a
+      ><a name="28" class="Keyword"
+      >open</a
+      ><a name="32"
+      > </a
+      ><a name="33" class="Keyword"
+      >import</a
+      ><a name="39"
+      > </a
+      ><a name="40" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="52"
+      >
+
+</a
+      ><a name="54" class="Keyword"
+      >module</a
+      ><a name="60"
+      > </a
+      ><a name="61" href="FunOrn.Lift.Constructor.html#1" class="Module"
+      >FunOrn.Lift.Constructor</a
+      ><a name="84"
+      >
+         </a
+      ><a name="94" class="Symbol"
+      >{</a
+      ><a name="95" href="FunOrn.Lift.Constructor.html#95" class="Bound"
+      >I</a
+      ><a name="96"
+      > </a
+      ><a name="97" href="FunOrn.Lift.Constructor.html#97" class="Bound"
+      >I&#8314;</a
+      ><a name="99"
+      > </a
+      ><a name="100" class="Symbol"
+      >:</a
+      ><a name="101"
+      > </a
+      ><a name="102" class="PrimitiveType"
+      >Set</a
+      ><a name="105"
+      > </a
+      ><a name="106" class="Symbol"
+      >}</a
+      ><a name="107"
+      >
+         </a
+      ><a name="117" class="Symbol"
+      >{</a
+      ><a name="118" href="FunOrn.Lift.Constructor.html#118" class="Bound"
+      >D</a
+      ><a name="119"
+      > </a
+      ><a name="120" class="Symbol"
+      >:</a
+      ><a name="121"
+      > </a
+      ><a name="122" href="IDesc.IDesc.html#1286" class="Record"
+      >func</a
+      ><a name="126"
+      >  </a
+      ><a name="128" href="FunOrn.Lift.Constructor.html#95" class="Bound"
+      >I</a
+      ><a name="129"
+      > </a
+      ><a name="130" href="FunOrn.Lift.Constructor.html#95" class="Bound"
+      >I</a
+      ><a name="131" class="Symbol"
+      >}</a
+      ><a name="132"
+      >
+         </a
+      ><a name="142" class="Symbol"
+      >{</a
+      ><a name="143" href="FunOrn.Lift.Constructor.html#143" class="Bound"
+      >u</a
+      ><a name="144"
+      > </a
+      ><a name="145" class="Symbol"
+      >:</a
+      ><a name="146"
+      > </a
+      ><a name="147" href="FunOrn.Lift.Constructor.html#97" class="Bound"
+      >I&#8314;</a
+      ><a name="149"
+      > </a
+      ><a name="150" class="Symbol"
+      >&#8594;</a
+      ><a name="151"
+      > </a
+      ><a name="152" href="FunOrn.Lift.Constructor.html#95" class="Bound"
+      >I</a
+      ><a name="153" class="Symbol"
+      >}</a
+      ><a name="154"
+      >
+         </a
+      ><a name="164" class="Symbol"
+      >(</a
+      ><a name="165" href="FunOrn.Lift.Constructor.html#165" class="Bound"
+      >o</a
+      ><a name="166"
+      > </a
+      ><a name="167" class="Symbol"
+      >:</a
+      ><a name="168"
+      > </a
+      ><a name="169" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="172"
+      > </a
+      ><a name="173" href="FunOrn.Lift.Constructor.html#118" class="Bound"
+      >D</a
+      ><a name="174"
+      > </a
+      ><a name="175" href="FunOrn.Lift.Constructor.html#143" class="Bound"
+      >u</a
+      ><a name="176"
+      > </a
+      ><a name="177" href="FunOrn.Lift.Constructor.html#143" class="Bound"
+      >u</a
+      ><a name="178" class="Symbol"
+      >)</a
+      ><a name="179"
+      >
+       </a
+      ><a name="187" class="Keyword"
+      >where</a
+      ><a name="192"
+      >
+
+</a
+      ><a name="194" class="Keyword"
+      >open</a
+      ><a name="198"
+      > </a
+      ><a name="199" class="Keyword"
+      >import</a
+      ><a name="205"
+      > </a
+      ><a name="206" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="218"
+      >
+
+</a
+      ><a name="220" class="Keyword"
+      >open</a
+      ><a name="224"
+      > </a
+      ><a name="225" class="Keyword"
+      >import</a
+      ><a name="231"
+      > </a
+      ><a name="232" href="Logic.Logic.html#1" class="Module"
+      >Logic.Logic</a
+      ><a name="243"
+      > 
+
+</a
+      ><a name="246" class="Keyword"
+      >open</a
+      ><a name="250"
+      > </a
+      ><a name="251" class="Keyword"
+      >import</a
+      ><a name="257"
+      > </a
+      ><a name="258" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="272"
+      >
+</a
+      ><a name="273" class="Keyword"
+      >open</a
+      ><a name="277"
+      > </a
+      ><a name="278" class="Keyword"
+      >import</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="IDesc.Induction.html#1" class="Module"
+      >IDesc.Induction</a
+      ><a name="300"
+      >
+
+</a
+      ><a name="302" class="Keyword"
+      >open</a
+      ><a name="306"
+      > </a
+      ><a name="307" class="Keyword"
+      >import</a
+      ><a name="313"
+      > </a
+      ><a name="314" href="Orn.Reornament.html#1" class="Module"
+      >Orn.Reornament</a
+      ><a name="328"
+      >
+
+</a
+      ><a name="330" class="Keyword"
+      >open</a
+      ><a name="334"
+      > </a
+      ><a name="335" class="Keyword"
+      >import</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="FunOrn.Functions.html#1" class="Module"
+      >FunOrn.Functions</a
+      ><a name="358"
+      >
+</a
+      ><a name="359" class="Keyword"
+      >open</a
+      ><a name="363"
+      > </a
+      ><a name="364" class="Keyword"
+      >import</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="FunOrn.FunOrnament.html#1" class="Module"
+      >FunOrn.FunOrnament</a
+      ><a name="389"
+      >
+</a
+      ><a name="390" class="Keyword"
+      >open</a
+      ><a name="394"
+      > </a
+      ><a name="395" class="Keyword"
+      >import</a
+      ><a name="401"
+      > </a
+      ><a name="402" href="FunOrn.Patch.html#1" class="Module"
+      >FunOrn.Patch</a
+      ><a name="414"
+      >
+</a
+      ><a name="415" class="Keyword"
+      >open</a
+      ><a name="419"
+      > </a
+      ><a name="420" class="Keyword"
+      >import</a
+      ><a name="426"
+      > </a
+      ><a name="427" href="FunOrn.Lift.MkReorn.html#1" class="Module"
+      >FunOrn.Lift.MkReorn</a
+      ><a name="446"
+      > </a
+      ><a name="447" href="FunOrn.Lift.Constructor.html#165" class="Bound"
+      >o</a
+      ><a name="448"
+      >
+
+</a
+      ><a name="450" class="Comment"
+      >-- Paper: Definition 6.17</a
+      ><a name="475"
+      >
+</a
+      ><a name="476" href="FunOrn.Lift.Constructor.html#476" class="Function"
+      >lift-constructor</a
+      ><a name="492"
+      > </a
+      ><a name="493" class="Symbol"
+      >:</a
+      ><a name="494"
+      > </a
+      ><a name="495" class="Symbol"
+      >{</a
+      ><a name="496" href="FunOrn.Lift.Constructor.html#496" class="Bound"
+      >i</a
+      ><a name="497"
+      > </a
+      ><a name="498" class="Symbol"
+      >:</a
+      ><a name="499"
+      > </a
+      ><a name="500" href="FunOrn.Lift.Constructor.html#95" class="Bound"
+      >I</a
+      ><a name="501" class="Symbol"
+      >}{</a
+      ><a name="503" href="FunOrn.Lift.Constructor.html#503" class="Bound"
+      >i&#8314;</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Symbol"
+      >:</a
+      ><a name="507"
+      > </a
+      ><a name="508" href="FunOrn.Lift.Constructor.html#143" class="Bound"
+      >u</a
+      ><a name="509"
+      > </a
+      ><a name="510" href="Logic.Logic.html#194" class="Datatype Operator"
+      >&#8315;&#185;</a
+      ><a name="512"
+      > </a
+      ><a name="513" href="FunOrn.Lift.Constructor.html#496" class="Bound"
+      >i</a
+      ><a name="514" class="Symbol"
+      >}</a
+      ><a name="515"
+      >
+                  </a
+      ><a name="534" class="Symbol"
+      >{</a
+      ><a name="535" href="FunOrn.Lift.Constructor.html#535" class="Bound"
+      >T</a
+      ><a name="536"
+      > </a
+      ><a name="537" class="Symbol"
+      >:</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="FunOrn.Functions.html#200" class="Datatype"
+      >Type</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Symbol"
+      >}{</a
+      ><a name="546" href="FunOrn.Lift.Constructor.html#546" class="Bound"
+      >T&#8314;</a
+      ><a name="548"
+      > </a
+      ><a name="549" class="Symbol"
+      >:</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="FunOrn.FunOrnament.html#354" class="Datatype"
+      >FunctionOrn</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="FunOrn.Lift.Constructor.html#535" class="Bound"
+      >T</a
+      ><a name="564" class="Symbol"
+      >}</a
+      ><a name="565"
+      >
+                  </a
+      ><a name="584" class="Symbol"
+      >{</a
+      ><a name="585" href="FunOrn.Lift.Constructor.html#585" class="Bound"
+      >t</a
+      ><a name="586"
+      > </a
+      ><a name="587" class="Symbol"
+      >:</a
+      ><a name="588"
+      > </a
+      ><a name="589" href="FunOrn.Functions.html#356" class="Function Operator"
+      >&#10214;</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="FunOrn.Lift.Constructor.html#535" class="Bound"
+      >T</a
+      ><a name="592"
+      > </a
+      ><a name="593" href="FunOrn.Functions.html#356" class="Function Operator"
+      >&#10215;Type</a
+      ><a name="598" class="Symbol"
+      >}</a
+      ><a name="599"
+      > </a
+      ><a name="600" class="Symbol"
+      >&#8594;</a
+      ><a name="601"
+      >
+                  </a
+      ><a name="620" class="Symbol"
+      >{</a
+      ><a name="621" href="FunOrn.Lift.Constructor.html#621" class="Bound"
+      >x</a
+      ><a name="622"
+      > </a
+      ><a name="623" class="Symbol"
+      >:</a
+      ><a name="624"
+      > </a
+      ><a name="625" href="IDesc.IDesc.html#1415" class="Function Operator"
+      >&#10214;</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="FunOrn.Lift.Constructor.html#118" class="Bound"
+      >D</a
+      ><a name="628"
+      > </a
+      ><a name="629" href="IDesc.IDesc.html#1415" class="Function Operator"
+      >&#10215;func</a
+      ><a name="634"
+      > </a
+      ><a name="635" class="Symbol"
+      >(</a
+      ><a name="636" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="637"
+      > </a
+      ><a name="638" href="FunOrn.Lift.Constructor.html#118" class="Bound"
+      >D</a
+      ><a name="639" class="Symbol"
+      >)</a
+      ><a name="640"
+      > </a
+      ><a name="641" href="FunOrn.Lift.Constructor.html#496" class="Bound"
+      >i</a
+      ><a name="642" class="Symbol"
+      >}</a
+      ><a name="643"
+      >
+                  </a
+      ><a name="662" class="Symbol"
+      >(</a
+      ><a name="663" href="FunOrn.Lift.Constructor.html#663" class="Bound"
+      >e</a
+      ><a name="664"
+      > </a
+      ><a name="665" class="Symbol"
+      >:</a
+      ><a name="666"
+      > </a
+      ><a name="667" href="FunOrn.Lift.MkReorn.html#2322" class="Function"
+      >Extra</a
+      ><a name="672"
+      > </a
+      ><a name="673" class="Symbol"
+      >{</a
+      ><a name="674"
+      >i&#8314; </a
+      ><a name="677" class="Symbol"
+      >=</a
+      ><a name="678"
+      > </a
+      ><a name="679" href="FunOrn.Lift.Constructor.html#503" class="Bound"
+      >i&#8314;</a
+      ><a name="681" class="Symbol"
+      >}</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="FunOrn.Lift.Constructor.html#621" class="Bound"
+      >x</a
+      ><a name="684" class="Symbol"
+      >)</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Symbol"
+      >&#8594;</a
+      ><a name="687"
+      > </a
+      ><a name="688" href="FunOrn.Lift.MkReorn.html#2443" class="Function"
+      >Args</a
+      ><a name="692"
+      > </a
+      ><a name="693" class="Symbol"
+      >{</a
+      ><a name="694"
+      >i&#8314; </a
+      ><a name="697" class="Symbol"
+      >=</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="FunOrn.Lift.Constructor.html#503" class="Bound"
+      >i&#8314;</a
+      ><a name="701" class="Symbol"
+      >}</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="FunOrn.Lift.Constructor.html#621" class="Bound"
+      >x</a
+      ><a name="704"
+      > </a
+      ><a name="705" href="FunOrn.Lift.Constructor.html#663" class="Bound"
+      >e</a
+      ><a name="706"
+      > </a
+      ><a name="707" class="Symbol"
+      >&#8594;</a
+      ><a name="708"
+      > </a
+      ><a name="709" href="FunOrn.Patch.html#271" class="Function"
+      >Patch</a
+      ><a name="714"
+      > </a
+      ><a name="715" href="FunOrn.Lift.Constructor.html#585" class="Bound"
+      >t</a
+      ><a name="716"
+      > </a
+      ><a name="717" href="FunOrn.Lift.Constructor.html#546" class="Bound"
+      >T&#8314;</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >&#8594;</a
+      ><a name="721"
+      >
+                  </a
+      ><a name="740" href="FunOrn.Patch.html#271" class="Function"
+      >Patch</a
+      ><a name="745"
+      > </a
+      ><a name="746" class="Symbol"
+      >(</a
+      ><a name="747" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="748"
+      > </a
+      ><a name="749" href="FunOrn.Lift.Constructor.html#621" class="Bound"
+      >x</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="FunOrn.Lift.Constructor.html#585" class="Bound"
+      >t</a
+      ><a name="756" class="Symbol"
+      >)</a
+      ><a name="757"
+      > </a
+      ><a name="758" class="Symbol"
+      >(</a
+      ><a name="759" href="FunOrn.FunOrnament.html#588" class="InductiveConstructor Operator"
+      >&#956;&#8314;</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="FunOrn.Lift.Constructor.html#165" class="Bound"
+      >o</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="FunOrn.FunOrnament.html#588" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="FunOrn.Lift.Constructor.html#503" class="Bound"
+      >i&#8314;</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="FunOrn.FunOrnament.html#588" class="InductiveConstructor Operator"
+      >]&#215;</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="FunOrn.Lift.Constructor.html#546" class="Bound"
+      >T&#8314;</a
+      ><a name="774" class="Symbol"
+      >)</a
+      ><a name="775"
+      >
+</a
+      ><a name="776" href="FunOrn.Lift.Constructor.html#476" class="Function"
+      >lift-constructor</a
+      ><a name="792"
+      > </a
+      ><a name="793" class="Symbol"
+      >{</a
+      ><a name="794"
+      >i&#8314; </a
+      ><a name="797" class="Symbol"
+      >=</a
+      ><a name="798"
+      > </a
+      ><a name="799" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="802"
+      > </a
+      ><a name="803" href="FunOrn.Lift.Constructor.html#803" class="Bound"
+      >i&#8314;</a
+      ><a name="805" class="Symbol"
+      >}</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="FunOrn.Lift.Constructor.html#807" class="Bound"
+      >e</a
+      ><a name="808"
+      > </a
+      ><a name="809" href="FunOrn.Lift.Constructor.html#809" class="Bound"
+      >a</a
+      ><a name="810"
+      > </a
+      ><a name="811" href="FunOrn.Lift.Constructor.html#811" class="Bound"
+      >p</a
+      ><a name="812"
+      > </a
+      ><a name="813" class="Symbol"
+      >=</a
+      ><a name="814"
+      > </a
+      ><a name="815" href="FunOrn.Lift.MkReorn.html#2597" class="Function"
+      >mkreorn</a
+      ><a name="822"
+      > </a
+      ><a name="823" href="FunOrn.Lift.Constructor.html#807" class="Bound"
+      >e</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="FunOrn.Lift.Constructor.html#809" class="Bound"
+      >a</a
+      ><a name="826"
+      > </a
+      ><a name="827" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="828"
+      > </a
+      ><a name="829" href="FunOrn.Lift.Constructor.html#811" class="Bound"
+      >p</a
+      ><a name="830"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

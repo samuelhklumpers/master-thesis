@@ -1,0 +1,1225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >FunOrn.Functions.Examples.Le</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="FunOrn.Functions.Examples.Le.html#1" class="Module"
+      >FunOrn.Functions.Examples.Le</a
+      ><a name="36"
+      > </a
+      ><a name="37" class="Keyword"
+      >where</a
+      ><a name="42"
+      >
+
+</a
+      ><a name="44" class="Keyword"
+      >open</a
+      ><a name="48"
+      > </a
+      ><a name="49" class="Keyword"
+      >import</a
+      ><a name="55"
+      > </a
+      ><a name="56" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="65"
+      >
+</a
+      ><a name="66" class="Keyword"
+      >open</a
+      ><a name="70"
+      > </a
+      ><a name="71" class="Keyword"
+      >import</a
+      ><a name="77"
+      > </a
+      ><a name="78" href="Data.Fin.html#1" class="Module"
+      >Data.Fin</a
+      ><a name="86"
+      > </a
+      ><a name="87" class="Keyword"
+      >hiding</a
+      ><a name="93"
+      > </a
+      ><a name="94" class="Symbol"
+      >(</a
+      ><a name="95"
+      >_&lt;_ </a
+      ><a name="99" class="Symbol"
+      >;</a
+      ><a name="100"
+      > fold </a
+      ><a name="106" class="Symbol"
+      >;</a
+      ><a name="107"
+      > lift</a
+      ><a name="112" class="Symbol"
+      >)</a
+      ><a name="113"
+      >
+</a
+      ><a name="114" class="Keyword"
+      >open</a
+      ><a name="118"
+      > </a
+      ><a name="119" class="Keyword"
+      >import</a
+      ><a name="125"
+      > </a
+      ><a name="126" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="138"
+      >
+
+</a
+      ><a name="140" class="Keyword"
+      >open</a
+      ><a name="144"
+      > </a
+      ><a name="145" class="Keyword"
+      >import</a
+      ><a name="151"
+      > </a
+      ><a name="152" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="189"
+      >
+
+</a
+      ><a name="191" class="Keyword"
+      >open</a
+      ><a name="195"
+      > </a
+      ><a name="196" class="Keyword"
+      >import</a
+      ><a name="202"
+      > </a
+      ><a name="203" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="217"
+      >
+</a
+      ><a name="218" class="Keyword"
+      >open</a
+      ><a name="222"
+      > </a
+      ><a name="223" class="Keyword"
+      >import</a
+      ><a name="229"
+      > </a
+      ><a name="230" href="IDesc.Lifting.html#1" class="Module"
+      >IDesc.Lifting</a
+      ><a name="243"
+      >
+</a
+      ><a name="244" class="Keyword"
+      >open</a
+      ><a name="248"
+      > </a
+      ><a name="249" class="Keyword"
+      >import</a
+      ><a name="255"
+      > </a
+      ><a name="256" href="IDesc.InitialAlgebra.html#1" class="Module"
+      >IDesc.InitialAlgebra</a
+      ><a name="276"
+      >
+</a
+      ><a name="277" class="Keyword"
+      >open</a
+      ><a name="281"
+      > </a
+      ><a name="282" class="Keyword"
+      >import</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="IDesc.Induction.html#1" class="Module"
+      >IDesc.Induction</a
+      ><a name="304"
+      >
+</a
+      ><a name="305" class="Keyword"
+      >open</a
+      ><a name="309"
+      > </a
+      ><a name="310" class="Keyword"
+      >import</a
+      ><a name="316"
+      > </a
+      ><a name="317" href="IDesc.Case.html#1" class="Module"
+      >IDesc.Case</a
+      ><a name="327"
+      >
+
+</a
+      ><a name="329" class="Keyword"
+      >open</a
+      ><a name="333"
+      > </a
+      ><a name="334" class="Keyword"
+      >import</a
+      ><a name="340"
+      > </a
+      ><a name="341" href="IDesc.Examples.Nat.html#1" class="Module"
+      >IDesc.Examples.Nat</a
+      ><a name="359"
+      > 
+</a
+      ><a name="361" class="Keyword"
+      >open</a
+      ><a name="365"
+      > </a
+      ><a name="366" class="Keyword"
+      >import</a
+      ><a name="372"
+      > </a
+      ><a name="373" href="IDesc.Examples.Bool.html#1" class="Module"
+      >IDesc.Examples.Bool</a
+      ><a name="392"
+      >
+
+</a
+      ><a name="394" class="Keyword"
+      >open</a
+      ><a name="398"
+      > </a
+      ><a name="399" class="Keyword"
+      >import</a
+      ><a name="405"
+      > </a
+      ><a name="406" href="FunOrn.Functions.html#1" class="Module"
+      >FunOrn.Functions</a
+      ><a name="422"
+      >
+
+
+</a
+      ><a name="425" class="Comment"
+      >-- Paper: Example 5.3</a
+      ><a name="446"
+      >
+
+</a
+      ><a name="448" href="FunOrn.Functions.Examples.Le.html#448" class="Function"
+      >type&lt;</a
+      ><a name="453"
+      > </a
+      ><a name="454" class="Symbol"
+      >:</a
+      ><a name="455"
+      > </a
+      ><a name="456" href="FunOrn.Functions.html#200" class="Datatype"
+      >Type</a
+      ><a name="460"
+      >
+</a
+      ><a name="461" href="FunOrn.Functions.Examples.Le.html#448" class="Function"
+      >type&lt;</a
+      ><a name="466"
+      > </a
+      ><a name="467" class="Symbol"
+      >=</a
+      ><a name="468"
+      > </a
+      ><a name="469" href="FunOrn.Functions.html#220" class="InductiveConstructor Operator"
+      >&#956;</a
+      ><a name="470"
+      > </a
+      ><a name="471" href="IDesc.Examples.Nat.html#265" class="Function"
+      >NatD</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="FunOrn.Functions.html#220" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="480"
+      > </a
+      ><a name="481" href="FunOrn.Functions.html#220" class="InductiveConstructor Operator"
+      >]&#8594;</a
+      ><a name="483"
+      > </a
+      ><a name="484" href="FunOrn.Functions.html#220" class="InductiveConstructor Operator"
+      >&#956;</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="IDesc.Examples.Nat.html#265" class="Function"
+      >NatD</a
+      ><a name="490"
+      > </a
+      ><a name="491" href="FunOrn.Functions.html#220" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="495"
+      > </a
+      ><a name="496" href="FunOrn.Functions.html#220" class="InductiveConstructor Operator"
+      >]&#8594;</a
+      ><a name="498"
+      > </a
+      ><a name="499" href="FunOrn.Functions.html#282" class="InductiveConstructor Operator"
+      >&#956;</a
+      ><a name="500"
+      > </a
+      ><a name="501" href="IDesc.Examples.Bool.html#215" class="Function"
+      >BoolD</a
+      ><a name="506"
+      > </a
+      ><a name="507" href="FunOrn.Functions.html#282" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="508"
+      > </a
+      ><a name="509" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="FunOrn.Functions.html#282" class="InductiveConstructor Operator"
+      >]&#215;</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="FunOrn.Functions.html#344" class="InductiveConstructor"
+      >`&#8868;</a
+      ><a name="517"
+      >
+
+</a
+      ><a name="519" class="Keyword"
+      >infix</a
+      ><a name="524"
+      > </a
+      ><a name="525" class="Number"
+      >40</a
+      ><a name="527"
+      > _&lt;_ 
+
+</a
+      ><a name="534" href="FunOrn.Functions.Examples.Le.html#534" class="Function"
+      >&#946;</a
+      ><a name="535"
+      > </a
+      ><a name="536" class="Symbol"
+      >:</a
+      ><a name="537"
+      > </a
+      ><a name="538" class="Symbol"
+      >(</a
+      ><a name="539" href="IDesc.Examples.Nat.html#411" class="Function"
+      >Nat</a
+      ><a name="542"
+      > </a
+      ><a name="543" class="Symbol"
+      >&#8594;</a
+      ><a name="544"
+      > </a
+      ><a name="545" href="IDesc.Examples.Bool.html#356" class="Function"
+      >Bool</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="551"
+      > </a
+      ><a name="552" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="553" class="Symbol"
+      >)</a
+      ><a name="554"
+      > </a
+      ><a name="555" class="Symbol"
+      >&#8594;</a
+      ><a name="556"
+      > </a
+      ><a name="557" href="IDesc.Case.html#292" class="Function"
+      >Cases</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="IDesc.Examples.Nat.html#265" class="Function"
+      >NatD</a
+      ><a name="567"
+      > </a
+      ><a name="568" class="Symbol"
+      >(&#955;</a
+      ><a name="570"
+      > </a
+      ><a name="571" href="FunOrn.Functions.Examples.Le.html#571" class="Bound"
+      >_</a
+      ><a name="572"
+      > </a
+      ><a name="573" class="Symbol"
+      >&#8594;</a
+      ><a name="574"
+      > </a
+      ><a name="575" href="IDesc.Examples.Bool.html#356" class="Function"
+      >Bool</a
+      ><a name="579"
+      > </a
+      ><a name="580" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="583" class="Symbol"
+      >)</a
+      ><a name="584"
+      >
+</a
+      ><a name="585" href="FunOrn.Functions.Examples.Le.html#534" class="Function"
+      >&#946;</a
+      ><a name="586"
+      > </a
+      ><a name="587" href="FunOrn.Functions.Examples.Le.html#587" class="Bound"
+      >&lt;n</a
+      ><a name="589"
+      > </a
+      ><a name="590" class="Symbol"
+      >{</a
+      ><a name="591" href="FunOrn.Functions.Examples.Le.html#591" class="Bound"
+      >i</a
+      ><a name="592" class="Symbol"
+      >}</a
+      ><a name="593"
+      > </a
+      ><a name="594" class="Symbol"
+      >(</a
+      ><a name="595" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="599"
+      > </a
+      ><a name="600" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="601"
+      > </a
+      ><a name="602" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="604" class="Symbol"
+      >)</a
+      ><a name="605"
+      > </a
+      ><a name="606" class="Symbol"
+      >=</a
+      ><a name="607"
+      > </a
+      ><a name="608" href="IDesc.Examples.Bool.html#387" class="Function"
+      >true</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="614"
+      > </a
+      ><a name="615" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="617"
+      >
+</a
+      ><a name="618" href="FunOrn.Functions.Examples.Le.html#534" class="Function"
+      >&#946;</a
+      ><a name="619"
+      > </a
+      ><a name="620" href="FunOrn.Functions.Examples.Le.html#620" class="Bound"
+      >&lt;n</a
+      ><a name="622"
+      > </a
+      ><a name="623" class="Symbol"
+      >{</a
+      ><a name="624" href="FunOrn.Functions.Examples.Le.html#624" class="Bound"
+      >i</a
+      ><a name="625" class="Symbol"
+      >}</a
+      ><a name="626"
+      > </a
+      ><a name="627" class="Symbol"
+      >(</a
+      ><a name="628" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="636"
+      > </a
+      ><a name="637" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="638"
+      > </a
+      ><a name="639" href="FunOrn.Functions.Examples.Le.html#639" class="Bound"
+      >m</a
+      ><a name="640" class="Symbol"
+      >)</a
+      ><a name="641"
+      > </a
+      ><a name="642" class="Symbol"
+      >=</a
+      ><a name="643"
+      > </a
+      ><a name="644" href="FunOrn.Functions.Examples.Le.html#620" class="Bound"
+      >&lt;n</a
+      ><a name="646"
+      > </a
+      ><a name="647" href="FunOrn.Functions.Examples.Le.html#639" class="Bound"
+      >m</a
+      ><a name="648"
+      >
+</a
+      ><a name="649" href="FunOrn.Functions.Examples.Le.html#534" class="Function"
+      >&#946;</a
+      ><a name="650"
+      > </a
+      ><a name="651" href="FunOrn.Functions.Examples.Le.html#651" class="Bound"
+      >&lt;n</a
+      ><a name="653"
+      > </a
+      ><a name="654" class="Symbol"
+      >{</a
+      ><a name="655" href="FunOrn.Functions.Examples.Le.html#655" class="Bound"
+      >i</a
+      ><a name="656" class="Symbol"
+      >}</a
+      ><a name="657"
+      > </a
+      ><a name="658" class="Symbol"
+      >(</a
+      ><a name="659" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="662"
+      > </a
+      ><a name="663" class="Symbol"
+      >(</a
+      ><a name="664" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="667"
+      > </a
+      ><a name="668" class="Symbol"
+      >())</a
+      ><a name="671"
+      > </a
+      ><a name="672" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="673"
+      > </a
+      ><a name="674" class="Symbol"
+      >_)</a
+      ><a name="676"
+      >
+
+
+</a
+      ><a name="679" href="FunOrn.Functions.Examples.Le.html#679" class="Function"
+      >&#945;</a
+      ><a name="680"
+      > </a
+      ><a name="681" class="Symbol"
+      >:</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="IDesc.Induction.html#297" class="Function"
+      >DAlg</a
+      ><a name="687"
+      > </a
+      ><a name="688" href="IDesc.Examples.Nat.html#265" class="Function"
+      >NatD</a
+      ><a name="692"
+      > </a
+      ><a name="693" class="Symbol"
+      >(&#955;</a
+      ><a name="695"
+      > </a
+      ><a name="696" href="FunOrn.Functions.Examples.Le.html#696" class="Bound"
+      >_</a
+      ><a name="697"
+      > </a
+      ><a name="698" class="Symbol"
+      >&#8594;</a
+      ><a name="699"
+      > </a
+      ><a name="700" href="IDesc.Examples.Nat.html#411" class="Function"
+      >Nat</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >&#8594;</a
+      ><a name="705"
+      > </a
+      ><a name="706" href="IDesc.Examples.Bool.html#356" class="Function"
+      >Bool</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="712"
+      > </a
+      ><a name="713" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="714" class="Symbol"
+      >)</a
+      ><a name="715"
+      >
+</a
+      ><a name="716" href="FunOrn.Functions.Examples.Le.html#679" class="Function"
+      >&#945;</a
+      ><a name="717"
+      > </a
+      ><a name="718" class="Symbol"
+      >{</a
+      ><a name="719" href="FunOrn.Functions.Examples.Le.html#719" class="Bound"
+      >i</a
+      ><a name="720" class="Symbol"
+      >}</a
+      ><a name="721"
+      > </a
+      ><a name="722" class="Symbol"
+      >{</a
+      ><a name="723" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="727"
+      > </a
+      ><a name="728" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="732" class="Symbol"
+      >}</a
+      ><a name="733"
+      >  </a
+      ><a name="735" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="737"
+      > </a
+      ><a name="738" class="Symbol"
+      >=</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Symbol"
+      >&#955;</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="FunOrn.Functions.Examples.Le.html#742" class="Bound"
+      >m</a
+      ><a name="743"
+      > </a
+      ><a name="744" class="Symbol"
+      >&#8594;</a
+      ><a name="745"
+      > </a
+      ><a name="746" href="IDesc.Examples.Bool.html#421" class="Function"
+      >false</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="753"
+      > </a
+      ><a name="754" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="756"
+      >
+</a
+      ><a name="757" href="FunOrn.Functions.Examples.Le.html#679" class="Function"
+      >&#945;</a
+      ><a name="758"
+      > </a
+      ><a name="759" class="Symbol"
+      >{</a
+      ><a name="760" href="FunOrn.Functions.Examples.Le.html#760" class="Bound"
+      >i</a
+      ><a name="761" class="Symbol"
+      >}</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >{</a
+      ><a name="764" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="772"
+      > </a
+      ><a name="773" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="774"
+      > </a
+      ><a name="775" href="FunOrn.Functions.Examples.Le.html#775" class="Bound"
+      >n</a
+      ><a name="776" class="Symbol"
+      >}</a
+      ><a name="777"
+      > </a
+      ><a name="778" href="FunOrn.Functions.Examples.Le.html#778" class="Bound"
+      >&lt;n</a
+      ><a name="780"
+      > </a
+      ><a name="781" class="Symbol"
+      >=</a
+      ><a name="782"
+      > 
+  </a
+      ><a name="786" href="IDesc.Case.html#358" class="Function"
+      >case</a
+      ><a name="790"
+      > </a
+      ><a name="791" href="IDesc.Examples.Nat.html#265" class="Function"
+      >NatD</a
+      ><a name="795"
+      > </a
+      ><a name="796" class="Symbol"
+      >(&#955;</a
+      ><a name="798"
+      > </a
+      ><a name="799" href="FunOrn.Functions.Examples.Le.html#799" class="Bound"
+      >_</a
+      ><a name="800"
+      > </a
+      ><a name="801" class="Symbol"
+      >&#8594;</a
+      ><a name="802"
+      > </a
+      ><a name="803" href="IDesc.Examples.Bool.html#356" class="Function"
+      >Bool</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="811" class="Symbol"
+      >)</a
+      ><a name="812"
+      > </a
+      ><a name="813" class="Symbol"
+      >(&#955;</a
+      ><a name="815"
+      > </a
+      ><a name="816" class="Symbol"
+      >{</a
+      ><a name="817" href="FunOrn.Functions.Examples.Le.html#817" class="Bound"
+      >i</a
+      ><a name="818" class="Symbol"
+      >}</a
+      ><a name="819"
+      > </a
+      ><a name="820" class="Symbol"
+      >&#8594;</a
+      ><a name="821"
+      > </a
+      ><a name="822" href="FunOrn.Functions.Examples.Le.html#534" class="Function"
+      >&#946;</a
+      ><a name="823"
+      > </a
+      ><a name="824" href="FunOrn.Functions.Examples.Le.html#778" class="Bound"
+      >&lt;n</a
+      ><a name="826"
+      > </a
+      ><a name="827" class="Symbol"
+      >{</a
+      ><a name="828" href="FunOrn.Functions.Examples.Le.html#817" class="Bound"
+      >i</a
+      ><a name="829" class="Symbol"
+      >})</a
+      ><a name="831"
+      >
+</a
+      ><a name="832" href="FunOrn.Functions.Examples.Le.html#679" class="Function"
+      >&#945;</a
+      ><a name="833"
+      > </a
+      ><a name="834" class="Symbol"
+      >{</a
+      ><a name="835" href="FunOrn.Functions.Examples.Le.html#835" class="Bound"
+      >i</a
+      ><a name="836" class="Symbol"
+      >}</a
+      ><a name="837"
+      > </a
+      ><a name="838" class="Symbol"
+      >{</a
+      ><a name="839" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="842"
+      > </a
+      ><a name="843" class="Symbol"
+      >(</a
+      ><a name="844" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="847"
+      > </a
+      ><a name="848" class="Symbol"
+      >())</a
+      ><a name="851"
+      > </a
+      ><a name="852" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="853"
+      > </a
+      ><a name="854" class="Symbol"
+      >_}</a
+      ><a name="856"
+      > </a
+      ><a name="857" class="Symbol"
+      >_</a
+      ><a name="858"
+      >
+
+</a
+      ><a name="860" href="FunOrn.Functions.Examples.Le.html#860" class="Function Operator"
+      >_&lt;_</a
+      ><a name="863"
+      > </a
+      ><a name="864" class="Symbol"
+      >:</a
+      ><a name="865"
+      > </a
+      ><a name="866" href="FunOrn.Functions.html#356" class="Function Operator"
+      >&#10214;</a
+      ><a name="867"
+      > </a
+      ><a name="868" href="FunOrn.Functions.Examples.Le.html#448" class="Function"
+      >type&lt;</a
+      ><a name="873"
+      > </a
+      ><a name="874" href="FunOrn.Functions.html#356" class="Function Operator"
+      >&#10215;Type</a
+      ><a name="879"
+      >
+</a
+      ><a name="880" href="FunOrn.Functions.Examples.Le.html#880" class="Bound"
+      >m</a
+      ><a name="881"
+      > </a
+      ><a name="882" href="FunOrn.Functions.Examples.Le.html#860" class="Function Operator"
+      >&lt;</a
+      ><a name="883"
+      > </a
+      ><a name="884" href="FunOrn.Functions.Examples.Le.html#884" class="Bound"
+      >n</a
+      ><a name="885"
+      > </a
+      ><a name="886" class="Symbol"
+      >=</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="IDesc.Induction.html#821" class="Function"
+      >induction</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="IDesc.Examples.Nat.html#265" class="Function"
+      >NatD</a
+      ><a name="902"
+      > </a
+      ><a name="903" class="Symbol"
+      >(&#955;</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="FunOrn.Functions.Examples.Le.html#906" class="Bound"
+      >_</a
+      ><a name="907"
+      > </a
+      ><a name="908" class="Symbol"
+      >&#8594;</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="IDesc.Examples.Nat.html#411" class="Function"
+      >Nat</a
+      ><a name="913"
+      > </a
+      ><a name="914" class="Symbol"
+      >&#8594;</a
+      ><a name="915"
+      > </a
+      ><a name="916" href="IDesc.Examples.Bool.html#356" class="Function"
+      >Bool</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Data.Product.html#1055" class="Function Operator"
+      >&#215;</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="924" class="Symbol"
+      >)</a
+      ><a name="925"
+      > </a
+      ><a name="926" class="Symbol"
+      >(&#955;</a
+      ><a name="928"
+      > </a
+      ><a name="929" class="Symbol"
+      >{</a
+      ><a name="930" href="FunOrn.Functions.Examples.Le.html#930" class="Bound"
+      >i</a
+      ><a name="931" class="Symbol"
+      >}{</a
+      ><a name="933" href="FunOrn.Functions.Examples.Le.html#933" class="Bound"
+      >xs</a
+      ><a name="935" class="Symbol"
+      >}</a
+      ><a name="936"
+      > </a
+      ><a name="937" class="Symbol"
+      >&#8594;</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="FunOrn.Functions.Examples.Le.html#679" class="Function"
+      >&#945;</a
+      ><a name="940"
+      > </a
+      ><a name="941" class="Symbol"
+      >{</a
+      ><a name="942" href="FunOrn.Functions.Examples.Le.html#930" class="Bound"
+      >i</a
+      ><a name="943" class="Symbol"
+      >}{</a
+      ><a name="945" href="FunOrn.Functions.Examples.Le.html#933" class="Bound"
+      >xs</a
+      ><a name="947" class="Symbol"
+      >})</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="FunOrn.Functions.Examples.Le.html#884" class="Bound"
+      >n</a
+      ><a name="951"
+      > </a
+      ><a name="952" href="FunOrn.Functions.Examples.Le.html#880" class="Bound"
+      >m</a
+      ><a name="953"
+      >
+
+</a
+      ><a name="955" class="Keyword"
+      >private</a
+      ><a name="962"
+      >
+  </a
+      ><a name="965" class="Keyword"
+      >module</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="FunOrn.Functions.Examples.Le.html#972" class="Module"
+      >Test</a
+      ><a name="976"
+      > </a
+      ><a name="977" class="Keyword"
+      >where</a
+      ><a name="982"
+      >
+
+    </a
+      ><a name="988" href="FunOrn.Functions.Examples.Le.html#988" class="Function"
+      >test-m&lt;0</a
+      ><a name="996"
+      > </a
+      ><a name="997" class="Symbol"
+      >:</a
+      ><a name="998"
+      > </a
+      ><a name="999" class="Symbol"
+      >&#8704;{</a
+      ><a name="1001" href="FunOrn.Functions.Examples.Le.html#1001" class="Bound"
+      >m</a
+      ><a name="1002" class="Symbol"
+      >}</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" class="Symbol"
+      >&#8594;</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="FunOrn.Functions.Examples.Le.html#1001" class="Bound"
+      >m</a
+      ><a name="1007"
+      > </a
+      ><a name="1008" href="FunOrn.Functions.Examples.Le.html#860" class="Function Operator"
+      >&lt;</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="IDesc.Examples.Nat.html#438" class="Function"
+      >ze</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" href="IDesc.Examples.Bool.html#421" class="Function"
+      >false</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1022"
+      > </a
+      ><a name="1023" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="1025"
+      >
+    </a
+      ><a name="1030" href="FunOrn.Functions.Examples.Le.html#988" class="Function"
+      >test-m&lt;0</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" class="Symbol"
+      >=</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1045"
+      >
+
+    </a
+      ><a name="1051" href="FunOrn.Functions.Examples.Le.html#1051" class="Function"
+      >test-0&lt;su</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" class="Symbol"
+      >:</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" class="Symbol"
+      >&#8704;{</a
+      ><a name="1065" href="FunOrn.Functions.Examples.Le.html#1065" class="Bound"
+      >n</a
+      ><a name="1066" class="Symbol"
+      >}</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" class="Symbol"
+      >&#8594;</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="IDesc.Examples.Nat.html#438" class="Function"
+      >ze</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="FunOrn.Functions.Examples.Le.html#860" class="Function Operator"
+      >&lt;</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="IDesc.Examples.Nat.html#467" class="Function"
+      >su</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="FunOrn.Functions.Examples.Le.html#1065" class="Bound"
+      >n</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" href="IDesc.Examples.Bool.html#387" class="Function"
+      >true</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1088"
+      > </a
+      ><a name="1089" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="1091"
+      >
+    </a
+      ><a name="1096" href="FunOrn.Functions.Examples.Le.html#1051" class="Function"
+      >test-0&lt;su</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" class="Symbol"
+      >=</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1112"
+      >
+        
+    </a
+      ><a name="1126" href="FunOrn.Functions.Examples.Le.html#1126" class="Function"
+      >test-su&lt;suze</a
+      ><a name="1138"
+      > </a
+      ><a name="1139" class="Symbol"
+      >:</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" class="Symbol"
+      >&#8704;{</a
+      ><a name="1143" href="FunOrn.Functions.Examples.Le.html#1143" class="Bound"
+      >m</a
+      ><a name="1144" class="Symbol"
+      >}</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" class="Symbol"
+      >&#8594;</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" href="IDesc.Examples.Nat.html#467" class="Function"
+      >su</a
+      ><a name="1150"
+      > </a
+      ><a name="1151" href="FunOrn.Functions.Examples.Le.html#1143" class="Bound"
+      >m</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" href="FunOrn.Functions.Examples.Le.html#860" class="Function Operator"
+      >&lt;</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" href="IDesc.Examples.Nat.html#467" class="Function"
+      >su</a
+      ><a name="1157"
+      > </a
+      ><a name="1158" href="IDesc.Examples.Nat.html#438" class="Function"
+      >ze</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" href="IDesc.Examples.Bool.html#421" class="Function"
+      >false</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1170"
+      > </a
+      ><a name="1171" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="1173"
+      >
+    </a
+      ><a name="1178" href="FunOrn.Functions.Examples.Le.html#1126" class="Function"
+      >test-su&lt;suze</a
+      ><a name="1190"
+      > </a
+      ><a name="1191" class="Symbol"
+      >=</a
+      ><a name="1192"
+      > </a
+      ><a name="1193" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1197"
+      >
+
+    </a
+      ><a name="1203" href="FunOrn.Functions.Examples.Le.html#1203" class="Function"
+      >test-suze&lt;su</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" class="Symbol"
+      >:</a
+      ><a name="1217"
+      > </a
+      ><a name="1218" class="Symbol"
+      >&#8704;{</a
+      ><a name="1220" href="FunOrn.Functions.Examples.Le.html#1220" class="Bound"
+      >n</a
+      ><a name="1221" class="Symbol"
+      >}</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" class="Symbol"
+      >&#8594;</a
+      ><a name="1224"
+      > </a
+      ><a name="1225" href="IDesc.Examples.Nat.html#467" class="Function"
+      >su</a
+      ><a name="1227"
+      > </a
+      ><a name="1228" href="IDesc.Examples.Nat.html#438" class="Function"
+      >ze</a
+      ><a name="1230"
+      > </a
+      ><a name="1231" href="FunOrn.Functions.Examples.Le.html#860" class="Function Operator"
+      >&lt;</a
+      ><a name="1232"
+      > </a
+      ><a name="1233" href="IDesc.Examples.Nat.html#467" class="Function"
+      >su</a
+      ><a name="1235"
+      > </a
+      ><a name="1236" class="Symbol"
+      >(</a
+      ><a name="1237" href="IDesc.Examples.Nat.html#467" class="Function"
+      >su</a
+      ><a name="1239"
+      > </a
+      ><a name="1240" href="FunOrn.Functions.Examples.Le.html#1220" class="Bound"
+      >n</a
+      ><a name="1241" class="Symbol"
+      >)</a
+      ><a name="1242"
+      > </a
+      ><a name="1243" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1244"
+      > </a
+      ><a name="1245" href="IDesc.Examples.Bool.html#387" class="Function"
+      >true</a
+      ><a name="1249"
+      > </a
+      ><a name="1250" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1251"
+      > </a
+      ><a name="1252" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="1254"
+      >
+    </a
+      ><a name="1259" href="FunOrn.Functions.Examples.Le.html#1203" class="Function"
+      >test-suze&lt;su</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" class="Symbol"
+      >=</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="1278"
+      >
+
+
+</a
+      ><a name="1281" class="Comment"
+      >{-
+pattern ze = &#10216; zero , tt &#10217;
+pattern su n = &#10216; suc zero , n , tt &#10217; 
+
+_&lt;_ : &#10214; type&lt; &#10215;Type
+m &lt; ze = false , tt
+ze &lt; su n = true , tt 
+su m &lt; su n = m &lt; n
+&#10216; suc (suc ()) , _ &#10217; &lt; _
+m &lt; &#10216; suc (suc ()) , _ &#10217;
+-}</a
+      ></pre
+    ></body
+  ></html
+>

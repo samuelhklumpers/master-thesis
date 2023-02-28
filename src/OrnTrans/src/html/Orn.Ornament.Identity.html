@@ -1,0 +1,530 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Orn.Ornament.Identity</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1"
+      >
+
+</a
+      ><a name="3" class="Keyword"
+      >module</a
+      ><a name="9"
+      > </a
+      ><a name="10" href="Orn.Ornament.Identity.html#1" class="Module"
+      >Orn.Ornament.Identity</a
+      ><a name="31"
+      > 
+         </a
+      ><a name="42" class="Symbol"
+      >{</a
+      ><a name="43" href="Orn.Ornament.Identity.html#43" class="Bound"
+      >I</a
+      ><a name="44"
+      > </a
+      ><a name="45" class="Symbol"
+      >:</a
+      ><a name="46"
+      > </a
+      ><a name="47" class="PrimitiveType"
+      >Set</a
+      ><a name="50" class="Symbol"
+      >}</a
+      ><a name="51"
+      >
+       </a
+      ><a name="59" class="Keyword"
+      >where</a
+      ><a name="64"
+      >
+
+</a
+      ><a name="66" class="Keyword"
+      >open</a
+      ><a name="70"
+      > </a
+      ><a name="71" class="Keyword"
+      >import</a
+      ><a name="77"
+      > </a
+      ><a name="78" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="86"
+      >
+
+</a
+      ><a name="88" class="Keyword"
+      >open</a
+      ><a name="92"
+      > </a
+      ><a name="93" class="Keyword"
+      >import</a
+      ><a name="99"
+      > </a
+      ><a name="100" href="Logic.Logic.html#1" class="Module"
+      >Logic.Logic</a
+      ><a name="111"
+      >
+
+</a
+      ><a name="113" class="Keyword"
+      >open</a
+      ><a name="117"
+      > </a
+      ><a name="118" class="Keyword"
+      >import</a
+      ><a name="124"
+      > </a
+      ><a name="125" href="IDesc.IDesc.html#1" class="Module"
+      >IDesc.IDesc</a
+      ><a name="136"
+      >
+
+</a
+      ><a name="138" class="Keyword"
+      >open</a
+      ><a name="142"
+      > </a
+      ><a name="143" class="Keyword"
+      >import</a
+      ><a name="149"
+      > </a
+      ><a name="150" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="162"
+      >
+
+</a
+      ><a name="164" class="Comment"
+      >-- Paper: Example 4.9</a
+      ><a name="185"
+      >
+</a
+      ><a name="186" href="Orn.Ornament.Identity.html#186" class="Function"
+      >idO</a
+      ><a name="189"
+      > </a
+      ><a name="190" class="Symbol"
+      >:</a
+      ><a name="191"
+      > </a
+      ><a name="192" class="Symbol"
+      >(</a
+      ><a name="193" href="Orn.Ornament.Identity.html#193" class="Bound"
+      >D</a
+      ><a name="194"
+      > </a
+      ><a name="195" class="Symbol"
+      >:</a
+      ><a name="196"
+      > </a
+      ><a name="197" href="IDesc.IDesc.html#1286" class="Record"
+      >func</a
+      ><a name="201"
+      >  </a
+      ><a name="203" href="Orn.Ornament.Identity.html#43" class="Bound"
+      >I</a
+      ><a name="204"
+      > </a
+      ><a name="205" href="Orn.Ornament.Identity.html#43" class="Bound"
+      >I</a
+      ><a name="206" class="Symbol"
+      >)</a
+      ><a name="207"
+      > </a
+      ><a name="208" class="Symbol"
+      >&#8594;</a
+      ><a name="209"
+      > </a
+      ><a name="210" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="213"
+      > </a
+      ><a name="214" href="Orn.Ornament.Identity.html#193" class="Bound"
+      >D</a
+      ><a name="215"
+      > </a
+      ><a name="216" href="Function.html#1006" class="Function"
+      >id</a
+      ><a name="218"
+      > </a
+      ><a name="219" href="Function.html#1006" class="Function"
+      >id</a
+      ><a name="221"
+      >
+</a
+      ><a name="222" href="Orn.Ornament.Identity.html#186" class="Function"
+      >idO</a
+      ><a name="225"
+      > </a
+      ><a name="226" href="Orn.Ornament.Identity.html#226" class="Bound"
+      >D</a
+      ><a name="227"
+      > </a
+      ><a name="228" class="Symbol"
+      >=</a
+      ><a name="229"
+      > </a
+      ><a name="230" href="Orn.Ornament.html#1654" class="InductiveConstructor"
+      >orn.mk</a
+      ><a name="236"
+      > </a
+      ><a name="237" class="Symbol"
+      >(&#955;</a
+      ><a name="239"
+      > </a
+      ><a name="240" href="Orn.Ornament.Identity.html#240" class="Bound"
+      >i</a
+      ><a name="241"
+      > </a
+      ><a name="242" class="Symbol"
+      >&#8594;</a
+      ><a name="243"
+      > </a
+      ><a name="244" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="248"
+      > </a
+      ><a name="249" class="Symbol"
+      >(</a
+      ><a name="250" href="IDesc.IDesc.html#1345" class="Field"
+      >func.out</a
+      ><a name="258"
+      > </a
+      ><a name="259" href="Orn.Ornament.Identity.html#226" class="Bound"
+      >D</a
+      ><a name="260"
+      > </a
+      ><a name="261" href="Orn.Ornament.Identity.html#240" class="Bound"
+      >i</a
+      ><a name="262" class="Symbol"
+      >))</a
+      ><a name="264"
+      >
+  </a
+      ><a name="267" class="Keyword"
+      >where</a
+      ><a name="272"
+      > </a
+      ><a name="273" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="277"
+      > </a
+      ><a name="278" class="Symbol"
+      >:</a
+      ><a name="279"
+      > </a
+      ><a name="280" class="Symbol"
+      >(</a
+      ><a name="281" href="Orn.Ornament.Identity.html#281" class="Bound"
+      >D</a
+      ><a name="282"
+      > </a
+      ><a name="283" class="Symbol"
+      >:</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="IDesc.IDesc.html#219" class="Datatype"
+      >IDesc</a
+      ><a name="290"
+      >  </a
+      ><a name="292" href="Orn.Ornament.Identity.html#43" class="Bound"
+      >I</a
+      ><a name="293" class="Symbol"
+      >)</a
+      ><a name="294"
+      > </a
+      ><a name="295" class="Symbol"
+      >&#8594;</a
+      ><a name="296"
+      > </a
+      ><a name="297" href="Orn.Ornament.html#187" class="Datatype"
+      >Orn</a
+      ><a name="300"
+      > </a
+      ><a name="301" href="Function.html#1006" class="Function"
+      >id</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="Orn.Ornament.Identity.html#281" class="Bound"
+      >D</a
+      ><a name="305"
+      >
+        </a
+      ><a name="314" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="318"
+      > </a
+      ><a name="319" class="Symbol"
+      >(</a
+      ><a name="320" href="IDesc.IDesc.html#250" class="InductiveConstructor"
+      >`var</a
+      ><a name="324"
+      > </a
+      ><a name="325" href="Orn.Ornament.Identity.html#325" class="Bound"
+      >i</a
+      ><a name="326" class="Symbol"
+      >)</a
+      ><a name="327"
+      > </a
+      ><a name="328" class="Symbol"
+      >=</a
+      ><a name="329"
+      > </a
+      ><a name="330" href="Orn.Ornament.html#321" class="InductiveConstructor"
+      >`var</a
+      ><a name="334"
+      > </a
+      ><a name="335" class="Symbol"
+      >(</a
+      ><a name="336" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="339"
+      > </a
+      ><a name="340" href="Orn.Ornament.Identity.html#325" class="Bound"
+      >i</a
+      ><a name="341" class="Symbol"
+      >)</a
+      ><a name="342"
+      >
+        </a
+      ><a name="351" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="355"
+      > </a
+      ><a name="356" href="IDesc.IDesc.html#277" class="InductiveConstructor"
+      >`1</a
+      ><a name="358"
+      > </a
+      ><a name="359" class="Symbol"
+      >=</a
+      ><a name="360"
+      > </a
+      ><a name="361" href="Orn.Ornament.html#382" class="InductiveConstructor"
+      >`1</a
+      ><a name="363"
+      >
+        </a
+      ><a name="372" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="376"
+      > </a
+      ><a name="377" class="Symbol"
+      >(</a
+      ><a name="378" href="Orn.Ornament.Identity.html#378" class="Bound"
+      >D&#8321;</a
+      ><a name="380"
+      > </a
+      ><a name="381" href="IDesc.IDesc.html#428" class="InductiveConstructor Operator"
+      >`&#215;</a
+      ><a name="383"
+      > </a
+      ><a name="384" href="Orn.Ornament.Identity.html#384" class="Bound"
+      >D&#8322;</a
+      ><a name="386" class="Symbol"
+      >)</a
+      ><a name="387"
+      > </a
+      ><a name="388" class="Symbol"
+      >=</a
+      ><a name="389"
+      > </a
+      ><a name="390" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="394"
+      > </a
+      ><a name="395" href="Orn.Ornament.Identity.html#378" class="Bound"
+      >D&#8321;</a
+      ><a name="397"
+      > </a
+      ><a name="398" href="Orn.Ornament.html#398" class="InductiveConstructor Operator"
+      >`&#215;</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="405"
+      > </a
+      ><a name="406" href="Orn.Ornament.Identity.html#384" class="Bound"
+      >D&#8322;</a
+      ><a name="408"
+      >
+        </a
+      ><a name="417" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="421"
+      > </a
+      ><a name="422" class="Symbol"
+      >(</a
+      ><a name="423" href="IDesc.IDesc.html#463" class="InductiveConstructor"
+      >`&#963;</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Orn.Ornament.Identity.html#426" class="Bound"
+      >n</a
+      ><a name="427"
+      > </a
+      ><a name="428" href="Orn.Ornament.Identity.html#428" class="Bound"
+      >T</a
+      ><a name="429" class="Symbol"
+      >)</a
+      ><a name="430"
+      > </a
+      ><a name="431" class="Symbol"
+      >=</a
+      ><a name="432"
+      > </a
+      ><a name="433" href="Orn.Ornament.html#466" class="InductiveConstructor"
+      >`&#963;</a
+      ><a name="435"
+      > </a
+      ><a name="436" class="Symbol"
+      >&#955;</a
+      ><a name="437"
+      > </a
+      ><a name="438" href="Orn.Ornament.Identity.html#438" class="Bound"
+      >k</a
+      ><a name="439"
+      > </a
+      ><a name="440" class="Symbol"
+      >&#8594;</a
+      ><a name="441"
+      > </a
+      ><a name="442" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="446"
+      > </a
+      ><a name="447" class="Symbol"
+      >(</a
+      ><a name="448" href="Orn.Ornament.Identity.html#428" class="Bound"
+      >T</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="Orn.Ornament.Identity.html#438" class="Bound"
+      >k</a
+      ><a name="451" class="Symbol"
+      >)</a
+      ><a name="452"
+      >
+        </a
+      ><a name="461" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="465"
+      > </a
+      ><a name="466" class="Symbol"
+      >(</a
+      ><a name="467" href="IDesc.IDesc.html#292" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Orn.Ornament.Identity.html#470" class="Bound"
+      >S</a
+      ><a name="471"
+      > </a
+      ><a name="472" href="Orn.Ornament.Identity.html#472" class="Bound"
+      >T</a
+      ><a name="473" class="Symbol"
+      >)</a
+      ><a name="474"
+      > </a
+      ><a name="475" class="Symbol"
+      >=</a
+      ><a name="476"
+      > </a
+      ><a name="477" href="Orn.Ornament.html#532" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="479"
+      > </a
+      ><a name="480" class="Symbol"
+      >&#955;</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Orn.Ornament.Identity.html#482" class="Bound"
+      >s</a
+      ><a name="483"
+      > </a
+      ><a name="484" class="Symbol"
+      >&#8594;</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="490"
+      > </a
+      ><a name="491" class="Symbol"
+      >(</a
+      ><a name="492" href="Orn.Ornament.Identity.html#472" class="Bound"
+      >T</a
+      ><a name="493"
+      > </a
+      ><a name="494" href="Orn.Ornament.Identity.html#482" class="Bound"
+      >s</a
+      ><a name="495" class="Symbol"
+      >)</a
+      ><a name="496"
+      >
+        </a
+      ><a name="505" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="509"
+      > </a
+      ><a name="510" class="Symbol"
+      >(</a
+      ><a name="511" href="IDesc.IDesc.html#337" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="513"
+      > </a
+      ><a name="514" href="Orn.Ornament.Identity.html#514" class="Bound"
+      >S</a
+      ><a name="515"
+      > </a
+      ><a name="516" href="Orn.Ornament.Identity.html#516" class="Bound"
+      >T</a
+      ><a name="517" class="Symbol"
+      >)</a
+      ><a name="518"
+      > </a
+      ><a name="519" class="Symbol"
+      >=</a
+      ><a name="520"
+      > </a
+      ><a name="521" href="Orn.Ornament.html#594" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="523"
+      > </a
+      ><a name="524" class="Symbol"
+      >&#955;</a
+      ><a name="525"
+      > </a
+      ><a name="526" href="Orn.Ornament.Identity.html#526" class="Bound"
+      >s</a
+      ><a name="527"
+      > </a
+      ><a name="528" class="Symbol"
+      >&#8594;</a
+      ><a name="529"
+      > </a
+      ><a name="530" href="Orn.Ornament.Identity.html#273" class="Function"
+      >help</a
+      ><a name="534"
+      > </a
+      ><a name="535" class="Symbol"
+      >(</a
+      ><a name="536" href="Orn.Ornament.Identity.html#516" class="Bound"
+      >T</a
+      ><a name="537"
+      > </a
+      ><a name="538" href="Orn.Ornament.Identity.html#526" class="Bound"
+      >s</a
+      ><a name="539" class="Symbol"
+      >)</a
+      ></pre
+    ></body
+  ></html
+>

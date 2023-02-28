@@ -1,0 +1,3470 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Orn.AlgebraicOrnament.Make</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1"
+      > 
+
+</a
+      ><a name="4" class="Keyword"
+      >open</a
+      ><a name="8"
+      > </a
+      ><a name="9" class="Keyword"
+      >import</a
+      ><a name="15"
+      > </a
+      ><a name="16" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Keyword"
+      >open</a
+      ><a name="33"
+      > </a
+      ><a name="34" class="Keyword"
+      >import</a
+      ><a name="40"
+      > </a
+      ><a name="41" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="50"
+      >
+
+</a
+      ><a name="52" class="Keyword"
+      >open</a
+      ><a name="56"
+      > </a
+      ><a name="57" class="Keyword"
+      >import</a
+      ><a name="63"
+      > </a
+      ><a name="64" href="Logic.Logic.html#1" class="Module"
+      >Logic.Logic</a
+      ><a name="75"
+      >
+
+</a
+      ><a name="77" class="Keyword"
+      >open</a
+      ><a name="81"
+      > </a
+      ><a name="82" class="Keyword"
+      >import</a
+      ><a name="88"
+      > </a
+      ><a name="89" href="IDesc.IDesc.html#1" class="Module"
+      >IDesc.IDesc</a
+      ><a name="100"
+      >
+</a
+      ><a name="101" class="Keyword"
+      >open</a
+      ><a name="105"
+      > </a
+      ><a name="106" class="Keyword"
+      >import</a
+      ><a name="112"
+      > </a
+      ><a name="113" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="127"
+      >
+</a
+      ><a name="128" class="Keyword"
+      >open</a
+      ><a name="132"
+      > </a
+      ><a name="133" class="Keyword"
+      >import</a
+      ><a name="139"
+      > </a
+      ><a name="140" href="IDesc.InitialAlgebra.html#1" class="Module"
+      >IDesc.InitialAlgebra</a
+      ><a name="160"
+      >
+</a
+      ><a name="161" class="Keyword"
+      >open</a
+      ><a name="165"
+      > </a
+      ><a name="166" class="Keyword"
+      >import</a
+      ><a name="172"
+      > </a
+      ><a name="173" href="IDesc.Induction.html#1" class="Module"
+      >IDesc.Induction</a
+      ><a name="188"
+      >
+</a
+      ><a name="189" class="Keyword"
+      >open</a
+      ><a name="193"
+      > </a
+      ><a name="194" class="Keyword"
+      >import</a
+      ><a name="200"
+      > </a
+      ><a name="201" href="IDesc.Lifting.html#1" class="Module"
+      >IDesc.Lifting</a
+      ><a name="214"
+      >
+
+</a
+      ><a name="216" class="Keyword"
+      >open</a
+      ><a name="220"
+      > </a
+      ><a name="221" class="Keyword"
+      >import</a
+      ><a name="227"
+      > </a
+      ><a name="228" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="265"
+      >
+
+</a
+      ><a name="267" class="Keyword"
+      >module</a
+      ><a name="273"
+      > </a
+      ><a name="274" href="Orn.AlgebraicOrnament.Make.html#1" class="Module"
+      >Orn.AlgebraicOrnament.Make</a
+      ><a name="300"
+      >
+           </a
+      ><a name="312" class="Symbol"
+      >{</a
+      ><a name="313" href="Orn.AlgebraicOrnament.Make.html#313" class="Bound"
+      >K</a
+      ><a name="314"
+      > </a
+      ><a name="315" class="Symbol"
+      >:</a
+      ><a name="316"
+      > </a
+      ><a name="317" class="PrimitiveType"
+      >Set</a
+      ><a name="320"
+      > </a
+      ><a name="321" class="Symbol"
+      >}</a
+      ><a name="322"
+      >
+           </a
+      ><a name="334" class="Symbol"
+      >{</a
+      ><a name="335" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="336"
+      > </a
+      ><a name="337" class="Symbol"
+      >:</a
+      ><a name="338"
+      > </a
+      ><a name="339" href="Orn.AlgebraicOrnament.Make.html#313" class="Bound"
+      >K</a
+      ><a name="340"
+      > </a
+      ><a name="341" class="Symbol"
+      >&#8594;</a
+      ><a name="342"
+      > </a
+      ><a name="343" class="PrimitiveType"
+      >Set</a
+      ><a name="346"
+      > </a
+      ><a name="347" class="Symbol"
+      >}</a
+      ><a name="348"
+      >
+           </a
+      ><a name="360" class="Symbol"
+      >(</a
+      ><a name="361" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="362"
+      > </a
+      ><a name="363" class="Symbol"
+      >:</a
+      ><a name="364"
+      > </a
+      ><a name="365" href="IDesc.IDesc.html#1286" class="Record"
+      >func</a
+      ><a name="369"
+      >  </a
+      ><a name="371" href="Orn.AlgebraicOrnament.Make.html#313" class="Bound"
+      >K</a
+      ><a name="372"
+      > </a
+      ><a name="373" href="Orn.AlgebraicOrnament.Make.html#313" class="Bound"
+      >K</a
+      ><a name="374" class="Symbol"
+      >)</a
+      ><a name="375"
+      >
+           </a
+      ><a name="387" class="Symbol"
+      >(</a
+      ><a name="388" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="389"
+      > </a
+      ><a name="390" class="Symbol"
+      >:</a
+      ><a name="391"
+      > </a
+      ><a name="392" href="IDesc.IDesc.html#1415" class="Function Operator"
+      >&#10214;</a
+      ><a name="393"
+      > </a
+      ><a name="394" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="395"
+      > </a
+      ><a name="396" href="IDesc.IDesc.html#1415" class="Function Operator"
+      >&#10215;func</a
+      ><a name="401"
+      > </a
+      ><a name="402" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="403"
+      > </a
+      ><a name="404" href="Logic.Logic.html#100" class="Function Operator"
+      >&#8658;</a
+      ><a name="405"
+      > </a
+      ><a name="406" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="407" class="Symbol"
+      >)</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="Keyword"
+      >where</a
+      ><a name="414"
+      >
+
+</a
+      ><a name="416" class="Keyword"
+      >open</a
+      ><a name="420"
+      > </a
+      ><a name="421" class="Keyword"
+      >import</a
+      ><a name="427"
+      > </a
+      ><a name="428" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="440"
+      >
+
+</a
+      ><a name="442" class="Keyword"
+      >import</a
+      ><a name="448"
+      > </a
+      ><a name="449" href="Orn.AlgebraicOrnament.html#1" class="Module"
+      >Orn.AlgebraicOrnament</a
+      ><a name="470"
+      >
+</a
+      ><a name="471" class="Keyword"
+      >open</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="Orn.AlgebraicOrnament.html#379" class="Module"
+      >Orn.</a
+      ><a name="480" href="Orn.AlgebraicOrnament.html#383" class="Module"
+      >AlgebraicOrnament.</a
+      ><a name="498" href="Orn.AlgebraicOrnament.html#779" class="Module"
+      >Func</a
+      ><a name="502"
+      > </a
+      ><a name="503" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="506"
+      >
+</a
+      ><a name="507" class="Keyword"
+      >open</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="Orn.AlgebraicOrnament.html#1" class="Module"
+      >Orn.AlgebraicOrnament</a
+      ><a name="533"
+      > </a
+      ><a name="534" class="Keyword"
+      >hiding</a
+      ><a name="540"
+      > </a
+      ><a name="541" class="Symbol"
+      >(</a
+      ><a name="542"
+      >algOrnD</a
+      ><a name="549" class="Symbol"
+      >)</a
+      ><a name="550"
+      >
+
+</a
+      ><a name="552" class="Keyword"
+      >open</a
+      ><a name="556"
+      > </a
+      ><a name="557" class="Keyword"
+      >import</a
+      ><a name="563"
+      > </a
+      ><a name="564" href="Orn.Ornament.Examples.Lifting.html#1" class="Module"
+      >Orn.Ornament.Examples.Lifting</a
+      ><a name="593"
+      > </a
+      ><a name="594" class="Keyword"
+      >renaming</a
+      ><a name="602"
+      > </a
+      ><a name="603" class="Symbol"
+      >(</a
+      ><a name="604"
+      >&#9633;h </a
+      ><a name="607" class="Symbol"
+      >to</a
+      ><a name="609"
+      > &#9633;ho</a
+      ><a name="613" class="Symbol"
+      >)</a
+      ><a name="614"
+      >
+
+
+</a
+      ><a name="617" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="624"
+      > </a
+      ><a name="625" class="Symbol"
+      >:</a
+      ><a name="626"
+      > </a
+      ><a name="627" class="Symbol"
+      >{</a
+      ><a name="628" href="Orn.AlgebraicOrnament.Make.html#628" class="Bound"
+      >I</a
+      ><a name="629"
+      > </a
+      ><a name="630" class="Symbol"
+      >:</a
+      ><a name="631"
+      > </a
+      ><a name="632" class="PrimitiveType"
+      >Set</a
+      ><a name="635"
+      > </a
+      ><a name="636" class="Symbol"
+      >}</a
+      ><a name="637"
+      >
+          </a
+      ><a name="648" class="Symbol"
+      >{</a
+      ><a name="649" href="Orn.AlgebraicOrnament.Make.html#649" class="Bound"
+      >X</a
+      ><a name="650"
+      > </a
+      ><a name="651" class="Symbol"
+      >:</a
+      ><a name="652"
+      > </a
+      ><a name="653" href="Orn.AlgebraicOrnament.Make.html#628" class="Bound"
+      >I</a
+      ><a name="654"
+      > </a
+      ><a name="655" class="Symbol"
+      >&#8594;</a
+      ><a name="656"
+      > </a
+      ><a name="657" class="PrimitiveType"
+      >Set</a
+      ><a name="660"
+      > </a
+      ><a name="661" class="Symbol"
+      >}</a
+      ><a name="662"
+      >
+          </a
+      ><a name="673" class="Symbol"
+      >(</a
+      ><a name="674" href="Orn.AlgebraicOrnament.Make.html#674" class="Bound"
+      >D</a
+      ><a name="675"
+      > </a
+      ><a name="676" class="Symbol"
+      >:</a
+      ><a name="677"
+      > </a
+      ><a name="678" href="IDesc.IDesc.html#219" class="Datatype"
+      >IDesc</a
+      ><a name="683"
+      >  </a
+      ><a name="685" href="Orn.AlgebraicOrnament.Make.html#628" class="Bound"
+      >I</a
+      ><a name="686" class="Symbol"
+      >)</a
+      ><a name="687"
+      >
+          </a
+      ><a name="698" class="Symbol"
+      >(</a
+      ><a name="699" href="Orn.AlgebraicOrnament.Make.html#699" class="Bound"
+      >P</a
+      ><a name="700"
+      > </a
+      ><a name="701" class="Symbol"
+      >:</a
+      ><a name="702"
+      > </a
+      ><a name="703" class="Symbol"
+      >&#8704;{</a
+      ><a name="705" href="Orn.AlgebraicOrnament.Make.html#705" class="Bound"
+      >i</a
+      ><a name="706" class="Symbol"
+      >}</a
+      ><a name="707"
+      > </a
+      ><a name="708" class="Symbol"
+      >&#8594;</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Orn.AlgebraicOrnament.Make.html#649" class="Bound"
+      >X</a
+      ><a name="711"
+      > </a
+      ><a name="712" href="Orn.AlgebraicOrnament.Make.html#705" class="Bound"
+      >i</a
+      ><a name="713"
+      > </a
+      ><a name="714" class="Symbol"
+      >&#8594;</a
+      ><a name="715"
+      > </a
+      ><a name="716" class="PrimitiveType"
+      >Set</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >)</a
+      ><a name="721"
+      >
+          </a
+      ><a name="732" class="Symbol"
+      >(</a
+      ><a name="733" href="Orn.AlgebraicOrnament.Make.html#733" class="Bound"
+      >xs</a
+      ><a name="735"
+      > </a
+      ><a name="736" class="Symbol"
+      >:</a
+      ><a name="737"
+      > </a
+      ><a name="738" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="739"
+      > </a
+      ><a name="740" href="Orn.AlgebraicOrnament.Make.html#674" class="Bound"
+      >D</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="743"
+      > </a
+      ><a name="744" href="Orn.AlgebraicOrnament.Make.html#649" class="Bound"
+      >X</a
+      ><a name="745" class="Symbol"
+      >)</a
+      ><a name="746"
+      > </a
+      ><a name="747" class="Symbol"
+      >&#8594;</a
+      ><a name="748"
+      >
+          </a
+      ><a name="759" href="IDesc.Lifting.html#204" class="Function"
+      >&#9633;h</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Orn.AlgebraicOrnament.Make.html#674" class="Bound"
+      >D</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Orn.AlgebraicOrnament.Make.html#699" class="Bound"
+      >P</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="Orn.AlgebraicOrnament.Make.html#733" class="Bound"
+      >xs</a
+      ><a name="768"
+      > </a
+      ><a name="769" class="Symbol"
+      >&#8594;</a
+      ><a name="770"
+      > 
+          </a
+      ><a name="782" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="783"
+      > </a
+      ><a name="784" class="Symbol"
+      >(</a
+      ><a name="785" href="Orn.Ornament.html#911" class="Function Operator"
+      >&#10214;</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Orn.Ornament.Examples.Lifting.html#257" class="Function"
+      >&#9633;ho</a
+      ><a name="790"
+      > </a
+      ><a name="791" class="Symbol"
+      >{</a
+      ><a name="792"
+      >L </a
+      ><a name="794" class="Symbol"
+      >=</a
+      ><a name="795"
+      > </a
+      ><a name="796" href="Orn.AlgebraicOrnament.Make.html#628" class="Bound"
+      >I</a
+      ><a name="797" class="Symbol"
+      >}</a
+      ><a name="798"
+      > </a
+      ><a name="799" href="Orn.AlgebraicOrnament.Make.html#674" class="Bound"
+      >D</a
+      ><a name="800"
+      > </a
+      ><a name="801" href="Orn.AlgebraicOrnament.Make.html#733" class="Bound"
+      >xs</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Orn.Ornament.html#911" class="Function Operator"
+      >&#10215;Orn</a
+      ><a name="808" class="Symbol"
+      >)</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="811"
+      > 
+            </a
+      ><a name="825" class="Symbol"
+      >(&#955;</a
+      ><a name="827"
+      > </a
+      ><a name="828" href="Orn.AlgebraicOrnament.Make.html#828" class="Bound"
+      >ix</a
+      ><a name="830"
+      > </a
+      ><a name="831" class="Symbol"
+      >&#8594;</a
+      ><a name="832"
+      > </a
+      ><a name="833" href="Orn.AlgebraicOrnament.Make.html#699" class="Bound"
+      >P</a
+      ><a name="834"
+      > </a
+      ><a name="835" class="Symbol"
+      >{</a
+      ><a name="836" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="841"
+      > </a
+      ><a name="842" href="Orn.AlgebraicOrnament.Make.html#828" class="Bound"
+      >ix</a
+      ><a name="844" class="Symbol"
+      >}</a
+      ><a name="845"
+      > </a
+      ><a name="846" class="Symbol"
+      >(</a
+      ><a name="847" href="Data.Product.html#539" class="Field"
+      >proj&#8322;</a
+      ><a name="852"
+      > </a
+      ><a name="853" href="Orn.AlgebraicOrnament.Make.html#828" class="Bound"
+      >ix</a
+      ><a name="855" class="Symbol"
+      >))</a
+      ><a name="857"
+      >
+</a
+      ><a name="858" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="865"
+      > </a
+      ><a name="866" class="Symbol"
+      >(</a
+      ><a name="867" href="IDesc.IDesc.html#250" class="InductiveConstructor"
+      >`var</a
+      ><a name="871"
+      > </a
+      ><a name="872" href="Orn.AlgebraicOrnament.Make.html#872" class="Bound"
+      >i</a
+      ><a name="873" class="Symbol"
+      >)</a
+      ><a name="874"
+      > </a
+      ><a name="875" href="Orn.AlgebraicOrnament.Make.html#875" class="Bound"
+      >P</a
+      ><a name="876"
+      > </a
+      ><a name="877" href="Orn.AlgebraicOrnament.Make.html#877" class="Bound"
+      >xs</a
+      ><a name="879"
+      > </a
+      ><a name="880" href="Orn.AlgebraicOrnament.Make.html#880" class="Bound"
+      >ih</a
+      ><a name="882"
+      > </a
+      ><a name="883" class="Symbol"
+      >=</a
+      ><a name="884"
+      > </a
+      ><a name="885" href="Orn.AlgebraicOrnament.Make.html#880" class="Bound"
+      >ih</a
+      ><a name="887"
+      >
+</a
+      ><a name="888" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="895"
+      > </a
+      ><a name="896" href="IDesc.IDesc.html#277" class="InductiveConstructor"
+      >`1</a
+      ><a name="898"
+      > </a
+      ><a name="899" href="Orn.AlgebraicOrnament.Make.html#899" class="Bound"
+      >P</a
+      ><a name="900"
+      > </a
+      ><a name="901" href="Orn.AlgebraicOrnament.Make.html#901" class="Bound"
+      >xs</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Orn.AlgebraicOrnament.Make.html#904" class="Bound"
+      >ih</a
+      ><a name="906"
+      > </a
+      ><a name="907" class="Symbol"
+      >=</a
+      ><a name="908"
+      > </a
+      ><a name="909" href="Orn.AlgebraicOrnament.Make.html#904" class="Bound"
+      >ih</a
+      ><a name="911"
+      >
+</a
+      ><a name="912" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="919"
+      > </a
+      ><a name="920" class="Symbol"
+      >(</a
+      ><a name="921" href="Orn.AlgebraicOrnament.Make.html#921" class="Bound"
+      >D&#8321;</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="IDesc.IDesc.html#428" class="InductiveConstructor Operator"
+      >`&#215;</a
+      ><a name="926"
+      > </a
+      ><a name="927" href="Orn.AlgebraicOrnament.Make.html#927" class="Bound"
+      >D&#8322;</a
+      ><a name="929" class="Symbol"
+      >)</a
+      ><a name="930"
+      > </a
+      ><a name="931" href="Orn.AlgebraicOrnament.Make.html#931" class="Bound"
+      >P</a
+      ><a name="932"
+      > </a
+      ><a name="933" class="Symbol"
+      >(</a
+      ><a name="934" href="Orn.AlgebraicOrnament.Make.html#934" class="Bound"
+      >xs&#8321;</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="939"
+      > </a
+      ><a name="940" href="Orn.AlgebraicOrnament.Make.html#940" class="Bound"
+      >xs&#8322;</a
+      ><a name="943" class="Symbol"
+      >)</a
+      ><a name="944"
+      > </a
+      ><a name="945" class="Symbol"
+      >(</a
+      ><a name="946" href="Orn.AlgebraicOrnament.Make.html#946" class="Bound"
+      >ih&#8321;</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="951"
+      > </a
+      ><a name="952" href="Orn.AlgebraicOrnament.Make.html#952" class="Bound"
+      >ih&#8322;</a
+      ><a name="955" class="Symbol"
+      >)</a
+      ><a name="956"
+      > </a
+      ><a name="957" class="Symbol"
+      >=</a
+      ><a name="958"
+      > 
+  </a
+      ><a name="962" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="Orn.AlgebraicOrnament.Make.html#921" class="Bound"
+      >D&#8321;</a
+      ><a name="972"
+      > </a
+      ><a name="973" href="Orn.AlgebraicOrnament.Make.html#931" class="Bound"
+      >P</a
+      ><a name="974"
+      > </a
+      ><a name="975" href="Orn.AlgebraicOrnament.Make.html#934" class="Bound"
+      >xs&#8321;</a
+      ><a name="978"
+      > </a
+      ><a name="979" href="Orn.AlgebraicOrnament.Make.html#946" class="Bound"
+      >ih&#8321;</a
+      ><a name="982"
+      > </a
+      ><a name="983" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="984"
+      > </a
+      ><a name="985" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="992"
+      > </a
+      ><a name="993" href="Orn.AlgebraicOrnament.Make.html#927" class="Bound"
+      >D&#8322;</a
+      ><a name="995"
+      > </a
+      ><a name="996" href="Orn.AlgebraicOrnament.Make.html#931" class="Bound"
+      >P</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="Orn.AlgebraicOrnament.Make.html#940" class="Bound"
+      >xs&#8322;</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" href="Orn.AlgebraicOrnament.Make.html#952" class="Bound"
+      >ih&#8322;</a
+      ><a name="1005"
+      >
+</a
+      ><a name="1006" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" class="Symbol"
+      >(</a
+      ><a name="1015" href="IDesc.IDesc.html#463" class="InductiveConstructor"
+      >`&#963;</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Orn.AlgebraicOrnament.Make.html#1018" class="Bound"
+      >n</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Orn.AlgebraicOrnament.Make.html#1020" class="Bound"
+      >T</a
+      ><a name="1021" class="Symbol"
+      >)</a
+      ><a name="1022"
+      > </a
+      ><a name="1023" href="Orn.AlgebraicOrnament.Make.html#1023" class="Bound"
+      >P</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" class="Symbol"
+      >(</a
+      ><a name="1026" href="Orn.AlgebraicOrnament.Make.html#1026" class="Bound"
+      >k</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Orn.AlgebraicOrnament.Make.html#1030" class="Bound"
+      >xs</a
+      ><a name="1032" class="Symbol"
+      >)</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Orn.AlgebraicOrnament.Make.html#1034" class="Bound"
+      >ih</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" class="Symbol"
+      >=</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" class="Symbol"
+      >(</a
+      ><a name="1048" href="Orn.AlgebraicOrnament.Make.html#1020" class="Bound"
+      >T</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Orn.AlgebraicOrnament.Make.html#1026" class="Bound"
+      >k</a
+      ><a name="1051" class="Symbol"
+      >)</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="Orn.AlgebraicOrnament.Make.html#1023" class="Bound"
+      >P</a
+      ><a name="1054"
+      > </a
+      ><a name="1055" href="Orn.AlgebraicOrnament.Make.html#1030" class="Bound"
+      >xs</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" href="Orn.AlgebraicOrnament.Make.html#1034" class="Bound"
+      >ih</a
+      ><a name="1060"
+      >
+</a
+      ><a name="1061" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" class="Symbol"
+      >(</a
+      ><a name="1070" href="IDesc.IDesc.html#292" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="Orn.AlgebraicOrnament.Make.html#1073" class="Bound"
+      >S</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Orn.AlgebraicOrnament.Make.html#1075" class="Bound"
+      >T</a
+      ><a name="1076" class="Symbol"
+      >)</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="Orn.AlgebraicOrnament.Make.html#1078" class="Bound"
+      >P</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" class="Symbol"
+      >(</a
+      ><a name="1081" href="Orn.AlgebraicOrnament.Make.html#1081" class="Bound"
+      >s</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1084"
+      > </a
+      ><a name="1085" href="Orn.AlgebraicOrnament.Make.html#1085" class="Bound"
+      >xs</a
+      ><a name="1087" class="Symbol"
+      >)</a
+      ><a name="1088"
+      > </a
+      ><a name="1089" href="Orn.AlgebraicOrnament.Make.html#1089" class="Bound"
+      >ih</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" class="Symbol"
+      >=</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="1101"
+      > </a
+      ><a name="1102" class="Symbol"
+      >(</a
+      ><a name="1103" href="Orn.AlgebraicOrnament.Make.html#1075" class="Bound"
+      >T</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" href="Orn.AlgebraicOrnament.Make.html#1081" class="Bound"
+      >s</a
+      ><a name="1106" class="Symbol"
+      >)</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="Orn.AlgebraicOrnament.Make.html#1078" class="Bound"
+      >P</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" href="Orn.AlgebraicOrnament.Make.html#1085" class="Bound"
+      >xs</a
+      ><a name="1112"
+      > </a
+      ><a name="1113" href="Orn.AlgebraicOrnament.Make.html#1089" class="Bound"
+      >ih</a
+      ><a name="1115"
+      >
+</a
+      ><a name="1116" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="1123"
+      > </a
+      ><a name="1124" class="Symbol"
+      >(</a
+      ><a name="1125" href="IDesc.IDesc.html#337" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" href="Orn.AlgebraicOrnament.Make.html#1128" class="Bound"
+      >S</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" href="Orn.AlgebraicOrnament.Make.html#1130" class="Bound"
+      >T</a
+      ><a name="1131" class="Symbol"
+      >)</a
+      ><a name="1132"
+      > </a
+      ><a name="1133" href="Orn.AlgebraicOrnament.Make.html#1133" class="Bound"
+      >P</a
+      ><a name="1134"
+      > </a
+      ><a name="1135" href="Orn.AlgebraicOrnament.Make.html#1135" class="Bound"
+      >xs</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" href="Orn.AlgebraicOrnament.Make.html#1138" class="Bound"
+      >ih</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" class="Symbol"
+      >=</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" class="Symbol"
+      >&#955;</a
+      ><a name="1144"
+      > </a
+      ><a name="1145" href="Orn.AlgebraicOrnament.Make.html#1145" class="Bound"
+      >s</a
+      ><a name="1146"
+      > </a
+      ><a name="1147" class="Symbol"
+      >&#8594;</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" class="Symbol"
+      >(</a
+      ><a name="1158" href="Orn.AlgebraicOrnament.Make.html#1130" class="Bound"
+      >T</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Orn.AlgebraicOrnament.Make.html#1145" class="Bound"
+      >s</a
+      ><a name="1161" class="Symbol"
+      >)</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" href="Orn.AlgebraicOrnament.Make.html#1133" class="Bound"
+      >P</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" class="Symbol"
+      >(</a
+      ><a name="1166" href="Orn.AlgebraicOrnament.Make.html#1135" class="Bound"
+      >xs</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Orn.AlgebraicOrnament.Make.html#1145" class="Bound"
+      >s</a
+      ><a name="1170" class="Symbol"
+      >)</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" class="Symbol"
+      >(</a
+      ><a name="1173" href="Orn.AlgebraicOrnament.Make.html#1138" class="Bound"
+      >ih</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" href="Orn.AlgebraicOrnament.Make.html#1145" class="Bound"
+      >s</a
+      ><a name="1177" class="Symbol"
+      >)</a
+      ><a name="1178"
+      >
+
+</a
+      ><a name="1180" class="Comment"
+      >-- This generalizes (slightly, but not fully) &#9633;map:</a
+      ><a name="1231"
+      >
+</a
+      ><a name="1232" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1237"
+      > </a
+      ><a name="1238" class="Symbol"
+      >:</a
+      ><a name="1239"
+      > </a
+      ><a name="1240" class="Symbol"
+      >(</a
+      ><a name="1241" href="Orn.AlgebraicOrnament.Make.html#1241" class="Bound"
+      >D'</a
+      ><a name="1243"
+      > </a
+      ><a name="1244" class="Symbol"
+      >:</a
+      ><a name="1245"
+      > </a
+      ><a name="1246" href="IDesc.IDesc.html#219" class="Datatype"
+      >IDesc</a
+      ><a name="1251"
+      >  </a
+      ><a name="1253" href="Orn.AlgebraicOrnament.Make.html#313" class="Bound"
+      >K</a
+      ><a name="1254" class="Symbol"
+      >)</a
+      ><a name="1255"
+      >
+           </a
+      ><a name="1267" class="Symbol"
+      >{</a
+      ><a name="1268" href="Orn.AlgebraicOrnament.Make.html#1268" class="Bound"
+      >Q</a
+      ><a name="1269"
+      > </a
+      ><a name="1270" class="Symbol"
+      >:</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" class="Symbol"
+      >&#8704;{</a
+      ><a name="1274" href="Orn.AlgebraicOrnament.Make.html#1274" class="Bound"
+      >i</a
+      ><a name="1275" class="Symbol"
+      >}</a
+      ><a name="1276"
+      > </a
+      ><a name="1277" class="Symbol"
+      >&#8594;</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="Orn.AlgebraicOrnament.Make.html#1274" class="Bound"
+      >i</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" class="Symbol"
+      >&#8594;</a
+      ><a name="1284"
+      > </a
+      ><a name="1285" class="PrimitiveType"
+      >Set</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" class="Symbol"
+      >}</a
+      ><a name="1290"
+      >
+           </a
+      ><a name="1302" class="Symbol"
+      >{</a
+      ><a name="1303" href="Orn.AlgebraicOrnament.Make.html#1303" class="Bound"
+      >&#945;</a
+      ><a name="1304"
+      > </a
+      ><a name="1305" class="Symbol"
+      >:</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" class="Symbol"
+      >&#8704;{</a
+      ><a name="1309" href="Orn.AlgebraicOrnament.Make.html#1309" class="Bound"
+      >i</a
+      ><a name="1310" class="Symbol"
+      >}</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" class="Symbol"
+      >&#8594;</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="IDesc.IDesc.html#1345" class="Field"
+      >func.out</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" href="Orn.AlgebraicOrnament.Make.html#1309" class="Bound"
+      >i</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" class="Symbol"
+      >&#8594;</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="1336"
+      > </a
+      ><a name="1337" href="Orn.AlgebraicOrnament.Make.html#1309" class="Bound"
+      >i</a
+      ><a name="1338" class="Symbol"
+      >}</a
+      ><a name="1339"
+      >
+           </a
+      ><a name="1351" class="Symbol"
+      >(</a
+      ><a name="1352" href="Orn.AlgebraicOrnament.Make.html#1352" class="Bound"
+      >xs</a
+      ><a name="1354"
+      > </a
+      ><a name="1355" class="Symbol"
+      >:</a
+      ><a name="1356"
+      > </a
+      ><a name="1357" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="1358"
+      > </a
+      ><a name="1359" href="Orn.AlgebraicOrnament.Make.html#1241" class="Bound"
+      >D'</a
+      ><a name="1361"
+      > </a
+      ><a name="1362" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" class="Symbol"
+      >(</a
+      ><a name="1365" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1366"
+      > </a
+      ><a name="1367" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1368" class="Symbol"
+      >))</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" class="Symbol"
+      >&#8594;</a
+      ><a name="1372"
+      >
+           </a
+      ><a name="1384" href="IDesc.Lifting.html#204" class="Function"
+      >&#9633;h</a
+      ><a name="1386"
+      > </a
+      ><a name="1387" href="Orn.AlgebraicOrnament.Make.html#1241" class="Bound"
+      >D'</a
+      ><a name="1389"
+      > </a
+      ><a name="1390" class="Symbol"
+      >(&#955;</a
+      ><a name="1392"
+      > </a
+      ><a name="1393" href="Orn.AlgebraicOrnament.Make.html#1393" class="Bound"
+      >t</a
+      ><a name="1394"
+      > </a
+      ><a name="1395" class="Symbol"
+      >&#8594;</a
+      ><a name="1396"
+      > </a
+      ><a name="1397" href="Orn.AlgebraicOrnament.Make.html#1268" class="Bound"
+      >Q</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" class="Symbol"
+      >(</a
+      ><a name="1400" href="IDesc.InitialAlgebra.html#766" class="Function"
+      >fold</a
+      ><a name="1404"
+      > </a
+      ><a name="1405" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" href="Orn.AlgebraicOrnament.Make.html#1303" class="Bound"
+      >&#945;</a
+      ><a name="1408"
+      > </a
+      ><a name="1409" href="Orn.AlgebraicOrnament.Make.html#1393" class="Bound"
+      >t</a
+      ><a name="1410" class="Symbol"
+      >))</a
+      ><a name="1412"
+      > </a
+      ><a name="1413" href="Orn.AlgebraicOrnament.Make.html#1352" class="Bound"
+      >xs</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" class="Symbol"
+      >&#8594;</a
+      ><a name="1417"
+      >
+           </a
+      ><a name="1429" href="IDesc.Lifting.html#204" class="Function"
+      >&#9633;h</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" href="Orn.AlgebraicOrnament.Make.html#1241" class="Bound"
+      >D'</a
+      ><a name="1434"
+      > </a
+      ><a name="1435" href="Orn.AlgebraicOrnament.Make.html#1268" class="Bound"
+      >Q</a
+      ><a name="1436"
+      > </a
+      ><a name="1437" class="Symbol"
+      >(</a
+      ><a name="1438" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="1447"
+      > </a
+      ><a name="1448" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" href="Orn.AlgebraicOrnament.Make.html#1303" class="Bound"
+      >&#945;</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" href="Orn.AlgebraicOrnament.Make.html#1241" class="Bound"
+      >D'</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" href="Orn.AlgebraicOrnament.Make.html#1352" class="Bound"
+      >xs</a
+      ><a name="1457" class="Symbol"
+      >)</a
+      ><a name="1458"
+      >
+</a
+      ><a name="1459" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" class="Symbol"
+      >(</a
+      ><a name="1466" href="IDesc.IDesc.html#250" class="InductiveConstructor"
+      >`var</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" href="Orn.AlgebraicOrnament.Make.html#1471" class="Bound"
+      >i</a
+      ><a name="1472" class="Symbol"
+      >)</a
+      ><a name="1473"
+      > </a
+      ><a name="1474" href="Orn.AlgebraicOrnament.Make.html#1474" class="Bound"
+      >xs</a
+      ><a name="1476"
+      > </a
+      ><a name="1477" href="Orn.AlgebraicOrnament.Make.html#1477" class="Bound"
+      >ih</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" class="Symbol"
+      >=</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" href="Orn.AlgebraicOrnament.Make.html#1477" class="Bound"
+      >ih</a
+      ><a name="1484"
+      >
+</a
+      ><a name="1485" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1490"
+      > </a
+      ><a name="1491" href="IDesc.IDesc.html#277" class="InductiveConstructor"
+      >`1</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" href="Orn.AlgebraicOrnament.Make.html#1494" class="Bound"
+      >xs</a
+      ><a name="1496"
+      > </a
+      ><a name="1497" href="Orn.AlgebraicOrnament.Make.html#1497" class="Bound"
+      >ih</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" class="Symbol"
+      >=</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Orn.AlgebraicOrnament.Make.html#1497" class="Bound"
+      >ih</a
+      ><a name="1504"
+      >
+</a
+      ><a name="1505" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1510"
+      > </a
+      ><a name="1511" class="Symbol"
+      >(</a
+      ><a name="1512" href="Orn.AlgebraicOrnament.Make.html#1512" class="Bound"
+      >D&#8321;</a
+      ><a name="1514"
+      > </a
+      ><a name="1515" href="IDesc.IDesc.html#428" class="InductiveConstructor Operator"
+      >`&#215;</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="Orn.AlgebraicOrnament.Make.html#1518" class="Bound"
+      >D&#8322;</a
+      ><a name="1520" class="Symbol"
+      >)</a
+      ><a name="1521"
+      > </a
+      ><a name="1522" class="Symbol"
+      >(</a
+      ><a name="1523" href="Orn.AlgebraicOrnament.Make.html#1523" class="Bound"
+      >xs&#8321;</a
+      ><a name="1526"
+      > </a
+      ><a name="1527" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1528"
+      > </a
+      ><a name="1529" href="Orn.AlgebraicOrnament.Make.html#1529" class="Bound"
+      >xs&#8322;</a
+      ><a name="1532" class="Symbol"
+      >)</a
+      ><a name="1533"
+      > </a
+      ><a name="1534" class="Symbol"
+      >(</a
+      ><a name="1535" href="Orn.AlgebraicOrnament.Make.html#1535" class="Bound"
+      >ih&#8321;</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" href="Orn.AlgebraicOrnament.Make.html#1541" class="Bound"
+      >ih&#8322;</a
+      ><a name="1544" class="Symbol"
+      >)</a
+      ><a name="1545"
+      > </a
+      ><a name="1546" class="Symbol"
+      >=</a
+      ><a name="1547"
+      > 
+    </a
+      ><a name="1553" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" href="Orn.AlgebraicOrnament.Make.html#1512" class="Bound"
+      >D&#8321;</a
+      ><a name="1561"
+      > </a
+      ><a name="1562" href="Orn.AlgebraicOrnament.Make.html#1523" class="Bound"
+      >xs&#8321;</a
+      ><a name="1565"
+      > </a
+      ><a name="1566" href="Orn.AlgebraicOrnament.Make.html#1535" class="Bound"
+      >ih&#8321;</a
+      ><a name="1569"
+      > </a
+      ><a name="1570" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1571"
+      > </a
+      ><a name="1572" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1577"
+      > </a
+      ><a name="1578" href="Orn.AlgebraicOrnament.Make.html#1518" class="Bound"
+      >D&#8322;</a
+      ><a name="1580"
+      > </a
+      ><a name="1581" href="Orn.AlgebraicOrnament.Make.html#1529" class="Bound"
+      >xs&#8322;</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" href="Orn.AlgebraicOrnament.Make.html#1541" class="Bound"
+      >ih&#8322;</a
+      ><a name="1588"
+      >
+</a
+      ><a name="1589" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1594"
+      > </a
+      ><a name="1595" class="Symbol"
+      >(</a
+      ><a name="1596" href="IDesc.IDesc.html#463" class="InductiveConstructor"
+      >`&#963;</a
+      ><a name="1598"
+      > </a
+      ><a name="1599" href="Orn.AlgebraicOrnament.Make.html#1599" class="Bound"
+      >n</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" href="Orn.AlgebraicOrnament.Make.html#1601" class="Bound"
+      >T</a
+      ><a name="1602" class="Symbol"
+      >)</a
+      ><a name="1603"
+      > </a
+      ><a name="1604" class="Symbol"
+      >(</a
+      ><a name="1605" href="Orn.AlgebraicOrnament.Make.html#1605" class="Bound"
+      >k</a
+      ><a name="1606"
+      > </a
+      ><a name="1607" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1608"
+      > </a
+      ><a name="1609" href="Orn.AlgebraicOrnament.Make.html#1609" class="Bound"
+      >xs</a
+      ><a name="1611" class="Symbol"
+      >)</a
+      ><a name="1612"
+      > </a
+      ><a name="1613" href="Orn.AlgebraicOrnament.Make.html#1613" class="Bound"
+      >ih</a
+      ><a name="1615"
+      > </a
+      ><a name="1616" class="Symbol"
+      >=</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" class="Symbol"
+      >(</a
+      ><a name="1625" href="Orn.AlgebraicOrnament.Make.html#1601" class="Bound"
+      >T</a
+      ><a name="1626"
+      > </a
+      ><a name="1627" href="Orn.AlgebraicOrnament.Make.html#1605" class="Bound"
+      >k</a
+      ><a name="1628" class="Symbol"
+      >)</a
+      ><a name="1629"
+      > </a
+      ><a name="1630" href="Orn.AlgebraicOrnament.Make.html#1609" class="Bound"
+      >xs</a
+      ><a name="1632"
+      > </a
+      ><a name="1633" href="Orn.AlgebraicOrnament.Make.html#1613" class="Bound"
+      >ih</a
+      ><a name="1635"
+      >
+</a
+      ><a name="1636" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1641"
+      > </a
+      ><a name="1642" class="Symbol"
+      >(</a
+      ><a name="1643" href="IDesc.IDesc.html#292" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="1645"
+      > </a
+      ><a name="1646" href="Orn.AlgebraicOrnament.Make.html#1646" class="Bound"
+      >S</a
+      ><a name="1647"
+      > </a
+      ><a name="1648" href="Orn.AlgebraicOrnament.Make.html#1648" class="Bound"
+      >T</a
+      ><a name="1649" class="Symbol"
+      >)</a
+      ><a name="1650"
+      > </a
+      ><a name="1651" class="Symbol"
+      >(</a
+      ><a name="1652" href="Orn.AlgebraicOrnament.Make.html#1652" class="Bound"
+      >s</a
+      ><a name="1653"
+      > </a
+      ><a name="1654" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1655"
+      > </a
+      ><a name="1656" href="Orn.AlgebraicOrnament.Make.html#1656" class="Bound"
+      >xs</a
+      ><a name="1658" class="Symbol"
+      >)</a
+      ><a name="1659"
+      > </a
+      ><a name="1660" href="Orn.AlgebraicOrnament.Make.html#1660" class="Bound"
+      >ih</a
+      ><a name="1662"
+      > </a
+      ><a name="1663" class="Symbol"
+      >=</a
+      ><a name="1664"
+      > </a
+      ><a name="1665" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" class="Symbol"
+      >(</a
+      ><a name="1672" href="Orn.AlgebraicOrnament.Make.html#1648" class="Bound"
+      >T</a
+      ><a name="1673"
+      > </a
+      ><a name="1674" href="Orn.AlgebraicOrnament.Make.html#1652" class="Bound"
+      >s</a
+      ><a name="1675" class="Symbol"
+      >)</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" href="Orn.AlgebraicOrnament.Make.html#1656" class="Bound"
+      >xs</a
+      ><a name="1679"
+      > </a
+      ><a name="1680" href="Orn.AlgebraicOrnament.Make.html#1660" class="Bound"
+      >ih</a
+      ><a name="1682"
+      >
+</a
+      ><a name="1683" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1688"
+      > </a
+      ><a name="1689" class="Symbol"
+      >(</a
+      ><a name="1690" href="IDesc.IDesc.html#337" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Orn.AlgebraicOrnament.Make.html#1693" class="Bound"
+      >S</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" href="Orn.AlgebraicOrnament.Make.html#1695" class="Bound"
+      >T</a
+      ><a name="1696" class="Symbol"
+      >)</a
+      ><a name="1697"
+      > </a
+      ><a name="1698" href="Orn.AlgebraicOrnament.Make.html#1698" class="Bound"
+      >xs</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="Orn.AlgebraicOrnament.Make.html#1701" class="Bound"
+      >ih</a
+      ><a name="1703"
+      > </a
+      ><a name="1704" class="Symbol"
+      >=</a
+      ><a name="1705"
+      > </a
+      ><a name="1706" class="Symbol"
+      >&#955;</a
+      ><a name="1707"
+      > </a
+      ><a name="1708" href="Orn.AlgebraicOrnament.Make.html#1708" class="Bound"
+      >s</a
+      ><a name="1709"
+      > </a
+      ><a name="1710" class="Symbol"
+      >&#8594;</a
+      ><a name="1711"
+      > </a
+      ><a name="1712" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" class="Symbol"
+      >(</a
+      ><a name="1719" href="Orn.AlgebraicOrnament.Make.html#1695" class="Bound"
+      >T</a
+      ><a name="1720"
+      > </a
+      ><a name="1721" href="Orn.AlgebraicOrnament.Make.html#1708" class="Bound"
+      >s</a
+      ><a name="1722" class="Symbol"
+      >)</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" class="Symbol"
+      >(</a
+      ><a name="1725" href="Orn.AlgebraicOrnament.Make.html#1698" class="Bound"
+      >xs</a
+      ><a name="1727"
+      > </a
+      ><a name="1728" href="Orn.AlgebraicOrnament.Make.html#1708" class="Bound"
+      >s</a
+      ><a name="1729" class="Symbol"
+      >)</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" class="Symbol"
+      >(</a
+      ><a name="1732" href="Orn.AlgebraicOrnament.Make.html#1701" class="Bound"
+      >ih</a
+      ><a name="1734"
+      > </a
+      ><a name="1735" href="Orn.AlgebraicOrnament.Make.html#1708" class="Bound"
+      >s</a
+      ><a name="1736" class="Symbol"
+      >)</a
+      ><a name="1737"
+      >
+  
+
+</a
+      ><a name="1742" class="Comment"
+      >-- Paper: Remark 4.21</a
+      ><a name="1763"
+      >
+</a
+      ><a name="1764" class="Comment"
+      >-- Typeset: make D &#945; xs = make D^{&#945;} xs</a
+      ><a name="1803"
+      >
+</a
+      ><a name="1804" href="Orn.AlgebraicOrnament.Make.html#1804" class="Function"
+      >make</a
+      ><a name="1808"
+      > </a
+      ><a name="1809" class="Symbol"
+      >:</a
+      ><a name="1810"
+      > </a
+      ><a name="1811" class="Symbol"
+      >&#8704;{</a
+      ><a name="1813" href="Orn.AlgebraicOrnament.Make.html#1813" class="Bound"
+      >k</a
+      ><a name="1814" class="Symbol"
+      >}</a
+      ><a name="1815"
+      > </a
+      ><a name="1816" class="Symbol"
+      >&#8594;</a
+      ><a name="1817"
+      > </a
+      ><a name="1818" class="Symbol"
+      >(</a
+      ><a name="1819" href="Orn.AlgebraicOrnament.Make.html#1819" class="Bound"
+      >x</a
+      ><a name="1820"
+      > </a
+      ><a name="1821" class="Symbol"
+      >:</a
+      ><a name="1822"
+      > </a
+      ><a name="1823" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1824"
+      > </a
+      ><a name="1825" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1826"
+      > </a
+      ><a name="1827" href="Orn.AlgebraicOrnament.Make.html#1813" class="Bound"
+      >k</a
+      ><a name="1828" class="Symbol"
+      >)</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" class="Symbol"
+      >&#8594;</a
+      ><a name="1831"
+      > </a
+      ><a name="1832" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1833"
+      > </a
+      ><a name="1834" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="1841"
+      > </a
+      ><a name="1842" class="Symbol"
+      >(</a
+      ><a name="1843" href="Orn.AlgebraicOrnament.Make.html#1813" class="Bound"
+      >k</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1846"
+      > </a
+      ><a name="1847" href="IDesc.InitialAlgebra.html#766" class="Function"
+      >fold</a
+      ><a name="1851"
+      > </a
+      ><a name="1852" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1853"
+      > </a
+      ><a name="1854" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="1855"
+      > </a
+      ><a name="1856" href="Orn.AlgebraicOrnament.Make.html#1819" class="Bound"
+      >x</a
+      ><a name="1857" class="Symbol"
+      >)</a
+      ><a name="1858"
+      >
+</a
+      ><a name="1859" href="Orn.AlgebraicOrnament.Make.html#1804" class="Function"
+      >make</a
+      ><a name="1863"
+      > </a
+      ><a name="1864" href="Orn.AlgebraicOrnament.Make.html#1864" class="Bound"
+      >x</a
+      ><a name="1865"
+      > </a
+      ><a name="1866" class="Symbol"
+      >=</a
+      ><a name="1867"
+      > </a
+      ><a name="1868" href="IDesc.Induction.html#821" class="Function"
+      >induction</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1879"
+      > </a
+      ><a name="1880" class="Symbol"
+      >(&#955;</a
+      ><a name="1882"
+      > </a
+      ><a name="1883" class="Symbol"
+      >{</a
+      ><a name="1884" href="Orn.AlgebraicOrnament.Make.html#1884" class="Bound"
+      >k</a
+      ><a name="1885" class="Symbol"
+      >}</a
+      ><a name="1886"
+      > </a
+      ><a name="1887" href="Orn.AlgebraicOrnament.Make.html#1887" class="Bound"
+      >x</a
+      ><a name="1888"
+      > </a
+      ><a name="1889" class="Symbol"
+      >&#8594;</a
+      ><a name="1890"
+      > </a
+      ><a name="1891" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1892"
+      > </a
+      ><a name="1893" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" class="Symbol"
+      >(</a
+      ><a name="1902" href="Orn.AlgebraicOrnament.Make.html#1884" class="Bound"
+      >k</a
+      ><a name="1903"
+      > </a
+      ><a name="1904" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1905"
+      > </a
+      ><a name="1906" href="IDesc.InitialAlgebra.html#766" class="Function"
+      >fold</a
+      ><a name="1910"
+      > </a
+      ><a name="1911" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="1912"
+      > </a
+      ><a name="1913" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="1914"
+      > </a
+      ><a name="1915" href="Orn.AlgebraicOrnament.Make.html#1887" class="Bound"
+      >x</a
+      ><a name="1916" class="Symbol"
+      >))</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" href="Orn.AlgebraicOrnament.Make.html#3740" class="Function"
+      >step</a
+      ><a name="1923"
+      > </a
+      ><a name="1924" href="Orn.AlgebraicOrnament.Make.html#1864" class="Bound"
+      >x</a
+      ><a name="1925"
+      >
+        </a
+      ><a name="1934" class="Keyword"
+      >where</a
+      ><a name="1939"
+      > </a
+      ><a name="1940" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="1945"
+      > </a
+      ><a name="1946" class="Symbol"
+      >:</a
+      ><a name="1947"
+      > </a
+      ><a name="1948" class="Symbol"
+      >(</a
+      ><a name="1949" href="Orn.AlgebraicOrnament.Make.html#1949" class="Bound"
+      >k</a
+      ><a name="1950"
+      > </a
+      ><a name="1951" class="Symbol"
+      >:</a
+      ><a name="1952"
+      > </a
+      ><a name="1953" href="Orn.AlgebraicOrnament.Make.html#313" class="Bound"
+      >K</a
+      ><a name="1954" class="Symbol"
+      >)</a
+      ><a name="1955"
+      >
+                      </a
+      ><a name="1978" class="Symbol"
+      >(</a
+      ><a name="1979" href="Orn.AlgebraicOrnament.Make.html#1979" class="Bound"
+      >D'</a
+      ><a name="1981"
+      > </a
+      ><a name="1982" class="Symbol"
+      >:</a
+      ><a name="1983"
+      > </a
+      ><a name="1984" href="IDesc.IDesc.html#219" class="Datatype"
+      >IDesc</a
+      ><a name="1989"
+      >  </a
+      ><a name="1991" href="Orn.AlgebraicOrnament.Make.html#313" class="Bound"
+      >K</a
+      ><a name="1992" class="Symbol"
+      >)</a
+      ><a name="1993"
+      >
+                      </a
+      ><a name="2016" class="Symbol"
+      >(</a
+      ><a name="2017" href="Orn.AlgebraicOrnament.Make.html#2017" class="Bound"
+      >&#945;'</a
+      ><a name="2019"
+      > </a
+      ><a name="2020" class="Symbol"
+      >:</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="2023"
+      > </a
+      ><a name="2024" href="Orn.AlgebraicOrnament.Make.html#1979" class="Bound"
+      >D'</a
+      ><a name="2026"
+      > </a
+      ><a name="2027" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="2028"
+      > </a
+      ><a name="2029" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="2030"
+      > </a
+      ><a name="2031" class="Symbol"
+      >&#8594;</a
+      ><a name="2032"
+      > </a
+      ><a name="2033" href="Orn.AlgebraicOrnament.Make.html#335" class="Bound"
+      >X</a
+      ><a name="2034"
+      > </a
+      ><a name="2035" href="Orn.AlgebraicOrnament.Make.html#1949" class="Bound"
+      >k</a
+      ><a name="2036" class="Symbol"
+      >)</a
+      ><a name="2037"
+      >
+                      </a
+      ><a name="2060" class="Symbol"
+      >(</a
+      ><a name="2061" href="Orn.AlgebraicOrnament.Make.html#2061" class="Bound"
+      >xs</a
+      ><a name="2063"
+      > </a
+      ><a name="2064" class="Symbol"
+      >:</a
+      ><a name="2065"
+      > </a
+      ><a name="2066" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="2067"
+      > </a
+      ><a name="2068" href="Orn.AlgebraicOrnament.Make.html#1979" class="Bound"
+      >D'</a
+      ><a name="2070"
+      > </a
+      ><a name="2071" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="2072"
+      > </a
+      ><a name="2073" class="Symbol"
+      >(</a
+      ><a name="2074" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="2075"
+      > </a
+      ><a name="2076" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2077" class="Symbol"
+      >))</a
+      ><a name="2079"
+      >
+                      </a
+      ><a name="2102" class="Symbol"
+      >(</a
+      ><a name="2103" href="Orn.AlgebraicOrnament.Make.html#2103" class="Bound"
+      >ih</a
+      ><a name="2105"
+      > </a
+      ><a name="2106" class="Symbol"
+      >:</a
+      ><a name="2107"
+      > </a
+      ><a name="2108" href="IDesc.Lifting.html#204" class="Function"
+      >&#9633;h</a
+      ><a name="2110"
+      > </a
+      ><a name="2111" href="Orn.AlgebraicOrnament.Make.html#1979" class="Bound"
+      >D'</a
+      ><a name="2113"
+      > </a
+      ><a name="2114" class="Symbol"
+      >(&#955;</a
+      ><a name="2116"
+      > </a
+      ><a name="2117" class="Symbol"
+      >{</a
+      ><a name="2118" href="Orn.AlgebraicOrnament.Make.html#2118" class="Bound"
+      >k</a
+      ><a name="2119" class="Symbol"
+      >}</a
+      ><a name="2120"
+      > </a
+      ><a name="2121" href="Orn.AlgebraicOrnament.Make.html#2121" class="Bound"
+      >x</a
+      ><a name="2122"
+      > </a
+      ><a name="2123" class="Symbol"
+      >&#8594;</a
+      ><a name="2124"
+      > </a
+      ><a name="2125" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="2126"
+      > </a
+      ><a name="2127" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="2134"
+      > </a
+      ><a name="2135" class="Symbol"
+      >(</a
+      ><a name="2136" href="Orn.AlgebraicOrnament.Make.html#2118" class="Bound"
+      >k</a
+      ><a name="2137"
+      > </a
+      ><a name="2138" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2139"
+      > </a
+      ><a name="2140" href="IDesc.InitialAlgebra.html#766" class="Function"
+      >fold</a
+      ><a name="2144"
+      > </a
+      ><a name="2145" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2146"
+      > </a
+      ><a name="2147" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2148"
+      > </a
+      ><a name="2149" href="Orn.AlgebraicOrnament.Make.html#2121" class="Bound"
+      >x</a
+      ><a name="2150" class="Symbol"
+      >))</a
+      ><a name="2152"
+      > </a
+      ><a name="2153" href="Orn.AlgebraicOrnament.Make.html#2061" class="Bound"
+      >xs</a
+      ><a name="2155" class="Symbol"
+      >)</a
+      ><a name="2156"
+      > </a
+      ><a name="2157" class="Symbol"
+      >&#8594;</a
+      ><a name="2158"
+      >
+                      </a
+      ><a name="2181" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="2182"
+      > </a
+      ><a name="2183" href="Orn.AlgebraicOrnament.html#726" class="Function"
+      >Desc.algOrnD</a
+      ><a name="2195"
+      > </a
+      ><a name="2196" href="Orn.AlgebraicOrnament.Make.html#1949" class="Bound"
+      >k</a
+      ><a name="2197"
+      > </a
+      ><a name="2198" class="Symbol"
+      >(</a
+      ><a name="2199" href="Orn.AlgebraicOrnament.Make.html#2017" class="Bound"
+      >&#945;'</a
+      ><a name="2201"
+      > </a
+      ><a name="2202" class="Symbol"
+      >(</a
+      ><a name="2203" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="2212"
+      > </a
+      ><a name="2213" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2214"
+      > </a
+      ><a name="2215" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2216"
+      > </a
+      ><a name="2217" href="Orn.AlgebraicOrnament.Make.html#1979" class="Bound"
+      >D'</a
+      ><a name="2219"
+      > </a
+      ><a name="2220" href="Orn.AlgebraicOrnament.Make.html#2061" class="Bound"
+      >xs</a
+      ><a name="2222" class="Symbol"
+      >))</a
+      ><a name="2224"
+      >  </a
+      ><a name="2226" href="Orn.AlgebraicOrnament.Make.html#1979" class="Bound"
+      >D'</a
+      ><a name="2228"
+      > </a
+      ><a name="2229" href="Orn.AlgebraicOrnament.Make.html#2017" class="Bound"
+      >&#945;'</a
+      ><a name="2231"
+      > </a
+      ><a name="2232" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="2233"
+      > </a
+      ><a name="2234" class="Symbol"
+      >(</a
+      ><a name="2235" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="2236"
+      > </a
+      ><a name="2237" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="2244" class="Symbol"
+      >)</a
+      ><a name="2245"
+      >
+
+              </a
+      ><a name="2261" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="2266"
+      > </a
+      ><a name="2267" href="Orn.AlgebraicOrnament.Make.html#2267" class="Bound"
+      >k</a
+      ><a name="2268"
+      > </a
+      ><a name="2269" class="Symbol"
+      >(</a
+      ><a name="2270" href="IDesc.IDesc.html#250" class="InductiveConstructor"
+      >`var</a
+      ><a name="2274"
+      > </a
+      ><a name="2275" href="Orn.AlgebraicOrnament.Make.html#2275" class="Bound"
+      >i</a
+      ><a name="2276" class="Symbol"
+      >)</a
+      ><a name="2277"
+      > </a
+      ><a name="2278" href="Orn.AlgebraicOrnament.Make.html#2278" class="Bound"
+      >&#945;'</a
+      ><a name="2280"
+      > </a
+      ><a name="2281" href="Orn.AlgebraicOrnament.Make.html#2281" class="Bound"
+      >xs</a
+      ><a name="2283"
+      > </a
+      ><a name="2284" href="Orn.AlgebraicOrnament.Make.html#2284" class="Bound"
+      >ih</a
+      ><a name="2286"
+      > </a
+      ><a name="2287" class="Symbol"
+      >=</a
+      ><a name="2288"
+      > </a
+      ><a name="2289" href="IDesc.InitialAlgebra.html#335" class="Function"
+      >Fold.fold</a
+      ><a name="2298"
+      > </a
+      ><a name="2299" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2300"
+      > </a
+      ><a name="2301" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2302"
+      > </a
+      ><a name="2303" href="Orn.AlgebraicOrnament.Make.html#2281" class="Bound"
+      >xs</a
+      ><a name="2305"
+      > </a
+      ><a name="2306" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2307"
+      > 
+                                          </a
+      ><a name="2351" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2355"
+      > </a
+      ><a name="2356" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2357"
+      > </a
+      ><a name="2358" href="Orn.AlgebraicOrnament.Make.html#2284" class="Bound"
+      >ih</a
+      ><a name="2360"
+      >
+              </a
+      ><a name="2375" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="2380"
+      > </a
+      ><a name="2381" href="Orn.AlgebraicOrnament.Make.html#2381" class="Bound"
+      >k</a
+      ><a name="2382"
+      > </a
+      ><a name="2383" href="IDesc.IDesc.html#277" class="InductiveConstructor"
+      >`1</a
+      ><a name="2385"
+      > </a
+      ><a name="2386" href="Orn.AlgebraicOrnament.Make.html#2386" class="Bound"
+      >&#945;'</a
+      ><a name="2388"
+      > </a
+      ><a name="2389" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="2391"
+      > </a
+      ><a name="2392" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="2394"
+      > </a
+      ><a name="2395" class="Symbol"
+      >=</a
+      ><a name="2396"
+      > </a
+      ><a name="2397" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="2399"
+      > </a
+      ><a name="2400" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2401"
+      > </a
+      ><a name="2402" class="Symbol"
+      >(</a
+      ><a name="2403" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2407"
+      > </a
+      ><a name="2408" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2409"
+      > </a
+      ><a name="2410" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="2412" class="Symbol"
+      >)</a
+      ><a name="2413"
+      >
+              </a
+      ><a name="2428" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="2433"
+      > </a
+      ><a name="2434" href="Orn.AlgebraicOrnament.Make.html#2434" class="Bound"
+      >k</a
+      ><a name="2435"
+      > </a
+      ><a name="2436" class="Symbol"
+      >(</a
+      ><a name="2437" href="Orn.AlgebraicOrnament.Make.html#2437" class="Bound"
+      >D&#8321;</a
+      ><a name="2439"
+      > </a
+      ><a name="2440" href="IDesc.IDesc.html#428" class="InductiveConstructor Operator"
+      >`&#215;</a
+      ><a name="2442"
+      > </a
+      ><a name="2443" href="Orn.AlgebraicOrnament.Make.html#2443" class="Bound"
+      >D&#8322;</a
+      ><a name="2445" class="Symbol"
+      >)</a
+      ><a name="2446"
+      > </a
+      ><a name="2447" href="Orn.AlgebraicOrnament.Make.html#2447" class="Bound"
+      >&#945;'</a
+      ><a name="2449"
+      > </a
+      ><a name="2450" class="Symbol"
+      >(</a
+      ><a name="2451" href="Orn.AlgebraicOrnament.Make.html#2451" class="Bound"
+      >xs&#8321;</a
+      ><a name="2454"
+      > </a
+      ><a name="2455" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2456"
+      > </a
+      ><a name="2457" href="Orn.AlgebraicOrnament.Make.html#2457" class="Bound"
+      >xs&#8322;</a
+      ><a name="2460" class="Symbol"
+      >)</a
+      ><a name="2461"
+      > </a
+      ><a name="2462" class="Symbol"
+      >(</a
+      ><a name="2463" href="Orn.AlgebraicOrnament.Make.html#2463" class="Bound"
+      >ih&#8321;</a
+      ><a name="2466"
+      > </a
+      ><a name="2467" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2468"
+      > </a
+      ><a name="2469" href="Orn.AlgebraicOrnament.Make.html#2469" class="Bound"
+      >ih&#8322;</a
+      ><a name="2472" class="Symbol"
+      >)</a
+      ><a name="2473"
+      > </a
+      ><a name="2474" class="Symbol"
+      >=</a
+      ><a name="2475"
+      > 
+                </a
+      ><a name="2493" class="Symbol"
+      >(</a
+      ><a name="2494"
+      > </a
+      ><a name="2495" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="2504"
+      > </a
+      ><a name="2505" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2506"
+      > </a
+      ><a name="2507" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2508"
+      > </a
+      ><a name="2509" href="Orn.AlgebraicOrnament.Make.html#2437" class="Bound"
+      >D&#8321;</a
+      ><a name="2511"
+      > </a
+      ><a name="2512" href="Orn.AlgebraicOrnament.Make.html#2451" class="Bound"
+      >xs&#8321;</a
+      ><a name="2515"
+      > </a
+      ><a name="2516" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2517"
+      > </a
+      ><a name="2518" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="2527"
+      > </a
+      ><a name="2528" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2529"
+      > </a
+      ><a name="2530" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2531"
+      > </a
+      ><a name="2532" href="Orn.AlgebraicOrnament.Make.html#2443" class="Bound"
+      >D&#8322;</a
+      ><a name="2534"
+      > </a
+      ><a name="2535" href="Orn.AlgebraicOrnament.Make.html#2457" class="Bound"
+      >xs&#8322;</a
+      ><a name="2538" class="Symbol"
+      >)</a
+      ><a name="2539"
+      > </a
+      ><a name="2540" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2541"
+      > 
+                </a
+      ><a name="2559" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2563"
+      > </a
+      ><a name="2564" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2565"
+      > 
+                </a
+      ><a name="2583" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="2590"
+      > </a
+      ><a name="2591" href="Orn.AlgebraicOrnament.Make.html#2437" class="Bound"
+      >D&#8321;</a
+      ><a name="2593"
+      > </a
+      ><a name="2594" class="Symbol"
+      >(&#955;</a
+      ><a name="2596"
+      > </a
+      ><a name="2597" class="Symbol"
+      >{</a
+      ><a name="2598" href="Orn.AlgebraicOrnament.Make.html#2598" class="Bound"
+      >k</a
+      ><a name="2599" class="Symbol"
+      >}</a
+      ><a name="2600"
+      > </a
+      ><a name="2601" href="Orn.AlgebraicOrnament.Make.html#2601" class="Bound"
+      >x</a
+      ><a name="2602"
+      > </a
+      ><a name="2603" class="Symbol"
+      >&#8594;</a
+      ><a name="2604"
+      > </a
+      ><a name="2605" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="2606"
+      > </a
+      ><a name="2607" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="2614"
+      > </a
+      ><a name="2615" class="Symbol"
+      >(</a
+      ><a name="2616" href="Orn.AlgebraicOrnament.Make.html#2598" class="Bound"
+      >k</a
+      ><a name="2617"
+      > </a
+      ><a name="2618" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2619"
+      > </a
+      ><a name="2620" href="Orn.AlgebraicOrnament.Make.html#2601" class="Bound"
+      >x</a
+      ><a name="2621" class="Symbol"
+      >))</a
+      ><a name="2623"
+      > 
+                     </a
+      ><a name="2646" class="Symbol"
+      >(</a
+      ><a name="2647" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="2656"
+      > </a
+      ><a name="2657" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2658"
+      > </a
+      ><a name="2659" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2660"
+      > </a
+      ><a name="2661" href="Orn.AlgebraicOrnament.Make.html#2437" class="Bound"
+      >D&#8321;</a
+      ><a name="2663"
+      > </a
+      ><a name="2664" href="Orn.AlgebraicOrnament.Make.html#2451" class="Bound"
+      >xs&#8321;</a
+      ><a name="2667" class="Symbol"
+      >)</a
+      ><a name="2668"
+      > 
+                     </a
+      ><a name="2691" class="Symbol"
+      >(</a
+      ><a name="2692" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="2697"
+      > </a
+      ><a name="2698" href="Orn.AlgebraicOrnament.Make.html#2437" class="Bound"
+      >D&#8321;</a
+      ><a name="2700"
+      > </a
+      ><a name="2701" href="Orn.AlgebraicOrnament.Make.html#2451" class="Bound"
+      >xs&#8321;</a
+      ><a name="2704"
+      > </a
+      ><a name="2705" href="Orn.AlgebraicOrnament.Make.html#2463" class="Bound"
+      >ih&#8321;</a
+      ><a name="2708" class="Symbol"
+      >)</a
+      ><a name="2709"
+      > </a
+      ><a name="2710" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2711"
+      > 
+                </a
+      ><a name="2729" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="2736"
+      > </a
+      ><a name="2737" href="Orn.AlgebraicOrnament.Make.html#2443" class="Bound"
+      >D&#8322;</a
+      ><a name="2739"
+      > </a
+      ><a name="2740" class="Symbol"
+      >(&#955;</a
+      ><a name="2742"
+      > </a
+      ><a name="2743" class="Symbol"
+      >{</a
+      ><a name="2744" href="Orn.AlgebraicOrnament.Make.html#2744" class="Bound"
+      >k</a
+      ><a name="2745" class="Symbol"
+      >}</a
+      ><a name="2746"
+      > </a
+      ><a name="2747" href="Orn.AlgebraicOrnament.Make.html#2747" class="Bound"
+      >x</a
+      ><a name="2748"
+      > </a
+      ><a name="2749" class="Symbol"
+      >&#8594;</a
+      ><a name="2750"
+      > </a
+      ><a name="2751" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="2752"
+      > </a
+      ><a name="2753" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="2760"
+      > </a
+      ><a name="2761" class="Symbol"
+      >(</a
+      ><a name="2762" href="Orn.AlgebraicOrnament.Make.html#2744" class="Bound"
+      >k</a
+      ><a name="2763"
+      > </a
+      ><a name="2764" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2765"
+      > </a
+      ><a name="2766" href="Orn.AlgebraicOrnament.Make.html#2747" class="Bound"
+      >x</a
+      ><a name="2767" class="Symbol"
+      >))</a
+      ><a name="2769"
+      > 
+                     </a
+      ><a name="2792" class="Symbol"
+      >(</a
+      ><a name="2793" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="2802"
+      > </a
+      ><a name="2803" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2804"
+      > </a
+      ><a name="2805" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2806"
+      > </a
+      ><a name="2807" href="Orn.AlgebraicOrnament.Make.html#2443" class="Bound"
+      >D&#8322;</a
+      ><a name="2809"
+      > </a
+      ><a name="2810" href="Orn.AlgebraicOrnament.Make.html#2457" class="Bound"
+      >xs&#8322;</a
+      ><a name="2813" class="Symbol"
+      >)</a
+      ><a name="2814"
+      >
+                     </a
+      ><a name="2836" class="Symbol"
+      >(</a
+      ><a name="2837" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="2842"
+      > </a
+      ><a name="2843" href="Orn.AlgebraicOrnament.Make.html#2443" class="Bound"
+      >D&#8322;</a
+      ><a name="2845"
+      > </a
+      ><a name="2846" href="Orn.AlgebraicOrnament.Make.html#2457" class="Bound"
+      >xs&#8322;</a
+      ><a name="2849"
+      > </a
+      ><a name="2850" href="Orn.AlgebraicOrnament.Make.html#2469" class="Bound"
+      >ih&#8322;</a
+      ><a name="2853" class="Symbol"
+      >)</a
+      ><a name="2854"
+      > 
+              </a
+      ><a name="2870" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="2875"
+      > </a
+      ><a name="2876" href="Orn.AlgebraicOrnament.Make.html#2876" class="Bound"
+      >k</a
+      ><a name="2877"
+      > </a
+      ><a name="2878" class="Symbol"
+      >(</a
+      ><a name="2879" href="IDesc.IDesc.html#463" class="InductiveConstructor"
+      >`&#963;</a
+      ><a name="2881"
+      > </a
+      ><a name="2882" href="Orn.AlgebraicOrnament.Make.html#2882" class="Bound"
+      >n</a
+      ><a name="2883"
+      > </a
+      ><a name="2884" href="Orn.AlgebraicOrnament.Make.html#2884" class="Bound"
+      >T</a
+      ><a name="2885" class="Symbol"
+      >)</a
+      ><a name="2886"
+      > </a
+      ><a name="2887" href="Orn.AlgebraicOrnament.Make.html#2887" class="Bound"
+      >&#945;'</a
+      ><a name="2889"
+      > </a
+      ><a name="2890" class="Symbol"
+      >(</a
+      ><a name="2891" href="Orn.AlgebraicOrnament.Make.html#2891" class="Bound"
+      >s</a
+      ><a name="2892"
+      > </a
+      ><a name="2893" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2894"
+      > </a
+      ><a name="2895" href="Orn.AlgebraicOrnament.Make.html#2895" class="Bound"
+      >xs</a
+      ><a name="2897" class="Symbol"
+      >)</a
+      ><a name="2898"
+      > </a
+      ><a name="2899" href="Orn.AlgebraicOrnament.Make.html#2899" class="Bound"
+      >ih</a
+      ><a name="2901"
+      > </a
+      ><a name="2902" class="Symbol"
+      >=</a
+      ><a name="2903"
+      > 
+                </a
+      ><a name="2921" class="Symbol"
+      >(</a
+      ><a name="2922" href="Orn.AlgebraicOrnament.Make.html#2891" class="Bound"
+      >s</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="2935"
+      > </a
+      ><a name="2936" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="2937"
+      > </a
+      ><a name="2938" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="2939"
+      > </a
+      ><a name="2940" class="Symbol"
+      >(</a
+      ><a name="2941" href="Orn.AlgebraicOrnament.Make.html#2884" class="Bound"
+      >T</a
+      ><a name="2942"
+      > </a
+      ><a name="2943" href="Orn.AlgebraicOrnament.Make.html#2891" class="Bound"
+      >s</a
+      ><a name="2944" class="Symbol"
+      >)</a
+      ><a name="2945"
+      > </a
+      ><a name="2946" href="Orn.AlgebraicOrnament.Make.html#2895" class="Bound"
+      >xs</a
+      ><a name="2948" class="Symbol"
+      >)</a
+      ><a name="2949"
+      > </a
+      ><a name="2950" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2951"
+      > 
+                </a
+      ><a name="2969" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="2973"
+      > </a
+      ><a name="2974" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2975"
+      > 
+                </a
+      ><a name="2993" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="3000"
+      > </a
+      ><a name="3001" class="Symbol"
+      >(</a
+      ><a name="3002" href="Orn.AlgebraicOrnament.Make.html#2884" class="Bound"
+      >T</a
+      ><a name="3003"
+      > </a
+      ><a name="3004" href="Orn.AlgebraicOrnament.Make.html#2891" class="Bound"
+      >s</a
+      ><a name="3005" class="Symbol"
+      >)</a
+      ><a name="3006"
+      > </a
+      ><a name="3007" class="Symbol"
+      >(&#955;</a
+      ><a name="3009"
+      > </a
+      ><a name="3010" class="Symbol"
+      >{</a
+      ><a name="3011" href="Orn.AlgebraicOrnament.Make.html#3011" class="Bound"
+      >k</a
+      ><a name="3012" class="Symbol"
+      >}</a
+      ><a name="3013"
+      > </a
+      ><a name="3014" href="Orn.AlgebraicOrnament.Make.html#3014" class="Bound"
+      >x</a
+      ><a name="3015"
+      > </a
+      ><a name="3016" class="Symbol"
+      >&#8594;</a
+      ><a name="3017"
+      > </a
+      ><a name="3018" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="3019"
+      > </a
+      ><a name="3020" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="3027"
+      > </a
+      ><a name="3028" class="Symbol"
+      >(</a
+      ><a name="3029" href="Orn.AlgebraicOrnament.Make.html#3011" class="Bound"
+      >k</a
+      ><a name="3030"
+      > </a
+      ><a name="3031" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3032"
+      > </a
+      ><a name="3033" href="Orn.AlgebraicOrnament.Make.html#3014" class="Bound"
+      >x</a
+      ><a name="3034" class="Symbol"
+      >))</a
+      ><a name="3036"
+      > 
+                     </a
+      ><a name="3059" class="Symbol"
+      >(</a
+      ><a name="3060" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="3069"
+      > </a
+      ><a name="3070" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3071"
+      > </a
+      ><a name="3072" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="3073"
+      > </a
+      ><a name="3074" class="Symbol"
+      >(</a
+      ><a name="3075" href="Orn.AlgebraicOrnament.Make.html#2884" class="Bound"
+      >T</a
+      ><a name="3076"
+      > </a
+      ><a name="3077" href="Orn.AlgebraicOrnament.Make.html#2891" class="Bound"
+      >s</a
+      ><a name="3078" class="Symbol"
+      >)</a
+      ><a name="3079"
+      > </a
+      ><a name="3080" href="Orn.AlgebraicOrnament.Make.html#2895" class="Bound"
+      >xs</a
+      ><a name="3082" class="Symbol"
+      >)</a
+      ><a name="3083"
+      >
+                     </a
+      ><a name="3105" class="Symbol"
+      >(</a
+      ><a name="3106" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" class="Symbol"
+      >(</a
+      ><a name="3113" href="Orn.AlgebraicOrnament.Make.html#2884" class="Bound"
+      >T</a
+      ><a name="3114"
+      > </a
+      ><a name="3115" href="Orn.AlgebraicOrnament.Make.html#2891" class="Bound"
+      >s</a
+      ><a name="3116" class="Symbol"
+      >)</a
+      ><a name="3117"
+      > </a
+      ><a name="3118" href="Orn.AlgebraicOrnament.Make.html#2895" class="Bound"
+      >xs</a
+      ><a name="3120"
+      > </a
+      ><a name="3121" href="Orn.AlgebraicOrnament.Make.html#2899" class="Bound"
+      >ih</a
+      ><a name="3123" class="Symbol"
+      >)</a
+      ><a name="3124"
+      >
+              </a
+      ><a name="3139" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="3144"
+      > </a
+      ><a name="3145" href="Orn.AlgebraicOrnament.Make.html#3145" class="Bound"
+      >k</a
+      ><a name="3146"
+      > </a
+      ><a name="3147" class="Symbol"
+      >(</a
+      ><a name="3148" href="IDesc.IDesc.html#292" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="3150"
+      > </a
+      ><a name="3151" href="Orn.AlgebraicOrnament.Make.html#3151" class="Bound"
+      >S</a
+      ><a name="3152"
+      > </a
+      ><a name="3153" href="Orn.AlgebraicOrnament.Make.html#3153" class="Bound"
+      >T</a
+      ><a name="3154" class="Symbol"
+      >)</a
+      ><a name="3155"
+      > </a
+      ><a name="3156" href="Orn.AlgebraicOrnament.Make.html#3156" class="Bound"
+      >&#945;'</a
+      ><a name="3158"
+      > </a
+      ><a name="3159" class="Symbol"
+      >(</a
+      ><a name="3160" href="Orn.AlgebraicOrnament.Make.html#3160" class="Bound"
+      >s</a
+      ><a name="3161"
+      > </a
+      ><a name="3162" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3163"
+      > </a
+      ><a name="3164" href="Orn.AlgebraicOrnament.Make.html#3164" class="Bound"
+      >xs</a
+      ><a name="3166" class="Symbol"
+      >)</a
+      ><a name="3167"
+      > </a
+      ><a name="3168" href="Orn.AlgebraicOrnament.Make.html#3168" class="Bound"
+      >ih</a
+      ><a name="3170"
+      > </a
+      ><a name="3171" class="Symbol"
+      >=</a
+      ><a name="3172"
+      > 
+                </a
+      ><a name="3190" class="Symbol"
+      >(</a
+      ><a name="3191" href="Orn.AlgebraicOrnament.Make.html#3160" class="Bound"
+      >s</a
+      ><a name="3192"
+      > </a
+      ><a name="3193" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3194"
+      > </a
+      ><a name="3195" class="Symbol"
+      >(</a
+      ><a name="3196" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="3205"
+      > </a
+      ><a name="3206" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3207"
+      > </a
+      ><a name="3208" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="3209"
+      > </a
+      ><a name="3210" class="Symbol"
+      >(</a
+      ><a name="3211" href="Orn.AlgebraicOrnament.Make.html#3153" class="Bound"
+      >T</a
+      ><a name="3212"
+      > </a
+      ><a name="3213" href="Orn.AlgebraicOrnament.Make.html#3160" class="Bound"
+      >s</a
+      ><a name="3214" class="Symbol"
+      >)</a
+      ><a name="3215"
+      > </a
+      ><a name="3216" href="Orn.AlgebraicOrnament.Make.html#3164" class="Bound"
+      >xs</a
+      ><a name="3218" class="Symbol"
+      >))</a
+      ><a name="3220"
+      > </a
+      ><a name="3221" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3222"
+      >
+                </a
+      ><a name="3239" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="3243"
+      > </a
+      ><a name="3244" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3245"
+      > 
+                </a
+      ><a name="3263" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="3270"
+      > </a
+      ><a name="3271" class="Symbol"
+      >(</a
+      ><a name="3272" href="Orn.AlgebraicOrnament.Make.html#3153" class="Bound"
+      >T</a
+      ><a name="3273"
+      > </a
+      ><a name="3274" href="Orn.AlgebraicOrnament.Make.html#3160" class="Bound"
+      >s</a
+      ><a name="3275" class="Symbol"
+      >)</a
+      ><a name="3276"
+      > </a
+      ><a name="3277" class="Symbol"
+      >(&#955;</a
+      ><a name="3279"
+      > </a
+      ><a name="3280" class="Symbol"
+      >{</a
+      ><a name="3281" href="Orn.AlgebraicOrnament.Make.html#3281" class="Bound"
+      >k</a
+      ><a name="3282" class="Symbol"
+      >}</a
+      ><a name="3283"
+      > </a
+      ><a name="3284" href="Orn.AlgebraicOrnament.Make.html#3284" class="Bound"
+      >x</a
+      ><a name="3285"
+      > </a
+      ><a name="3286" class="Symbol"
+      >&#8594;</a
+      ><a name="3287"
+      > </a
+      ><a name="3288" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="3289"
+      > </a
+      ><a name="3290" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="3297"
+      > </a
+      ><a name="3298" class="Symbol"
+      >(</a
+      ><a name="3299" href="Orn.AlgebraicOrnament.Make.html#3281" class="Bound"
+      >k</a
+      ><a name="3300"
+      > </a
+      ><a name="3301" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3302"
+      > </a
+      ><a name="3303" href="Orn.AlgebraicOrnament.Make.html#3284" class="Bound"
+      >x</a
+      ><a name="3304" class="Symbol"
+      >))</a
+      ><a name="3306"
+      > 
+                     </a
+      ><a name="3329" class="Symbol"
+      >(</a
+      ><a name="3330" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="3339"
+      > </a
+      ><a name="3340" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3341"
+      > </a
+      ><a name="3342" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="3343"
+      > </a
+      ><a name="3344" class="Symbol"
+      >(</a
+      ><a name="3345" href="Orn.AlgebraicOrnament.Make.html#3153" class="Bound"
+      >T</a
+      ><a name="3346"
+      > </a
+      ><a name="3347" href="Orn.AlgebraicOrnament.Make.html#3160" class="Bound"
+      >s</a
+      ><a name="3348" class="Symbol"
+      >)</a
+      ><a name="3349"
+      > </a
+      ><a name="3350" href="Orn.AlgebraicOrnament.Make.html#3164" class="Bound"
+      >xs</a
+      ><a name="3352" class="Symbol"
+      >)</a
+      ><a name="3353"
+      >
+                     </a
+      ><a name="3375" class="Symbol"
+      >(</a
+      ><a name="3376" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="3381"
+      > </a
+      ><a name="3382" class="Symbol"
+      >(</a
+      ><a name="3383" href="Orn.AlgebraicOrnament.Make.html#3153" class="Bound"
+      >T</a
+      ><a name="3384"
+      > </a
+      ><a name="3385" href="Orn.AlgebraicOrnament.Make.html#3160" class="Bound"
+      >s</a
+      ><a name="3386" class="Symbol"
+      >)</a
+      ><a name="3387"
+      > </a
+      ><a name="3388" href="Orn.AlgebraicOrnament.Make.html#3164" class="Bound"
+      >xs</a
+      ><a name="3390"
+      > </a
+      ><a name="3391" href="Orn.AlgebraicOrnament.Make.html#3168" class="Bound"
+      >ih</a
+      ><a name="3393" class="Symbol"
+      >)</a
+      ><a name="3394"
+      >
+              </a
+      ><a name="3409" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="3414"
+      > </a
+      ><a name="3415" href="Orn.AlgebraicOrnament.Make.html#3415" class="Bound"
+      >k</a
+      ><a name="3416"
+      > </a
+      ><a name="3417" class="Symbol"
+      >(</a
+      ><a name="3418" href="IDesc.IDesc.html#337" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="3420"
+      > </a
+      ><a name="3421" href="Orn.AlgebraicOrnament.Make.html#3421" class="Bound"
+      >S</a
+      ><a name="3422"
+      > </a
+      ><a name="3423" href="Orn.AlgebraicOrnament.Make.html#3423" class="Bound"
+      >T</a
+      ><a name="3424" class="Symbol"
+      >)</a
+      ><a name="3425"
+      > </a
+      ><a name="3426" href="Orn.AlgebraicOrnament.Make.html#3426" class="Bound"
+      >&#945;'</a
+      ><a name="3428"
+      > </a
+      ><a name="3429" href="Orn.AlgebraicOrnament.Make.html#3429" class="Bound"
+      >xs</a
+      ><a name="3431"
+      > </a
+      ><a name="3432" href="Orn.AlgebraicOrnament.Make.html#3432" class="Bound"
+      >ih</a
+      ><a name="3434"
+      > </a
+      ><a name="3435" class="Symbol"
+      >=</a
+      ><a name="3436"
+      > 
+                </a
+      ><a name="3454" class="Symbol"
+      >(&#955;</a
+      ><a name="3456"
+      > </a
+      ><a name="3457" href="Orn.AlgebraicOrnament.Make.html#3457" class="Bound"
+      >s</a
+      ><a name="3458"
+      > </a
+      ><a name="3459" class="Symbol"
+      >&#8594;</a
+      ><a name="3460"
+      > </a
+      ><a name="3461" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="3470"
+      > </a
+      ><a name="3471" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3472"
+      > </a
+      ><a name="3473" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="3474"
+      > </a
+      ><a name="3475" class="Symbol"
+      >(</a
+      ><a name="3476" href="Orn.AlgebraicOrnament.Make.html#3423" class="Bound"
+      >T</a
+      ><a name="3477"
+      > </a
+      ><a name="3478" href="Orn.AlgebraicOrnament.Make.html#3457" class="Bound"
+      >s</a
+      ><a name="3479" class="Symbol"
+      >)</a
+      ><a name="3480"
+      > </a
+      ><a name="3481" class="Symbol"
+      >(</a
+      ><a name="3482" href="Orn.AlgebraicOrnament.Make.html#3429" class="Bound"
+      >xs</a
+      ><a name="3484"
+      > </a
+      ><a name="3485" href="Orn.AlgebraicOrnament.Make.html#3457" class="Bound"
+      >s</a
+      ><a name="3486" class="Symbol"
+      >))</a
+      ><a name="3488"
+      > </a
+      ><a name="3489" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3490"
+      > 
+                </a
+      ><a name="3508" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="3512"
+      > </a
+      ><a name="3513" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3514"
+      > 
+                </a
+      ><a name="3532" class="Symbol"
+      >&#955;</a
+      ><a name="3533"
+      > </a
+      ><a name="3534" href="Orn.AlgebraicOrnament.Make.html#3534" class="Bound"
+      >s</a
+      ><a name="3535"
+      > </a
+      ><a name="3536" class="Symbol"
+      >&#8594;</a
+      ><a name="3537"
+      > </a
+      ><a name="3538" href="Orn.AlgebraicOrnament.Make.html#617" class="Function"
+      >toILift</a
+      ><a name="3545"
+      > </a
+      ><a name="3546" class="Symbol"
+      >(</a
+      ><a name="3547" href="Orn.AlgebraicOrnament.Make.html#3423" class="Bound"
+      >T</a
+      ><a name="3548"
+      > </a
+      ><a name="3549" href="Orn.AlgebraicOrnament.Make.html#3534" class="Bound"
+      >s</a
+      ><a name="3550" class="Symbol"
+      >)</a
+      ><a name="3551"
+      > 
+                           </a
+      ><a name="3580" class="Symbol"
+      >(&#955;</a
+      ><a name="3582"
+      > </a
+      ><a name="3583" class="Symbol"
+      >{</a
+      ><a name="3584" href="Orn.AlgebraicOrnament.Make.html#3584" class="Bound"
+      >k&#8321;</a
+      ><a name="3586" class="Symbol"
+      >}</a
+      ><a name="3587"
+      > </a
+      ><a name="3588" href="Orn.AlgebraicOrnament.Make.html#3588" class="Bound"
+      >x&#8321;</a
+      ><a name="3590"
+      > </a
+      ><a name="3591" class="Symbol"
+      >&#8594;</a
+      ><a name="3592"
+      > </a
+      ><a name="3593" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="3594"
+      > </a
+      ><a name="3595" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="3602"
+      > </a
+      ><a name="3603" class="Symbol"
+      >(</a
+      ><a name="3604" href="Orn.AlgebraicOrnament.Make.html#3584" class="Bound"
+      >k&#8321;</a
+      ><a name="3606"
+      > </a
+      ><a name="3607" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3608"
+      > </a
+      ><a name="3609" href="Orn.AlgebraicOrnament.Make.html#3588" class="Bound"
+      >x&#8321;</a
+      ><a name="3611" class="Symbol"
+      >))</a
+      ><a name="3613"
+      >
+                           </a
+      ><a name="3641" class="Symbol"
+      >(</a
+      ><a name="3642" href="IDesc.InitialAlgebra.html#414" class="Function"
+      >Fold.hyps</a
+      ><a name="3651"
+      > </a
+      ><a name="3652" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3653"
+      > </a
+      ><a name="3654" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="3655"
+      > </a
+      ><a name="3656" class="Symbol"
+      >(</a
+      ><a name="3657" href="Orn.AlgebraicOrnament.Make.html#3423" class="Bound"
+      >T</a
+      ><a name="3658"
+      > </a
+      ><a name="3659" href="Orn.AlgebraicOrnament.Make.html#3534" class="Bound"
+      >s</a
+      ><a name="3660" class="Symbol"
+      >)</a
+      ><a name="3661"
+      > </a
+      ><a name="3662" class="Symbol"
+      >(</a
+      ><a name="3663" href="Orn.AlgebraicOrnament.Make.html#3429" class="Bound"
+      >xs</a
+      ><a name="3665"
+      > </a
+      ><a name="3666" href="Orn.AlgebraicOrnament.Make.html#3534" class="Bound"
+      >s</a
+      ><a name="3667" class="Symbol"
+      >))</a
+      ><a name="3669"
+      >
+                           </a
+      ><a name="3697" class="Symbol"
+      >(</a
+      ><a name="3698" href="Orn.AlgebraicOrnament.Make.html#1232" class="Function"
+      >&#9633;gmap</a
+      ><a name="3703"
+      > </a
+      ><a name="3704" class="Symbol"
+      >(</a
+      ><a name="3705" href="Orn.AlgebraicOrnament.Make.html#3423" class="Bound"
+      >T</a
+      ><a name="3706"
+      > </a
+      ><a name="3707" href="Orn.AlgebraicOrnament.Make.html#3534" class="Bound"
+      >s</a
+      ><a name="3708" class="Symbol"
+      >)</a
+      ><a name="3709"
+      > </a
+      ><a name="3710" class="Symbol"
+      >(</a
+      ><a name="3711" href="Orn.AlgebraicOrnament.Make.html#3429" class="Bound"
+      >xs</a
+      ><a name="3713"
+      > </a
+      ><a name="3714" href="Orn.AlgebraicOrnament.Make.html#3534" class="Bound"
+      >s</a
+      ><a name="3715" class="Symbol"
+      >)</a
+      ><a name="3716"
+      > </a
+      ><a name="3717" class="Symbol"
+      >(</a
+      ><a name="3718" href="Orn.AlgebraicOrnament.Make.html#3432" class="Bound"
+      >ih</a
+      ><a name="3720"
+      > </a
+      ><a name="3721" href="Orn.AlgebraicOrnament.Make.html#3534" class="Bound"
+      >s</a
+      ><a name="3722" class="Symbol"
+      >))</a
+      ><a name="3724"
+      >
+
+              </a
+      ><a name="3740" href="Orn.AlgebraicOrnament.Make.html#3740" class="Function"
+      >step</a
+      ><a name="3744"
+      > </a
+      ><a name="3745" class="Symbol"
+      >:</a
+      ><a name="3746"
+      > </a
+      ><a name="3747" href="IDesc.Induction.html#297" class="Function"
+      >DAlg</a
+      ><a name="3751"
+      > </a
+      ><a name="3752" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3753"
+      > </a
+      ><a name="3754" class="Symbol"
+      >(&#955;</a
+      ><a name="3756"
+      > </a
+      ><a name="3757" class="Symbol"
+      >{</a
+      ><a name="3758" href="Orn.AlgebraicOrnament.Make.html#3758" class="Bound"
+      >k</a
+      ><a name="3759" class="Symbol"
+      >}</a
+      ><a name="3760"
+      > </a
+      ><a name="3761" href="Orn.AlgebraicOrnament.Make.html#3761" class="Bound"
+      >x</a
+      ><a name="3762"
+      > </a
+      ><a name="3763" class="Symbol"
+      >&#8594;</a
+      ><a name="3764"
+      > </a
+      ><a name="3765" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="3766"
+      > </a
+      ><a name="3767" href="Orn.AlgebraicOrnament.html#995" class="Function"
+      >algOrnD</a
+      ><a name="3774"
+      > </a
+      ><a name="3775" class="Symbol"
+      >(</a
+      ><a name="3776" href="Orn.AlgebraicOrnament.Make.html#3758" class="Bound"
+      >k</a
+      ><a name="3777"
+      > </a
+      ><a name="3778" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3779"
+      > </a
+      ><a name="3780" href="IDesc.InitialAlgebra.html#766" class="Function"
+      >fold</a
+      ><a name="3784"
+      > </a
+      ><a name="3785" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3786"
+      > </a
+      ><a name="3787" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="3788"
+      > </a
+      ><a name="3789" href="Orn.AlgebraicOrnament.Make.html#3761" class="Bound"
+      >x</a
+      ><a name="3790" class="Symbol"
+      >))</a
+      ><a name="3792"
+      >
+              </a
+      ><a name="3807" href="Orn.AlgebraicOrnament.Make.html#3740" class="Function"
+      >step</a
+      ><a name="3811"
+      > </a
+      ><a name="3812" class="Symbol"
+      >{</a
+      ><a name="3813" href="Orn.AlgebraicOrnament.Make.html#3813" class="Bound"
+      >k</a
+      ><a name="3814" class="Symbol"
+      >}{</a
+      ><a name="3816" href="Orn.AlgebraicOrnament.Make.html#3816" class="Bound"
+      >xs</a
+      ><a name="3818" class="Symbol"
+      >}</a
+      ><a name="3819"
+      > </a
+      ><a name="3820" href="Orn.AlgebraicOrnament.Make.html#3820" class="Bound"
+      >x</a
+      ><a name="3821"
+      > </a
+      ><a name="3822" class="Symbol"
+      >=</a
+      ><a name="3823"
+      > </a
+      ><a name="3824" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="3825"
+      > </a
+      ><a name="3826" href="Orn.AlgebraicOrnament.Make.html#1940" class="Function"
+      >step'</a
+      ><a name="3831"
+      > </a
+      ><a name="3832" href="Orn.AlgebraicOrnament.Make.html#3813" class="Bound"
+      >k</a
+      ><a name="3833"
+      > </a
+      ><a name="3834" class="Symbol"
+      >(</a
+      ><a name="3835" href="IDesc.IDesc.html#1345" class="Field"
+      >func.out</a
+      ><a name="3843"
+      > </a
+      ><a name="3844" href="Orn.AlgebraicOrnament.Make.html#361" class="Bound"
+      >D</a
+      ><a name="3845"
+      > </a
+      ><a name="3846" href="Orn.AlgebraicOrnament.Make.html#3813" class="Bound"
+      >k</a
+      ><a name="3847" class="Symbol"
+      >)</a
+      ><a name="3848"
+      > </a
+      ><a name="3849" class="Symbol"
+      >(</a
+      ><a name="3850" href="Orn.AlgebraicOrnament.Make.html#388" class="Bound"
+      >&#945;</a
+      ><a name="3851"
+      > </a
+      ><a name="3852" class="Symbol"
+      >{</a
+      ><a name="3853" href="Orn.AlgebraicOrnament.Make.html#3813" class="Bound"
+      >k</a
+      ><a name="3854" class="Symbol"
+      >})</a
+      ><a name="3856"
+      > </a
+      ><a name="3857" href="Orn.AlgebraicOrnament.Make.html#3816" class="Bound"
+      >xs</a
+      ><a name="3859"
+      > </a
+      ><a name="3860" href="Orn.AlgebraicOrnament.Make.html#3820" class="Bound"
+      >x</a
+      ><a name="3861"
+      > </a
+      ><a name="3862" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="3863"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

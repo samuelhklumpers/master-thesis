@@ -1,0 +1,1427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Orn.Reornament</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1"
+      >
+</a
+      ><a name="2" class="Keyword"
+      >open</a
+      ><a name="6"
+      > </a
+      ><a name="7" class="Keyword"
+      >import</a
+      ><a name="13"
+      > </a
+      ><a name="14" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="22"
+      >
+
+</a
+      ><a name="24" class="Keyword"
+      >open</a
+      ><a name="28"
+      > </a
+      ><a name="29" class="Keyword"
+      >import</a
+      ><a name="35"
+      > </a
+      ><a name="36" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="45"
+      > </a
+      ><a name="46" class="Keyword"
+      >hiding</a
+      ><a name="52"
+      > </a
+      ><a name="53" class="Symbol"
+      >(</a
+      ><a name="54"
+      >_&#8799;_</a
+      ><a name="57" class="Symbol"
+      >)</a
+      ><a name="58"
+      >
+</a
+      ><a name="59" class="Keyword"
+      >open</a
+      ><a name="63"
+      > </a
+      ><a name="64" class="Keyword"
+      >import</a
+      ><a name="70"
+      > </a
+      ><a name="71" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="83"
+      >
+
+</a
+      ><a name="85" class="Keyword"
+      >open</a
+      ><a name="89"
+      > </a
+      ><a name="90" class="Keyword"
+      >import</a
+      ><a name="96"
+      > </a
+      ><a name="97" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="134"
+      >
+
+</a
+      ><a name="136" class="Keyword"
+      >open</a
+      ><a name="140"
+      > </a
+      ><a name="141" class="Keyword"
+      >import</a
+      ><a name="147"
+      > </a
+      ><a name="148" href="Logic.Logic.html#1" class="Module"
+      >Logic.Logic</a
+      ><a name="159"
+      >
+
+</a
+      ><a name="161" class="Keyword"
+      >open</a
+      ><a name="165"
+      > </a
+      ><a name="166" class="Keyword"
+      >import</a
+      ><a name="172"
+      > </a
+      ><a name="173" href="IDesc.IDesc.html#1" class="Module"
+      >IDesc.IDesc</a
+      ><a name="184"
+      >
+</a
+      ><a name="185" class="Keyword"
+      >open</a
+      ><a name="189"
+      > </a
+      ><a name="190" class="Keyword"
+      >import</a
+      ><a name="196"
+      > </a
+      ><a name="197" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="211"
+      >
+</a
+      ><a name="212" class="Keyword"
+      >open</a
+      ><a name="216"
+      > </a
+      ><a name="217" class="Keyword"
+      >import</a
+      ><a name="223"
+      > </a
+      ><a name="224" href="IDesc.InitialAlgebra.html#1" class="Module"
+      >IDesc.InitialAlgebra</a
+      ><a name="244"
+      >
+
+</a
+      ><a name="246" class="Keyword"
+      >open</a
+      ><a name="250"
+      > </a
+      ><a name="251" class="Keyword"
+      >import</a
+      ><a name="257"
+      > </a
+      ><a name="258" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="270"
+      >
+
+
+
+</a
+      ><a name="274" class="Keyword"
+      >module</a
+      ><a name="280"
+      > </a
+      ><a name="281" href="Orn.Reornament.html#1" class="Module"
+      >Orn.Reornament</a
+      ><a name="295"
+      > 
+         </a
+      ><a name="306" class="Symbol"
+      >{</a
+      ><a name="307" href="Orn.Reornament.html#307" class="Bound"
+      >K</a
+      ><a name="308"
+      > </a
+      ><a name="309" href="Orn.Reornament.html#309" class="Bound"
+      >I</a
+      ><a name="310"
+      > </a
+      ><a name="311" class="Symbol"
+      >:</a
+      ><a name="312"
+      > </a
+      ><a name="313" class="PrimitiveType"
+      >Set</a
+      ><a name="316"
+      > </a
+      ><a name="317" class="Symbol"
+      >}</a
+      ><a name="318"
+      >
+         </a
+      ><a name="328" class="Symbol"
+      >{</a
+      ><a name="329" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="330"
+      > </a
+      ><a name="331" class="Symbol"
+      >:</a
+      ><a name="332"
+      > </a
+      ><a name="333" href="IDesc.IDesc.html#1286" class="Record"
+      >func</a
+      ><a name="337"
+      >  </a
+      ><a name="339" href="Orn.Reornament.html#309" class="Bound"
+      >I</a
+      ><a name="340"
+      > </a
+      ><a name="341" href="Orn.Reornament.html#309" class="Bound"
+      >I</a
+      ><a name="342" class="Symbol"
+      >}</a
+      ><a name="343"
+      >
+         </a
+      ><a name="353" class="Symbol"
+      >{</a
+      ><a name="354" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="355"
+      > </a
+      ><a name="356" class="Symbol"
+      >:</a
+      ><a name="357"
+      > </a
+      ><a name="358" href="Orn.Reornament.html#307" class="Bound"
+      >K</a
+      ><a name="359"
+      > </a
+      ><a name="360" class="Symbol"
+      >&#8594;</a
+      ><a name="361"
+      > </a
+      ><a name="362" href="Orn.Reornament.html#309" class="Bound"
+      >I</a
+      ><a name="363" class="Symbol"
+      >}</a
+      ><a name="364"
+      >
+       </a
+      ><a name="372" class="Keyword"
+      >where</a
+      ><a name="377"
+      >
+
+
+</a
+      ><a name="380" href="Orn.Reornament.html#380" class="Function"
+      >forgetIdx</a
+      ><a name="389"
+      > </a
+      ><a name="390" class="Symbol"
+      >:</a
+      ><a name="391"
+      > </a
+      ><a name="392" href="Data.Product.html#439" class="Record"
+      >&#931;</a
+      ><a name="393"
+      > </a
+      ><a name="394" href="Orn.Reornament.html#307" class="Bound"
+      >K</a
+      ><a name="395"
+      > </a
+      ><a name="396" class="Symbol"
+      >(</a
+      ><a name="397" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="398"
+      > </a
+      ><a name="399" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Function.html#713" class="Function Operator"
+      >&#8728;</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="404" class="Symbol"
+      >)</a
+      ><a name="405"
+      > </a
+      ><a name="406" class="Symbol"
+      >&#8594;</a
+      ><a name="407"
+      > </a
+      ><a name="408" href="Orn.Reornament.html#307" class="Bound"
+      >K</a
+      ><a name="409"
+      >
+</a
+      ><a name="410" href="Orn.Reornament.html#380" class="Function"
+      >forgetIdx</a
+      ><a name="419"
+      > </a
+      ><a name="420" class="Symbol"
+      >=</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Data.Product.html#525" class="Field"
+      >proj&#8321;</a
+      ><a name="427"
+      > 
+
+</a
+      ><a name="430" class="Comment"
+      >-- Paper: Definition 4.29</a
+      ><a name="455"
+      >
+</a
+      ><a name="456" class="Comment"
+      >-- Typeset: Reorn O = &#8968; O &#8969;</a
+      ><a name="483"
+      >
+</a
+      ><a name="484" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="489"
+      > </a
+      ><a name="490" class="Symbol"
+      >:</a
+      ><a name="491"
+      > </a
+      ><a name="492" class="Symbol"
+      >&#8704;{</a
+      ><a name="494" href="Orn.Reornament.html#494" class="Bound"
+      >D'</a
+      ><a name="496" class="Symbol"
+      >}</a
+      ><a name="497"
+      > </a
+      ><a name="498" class="Symbol"
+      >&#8594;</a
+      ><a name="499"
+      > </a
+      ><a name="500" class="Symbol"
+      >(</a
+      ><a name="501" href="Orn.Reornament.html#501" class="Bound"
+      >O</a
+      ><a name="502"
+      > </a
+      ><a name="503" class="Symbol"
+      >:</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Orn.Ornament.html#187" class="Datatype"
+      >Orn</a
+      ><a name="508"
+      > </a
+      ><a name="509" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="510"
+      > </a
+      ><a name="511" href="Orn.Reornament.html#494" class="Bound"
+      >D'</a
+      ><a name="513" class="Symbol"
+      >)</a
+      ><a name="514"
+      > </a
+      ><a name="515" class="Symbol"
+      >&#8594;</a
+      ><a name="516"
+      > </a
+      ><a name="517" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="518"
+      > </a
+      ><a name="519" href="Orn.Reornament.html#494" class="Bound"
+      >D'</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="523"
+      > </a
+      ><a name="524" class="Symbol"
+      >(</a
+      ><a name="525" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="526"
+      > </a
+      ><a name="527" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="528" class="Symbol"
+      >)</a
+      ><a name="529"
+      > </a
+      ><a name="530" class="Symbol"
+      >&#8594;</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Orn.Ornament.html#187" class="Datatype"
+      >Orn</a
+      ><a name="535"
+      > </a
+      ><a name="536" href="Orn.Reornament.html#380" class="Function"
+      >forgetIdx</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="Orn.Ornament.html#911" class="Function Operator"
+      >&#10214;</a
+      ><a name="547"
+      > </a
+      ><a name="548" href="Orn.Reornament.html#501" class="Bound"
+      >O</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Orn.Ornament.html#911" class="Function Operator"
+      >&#10215;Orn</a
+      ><a name="554"
+      >
+</a
+      ><a name="555" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="560"
+      > </a
+      ><a name="561" href="Orn.Ornament.html#382" class="InductiveConstructor"
+      >`1</a
+      ><a name="563"
+      > </a
+      ><a name="564" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="566"
+      > </a
+      ><a name="567" class="Symbol"
+      >=</a
+      ><a name="568"
+      > </a
+      ><a name="569" href="Orn.Ornament.html#382" class="InductiveConstructor"
+      >`1</a
+      ><a name="571"
+      >
+</a
+      ><a name="572" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="577"
+      > </a
+      ><a name="578" class="Symbol"
+      >(</a
+      ><a name="579" href="Orn.Reornament.html#579" class="Bound"
+      >O&#8321;</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Orn.Ornament.html#398" class="InductiveConstructor Operator"
+      >`&#215;</a
+      ><a name="584"
+      > </a
+      ><a name="585" href="Orn.Reornament.html#585" class="Bound"
+      >O&#8322;</a
+      ><a name="587" class="Symbol"
+      >)</a
+      ><a name="588"
+      > </a
+      ><a name="589" class="Symbol"
+      >(</a
+      ><a name="590" href="Orn.Reornament.html#590" class="Bound"
+      >xs&#8321;</a
+      ><a name="593"
+      > </a
+      ><a name="594" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="595"
+      > </a
+      ><a name="596" href="Orn.Reornament.html#596" class="Bound"
+      >xs&#8322;</a
+      ><a name="599" class="Symbol"
+      >)</a
+      ><a name="600"
+      > </a
+      ><a name="601" class="Symbol"
+      >=</a
+      ><a name="602"
+      > </a
+      ><a name="603" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Orn.Reornament.html#579" class="Bound"
+      >O&#8321;</a
+      ><a name="611"
+      > </a
+      ><a name="612" href="Orn.Reornament.html#590" class="Bound"
+      >xs&#8321;</a
+      ><a name="615"
+      > </a
+      ><a name="616" href="Orn.Ornament.html#398" class="InductiveConstructor Operator"
+      >`&#215;</a
+      ><a name="618"
+      > </a
+      ><a name="619" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="624"
+      > </a
+      ><a name="625" href="Orn.Reornament.html#585" class="Bound"
+      >O&#8322;</a
+      ><a name="627"
+      > </a
+      ><a name="628" href="Orn.Reornament.html#596" class="Bound"
+      >xs&#8322;</a
+      ><a name="631"
+      >
+</a
+      ><a name="632" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="637"
+      > </a
+      ><a name="638" class="Symbol"
+      >(</a
+      ><a name="639" href="Orn.Ornament.html#466" class="InductiveConstructor"
+      >`&#963;</a
+      ><a name="641"
+      > </a
+      ><a name="642" href="Orn.Reornament.html#642" class="Bound"
+      >T&#8314;</a
+      ><a name="644" class="Symbol"
+      >)</a
+      ><a name="645"
+      > </a
+      ><a name="646" class="Symbol"
+      >(</a
+      ><a name="647" href="Orn.Reornament.html#647" class="Bound"
+      >k</a
+      ><a name="648"
+      > </a
+      ><a name="649" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="650"
+      > </a
+      ><a name="651" href="Orn.Reornament.html#651" class="Bound"
+      >xs</a
+      ><a name="653" class="Symbol"
+      >)</a
+      ><a name="654"
+      > </a
+      ><a name="655" class="Symbol"
+      >=</a
+      ><a name="656"
+      > </a
+      ><a name="657" href="Orn.Ornament.html#776" class="InductiveConstructor"
+      >delete&#963;</a
+      ><a name="664"
+      > </a
+      ><a name="665" href="Orn.Reornament.html#647" class="Bound"
+      >k</a
+      ><a name="666"
+      > </a
+      ><a name="667" class="Symbol"
+      >(</a
+      ><a name="668" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="673"
+      > </a
+      ><a name="674" class="Symbol"
+      >(</a
+      ><a name="675" href="Orn.Reornament.html#642" class="Bound"
+      >T&#8314;</a
+      ><a name="677"
+      > </a
+      ><a name="678" href="Orn.Reornament.html#647" class="Bound"
+      >k</a
+      ><a name="679" class="Symbol"
+      >)</a
+      ><a name="680"
+      > </a
+      ><a name="681" href="Orn.Reornament.html#651" class="Bound"
+      >xs</a
+      ><a name="683" class="Symbol"
+      >)</a
+      ><a name="684"
+      >
+</a
+      ><a name="685" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="690"
+      > </a
+      ><a name="691" class="Symbol"
+      >(</a
+      ><a name="692" href="Orn.Ornament.html#532" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="694"
+      > </a
+      ><a name="695" href="Orn.Reornament.html#695" class="Bound"
+      >T&#8314;</a
+      ><a name="697" class="Symbol"
+      >)</a
+      ><a name="698"
+      > </a
+      ><a name="699" class="Symbol"
+      >(</a
+      ><a name="700" href="Orn.Reornament.html#700" class="Bound"
+      >s</a
+      ><a name="701"
+      > </a
+      ><a name="702" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="703"
+      > </a
+      ><a name="704" href="Orn.Reornament.html#704" class="Bound"
+      >xs</a
+      ><a name="706" class="Symbol"
+      >)</a
+      ><a name="707"
+      > </a
+      ><a name="708" class="Symbol"
+      >=</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="717"
+      > </a
+      ><a name="718" href="Orn.Reornament.html#700" class="Bound"
+      >s</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >(</a
+      ><a name="721" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="726"
+      > </a
+      ><a name="727" class="Symbol"
+      >(</a
+      ><a name="728" href="Orn.Reornament.html#695" class="Bound"
+      >T&#8314;</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Orn.Reornament.html#700" class="Bound"
+      >s</a
+      ><a name="732" class="Symbol"
+      >)</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Orn.Reornament.html#704" class="Bound"
+      >xs</a
+      ><a name="736" class="Symbol"
+      >)</a
+      ><a name="737"
+      >
+</a
+      ><a name="738" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="743"
+      > </a
+      ><a name="744" class="Symbol"
+      >(</a
+      ><a name="745" href="Orn.Ornament.html#594" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="747"
+      > </a
+      ><a name="748" href="Orn.Reornament.html#748" class="Bound"
+      >T&#8314;</a
+      ><a name="750" class="Symbol"
+      >)</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Orn.Reornament.html#752" class="Bound"
+      >f</a
+      ><a name="753"
+      > </a
+      ><a name="754" class="Symbol"
+      >=</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Orn.Ornament.html#594" class="InductiveConstructor"
+      >`&#928;</a
+      ><a name="758"
+      > </a
+      ><a name="759" class="Symbol"
+      >&#955;</a
+      ><a name="760"
+      > </a
+      ><a name="761" href="Orn.Reornament.html#761" class="Bound"
+      >s</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >&#8594;</a
+      ><a name="764"
+      > </a
+      ><a name="765" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="770"
+      > </a
+      ><a name="771" class="Symbol"
+      >(</a
+      ><a name="772" href="Orn.Reornament.html#748" class="Bound"
+      >T&#8314;</a
+      ><a name="774"
+      > </a
+      ><a name="775" href="Orn.Reornament.html#761" class="Bound"
+      >s</a
+      ><a name="776" class="Symbol"
+      >)</a
+      ><a name="777"
+      > </a
+      ><a name="778" class="Symbol"
+      >(</a
+      ><a name="779" href="Orn.Reornament.html#752" class="Bound"
+      >f</a
+      ><a name="780"
+      > </a
+      ><a name="781" href="Orn.Reornament.html#761" class="Bound"
+      >s</a
+      ><a name="782" class="Symbol"
+      >)</a
+      ><a name="783"
+      >
+</a
+      ><a name="784" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="789"
+      > </a
+      ><a name="790" class="Symbol"
+      >(</a
+      ><a name="791" href="Orn.Ornament.html#321" class="InductiveConstructor"
+      >`var</a
+      ><a name="795"
+      > </a
+      ><a name="796" class="Symbol"
+      >(</a
+      ><a name="797" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="800"
+      > </a
+      ><a name="801" href="Orn.Reornament.html#801" class="Bound"
+      >k</a
+      ><a name="802" class="Symbol"
+      >))</a
+      ><a name="804"
+      > </a
+      ><a name="805" href="Orn.Reornament.html#805" class="Bound"
+      >xs</a
+      ><a name="807"
+      > </a
+      ><a name="808" class="Symbol"
+      >=</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Orn.Ornament.html#321" class="InductiveConstructor"
+      >`var</a
+      ><a name="814"
+      > </a
+      ><a name="815" class="Symbol"
+      >(</a
+      ><a name="816" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="819"
+      > </a
+      ><a name="820" class="Symbol"
+      >(</a
+      ><a name="821" href="Orn.Reornament.html#801" class="Bound"
+      >k</a
+      ><a name="822"
+      > </a
+      ><a name="823" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="Orn.Reornament.html#805" class="Bound"
+      >xs</a
+      ><a name="827" class="Symbol"
+      >))</a
+      ><a name="829"
+      >
+</a
+      ><a name="830" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="835"
+      > </a
+      ><a name="836" class="Symbol"
+      >(</a
+      ><a name="837" href="Orn.Ornament.html#251" class="InductiveConstructor"
+      >insert</a
+      ><a name="843"
+      > </a
+      ><a name="844" href="Orn.Reornament.html#844" class="Bound"
+      >S</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="Orn.Reornament.html#846" class="Bound"
+      >D&#8314;</a
+      ><a name="848" class="Symbol"
+      >)</a
+      ><a name="849"
+      > </a
+      ><a name="850" href="Orn.Reornament.html#850" class="Bound"
+      >xs</a
+      ><a name="852"
+      > </a
+      ><a name="853" class="Symbol"
+      >=</a
+      ><a name="854"
+      > </a
+      ><a name="855" href="Orn.Ornament.html#532" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="857"
+      > </a
+      ><a name="858" class="Symbol"
+      >&#955;</a
+      ><a name="859"
+      > </a
+      ><a name="860" href="Orn.Reornament.html#860" class="Bound"
+      >s</a
+      ><a name="861"
+      > </a
+      ><a name="862" class="Symbol"
+      >&#8594;</a
+      ><a name="863"
+      > </a
+      ><a name="864" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="869"
+      > </a
+      ><a name="870" class="Symbol"
+      >(</a
+      ><a name="871" href="Orn.Reornament.html#846" class="Bound"
+      >D&#8314;</a
+      ><a name="873"
+      > </a
+      ><a name="874" href="Orn.Reornament.html#860" class="Bound"
+      >s</a
+      ><a name="875" class="Symbol"
+      >)</a
+      ><a name="876"
+      > </a
+      ><a name="877" href="Orn.Reornament.html#850" class="Bound"
+      >xs</a
+      ><a name="879"
+      >
+</a
+      ><a name="880" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="885"
+      > </a
+      ><a name="886" class="Symbol"
+      >(</a
+      ><a name="887" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="894"
+      > </a
+      ><a name="895" class="Symbol"
+      >{</a
+      ><a name="896"
+      >T </a
+      ><a name="898" class="Symbol"
+      >=</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Orn.Reornament.html#900" class="Bound"
+      >T</a
+      ><a name="901" class="Symbol"
+      >}</a
+      ><a name="902"
+      > </a
+      ><a name="903" href="Orn.Reornament.html#903" class="Bound"
+      >s</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Orn.Reornament.html#905" class="Bound"
+      >o</a
+      ><a name="906" class="Symbol"
+      >)</a
+      ><a name="907"
+      > </a
+      ><a name="908" class="Symbol"
+      >(</a
+      ><a name="909" href="Orn.Reornament.html#909" class="Bound"
+      >s'</a
+      ><a name="911"
+      > </a
+      ><a name="912" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Orn.Reornament.html#914" class="Bound"
+      >xs</a
+      ><a name="916" class="Symbol"
+      >)</a
+      ><a name="917"
+      > </a
+      ><a name="918" class="Symbol"
+      >=</a
+      ><a name="919"
+      > </a
+      ><a name="920" href="Orn.Ornament.html#251" class="InductiveConstructor"
+      >insert</a
+      ><a name="926"
+      > </a
+      ><a name="927" class="Symbol"
+      >(</a
+      ><a name="928" href="Orn.Reornament.html#909" class="Bound"
+      >s'</a
+      ><a name="930"
+      > </a
+      ><a name="931" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="932"
+      > </a
+      ><a name="933" href="Orn.Reornament.html#903" class="Bound"
+      >s</a
+      ><a name="934" class="Symbol"
+      >)</a
+      ><a name="935"
+      > </a
+      ><a name="936" class="Symbol"
+      >&#955;</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Orn.Reornament.html#938" class="Bound"
+      >q</a
+      ><a name="939"
+      > </a
+      ><a name="940" class="Symbol"
+      >&#8594;</a
+      ><a name="941"
+      > </a
+      ><a name="942" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="947"
+      > </a
+      ><a name="948" href="Orn.Reornament.html#905" class="Bound"
+      >o</a
+      ><a name="949"
+      > </a
+      ><a name="950" class="Symbol"
+      >(</a
+      ><a name="951" href="Relation.Binary.PropositionalEquality.Core.html#705" class="Function"
+      >subst</a
+      ><a name="956"
+      > </a
+      ><a name="957" class="Symbol"
+      >(&#955;</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Orn.Reornament.html#960" class="Bound"
+      >s</a
+      ><a name="961"
+      > </a
+      ><a name="962" class="Symbol"
+      >&#8594;</a
+      ><a name="963"
+      > </a
+      ><a name="964" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="965"
+      > </a
+      ><a name="966" href="Orn.Reornament.html#900" class="Bound"
+      >T</a
+      ><a name="967"
+      > </a
+      ><a name="968" href="Orn.Reornament.html#960" class="Bound"
+      >s</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="971"
+      > </a
+      ><a name="972" class="Symbol"
+      >(</a
+      ><a name="973" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="974"
+      > </a
+      ><a name="975" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="976" class="Symbol"
+      >))</a
+      ><a name="978"
+      > </a
+      ><a name="979" href="Orn.Reornament.html#938" class="Bound"
+      >q</a
+      ><a name="980"
+      > </a
+      ><a name="981" href="Orn.Reornament.html#914" class="Bound"
+      >xs</a
+      ><a name="983" class="Symbol"
+      >)</a
+      ><a name="984"
+      > 
+</a
+      ><a name="986" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="991"
+      > </a
+      ><a name="992" class="Symbol"
+      >(</a
+      ><a name="993" href="Orn.Ornament.html#776" class="InductiveConstructor"
+      >delete&#963;</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" class="Symbol"
+      >{</a
+      ><a name="1002"
+      >T </a
+      ><a name="1004" class="Symbol"
+      >=</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Orn.Reornament.html#1006" class="Bound"
+      >T</a
+      ><a name="1007" class="Symbol"
+      >}</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Orn.Reornament.html#1009" class="Bound"
+      >k</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Orn.Reornament.html#1011" class="Bound"
+      >o</a
+      ><a name="1012" class="Symbol"
+      >)</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" class="Symbol"
+      >(</a
+      ><a name="1015" href="Orn.Reornament.html#1015" class="Bound"
+      >k'</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Orn.Reornament.html#1020" class="Bound"
+      >xs</a
+      ><a name="1022" class="Symbol"
+      >)</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >=</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Orn.Ornament.html#251" class="InductiveConstructor"
+      >insert</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" class="Symbol"
+      >(</a
+      ><a name="1034" href="Orn.Reornament.html#1015" class="Bound"
+      >k'</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" href="Relation.Binary.Core.html#4603" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="Orn.Reornament.html#1009" class="Bound"
+      >k</a
+      ><a name="1040" class="Symbol"
+      >)</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" class="Symbol"
+      >&#955;</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" class="Symbol"
+      >{</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" href="Orn.Reornament.html#1046" class="Bound"
+      >q</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" class="Symbol"
+      >&#8594;</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Orn.Reornament.html#1011" class="Bound"
+      >o</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" class="Symbol"
+      >(</a
+      ><a name="1059" href="Relation.Binary.PropositionalEquality.Core.html#705" class="Function"
+      >subst</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" class="Symbol"
+      >(&#955;</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Orn.Reornament.html#1068" class="Bound"
+      >k</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" class="Symbol"
+      >&#8594;</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10214;</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Orn.Reornament.html#1006" class="Bound"
+      >T</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" href="Orn.Reornament.html#1068" class="Bound"
+      >k</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="IDesc.IDesc.html#533" class="Function Operator"
+      >&#10215;</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" class="Symbol"
+      >(</a
+      ><a name="1081" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="1084" class="Symbol"
+      >))</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Orn.Reornament.html#1046" class="Bound"
+      >q</a
+      ><a name="1088"
+      > </a
+      ><a name="1089" href="Orn.Reornament.html#1020" class="Bound"
+      >xs</a
+      ><a name="1091" class="Symbol"
+      >)</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" class="Symbol"
+      >}</a
+      ><a name="1094"
+      >
+
+</a
+      ><a name="1096" class="Comment"
+      >-- Paper: Definition 4.29</a
+      ><a name="1121"
+      >
+</a
+      ><a name="1122" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8968;_&#8969;</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" class="Symbol"
+      >:</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" class="Symbol"
+      >(</a
+      ><a name="1129" href="Orn.Reornament.html#1129" class="Bound"
+      >o</a
+      ><a name="1130"
+      > </a
+      ><a name="1131" class="Symbol"
+      >:</a
+      ><a name="1132"
+      > </a
+      ><a name="1133" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="1136"
+      > </a
+      ><a name="1137" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="1138"
+      > </a
+      ><a name="1139" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="1142" class="Symbol"
+      >)</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" class="Symbol"
+      >&#8594;</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1151"
+      > </a
+      ><a name="1152" href="Orn.Reornament.html#1129" class="Bound"
+      >o</a
+      ><a name="1153"
+      > </a
+      ><a name="1154" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Orn.Reornament.html#380" class="Function"
+      >forgetIdx</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Orn.Reornament.html#380" class="Function"
+      >forgetIdx</a
+      ><a name="1178"
+      >
+</a
+      ><a name="1179" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8968;</a
+      ><a name="1180"
+      > </a
+      ><a name="1181" href="Orn.Reornament.html#1181" class="Bound"
+      >o</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8969;</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" class="Symbol"
+      >=</a
+      ><a name="1186"
+      > </a
+      ><a name="1187" href="Orn.Ornament.html#1654" class="InductiveConstructor"
+      >orn.mk</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" class="Symbol"
+      >(&#955;</a
+      ><a name="1196"
+      > </a
+      ><a name="1197" class="Symbol"
+      >{</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" class="Symbol"
+      >(</a
+      ><a name="1200" href="Orn.Reornament.html#1200" class="Bound"
+      >k</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1203"
+      > </a
+      ><a name="1204" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Orn.Reornament.html#1206" class="Bound"
+      >xs</a
+      ><a name="1208"
+      > </a
+      ><a name="1209" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1210" class="Symbol"
+      >)</a
+      ><a name="1211"
+      > </a
+      ><a name="1212" class="Symbol"
+      >&#8594;</a
+      ><a name="1213"
+      > </a
+      ><a name="1214" href="Orn.Reornament.html#484" class="Function"
+      >Reorn</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" class="Symbol"
+      >(</a
+      ><a name="1221" href="Orn.Ornament.html#1670" class="Field"
+      >orn.out</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" href="Orn.Reornament.html#1181" class="Bound"
+      >o</a
+      ><a name="1230"
+      > </a
+      ><a name="1231" href="Orn.Reornament.html#1200" class="Bound"
+      >k</a
+      ><a name="1232" class="Symbol"
+      >)</a
+      ><a name="1233"
+      > </a
+      ><a name="1234" href="Orn.Reornament.html#1206" class="Bound"
+      >xs</a
+      ><a name="1236"
+      > </a
+      ><a name="1237" class="Symbol"
+      >})</a
+      ><a name="1239"
+      >
+
+
+</a
+      ><a name="1242" href="Orn.Reornament.html#1242" class="Function Operator"
+      >&#8968;_&#8969;D</a
+      ><a name="1246"
+      > </a
+      ><a name="1247" class="Symbol"
+      >:</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="1252"
+      > </a
+      ><a name="1253" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="1254"
+      > </a
+      ><a name="1255" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="1256"
+      > </a
+      ><a name="1257" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="1258"
+      > </a
+      ><a name="1259" class="Symbol"
+      >&#8594;</a
+      ><a name="1260"
+      > </a
+      ><a name="1261" href="IDesc.IDesc.html#1286" class="Record"
+      >func</a
+      ><a name="1265"
+      >  </a
+      ><a name="1267" class="Symbol"
+      >(</a
+      ><a name="1268" href="Data.Product.html#439" class="Record"
+      >&#931;</a
+      ><a name="1269"
+      > </a
+      ><a name="1270" href="Orn.Reornament.html#307" class="Bound"
+      >K</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" class="Symbol"
+      >(</a
+      ><a name="1273" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="1276"
+      > </a
+      ><a name="1277" href="Function.html#713" class="Function Operator"
+      >&#8728;</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="1280" class="Symbol"
+      >))</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" class="Symbol"
+      >(</a
+      ><a name="1284" href="Data.Product.html#439" class="Record"
+      >&#931;</a
+      ><a name="1285"
+      > </a
+      ><a name="1286" href="Orn.Reornament.html#307" class="Bound"
+      >K</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" class="Symbol"
+      >(</a
+      ><a name="1289" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Orn.Reornament.html#329" class="Bound"
+      >D</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" href="Function.html#713" class="Function Operator"
+      >&#8728;</a
+      ><a name="1294"
+      > </a
+      ><a name="1295" href="Orn.Reornament.html#354" class="Bound"
+      >u</a
+      ><a name="1296" class="Symbol"
+      >))</a
+      ><a name="1298"
+      >
+</a
+      ><a name="1299" href="Orn.Reornament.html#1242" class="Function Operator"
+      >&#8968;</a
+      ><a name="1300"
+      > </a
+      ><a name="1301" href="Orn.Reornament.html#1301" class="Bound"
+      >o</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" href="Orn.Reornament.html#1242" class="Function Operator"
+      >&#8969;D</a
+      ><a name="1305"
+      > </a
+      ><a name="1306" class="Symbol"
+      >=</a
+      ><a name="1307"
+      > </a
+      ><a name="1308" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="1309"
+      > </a
+      ><a name="1310" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8968;</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" href="Orn.Reornament.html#1301" class="Bound"
+      >o</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" href="Orn.Reornament.html#1122" class="Function Operator"
+      >&#8969;</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="1320"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

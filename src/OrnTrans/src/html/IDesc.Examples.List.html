@@ -1,0 +1,516 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >IDesc.Examples.List</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="IDesc.Examples.List.html#1" class="Module"
+      >IDesc.Examples.List</a
+      ><a name="27"
+      > </a
+      ><a name="28" class="Keyword"
+      >where</a
+      ><a name="33"
+      >
+
+</a
+      ><a name="35" class="Keyword"
+      >open</a
+      ><a name="39"
+      > </a
+      ><a name="40" class="Keyword"
+      >import</a
+      ><a name="46"
+      > </a
+      ><a name="47" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="56"
+      >
+</a
+      ><a name="57" class="Keyword"
+      >open</a
+      ><a name="61"
+      > </a
+      ><a name="62" class="Keyword"
+      >import</a
+      ><a name="68"
+      > </a
+      ><a name="69" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="77"
+      >
+</a
+      ><a name="78" class="Keyword"
+      >open</a
+      ><a name="82"
+      > </a
+      ><a name="83" class="Keyword"
+      >import</a
+      ><a name="89"
+      > </a
+      ><a name="90" href="Data.Fin.html#1" class="Module"
+      >Data.Fin</a
+      ><a name="98"
+      > </a
+      ><a name="99" class="Keyword"
+      >hiding</a
+      ><a name="105"
+      > </a
+      ><a name="106" class="Symbol"
+      >(</a
+      ><a name="107"
+      >lift</a
+      ><a name="111" class="Symbol"
+      >)</a
+      ><a name="112"
+      >
+</a
+      ><a name="113" class="Keyword"
+      >open</a
+      ><a name="117"
+      > </a
+      ><a name="118" class="Keyword"
+      >import</a
+      ><a name="124"
+      > </a
+      ><a name="125" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="137"
+      >
+
+</a
+      ><a name="139" class="Keyword"
+      >open</a
+      ><a name="143"
+      > </a
+      ><a name="144" class="Keyword"
+      >import</a
+      ><a name="150"
+      > </a
+      ><a name="151" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="188"
+      >
+
+</a
+      ><a name="190" class="Keyword"
+      >open</a
+      ><a name="194"
+      > </a
+      ><a name="195" class="Keyword"
+      >import</a
+      ><a name="201"
+      > </a
+      ><a name="202" href="IDesc.IDesc.html#1" class="Module"
+      >IDesc.IDesc</a
+      ><a name="213"
+      >
+</a
+      ><a name="214" class="Keyword"
+      >open</a
+      ><a name="218"
+      > </a
+      ><a name="219" class="Keyword"
+      >import</a
+      ><a name="225"
+      > </a
+      ><a name="226" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="240"
+      >
+
+</a
+      ><a name="242" class="Comment"
+      >-- Paper: Example 3.6</a
+      ><a name="263"
+      >
+
+</a
+      ><a name="265" href="IDesc.Examples.List.html#265" class="Function"
+      >ListD</a
+      ><a name="270"
+      > </a
+      ><a name="271" class="Symbol"
+      >:</a
+      ><a name="272"
+      > </a
+      ><a name="273" class="PrimitiveType"
+      >Set</a
+      ><a name="276"
+      > </a
+      ><a name="277" class="Symbol"
+      >&#8594;</a
+      ><a name="278"
+      > </a
+      ><a name="279" href="IDesc.IDesc.html#1286" class="Record"
+      >func</a
+      ><a name="283"
+      > </a
+      ><a name="284" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="285"
+      > </a
+      ><a name="286" href="Data.Unit.html#653" class="Record"
+      >&#8868;</a
+      ><a name="287"
+      >
+</a
+      ><a name="288" href="IDesc.Examples.List.html#265" class="Function"
+      >ListD</a
+      ><a name="293"
+      > </a
+      ><a name="294" href="IDesc.Examples.List.html#294" class="Bound"
+      >A</a
+      ><a name="295"
+      > </a
+      ><a name="296" class="Symbol"
+      >=</a
+      ><a name="297"
+      > </a
+      ><a name="298" href="IDesc.IDesc.html#1330" class="InductiveConstructor"
+      >func.mk</a
+      ><a name="305"
+      > </a
+      ><a name="306" class="Symbol"
+      >&#955;</a
+      ><a name="307"
+      > </a
+      ><a name="308" href="IDesc.Examples.List.html#308" class="Bound"
+      >_</a
+      ><a name="309"
+      > </a
+      ><a name="310" class="Symbol"
+      >&#8594;</a
+      ><a name="311"
+      >
+       </a
+      ><a name="319" href="IDesc.IDesc.html#463" class="InductiveConstructor"
+      >`&#963;</a
+      ><a name="321"
+      > </a
+      ><a name="322" class="Number"
+      >2</a
+      ><a name="323"
+      > 
+          </a
+      ><a name="335" class="Symbol"
+      >(&#955;</a
+      ><a name="337"
+      > </a
+      ><a name="338" class="Symbol"
+      >{</a
+      ><a name="339"
+      > </a
+      ><a name="340" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="344"
+      > </a
+      ><a name="345" class="Symbol"
+      >&#8594;</a
+      ><a name="346"
+      > </a
+      ><a name="347" href="IDesc.IDesc.html#277" class="InductiveConstructor"
+      >`1</a
+      ><a name="349"
+      > 
+             </a
+      ><a name="364" class="Symbol"
+      >;</a
+      ><a name="365"
+      > </a
+      ><a name="366" class="Symbol"
+      >(</a
+      ><a name="367" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="375" class="Symbol"
+      >)</a
+      ><a name="376"
+      > </a
+      ><a name="377" class="Symbol"
+      >&#8594;</a
+      ><a name="378"
+      > </a
+      ><a name="379" href="IDesc.IDesc.html#292" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="381"
+      > </a
+      ><a name="382" href="IDesc.Examples.List.html#294" class="Bound"
+      >A</a
+      ><a name="383"
+      > </a
+      ><a name="384" class="Symbol"
+      >&#955;</a
+      ><a name="385"
+      > </a
+      ><a name="386" href="IDesc.Examples.List.html#386" class="Bound"
+      >_</a
+      ><a name="387"
+      > </a
+      ><a name="388" class="Symbol"
+      >&#8594;</a
+      ><a name="389"
+      > </a
+      ><a name="390" href="IDesc.IDesc.html#250" class="InductiveConstructor"
+      >`var</a
+      ><a name="394"
+      > </a
+      ><a name="395" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="397"
+      >
+             </a
+      ><a name="411" class="Symbol"
+      >;</a
+      ><a name="412"
+      > </a
+      ><a name="413" class="Symbol"
+      >(</a
+      ><a name="414" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="417"
+      > </a
+      ><a name="418" class="Symbol"
+      >(</a
+      ><a name="419" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="422"
+      > </a
+      ><a name="423" class="Symbol"
+      >()))</a
+      ><a name="427"
+      > </a
+      ><a name="428" class="Symbol"
+      >})</a
+      ><a name="430"
+      >
+
+</a
+      ><a name="432" href="IDesc.Examples.List.html#432" class="Function"
+      >List</a
+      ><a name="436"
+      > </a
+      ><a name="437" class="Symbol"
+      >:</a
+      ><a name="438"
+      > </a
+      ><a name="439" class="PrimitiveType"
+      >Set</a
+      ><a name="442"
+      > </a
+      ><a name="443" class="Symbol"
+      >&#8594;</a
+      ><a name="444"
+      > </a
+      ><a name="445" class="PrimitiveType"
+      >Set</a
+      ><a name="448"
+      >
+</a
+      ><a name="449" href="IDesc.Examples.List.html#432" class="Function"
+      >List</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="IDesc.Examples.List.html#454" class="Bound"
+      >A</a
+      ><a name="455"
+      > </a
+      ><a name="456" class="Symbol"
+      >=</a
+      ><a name="457"
+      > </a
+      ><a name="458" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="459"
+      > </a
+      ><a name="460" class="Symbol"
+      >(</a
+      ><a name="461" href="IDesc.Examples.List.html#265" class="Function"
+      >ListD</a
+      ><a name="466"
+      > </a
+      ><a name="467" href="IDesc.Examples.List.html#454" class="Bound"
+      >A</a
+      ><a name="468" class="Symbol"
+      >)</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="472"
+      >
+
+</a
+      ><a name="474" href="IDesc.Examples.List.html#474" class="Function"
+      >nil</a
+      ><a name="477"
+      > </a
+      ><a name="478" class="Symbol"
+      >:</a
+      ><a name="479"
+      > </a
+      ><a name="480" class="Symbol"
+      >&#8704;{</a
+      ><a name="482" href="IDesc.Examples.List.html#482" class="Bound"
+      >A</a
+      ><a name="483" class="Symbol"
+      >}</a
+      ><a name="484"
+      > </a
+      ><a name="485" class="Symbol"
+      >&#8594;</a
+      ><a name="486"
+      > </a
+      ><a name="487" href="IDesc.Examples.List.html#432" class="Function"
+      >List</a
+      ><a name="491"
+      > </a
+      ><a name="492" href="IDesc.Examples.List.html#482" class="Bound"
+      >A</a
+      ><a name="493"
+      >
+</a
+      ><a name="494" href="IDesc.Examples.List.html#474" class="Function"
+      >nil</a
+      ><a name="497"
+      > </a
+      ><a name="498" class="Symbol"
+      >=</a
+      ><a name="499"
+      > </a
+      ><a name="500" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="506"
+      > </a
+      ><a name="507" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="508"
+      > </a
+      ><a name="509" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="513"
+      >
+
+</a
+      ><a name="515" href="IDesc.Examples.List.html#515" class="Function"
+      >cons</a
+      ><a name="519"
+      > </a
+      ><a name="520" class="Symbol"
+      >:</a
+      ><a name="521"
+      > </a
+      ><a name="522" class="Symbol"
+      >&#8704;{</a
+      ><a name="524" href="IDesc.Examples.List.html#524" class="Bound"
+      >A</a
+      ><a name="525" class="Symbol"
+      >}</a
+      ><a name="526"
+      > </a
+      ><a name="527" class="Symbol"
+      >&#8594;</a
+      ><a name="528"
+      > </a
+      ><a name="529" href="IDesc.Examples.List.html#524" class="Bound"
+      >A</a
+      ><a name="530"
+      > </a
+      ><a name="531" class="Symbol"
+      >&#8594;</a
+      ><a name="532"
+      > </a
+      ><a name="533" href="IDesc.Examples.List.html#432" class="Function"
+      >List</a
+      ><a name="537"
+      > </a
+      ><a name="538" href="IDesc.Examples.List.html#524" class="Bound"
+      >A</a
+      ><a name="539"
+      > </a
+      ><a name="540" class="Symbol"
+      >&#8594;</a
+      ><a name="541"
+      > </a
+      ><a name="542" href="IDesc.Examples.List.html#432" class="Function"
+      >List</a
+      ><a name="546"
+      > </a
+      ><a name="547" href="IDesc.Examples.List.html#524" class="Bound"
+      >A</a
+      ><a name="548"
+      >
+</a
+      ><a name="549" href="IDesc.Examples.List.html#515" class="Function"
+      >cons</a
+      ><a name="553"
+      > </a
+      ><a name="554" href="IDesc.Examples.List.html#554" class="Bound"
+      >a</a
+      ><a name="555"
+      > </a
+      ><a name="556" href="IDesc.Examples.List.html#556" class="Bound"
+      >xs</a
+      ><a name="558"
+      > </a
+      ><a name="559" class="Symbol"
+      >=</a
+      ><a name="560"
+      > </a
+      ><a name="561" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="566"
+      > </a
+      ><a name="567" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="571"
+      > </a
+      ><a name="572" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="573"
+      > </a
+      ><a name="574" href="IDesc.Examples.List.html#554" class="Bound"
+      >a</a
+      ><a name="575"
+      > </a
+      ><a name="576" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="577"
+      > </a
+      ><a name="578" href="IDesc.Examples.List.html#556" class="Bound"
+      >xs</a
+      ><a name="580"
+      > </a
+      ><a name="581" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="582"
+      > 
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,685 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Orn.Brady.Vec</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Orn.Brady.Vec.html#1" class="Module"
+      >Orn.Brady.Vec</a
+      ><a name="21"
+      > 
+         </a
+      ><a name="32" class="Symbol"
+      >(</a
+      ><a name="33" href="Orn.Brady.Vec.html#33" class="Bound"
+      >A</a
+      ><a name="34"
+      > </a
+      ><a name="35" class="Symbol"
+      >:</a
+      ><a name="36"
+      > </a
+      ><a name="37" class="PrimitiveType"
+      >Set</a
+      ><a name="40" class="Symbol"
+      >)</a
+      ><a name="41"
+      >
+       </a
+      ><a name="49" class="Keyword"
+      >where</a
+      ><a name="54"
+      >
+
+</a
+      ><a name="56" class="Keyword"
+      >open</a
+      ><a name="60"
+      > </a
+      ><a name="61" class="Keyword"
+      >import</a
+      ><a name="67"
+      > </a
+      ><a name="68" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="76"
+      >
+
+</a
+      ><a name="78" class="Keyword"
+      >open</a
+      ><a name="82"
+      > </a
+      ><a name="83" class="Keyword"
+      >import</a
+      ><a name="89"
+      > </a
+      ><a name="90" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="99"
+      >
+</a
+      ><a name="100" class="Keyword"
+      >open</a
+      ><a name="104"
+      > </a
+      ><a name="105" class="Keyword"
+      >import</a
+      ><a name="111"
+      > </a
+      ><a name="112" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="120"
+      >
+</a
+      ><a name="121" class="Keyword"
+      >open</a
+      ><a name="125"
+      > </a
+      ><a name="126" class="Keyword"
+      >import</a
+      ><a name="132"
+      > </a
+      ><a name="133" href="Data.Fin.html#1" class="Module"
+      >Data.Fin</a
+      ><a name="141"
+      > </a
+      ><a name="142" class="Keyword"
+      >hiding</a
+      ><a name="148"
+      > </a
+      ><a name="149" class="Symbol"
+      >(</a
+      ><a name="150"
+      >lift</a
+      ><a name="154" class="Symbol"
+      >)</a
+      ><a name="155"
+      >
+</a
+      ><a name="156" class="Keyword"
+      >open</a
+      ><a name="160"
+      > </a
+      ><a name="161" class="Keyword"
+      >import</a
+      ><a name="167"
+      > </a
+      ><a name="168" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="180"
+      >
+
+</a
+      ><a name="182" class="Keyword"
+      >open</a
+      ><a name="186"
+      > </a
+      ><a name="187" class="Keyword"
+      >import</a
+      ><a name="193"
+      > </a
+      ><a name="194" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="231"
+      >
+
+</a
+      ><a name="233" class="Keyword"
+      >open</a
+      ><a name="237"
+      > </a
+      ><a name="238" class="Keyword"
+      >import</a
+      ><a name="244"
+      > </a
+      ><a name="245" href="Logic.Logic.html#1" class="Module"
+      >Logic.Logic</a
+      ><a name="256"
+      >
+
+</a
+      ><a name="258" class="Keyword"
+      >open</a
+      ><a name="262"
+      > </a
+      ><a name="263" class="Keyword"
+      >import</a
+      ><a name="269"
+      > </a
+      ><a name="270" href="IDesc.Fixpoint.html#1" class="Module"
+      >IDesc.Fixpoint</a
+      ><a name="284"
+      >
+</a
+      ><a name="285" class="Keyword"
+      >open</a
+      ><a name="289"
+      > </a
+      ><a name="290" class="Keyword"
+      >import</a
+      ><a name="296"
+      > </a
+      ><a name="297" href="IDesc.Examples.Vec.html#1" class="Module"
+      >IDesc.Examples.Vec</a
+      ><a name="315"
+      >
+
+</a
+      ><a name="317" class="Keyword"
+      >open</a
+      ><a name="321"
+      > </a
+      ><a name="322" class="Keyword"
+      >import</a
+      ><a name="328"
+      > </a
+      ><a name="329" href="Orn.Ornament.html#1" class="Module"
+      >Orn.Ornament</a
+      ><a name="341"
+      >
+
+</a
+      ><a name="343" class="Comment"
+      >-- Paper: Example 4.10</a
+      ><a name="365"
+      >
+
+</a
+      ><a name="367" href="Orn.Brady.Vec.html#367" class="Function"
+      >VecO</a
+      ><a name="371"
+      > </a
+      ><a name="372" class="Symbol"
+      >:</a
+      ><a name="373"
+      > </a
+      ><a name="374" href="Orn.Ornament.html#1571" class="Record"
+      >orn</a
+      ><a name="377"
+      > </a
+      ><a name="378" class="Symbol"
+      >(</a
+      ><a name="379" href="IDesc.Examples.Vec.html#365" class="Function"
+      >Constraint.VecD</a
+      ><a name="394"
+      > </a
+      ><a name="395" href="Orn.Brady.Vec.html#33" class="Bound"
+      >A</a
+      ><a name="396" class="Symbol"
+      >)</a
+      ><a name="397"
+      > </a
+      ><a name="398" href="Function.html#1006" class="Function"
+      >id</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Function.html#1006" class="Function"
+      >id</a
+      ><a name="403"
+      >
+</a
+      ><a name="404" href="Orn.Brady.Vec.html#367" class="Function"
+      >VecO</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="Symbol"
+      >=</a
+      ><a name="410"
+      > </a
+      ><a name="411" href="Orn.Ornament.html#1654" class="InductiveConstructor"
+      >orn.mk</a
+      ><a name="417"
+      > </a
+      ><a name="418" class="Symbol"
+      >&#955;</a
+      ><a name="419"
+      > </a
+      ><a name="420" class="Symbol"
+      >{</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Data.Nat.html#714" class="InductiveConstructor"
+      >zero</a
+      ><a name="426"
+      > </a
+      ><a name="427" class="Symbol"
+      >&#8594;</a
+      ><a name="428"
+      > </a
+      ><a name="429" href="Orn.Ornament.html#251" class="InductiveConstructor"
+      >insert</a
+      ><a name="435"
+      > </a
+      ><a name="436" class="Symbol"
+      >(</a
+      ><a name="437" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="440"
+      > </a
+      ><a name="441" class="Number"
+      >1</a
+      ><a name="442" class="Symbol"
+      >)</a
+      ><a name="443"
+      > </a
+      ><a name="444" class="Symbol"
+      >&#955;</a
+      ><a name="445"
+      > </a
+      ><a name="446" class="Symbol"
+      >{</a
+      ><a name="447"
+      > </a
+      ><a name="448" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="452"
+      > </a
+      ><a name="453" class="Symbol"
+      >&#8594;</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="462"
+      > </a
+      ><a name="463" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="467"
+      > </a
+      ><a name="468" class="Symbol"
+      >(</a
+      ><a name="469" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="476"
+      > </a
+      ><a name="477" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Orn.Ornament.html#382" class="InductiveConstructor"
+      >`1</a
+      ><a name="484" class="Symbol"
+      >)</a
+      ><a name="485"
+      > 
+                                          </a
+      ><a name="529" class="Symbol"
+      >;</a
+      ><a name="530"
+      > </a
+      ><a name="531" class="Symbol"
+      >(</a
+      ><a name="532" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="535"
+      > </a
+      ><a name="536" class="Symbol"
+      >())</a
+      ><a name="539"
+      > </a
+      ><a name="540" class="Symbol"
+      >}</a
+      ><a name="541"
+      > 
+                </a
+      ><a name="559" class="Symbol"
+      >;</a
+      ><a name="560"
+      > </a
+      ><a name="561" class="Symbol"
+      >(</a
+      ><a name="562" href="Data.Nat.html#725" class="InductiveConstructor"
+      >suc</a
+      ><a name="565"
+      > </a
+      ><a name="566" href="Orn.Brady.Vec.html#566" class="Bound"
+      >n</a
+      ><a name="567" class="Symbol"
+      >)</a
+      ><a name="568"
+      > </a
+      ><a name="569" class="Symbol"
+      >&#8594;</a
+      ><a name="570"
+      > </a
+      ><a name="571" href="Orn.Ornament.html#251" class="InductiveConstructor"
+      >insert</a
+      ><a name="577"
+      > </a
+      ><a name="578" class="Symbol"
+      >(</a
+      ><a name="579" href="Data.Fin.html#775" class="Datatype"
+      >Fin</a
+      ><a name="582"
+      > </a
+      ><a name="583" class="Number"
+      >1</a
+      ><a name="584" class="Symbol"
+      >)</a
+      ><a name="585"
+      > </a
+      ><a name="586" class="Symbol"
+      >&#955;</a
+      ><a name="587"
+      > </a
+      ><a name="588" class="Symbol"
+      >{</a
+      ><a name="589"
+      > </a
+      ><a name="590" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="594"
+      > </a
+      ><a name="595" class="Symbol"
+      >&#8594;</a
+      ><a name="596"
+      > </a
+      ><a name="597" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="604"
+      > </a
+      ><a name="605" class="Symbol"
+      >(</a
+      ><a name="606" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="609"
+      > </a
+      ><a name="610" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="614" class="Symbol"
+      >)</a
+      ><a name="615"
+      > 
+                                                     </a
+      ><a name="670" class="Symbol"
+      >(</a
+      ><a name="671" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="678"
+      > </a
+      ><a name="679" href="Orn.Brady.Vec.html#566" class="Bound"
+      >n</a
+      ><a name="680"
+      > 
+                                                     </a
+      ><a name="735" class="Symbol"
+      >(</a
+      ><a name="736" href="Orn.Ornament.html#669" class="InductiveConstructor"
+      >delete&#931;</a
+      ><a name="743"
+      > </a
+      ><a name="744" href="Relation.Binary.Core.html#4653" class="InductiveConstructor"
+      >refl</a
+      ><a name="748"
+      > 
+                                                     </a
+      ><a name="803" class="Symbol"
+      >(</a
+      ><a name="804" href="Orn.Ornament.html#532" class="InductiveConstructor"
+      >`&#931;</a
+      ><a name="806"
+      > </a
+      ><a name="807" class="Symbol"
+      >(&#955;</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Orn.Brady.Vec.html#810" class="Bound"
+      >_</a
+      ><a name="811"
+      > </a
+      ><a name="812" class="Symbol"
+      >&#8594;</a
+      ><a name="813"
+      > 
+                                                      </a
+      ><a name="869" href="Orn.Ornament.html#321" class="InductiveConstructor"
+      >`var</a
+      ><a name="873"
+      > </a
+      ><a name="874" class="Symbol"
+      >(</a
+      ><a name="875" href="Logic.Logic.html#238" class="InductiveConstructor"
+      >inv</a
+      ><a name="878"
+      > </a
+      ><a name="879" href="Orn.Brady.Vec.html#566" class="Bound"
+      >n</a
+      ><a name="880" class="Symbol"
+      >)))))</a
+      ><a name="885"
+      >
+                                             </a
+      ><a name="931" class="Symbol"
+      >;</a
+      ><a name="932"
+      > </a
+      ><a name="933" class="Symbol"
+      >(</a
+      ><a name="934" href="Data.Fin.html#828" class="InductiveConstructor"
+      >suc</a
+      ><a name="937"
+      > </a
+      ><a name="938" class="Symbol"
+      >())</a
+      ><a name="941"
+      > </a
+      ><a name="942" class="Symbol"
+      >}</a
+      ><a name="943"
+      > </a
+      ><a name="944" class="Symbol"
+      >}</a
+      ><a name="945"
+      >
+
+</a
+      ><a name="947" href="Orn.Brady.Vec.html#947" class="Function"
+      >Vec</a
+      ><a name="950"
+      > </a
+      ><a name="951" class="Symbol"
+      >:</a
+      ><a name="952"
+      > </a
+      ><a name="953" href="Data.Nat.html#698" class="Datatype"
+      >&#8469;</a
+      ><a name="954"
+      > </a
+      ><a name="955" class="Symbol"
+      >&#8594;</a
+      ><a name="956"
+      > </a
+      ><a name="957" class="PrimitiveType"
+      >Set</a
+      ><a name="960"
+      >
+</a
+      ><a name="961" href="Orn.Brady.Vec.html#947" class="Function"
+      >Vec</a
+      ><a name="964"
+      > </a
+      ><a name="965" class="Symbol"
+      >=</a
+      ><a name="966"
+      > </a
+      ><a name="967" href="IDesc.Fixpoint.html#81" class="Datatype"
+      >&#956;</a
+      ><a name="968"
+      > </a
+      ><a name="969" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10214;</a
+      ><a name="970"
+      > </a
+      ><a name="971" href="Orn.Brady.Vec.html#367" class="Function"
+      >VecO</a
+      ><a name="975"
+      > </a
+      ><a name="976" href="Orn.Ornament.html#1713" class="Function Operator"
+      >&#10215;orn</a
+      ><a name="980"
+      > 
+  
+</a
+      ><a name="985" href="Orn.Brady.Vec.html#985" class="Function"
+      >nil</a
+      ><a name="988"
+      > </a
+      ><a name="989" class="Symbol"
+      >:</a
+      ><a name="990"
+      > </a
+      ><a name="991" href="Orn.Brady.Vec.html#947" class="Function"
+      >Vec</a
+      ><a name="994"
+      > </a
+      ><a name="995" class="Number"
+      >0</a
+      ><a name="996"
+      >
+</a
+      ><a name="997" href="Orn.Brady.Vec.html#985" class="Function"
+      >nil</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" class="Symbol"
+      >=</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" href="Data.Unit.html#681" class="InductiveConstructor"
+      >tt</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1016"
+      >
+
+</a
+      ><a name="1018" href="Orn.Brady.Vec.html#1018" class="Function"
+      >cons</a
+      ><a name="1022"
+      > </a
+      ><a name="1023" class="Symbol"
+      >:</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" class="Symbol"
+      >&#8704;{</a
+      ><a name="1027" href="Orn.Brady.Vec.html#1027" class="Bound"
+      >n</a
+      ><a name="1028" class="Symbol"
+      >}</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" class="Symbol"
+      >&#8594;</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" href="Orn.Brady.Vec.html#33" class="Bound"
+      >A</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" class="Symbol"
+      >&#8594;</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Orn.Brady.Vec.html#947" class="Function"
+      >Vec</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" href="Orn.Brady.Vec.html#1027" class="Bound"
+      >n</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" class="Symbol"
+      >&#8594;</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Orn.Brady.Vec.html#947" class="Function"
+      >Vec</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" class="Symbol"
+      >(</a
+      ><a name="1049" href="Data.Nat.html#725" class="InductiveConstructor"
+      >suc</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="Orn.Brady.Vec.html#1027" class="Bound"
+      >n</a
+      ><a name="1054" class="Symbol"
+      >)</a
+      ><a name="1055"
+      >
+</a
+      ><a name="1056" href="Orn.Brady.Vec.html#1018" class="Function"
+      >cons</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" href="Orn.Brady.Vec.html#1061" class="Bound"
+      >a</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" href="Orn.Brady.Vec.html#1063" class="Bound"
+      >xs</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" class="Symbol"
+      >=</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10216;</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Data.Fin.html#797" class="InductiveConstructor"
+      >zero</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" href="Orn.Brady.Vec.html#1061" class="Bound"
+      >a</a
+      ><a name="1078"
+      > </a
+      ><a name="1079" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1080"
+      > </a
+      ><a name="1081" href="Orn.Brady.Vec.html#1063" class="Bound"
+      >xs</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="IDesc.Fixpoint.html#121" class="InductiveConstructor Operator"
+      >&#10217;</a
+      ><a name="1085"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
