@@ -1,3 +1,7 @@
+\documentclass[../Main.tex]{subfiles}
+
+\begin{document}
+\begin{code}
 {-# OPTIONS --cubical #-}
 
 module Extra.Algebra where
@@ -9,10 +13,17 @@ import Cubical.Structures.Auto                 as Auto
 
 
 -- adapting https://agda.github.io/cubical/Cubical.Algebra.Semigroup.Base.html
+\end{code}
 
+
+%<*MagmaStr>
+\begin{code}
 MagmaStr : Type → Type
 MagmaStr A = A → A → A
+\end{code}
+%</MagmaStr>
 
+\begin{code}
 -- not having records is unfortunate
 {-
 record IsMagma {A : Type} (_·_ : MagmaStr A) : Type where
@@ -45,3 +56,5 @@ MagmaUnivalentStr = Auto.autoUnivalentStr MagmaStr
 
 MagmaΣPath : (M N : Magma) → (M ≃[ MagmaEquivStr ] N) ≃ (M ≡ N)
 MagmaΣPath = SIP MagmaUnivalentStr
+\end{code}
+\end{document}

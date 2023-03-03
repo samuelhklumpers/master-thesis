@@ -31,7 +31,7 @@ Point : {X : Type} → X → Type
 Point {X = X} x = Σ' X λ y → x ≡ y
 
 _+'_ : Leibniz → Leibniz → Leibniz
-x +' y = fromℕ (⟦ x ⟧ N.+ ⟦ y ⟧)
+x +' y = fromℕ (toℕ x N.+ toℕ y)
 
 +'-e : ∀ x y → Point (x +' y)
 -- comment this
@@ -39,7 +39,7 @@ x +' y = fromℕ (⟦ x ⟧ N.+ ⟦ y ⟧)
 {-
 -- and uncomment this, to remark that, unsurprisingly, +'-o now is both correct and as "optimized" as you wanted it to be 
 +'-e 0b     y = s' ℕ≃L.sec y
-+'-e (x 1b) 0b = s' cong (λ k → suc (fromℕ k)) (+-zero (⟦ x ⟧ N.+ (⟦ x ⟧ N.+ 0))) ∙ fromℕ-1+2· ⟦ x ⟧ ∙ cong _1b (ℕ≃L.sec x)
++'-e (x 1b) 0b = s' cong (λ k → suc (fromℕ k)) (+-zero (toℕ x N.+ (toℕ x N.+ 0))) ∙ fromℕ-1+2· toℕ x ∙ cong _1b (ℕ≃L.sec x)
 +'-e (x 1b) (y 1b) = s' {!1 + from (2 * x + 1 + 2 * x) ... lots of lemmas ... 2 + 2 * from (x + y) ... x + y 2b !}
 +'-e (x 1b) (y 2b) = s' {!on the bright side, the lemmas are about ℕ and the ringsolver probably makes short work of large parts!}
 +'-e (x 2b) y = {!!}

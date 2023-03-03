@@ -208,15 +208,15 @@ module Digits where
 
   -- interpret a list of binary digits as a natural
   ⟦_⟧ : DL → ℕ
-  ⟦ nb ⟧   = 0
-  ⟦ 0b x ⟧ = 2 ℕ.· ⟦ x ⟧
-  ⟦ 1b x ⟧ = 1 ℕ.+ 2 ℕ.· ⟦ x ⟧
+  toℕ nb   = 0
+  toℕ 0b x = 2 ℕ.· toℕ x
+  toℕ 1b x = 1 ℕ.+ 2 ℕ.· toℕ x
 
   -- "⟦_⟧ is a homomorphism of natural numbers"
-  ⟦⟧-suc : ∀ x → ⟦ suc x ⟧ ≡ ℕ.suc ⟦ x ⟧
-  ⟦⟧-suc nb     = refl
-  ⟦⟧-suc (0b x) = refl
-  ⟦⟧-suc (1b x) = (cong (2 ℕ.·_) (⟦⟧-suc x)) ∙ ·-suc 2 ⟦ x ⟧
+  toℕ-suc : ∀ x → toℕ suc x ≡ ℕ.suc toℕ x
+  toℕ-suc nb     = refl
+  toℕ-suc (0b x) = refl
+  toℕ-suc (1b x) = (cong (2 ℕ.·_) (toℕ-suc x)) ∙ ·-suc 2 toℕ x
 
   -- going back is very easy using suc!
   fromℕ : ℕ → DL
@@ -224,7 +224,7 @@ module Digits where
   fromℕ (ℕ.suc n) = suc (fromℕ n)
 ```
 
-Evidently, a natural number should satisfy fromℕ ⟦ x ⟧ ≡ x, for which the following lemma is essential, but clearly fails already at 0
+Evidently, a natural number should satisfy fromℕ toℕ x ≡ x, for which the following lemma is essential, but clearly fails already at 0
 ```
   -- fromℕ-2· : ∀ n → fromℕ (2 ℕ.· n) ≡ 0b fromℕ n
   -- fromℕ-2· ℕ.zero    = {!nb ≡ 0b nb!}
@@ -257,15 +257,15 @@ module Binary where
   ⟦_⟧ : Bin → ℕ
   ⟦_⟧ = SQ.rec isSetℕ Digits.⟦_⟧ p
     where
-    p : ∀ a b → a R b → Digits.⟦ a ⟧ ≡ Digits.⟦ b ⟧
+    p : ∀ a b → a R b → Digits.toℕ a ≡ Digits.toℕ b
     p .nb .nb nb-R = refl
     p .nb .(0b _) (r-R r) = cong (2 ℕ.·_) (p _ _ r)
     p .(0b _) .nb (l-R r) = cong (2 ℕ.·_) (p _ _ r)
     p .(0b _) .(0b _) (0b-R r) = cong (2 ℕ.·_) (p _ _ r)
     p .(1b _) .(1b _) (1b-R r) = cong (λ n → 1 ℕ.+ 2 ℕ.· n) (p _ _ r)
 
-  ⟦⟧-suc : ∀ x → ⟦ suc x ⟧ ≡ ℕ.suc ⟦ x ⟧
-  ⟦⟧-suc = SQ.elimProp (λ _ → isSetℕ _ _) Digits.⟦⟧-suc
+  toℕ-suc : ∀ x → toℕ suc x ≡ ℕ.suc toℕ x
+  toℕ-suc = SQ.elimProp (λ _ → isSetℕ _ _) Digits.toℕ-suc
 
   fromℕ : ℕ → Bin
   fromℕ = [_] ∘ Digits.fromℕ
@@ -297,15 +297,15 @@ Bin≃ℕ = isoToEquiv (iso ⟦_⟧ fromℕ sec ret)
 
     sec : section ⟦_⟧ fromℕ
     sec ℕ.zero    = refl
-    sec (ℕ.suc x) = ⟦⟧-suc (fromℕ x) ∙ cong ℕ.suc (sec x)
+    sec (ℕ.suc x) = toℕ-suc (fromℕ x) ∙ cong ℕ.suc (sec x)
 
     ret : retract ⟦_⟧ fromℕ
     ret = elimProp (λ _ → squash/ _ _) go
       module ret where
-        go : ∀ a → fromℕ Digits.⟦ a ⟧ ≡ [ a ]
+        go : ∀ a → fromℕ Digits.toℕ a ≡ [ a ]
         go nb     = refl
-        go (0b a) = fromℕ-2· Digits.⟦ a ⟧ ∙ cong Bin-0b (go a)
-        go (1b a) = fromℕ-1+2· Digits.⟦ a ⟧ ∙ cong Bin-1b (go a)
+        go (0b a) = fromℕ-2· Digits.toℕ a ∙ cong Bin-0b (go a)
+        go (1b a) = fromℕ-1+2· Digits.toℕ a ∙ cong Bin-1b (go a)
 ```
 Great!
 
@@ -358,7 +358,7 @@ Index-nb x r = ua (⊥-strict (h x r))
   h (0b x) (l-R r) (0t0 ix) = h x r ix
   h (0b x) (l-R r) (0t1 ix) = h x r ix
 
-re-index-Bin : ∀ x → Fin ⟦ x ⟧ ≃ Index x
+re-index-Bin : ∀ x → Fin toℕ x ≃ Index x
 re-index-Bin nb     = {!!}
 re-index-Bin (0b x) = {!!}
 re-index-Bin (1b x) = {!!}

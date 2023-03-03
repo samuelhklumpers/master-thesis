@@ -19,14 +19,15 @@ The type of the 1-2 binary numbers
 %<*Leibniz>
 \AgdaTarget{Leibniz}
 \AgdaTarget{0b}
-\AgdaTarget{\_1b}
-\AgdaTarget{\_2b}
+\AgdaTarget{1b, \_1b}
+\AgdaTarget{2b, \_2b}
 \begin{code}
 data Leibniz : Set where
     0b : Leibniz
     _1b : Leibniz → Leibniz
     _2b : Leibniz → Leibniz
 \end{code}
+\newcommand{\bL}{\AgdaDatatype{Leibniz}}
 %</Leibniz>
 
 The successor operation on binary numbers
@@ -97,22 +98,12 @@ fromℕ (ℕ.suc n) = bsuc (fromℕ n)
 
 From leibniz to peano
 %<*toN>
-\AgdaTarget{⟦\_⟧}
+\AgdaTarget{toℕ}
 \begin{code}
-⟦_⟧ : Leibniz → ℕ
-⟦ 0b ⟧   = 0
-⟦ n 1b ⟧ = 1 N.+ 2 N.· ⟦ n ⟧ 
-⟦ n 2b ⟧ = 2 N.+ 2 N.· ⟦ n ⟧
+toℕ : Leibniz → ℕ
+toℕ 0b     = 0
+toℕ (n 1b) = 1 N.+ 2 N.· toℕ n 
+toℕ (n 2b) = 2 N.+ 2 N.· toℕ n
 \end{code}
 %</toN>
-
-Structures
-%<*magmaL>
-\AgdaTarget{MagmaL}
-\begin{code}
-MagmaL : Magma
-fst MagmaL = Leibniz
-snd MagmaL = _+_
-\end{code}
-%</magmaL>
 \end{document}

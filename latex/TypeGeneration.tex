@@ -1,0 +1,54 @@
+\documentclass[Main.tex]{subfiles}
+
+\begin{document}
+While the practical applications of the last example do not stretch very far\footnote{Considering that \AgdaDatatype{ℕ} is a candidate to be replaced by a more suitable unsigned integer type when compiling to Haskell anyway.}, the approach generalizes to the more relevant containers and their associated laws.
+
+In the same vein as the last section, we could define a simple but inefficient array type, and a more efficient implementation using trees. Then we can show that these are equivalent, such that when the simple type satisfies a set of laws, trees will satisfy them as well. We could then start developing all sorts of complex implementations fine-tuned to each operation and figure out how these are equivalent to some simpler type, but let us first take a step back, and investigate how we can make this approach run smoothly in an even simpler example.
+
+Rather than defining inductively defining a container and then showing that it is represented by a lookup function, we can go the other way and define a type by insisting that it is equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations in \cite{purelyfunctional}, and has some formalized examples in, e.g., \cite{calcdata} and \cite{progorn}. Numerical representations form the starting point for defining more complex datastructures based off of simpler basic structures, so let us run through an example.
+
+\subsection{Numerical representations: from numbers to containers}
+We can compute the type of vectors starting from \bN{}.\footnote{This is adapted (and fairly abridged) from \cite{calcdata}} For simplicity, we define them as a type computing function via the ``use-as-definition`` notation from before. We expect vectors to be represented by 
+\[ lookup \]
+where we use the finite type \AgdaDatatype{Fin} as an index into vector. We define this as
+\[ finfromsigma \]
+The computation of vectors proceeds as follows
+\[ vectors \]
+
+\investigate{SIP doesn't mesh very well with indexed stuff, does HSIP help?}
+
+Arrays are made to be indexed, but let us list some expectations
+\todo{do this}
+
+The implementation of vectors as functions is very straightforward
+\[ \]
+and clearly satisfies our interface
+\[ \]
+Again these proofs transport to vectors.\todo{If one was determined to cobble together the path over path over path we need now.}
+
+(This computation can of course be generalized to any arity zeroless numeral system; unfortunately beyond this set of base types, this ``straightforward'' computation from numeral system to container loses its efficacy. In a sense, the n-ary natural numbers are exactly the base types for which the required steps are convenient type equivalences like $(A + B) \to C = (A \to C) \times (B \to C)$?)
+
+%\subsection{Relating types by structure: Ornamentation (unfinished)}\label{sec:ornament}
+\subsection{Numerical representations as ornaments}
+We could peform the same computation for \bL{}, which would yield the type of binary trees, but we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. But wait! Such modifications of constructors are already made formal by the concept of ornamentation!
+
+Ornamentation, as exposed in \cite{algorn} and \cite{progorn}, lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped. Furthermore, a one-sided ornament: an ornamental description, lets us describe new datatypes by recording the modifications to an existing description.
+\todo{Again not sure if it helps to reiterate Desc, Orn, and OrnDesc.}
+
+This links back to the construction in the previous section, since \bN{} and \AgdaDatatype{Vec} share the same recursive structure, so \AgdaDatatype{Vec} can be formed by introducing indices and adding a field holding an element at each node.\footnote{These and similar examples are also documented in \cite{progorn}} For this, we first have to give a description of \bN{} to work with\todo{Clearly this can use more explanation (the question is, how much?)}
+\todo{include this}
+Now we can write down the ornament which adds fields to the \AgdaFunction{suc} constructor
+\[ include me \]
+With the least fixpoint and description extraction from \cite{progorn}, this is sufficient to define \AgdaDatatype{Vec}.
+
+Note that we cannot hope to give an unindexed ornament from \bL{} into trees, since trees have a very different recursive structure! Instead, we must keep track at what level we are in the tree so that we can ask for adequately many elements. 
+\todo{include this}
+
+In fact, this ``folding in'' technique seems to apply rather generally, let us digress.
+
+\subsection{Folding in}
+Let us describe this procedure of folding a complex recursive structure into a simpler structure more generally, and relate this to the construction of binary heaps in \cite{progorn}.
+\todo{go}
+
+
+\end{document}

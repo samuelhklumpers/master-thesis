@@ -14,6 +14,17 @@
 
 % from: https://agda.readthedocs.io/en/v2.6.3/_downloads/59877ce886494c991a213f09e29b712c/article-luaxelatex-different-fonts.lagda.tex
 \usepackage{fontspec}
+
+\usepackage{luaotfload}
+\directlua{luaotfload.add_fallback
+  ("mycustomfallback",
+    { "JuliaMono:style=Regular;"
+    , "NotoSansMono:style=Regular;"
+    , "NotoSansMath:style=Regular;"
+    }
+  )}
+\defaultfontfeatures{RawFeature={fallback=mycustomfallback}}
+
 \newfontfamily{\AgdaSerifFont}{Linux Libertine O}
 \newfontfamily{\AgdaSansSerifFont}{Linux Biolinum O}
 \newfontfamily{\AgdaTypewriterFont}{inconsolata}
@@ -29,8 +40,8 @@
 \usepackage{subfiles} % load me last!
 
 
-
-\newcommand{\investigate}[1]{\textcolor{gray}{\textit{#1}}}
+% macros
+\newcommand{\investigate}[1]{\par\vspace{1\baselineskip}\textcolor{gray}{\textit{#1}}\vspace{1\baselineskip}\par}
 
 
 \title{Running in circles in Agda\\ \small I'll have to grab a UU-template at some point}
@@ -41,8 +52,13 @@
 \tableofcontents
 
 This document is generated from a literate agda file!
+\newpage
 
-\section{Introduction}
+\begin{abstract}
+    The preliminary goal of this thesis is to introduce, among others, the concepts of the structure identity principle, numerical representations, and ornamentations, which are then combined to simplify the presentation and verification of finger trees, as a demonstration of the generalizability and improved compactness and security of the resulting code. 
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
 Most of the time when we are Agda-ing \cite{agda} we are trying to un-Haskell ourselves, e.g., not take the head of an empty list. In this example, we can make \AgdaFunction{head} total by switching to length-indexed lists: vectors. We have now effectively doubled the size of our code base, since functions like \AgdaFunction{\_++\_} which we had for lists, will also have to be reimplemented for vectors.
 
 To make things worse; often, after coping with the overloaded names resulting from Agda-ing by shoving them into a different namespace, we also find out that lists nor vectors are efficient containers to begin with. Maybe binary trees are better. We now need four times the number of definitions to keep everything working, and, if we start proving things, we will also have to prove everything fourfold. (Not to mention that reasoning about trees is probably going to be harder than reasoning about lists).  This inefficiency has sparked (my) interest in ways to deal with the situation.
@@ -51,36 +67,33 @@ Following \cite{orntrans} and \cite{progorn}, we can describe the relation betwe
 
 From a different direction, \cite{calcdata} gives methods by which we can show two implementations of some structure to be equivalent. With this, we can simply transport all proofs about \AgdaFunction{\_++\_} we have for lists over to the implementation for trees, provided that we show them to be equivalent as appendable containers. This process can also be automated by some heavy generics, but instead, we resort to cubical; which hosts a range of research like \cite{iri} tailored to the problem describing equivalences of structures.
 
-We can liken the situation to movement on a plane, where ornamentation moves us vertically by modifying constructors or indices, and structured equivalences move us horizontally to and from equivalent but more equivalent implementations.
+We can liken the situation to movement on a plane, where ornamentation moves us vertically by modifying constructors or indices, and structured equivalences move us horizontally to and from equivalent but more equivalent implementations. In this paper, we will investigate a variety of means of moving around structures and proofs, and ways to make this more efficient or less intrusive.
 
-Before we try to improve or generalize upon these approaches, let us clarify some parts of the enviroment we are working in, partially by going through some examples.
-
-
-\section{How Cubical Agda helps our binary numbers (almost done)}
-\subfile{Tex/CubicalAndBinary}
+Currently, all sections mainly reintroduce or reformulate existing research, with some spots of new ideas and original examples here and there. In \autoref{sec:leibniz}, we will look at how proofs on unary naturals can be moved to binary naturals. Then in \autoref{sec:numrep} we recall how numeral systems in particular induce container types, which we attempt to reformulate in the language of ornaments in \autoref{sec:ornament}.
+%Before we try to improve or generalize upon these approaches, let us clarify some parts of the enviroment we are working in, partially by going through some examples.
 
 
-\section{Numerical representations (rough)}
-\subfile{NumericalRepresentations}
+\section{How Cubical Agda helps our binary numbers (ready)}\label{sec:leibniz}
+\subfile{CubicalAndBinary}
 
 
-\section{Ornamentation (unfinished)}
-\subfile{Ornamentation}
+\section{Specifying types (rough)}\label{sec:numrep}
+\subfile{TypeGeneration}
 
 
-\section{Equivalence from initiality (where does this go?)}
+\section{Equivalence from initiality (where does this go?)}\label{sec:initiality}
 
 
 
-\section{Is equivalence too strong (finger trees)}
+\section{Is equivalence too strong (finger trees)}\label{sec:weakening}
 
 
 
-\section{Discussion and future work (aka the union of my to-do list and the actual future work section)}
+\section{Discussion and future work (aka the union of my to-do list and the actual future work section)}\label{sec:discussion}
 
 
 
-\section{Temporary}
+\section{Temporary}\label{sec:temp}
 \listoftodos
 %\subfile{Scratch.tex}
 

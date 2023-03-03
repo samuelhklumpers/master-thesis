@@ -1,0 +1,141 @@
+\documentclass[../Main.tex]{subfiles}
+
+\begin{document}
+\begin{code}%
+\>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
+\AgdaKeyword{OPTIONS}\AgdaSpace{}%
+\AgdaPragma{--cubical}\AgdaSpace{}%
+\AgdaSymbol{\#-\}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{Extra.Algebra}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Prelude}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Cubical.Foundations.SIP}\<%
+\\
+\>[0]\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Cubical.Structures.Auto}%
+\>[47]\AgdaSymbol{as}\AgdaSpace{}%
+\AgdaModule{Auto}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ adapting\ https://agda.github.io/cubical/Cubical.Algebra.Semigroup.Base.html}\<%
+\end{code}
+
+
+%<*MagmaStr>
+\begin{code}%
+\>[0]\AgdaFunction{MagmaStr}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Type}\<%
+\\
+\>[0]\AgdaFunction{MagmaStr}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\end{code}
+%</MagmaStr>
+
+\begin{code}%
+\>[0]\AgdaComment{--\ not\ having\ records\ is\ unfortunate}\<%
+\\
+\>[0]\AgdaComment{\{-
+record\ IsMagma\ \{A\ :\ Type\}\ (\AgdaUnderscore{}·\AgdaUnderscore{}\ :\ MagmaStr\ A)\ :\ Type\ where
+\ \ no-eta-equality
+\ \ constructor\ ismagma
+
+\ \ field
+\ \ \ \ is-set\ :\ isSet\ A
+
+record\ MagmaStr'\ (A\ :\ Type)\ :\ Type\ where
+\ \ constructor\ magmastr
+
+\ \ field
+\ \ \ \ \AgdaUnderscore{}·\AgdaUnderscore{}\ \ \ \ \ \ \ \ \ :\ MagmaStr\ A
+\ \ \ \ isMagma\ \ \ \ \ :\ IsMagma\ \AgdaUnderscore{}·\AgdaUnderscore{}
+
+\ \ infixl\ 7\ \AgdaUnderscore{}·\AgdaUnderscore{}
+
+\ \ open\ IsMagma\ isMagma\ public
+-\}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{Magma}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Type₁}\<%
+\\
+\>[0]\AgdaFunction{Magma}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{TypeWithStr}\AgdaSpace{}%
+\AgdaPrimitive{ℓ-zero}\AgdaSpace{}%
+\AgdaFunction{MagmaStr}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ SIP\ kills\ levels\ for\ now\ :(}\<%
+\\
+\>[0]\AgdaFunction{MagmaEquivStr}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaMacro{Auto.AutoEquivStr}\AgdaSpace{}%
+\AgdaFunction{MagmaStr}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{MagmaUnivalentStr}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{UnivalentStr}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaFunction{MagmaEquivStr}\<%
+\\
+\>[0]\AgdaFunction{MagmaUnivalentStr}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaMacro{Auto.autoUnivalentStr}\AgdaSpace{}%
+\AgdaFunction{MagmaStr}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{MagmaΣPath}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{M}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Magma}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{M}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≃[}}\AgdaSpace{}%
+\AgdaFunction{MagmaEquivStr}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≃}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{M}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡}}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaFunction{MagmaΣPath}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{SIP}\AgdaSpace{}%
+\AgdaFunction{MagmaUnivalentStr}\<%
+\end{code}
+\end{document}
