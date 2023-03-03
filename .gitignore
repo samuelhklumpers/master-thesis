@@ -1,0 +1,11 @@
+_build
+*.bcf
+*.xml
+*.gz
+*.ptb
+*.tdo
+*.aux
+*.fls
+*.fdb_latexmk
+*.log
+*.out
