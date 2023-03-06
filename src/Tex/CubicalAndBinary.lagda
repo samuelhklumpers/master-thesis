@@ -44,7 +44,6 @@ data ℕ : Type where
   zero : ℕ
   suc  : ℕ → ℕ
 \end{code}
-\newcommand{\bN}{\AgdaDatatype{ℕ}}
 %</Peano>
 
 %<*sym>

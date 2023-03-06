@@ -1,22 +1,23 @@
 AGDA=agda-2.6.2
-AFLAGS=-i. --latex
+# make sure we stop early if an unsolved meta is going to stop us later anyway
+AFLAGS=-i. --latex -W error
+
+# make sure latex doesn't ask us for input if we hit an error
+LATEX=latexmk -pdf -use-make -lualatex -halt-on-error -synctex=1
 SOURCE=Main.tex
-# POSTPROCESS=postprocess-latex.pl
-LATEX=latexmk -pdf -use-make -lualatex -synctex=1
 
 
 .PHONY: all bel
 
-
 targets := $(wildcard src/**/*.lagda)
+
 
 lagda = $(AGDA) $(AFLAGS) $(target)
 
 all:
+	$(MAKE) try ; tput bel
+
+try:
 	$(foreach target, $(targets), $(lagda) ; )
 	cd latex/ && \
 	$(LATEX) $(SOURCE)
-	tput bel
-
-# perl ../$(POSTPROCESS) $(SOURCE).tex > $(SOURCE).processed && \
-# mv $(SOURCE).processed $(SOURCE).tex && \

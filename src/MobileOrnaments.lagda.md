@@ -42,9 +42,7 @@ but clearly they're not naturally isomorphic or so.
 
 --* Linear chains containing branching data
 For this, we take inspiration from calculating datastructures and the N-ary trees experiment, in which we represent trees by linear chains of ever-growing tuples.
-```
 open import Nary
-```
 
 Starting from the simplest (non-trivial) case of 1-2-trees.
 These can either be an empty leaf, a node with 1 element and 2 children, or a node with 2 elements and 2 children.

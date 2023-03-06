@@ -27,7 +27,6 @@ data Leibniz : Set where
     _1b : Leibniz → Leibniz
     _2b : Leibniz → Leibniz
 \end{code}
-\newcommand{\bL}{\AgdaDatatype{Leibniz}}
 %</Leibniz>
 
 The successor operation on binary numbers

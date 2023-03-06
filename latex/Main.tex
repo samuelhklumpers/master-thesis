@@ -43,6 +43,10 @@
 % macros
 \newcommand{\investigate}[1]{\par\vspace{1\baselineskip}\textcolor{gray}{\textit{#1}}\vspace{1\baselineskip}\par}
 
+% symbols
+\newcommand{\bN}{\AgdaDatatype{ℕ}}
+\newcommand{\bL}{\AgdaDatatype{Leibniz}}
+
 
 \title{Running in circles in Agda\\ \small I'll have to grab a UU-template at some point}
 \author{Samuel Klumpers\\6057314}
@@ -69,7 +73,7 @@ From a different direction, \cite{calcdata} gives methods by which we can show t
 
 We can liken the situation to movement on a plane, where ornamentation moves us vertically by modifying constructors or indices, and structured equivalences move us horizontally to and from equivalent but more equivalent implementations. In this paper, we will investigate a variety of means of moving around structures and proofs, and ways to make this more efficient or less intrusive.
 
-Currently, all sections mainly reintroduce or reformulate existing research, with some spots of new ideas and original examples here and there. In \autoref{sec:leibniz}, we will look at how proofs on unary naturals can be moved to binary naturals. Then in \autoref{sec:numrep} we recall how numeral systems in particular induce container types, which we attempt to reformulate in the language of ornaments in \autoref{sec:ornament}.
+Currently, all sections mainly reintroduce or reformulate existing research, with some spots of new ideas and original examples here and there. In \autoref{sec:leibniz}, we will look at how proofs on unary naturals can be moved to binary naturals. Then in \autoref{sec:numrep} we recall how numeral systems in particular induce container types, which we attempt to reformulate in the language of ornaments in \autoref{ssec:ornaments}.
 %Before we try to improve or generalize upon these approaches, let us clarify some parts of the enviroment we are working in, partially by going through some examples.
 
 
@@ -77,8 +81,11 @@ Currently, all sections mainly reintroduce or reformulate existing research, wit
 \subfile{CubicalAndBinary}
 
 
-\section{Specifying types (rough)}\label{sec:numrep}
+\section{Specifying types (ready)}\label{sec:numrep}
 \subfile{TypeGeneration}
+
+\section{Reducing friction}\label{sec:comfort}
+The setup some approaches in earlier sections require makes them tedious or impractical to apply. In this section we will look at some ways how part of this problem could be alleviated through generics [practical generic programming], or by alternative descriptions of concepts like equivalences through the lens of initial algebras.
 
 
 \section{Equivalence from initiality (where does this go?)}\label{sec:initiality}

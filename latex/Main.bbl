@@ -1,0 +1,385 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{anyt/global//global/global}
+    \entry{iri}{misc}{}
+      \name{author}{4}{}{%
+        {{hash=ab4a713b0ee991d87b0eeda400ad210a}{%
+           family={Angiuli},
+           familyi={A\bibinitperiod},
+           given={Carlo},
+           giveni={C\bibinitperiod}}}%
+        {{hash=8948108e4d23939b1818cd45a2651ae9}{%
+           family={Cavallo},
+           familyi={C\bibinitperiod},
+           given={Evan},
+           giveni={E\bibinitperiod}}}%
+        {{hash=324585bd6e55e1a2fb4eaa984c14da0b}{%
+           family={Mörtberg},
+           familyi={M\bibinitperiod},
+           given={Anders},
+           giveni={A\bibinitperiod}}}%
+        {{hash=3d51cc9a01b78c9ff3622fc726f3ef2a}{%
+           family={Zeuner},
+           familyi={Z\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{660a95c89c1f46183a438ac0a9a336ee}
+      \strng{fullhash}{1790c48a31fc5b0c3c3e75b61ac17895}
+      \strng{bibnamehash}{660a95c89c1f46183a438ac0a9a336ee}
+      \strng{authorbibnamehash}{660a95c89c1f46183a438ac0a9a336ee}
+      \strng{authornamehash}{660a95c89c1f46183a438ac0a9a336ee}
+      \strng{authorfullhash}{1790c48a31fc5b0c3c3e75b61ac17895}
+      \field{labelalpha}{Ang+20}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Internalizing Representation Independence with Univalence}
+      \field{year}{2020}
+      \verb{doi}
+      \verb 10.48550/ARXIV.2009.05547
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2009.05547
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2009.05547
+      \endverb
+      \keyw{Programming Languages (cs.PL),Logic in Computer Science (cs.LO),FOS: Computer and information sciences,FOS: Computer and information sciences}
+    \endentry
+    \entry{orntrans}{article}{}
+      \name{author}{2}{}{%
+        {{hash=b33a4203b672a4319ba6060eb00f0a4a}{%
+           family={DAGAND},
+           familyi={D\bibinitperiod},
+           given={PIERRE-ÉVARISTE},
+           giveni={P\bibinithyphendelim É\bibinitperiod}}}%
+        {{hash=82e45e6e8cd831d16f20ccb7ca49df3c}{%
+           family={McBRIDE},
+           familyi={M\bibinitperiod},
+           given={CONOR},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press ({CUP})}%
+      }
+      \strng{namehash}{25ff442536ff1ddf1d6e1750bff347eb}
+      \strng{fullhash}{25ff442536ff1ddf1d6e1750bff347eb}
+      \strng{bibnamehash}{25ff442536ff1ddf1d6e1750bff347eb}
+      \strng{authorbibnamehash}{25ff442536ff1ddf1d6e1750bff347eb}
+      \strng{authornamehash}{25ff442536ff1ddf1d6e1750bff347eb}
+      \strng{authorfullhash}{25ff442536ff1ddf1d6e1750bff347eb}
+      \field{labelalpha}{DM14}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Functional Programming}
+      \field{month}{4}
+      \field{number}{2-3}
+      \field{title}{Transporting functions across ornaments}
+      \field{volume}{24}
+      \field{year}{2014}
+      \field{pages}{316\bibrangedash 383}
+      \range{pages}{68}
+      \verb{doi}
+      \verb 10.1017/s0956796814000069
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1017%2Fs0956796814000069
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1017%2Fs0956796814000069
+      \endverb
+    \endentry
+    \entry{practgen}{article}{}
+      \name{author}{2}{}{%
+        {{hash=6ba55517123febf15165f3e347657570}{%
+           family={Escot},
+           familyi={E\bibinitperiod},
+           given={Lucas},
+           giveni={L\bibinitperiod}}}%
+        {{hash=2246f80b638c02cdfb0bc74158f62027}{%
+           family={Cockx},
+           familyi={C\bibinitperiod},
+           given={Jesper},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{60025245759fda38bce121edd73842ec}
+      \strng{fullhash}{60025245759fda38bce121edd73842ec}
+      \strng{bibnamehash}{60025245759fda38bce121edd73842ec}
+      \strng{authorbibnamehash}{60025245759fda38bce121edd73842ec}
+      \strng{authornamehash}{60025245759fda38bce121edd73842ec}
+      \strng{authorfullhash}{60025245759fda38bce121edd73842ec}
+      \field{labelalpha}{EC22}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Datatype-generic programming makes it possible to define a construction once and apply it to a large class of datatypes. It is often used to avoid code duplication in languages that encourage the definition of custom datatypes, in particular state-of-the-art dependently typed languages where one can have many variants of the same datatype with different type-level invariants. In addition to giving access to familiar programming constructions for free, datatype-generic programming in the dependently typed setting also allows for the construction of generic proofs. However, the current interfaces available for this purpose are needlessly hard to use or are limited in the range of datatypes they handle. In this paper, we describe the design of a library for safe and user-friendly datatype-generic programming in the Agda language. Generic constructions in our library are regular Agda functions over a broad universe of datatypes, yet they can be specialized to native Agda datatypes with a simple one-liner. Furthermore, we provide building blocks so that library designers can too define their own datatype-generic constructions.}
+      \field{journaltitle}{Proc. ACM Program. Lang.}
+      \field{month}{8}
+      \field{number}{ICFP}
+      \field{title}{Practical Generic Programming over a Universe of Native Datatypes}
+      \field{volume}{6}
+      \field{year}{2022}
+      \verb{doi}
+      \verb 10.1145/3547644
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/3547644
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/3547644
+      \endverb
+      \keyw{Dependent types,Generic programming}
+    \endentry
+    \entry{calcdata}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=bc723d7d077e574c937d5817c4d6e257}{%
+           family={Hinze},
+           familyi={H\bibinitperiod},
+           given={Ralf},
+           giveni={R\bibinitperiod}}}%
+        {{hash=4ef018cfdc047b2a3577499d839bede3}{%
+           family={Swierstra},
+           familyi={S\bibinitperiod},
+           given={Wouter},
+           giveni={W\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=b30eb8db6fa04ec663c803d1cb570f52}{%
+           family={Komendantskaya},
+           familyi={K\bibinitperiod},
+           given={Ekaterina},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cham}%
+      }
+      \list{publisher}{1}{%
+        {Springer International Publishing}%
+      }
+      \strng{namehash}{74281b1822e921cf8ceb207695db73d5}
+      \strng{fullhash}{74281b1822e921cf8ceb207695db73d5}
+      \strng{bibnamehash}{74281b1822e921cf8ceb207695db73d5}
+      \strng{authorbibnamehash}{74281b1822e921cf8ceb207695db73d5}
+      \strng{authornamehash}{74281b1822e921cf8ceb207695db73d5}
+      \strng{authorfullhash}{74281b1822e921cf8ceb207695db73d5}
+      \strng{editorbibnamehash}{b30eb8db6fa04ec663c803d1cb570f52}
+      \strng{editornamehash}{b30eb8db6fa04ec663c803d1cb570f52}
+      \strng{editorfullhash}{b30eb8db6fa04ec663c803d1cb570f52}
+      \field{labelalpha}{HS22}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Where do datastructures come from? This paper explores how to systematically derive implementations of one-sided flexible arrays from a simple reference implementation. Using the dependently typed programming language Agda, each calculation constructs an isomorphic---yet more efficient---datastructure using only a handful of laws relating types and arithmetic. Although these calculations do not generally produce novel datastructures they do give insight into how certain datastructures arise and how different implementations are related.}
+      \field{booktitle}{Mathematics of Program Construction}
+      \field{isbn}{978-3-031-16912-0}
+      \field{title}{Calculating Datastructures}
+      \field{year}{2022}
+      \field{pages}{62\bibrangedash 101}
+      \range{pages}{40}
+    \endentry
+    \entry{progorn}{article}{}
+      \name{author}{2}{}{%
+        {{hash=3a0f2d045f0c5b5e53e2e82d2ac96179}{%
+           family={KO},
+           familyi={K\bibinitperiod},
+           given={HSIANG-SHANG},
+           giveni={H\bibinithyphendelim S\bibinitperiod}}}%
+        {{hash=757cd692ba5ddcd9368f43580fc330e9}{%
+           family={GIBBONS},
+           familyi={G\bibinitperiod},
+           given={JEREMY},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{38a36e71d05be602d8377e496579f12d}
+      \strng{fullhash}{38a36e71d05be602d8377e496579f12d}
+      \strng{bibnamehash}{38a36e71d05be602d8377e496579f12d}
+      \strng{authorbibnamehash}{38a36e71d05be602d8377e496579f12d}
+      \strng{authornamehash}{38a36e71d05be602d8377e496579f12d}
+      \strng{authorfullhash}{38a36e71d05be602d8377e496579f12d}
+      \field{labelalpha}{KG16}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Functional Programming}
+      \field{title}{Programming with ornaments}
+      \field{volume}{27}
+      \field{year}{2016}
+      \field{pages}{e2}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1017/S0956796816000307
+      \endverb
+    \endentry
+    \entry{algorn}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=2c2c2406f3f7d52d846f02ca883d9b3d}{%
+           family={McBride},
+           familyi={M\bibinitperiod},
+           given={Conor},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{2c2c2406f3f7d52d846f02ca883d9b3d}
+      \strng{fullhash}{2c2c2406f3f7d52d846f02ca883d9b3d}
+      \strng{bibnamehash}{2c2c2406f3f7d52d846f02ca883d9b3d}
+      \strng{authorbibnamehash}{2c2c2406f3f7d52d846f02ca883d9b3d}
+      \strng{authornamehash}{2c2c2406f3f7d52d846f02ca883d9b3d}
+      \strng{authorfullhash}{2c2c2406f3f7d52d846f02ca883d9b3d}
+      \field{labelalpha}{McB14}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Ornamental Algebras, Algebraic Ornaments}
+      \field{year}{2014}
+    \endentry
+    \entry{purelyfunctional}{book}{}
+      \name{author}{1}{}{%
+        {{hash=e4e76cfb2d550f0048c93839f784f76d}{%
+           family={Okasaki},
+           familyi={O\bibinitperiod},
+           given={Chris},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {USA}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{e4e76cfb2d550f0048c93839f784f76d}
+      \strng{fullhash}{e4e76cfb2d550f0048c93839f784f76d}
+      \strng{bibnamehash}{e4e76cfb2d550f0048c93839f784f76d}
+      \strng{authorbibnamehash}{e4e76cfb2d550f0048c93839f784f76d}
+      \strng{authornamehash}{e4e76cfb2d550f0048c93839f784f76d}
+      \strng{authorfullhash}{e4e76cfb2d550f0048c93839f784f76d}
+      \field{labelalpha}{Oka98}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{0521631246}
+      \field{title}{Purely Functional Data Structures}
+      \field{year}{1998}
+    \endentry
+    \entry{agda}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=ace8729c7b8c4555bcded660f3a49f2d}{%
+           family={Team},
+           familyi={T\bibinitperiod},
+           given={Agda\bibnamedelima Development},
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{ace8729c7b8c4555bcded660f3a49f2d}
+      \strng{fullhash}{ace8729c7b8c4555bcded660f3a49f2d}
+      \strng{bibnamehash}{ace8729c7b8c4555bcded660f3a49f2d}
+      \strng{authorbibnamehash}{ace8729c7b8c4555bcded660f3a49f2d}
+      \strng{authornamehash}{ace8729c7b8c4555bcded660f3a49f2d}
+      \strng{authorfullhash}{ace8729c7b8c4555bcded660f3a49f2d}
+      \field{labelalpha}{Tea23}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Agda}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://agda.readthedocs.io/en/v2.6.3/
+      \endverb
+      \verb{url}
+      \verb https://agda.readthedocs.io/en/v2.6.3/
+      \endverb
+    \endentry
+    \entry{cuagda}{article}{}
+      \name{author}{3}{}{%
+        {{hash=38b551d0b5ec5e2b4c915bd08649e102}{%
+           family={Vezzosi},
+           familyi={V\bibinitperiod},
+           given={Andrea},
+           giveni={A\bibinitperiod}}}%
+        {{hash=324585bd6e55e1a2fb4eaa984c14da0b}{%
+           family={Mörtberg},
+           familyi={M\bibinitperiod},
+           given={Anders},
+           giveni={A\bibinitperiod}}}%
+        {{hash=492fee9410a0fd601511d2201c985f28}{%
+           family={Abel},
+           familyi={A\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{e6ae212e716173f7523e0f1dde3bc4a7}
+      \strng{fullhash}{e6ae212e716173f7523e0f1dde3bc4a7}
+      \strng{bibnamehash}{e6ae212e716173f7523e0f1dde3bc4a7}
+      \strng{authorbibnamehash}{e6ae212e716173f7523e0f1dde3bc4a7}
+      \strng{authornamehash}{e6ae212e716173f7523e0f1dde3bc4a7}
+      \strng{authorfullhash}{e6ae212e716173f7523e0f1dde3bc4a7}
+      \field{labelalpha}{VMA19}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Proof assistants based on dependent type theory provide expressive languages for both programming and proving within the same system. However, all of the major implementations lack powerful extensionality principles for reasoning about equality, such as function and propositional extensionality. These principles are typically added axiomatically which disrupts the constructive properties of these systems. Cubical type theory provides a solution by giving computational meaning to Homotopy Type Theory and Univalent Foundations, in particular to the univalence axiom and higher inductive types. This paper describes an extension of the dependently typed functional programming language Agda with cubical primitives, making it into a full-blown proof assistant with native support for univalence and a general schema of higher inductive types. These new primitives make function and propositional extensionality as well as quotient types directly definable with computational content. Additionally, thanks also to copatterns, bisimilarity is equivalent to equality for coinductive types. This extends Agda with support for a wide range of extensionality principles, without sacrificing type checking and constructivity.}
+      \field{journaltitle}{Proc. ACM Program. Lang.}
+      \field{month}{7}
+      \field{number}{ICFP}
+      \field{title}{Cubical Agda: A Dependently Typed Programming Language with Univalence and Higher Inductive Types}
+      \field{volume}{3}
+      \field{year}{2019}
+      \verb{doi}
+      \verb 10.1145/3341691
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/3341691
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/3341691
+      \endverb
+      \keyw{Higher Inductive Types,Dependent Pattern Matching,Cubical Type Theory,Univalence}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
