@@ -2,8 +2,8 @@
 
 module Prelude where
 
-open import Cubical.Foundations.Prelude             public 
-open import Cubical.Foundations.Everything          public 
+open import Cubical.Foundations.Prelude          
+open import Cubical.Foundations.Everything          public         hiding (id)
 open import Cubical.Foundations.GroupoidLaws        public 
 
 open import Cubical.Data.Bool                       public         using (Bool; true; false; isSetBool; Bool→Type)
@@ -25,6 +25,8 @@ open import Cubical.Relation.Nullary                public
 open import Cubical.Relation.Nullary.Properties     public 
 
 open import Cubical.HITs.SetQuotients               as SQ
+
+open import Function.Base                           public using (id)
 
 
 variable
