@@ -1,3 +1,0 @@
-name: calculating-things
-depend: standard-library-2.0, cubical-0.4
-include: src
