@@ -28,9 +28,6 @@ RField (σ S D) = Σ S λ s → RField (D s)
 %</RField>
 
 %<*Number>
-\AgdaTarget{Number}
-\AgdaTarget{𝟙}
-\AgdaTarget{ṿ}
 \begin{code}
 -- note to self, I should probably make ṿ _not_ overlap
 -- so not everything links here

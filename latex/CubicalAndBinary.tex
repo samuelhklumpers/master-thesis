@@ -1,7 +1,3 @@
-\documentclass[Main.tex]{subfiles}
-
-
-\begin{document}
 Let us quickly review the small set of features in Cubical Agda that we will be using extensively throughout this article.\footnote{\cite{cuagda} gives a comprehensive introduction to cubical agda.} We note that there are some downsides to cubical, such as that
 \ExecuteMetaData[Tex/CubicalAndBinary]{cubical}\todo{Not sure if it would be helpful to have a more extensive introduction covering all features used.}
 also implies the negation of axiom K, which in turn complicates both some termination checking and some universe levels.\todo{To be precise, the mapFold in \cite{progorn} gets painted red.} And, more obviously, we get saddled with the proof obligation that our types are sets should we use certain constructions.
@@ -74,4 +70,3 @@ and the \AgdaFunction{\_+\_} magma on \bN{} and are identical
 \ExecuteMetaData[Leibniz/Properties.tex]{magma-equal}
 As a consequence, properties of \AgdaFunction{\_+\_} directly yield corresponding properties of \AgdaFunction{plus}. For example,
 \ExecuteMetaData[Leibniz/Properties.tex]{assoc-transport}
-\end{document}

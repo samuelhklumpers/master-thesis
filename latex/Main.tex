@@ -51,14 +51,12 @@
 \usepackage[style=alphabetic]{biblatex}
 \addbibresource{refs.bib}
 
-\usepackage{subfiles} % load me last!
 
 
 % macros
 \newcommand{\investigate}[1]{\par\vspace{1\baselineskip}\textcolor{gray}{\textit{#1}}\vspace{1\baselineskip}\par}
 
 % symbols
-%\AgdaTarget{Leibniz}
 \newcommand{\bN}{\AgdaDatatype{ℕ}}
 \newcommand{\bL}{\AgdaDatatype{Leibniz}}
 
@@ -97,14 +95,13 @@ Currently, all sections mainly reintroduce or reformulate existing research, wit
 
 
 \section{How Cubical Agda helps our binary numbers (ready)}\label{sec:leibniz}
-\subfile{CubicalAndBinary}
-
+\input{CubicalAndBinary}
 
 \section{Specifying types (ready)}\label{sec:numrep}
-\subfile{TypeGeneration}
+\input{TypeGeneration}
 
 \section{Reducing friction (work in progress)}\label{sec:userfriendly}
-\subfile{UserFriendly}
+\input{UserFriendly}
 
 \section{Is equivalence too strong (finger trees)}\label{sec:weakening}
 

@@ -1,6 +1,3 @@
-\documentclass[Main.tex]{subfiles}
-
-\begin{document}
 While the practical applications of the last example do not stretch very far\footnote{Considering that \AgdaDatatype{ℕ} is a candidate to be replaced by a more suitable unsigned integer type when compiling to Haskell anyway.}, the approach generalizes to the more relevant containers and their associated laws.
 
 In the same vein as the last section, we could define a simple but inefficient array type, and a more efficient implementation using trees. Then we can show that these are equivalent, such that when the simple type satisfies a set of laws, trees will satisfy them as well. We could then start developing all sorts of complex implementations fine-tuned to each operation and figure out how these are equivalent to some simpler type, but let us first take a step back, and investigate how we can make this approach run smoothly in a simpler example.
@@ -80,4 +77,3 @@ Note that \AgdaFunction{subnodes} effectively keeps the shape of the previous fi
 \investigate{I then tried and realized how unpleasant even the functions from the original type to the nested type are to write.}
 
 As a trivialty, we get that any type, interpreted as a container, always decomposes as an ornament over a ``numerical'' base type.\todo{Or at least, that was where I was trying to go with this, but I notice that this still is a bit further away.} This links to the construction of binary heaps in \cite{progorn}, as in hindsight, starting from the usual binary heaps would yield binary numbers and their binary heap ornament (in a much less useful package).
-\end{document}
