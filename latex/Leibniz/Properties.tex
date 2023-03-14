@@ -279,7 +279,9 @@
 \AgdaInductiveConstructor{ℕ.suc}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{toℕ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
-\\
+\end{code}
+%</toN-suc>
+\begin{code}%
 \>[0]\AgdaFunction{toℕ-suc}\AgdaSpace{}%
 \AgdaInductiveConstructor{0b}%
 \>[15]\AgdaSymbol{=}\AgdaSpace{}%
@@ -318,11 +320,9 @@
 \AgdaSymbol{(}\AgdaFunction{toℕ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\<%
 \end{code}
-%</toN-suc>
 
 %<*fromN-1>
 \AgdaTarget{fromℕ-1+2·}
-\AgdaTarget{fromℕ-2+2·}
 \begin{code}%
 \>[0]\AgdaFunction{fromℕ-1+2·}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -339,7 +339,9 @@
 \AgdaSymbol{(}\AgdaFunction{fromℕ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{1b}}\<%
-\\
+\end{code}
+%</fromN-1>
+\begin{code}%
 \>[0]\AgdaFunction{fromℕ-1+2·}\AgdaSpace{}%
 \AgdaInductiveConstructor{ℕ.zero}%
 \>[21]\AgdaSymbol{=}\AgdaSpace{}%
@@ -367,9 +369,10 @@
 \AgdaOperator{\AgdaFunction{∙}}\AgdaSpace{}%
 \AgdaFunction{fromℕ-1+2·}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+%<*fromN-2>
+\AgdaTarget{fromℕ-2+2·}
+\begin{code}%
 \>[0]\AgdaFunction{fromℕ-2+2·}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
@@ -385,7 +388,9 @@
 \AgdaSymbol{(}\AgdaFunction{fromℕ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{2b}}\<%
-\\
+\end{code}
+%</fromN-2>
+\begin{code}%
 \>[0]\AgdaFunction{fromℕ-2+2·}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -394,7 +399,6 @@
 \AgdaSymbol{(}\AgdaFunction{fromℕ-1+2·}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
-%</fromN-1>
 
 %<*N-iso-L>
 \AgdaTarget{ℕ↔L}
@@ -583,13 +587,14 @@ discreteL\ (x\ 2b)\ (y\ 2b)\ with\ discreteL\ x\ y
 \AgdaModule{Iso}\<%
 \end{code}
 
-%<*plus-def>
-\AgdaTarget{plus-def}
 \begin{code}%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{TERMINATING}\AgdaSpace{}%
 \AgdaSymbol{\#-\}}\<%
-\\
+\end{code}
+%<*plus-def>
+\AgdaTarget{plus-def}
+\begin{code}%
 \>[0]\AgdaFunction{plus-def}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%

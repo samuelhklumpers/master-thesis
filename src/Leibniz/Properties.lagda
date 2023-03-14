@@ -57,28 +57,37 @@ import Cubical.Data.Equality as Eq
 \AgdaTarget{toℕ-suc}
 \begin{code}
 toℕ-suc : ∀ x → toℕ (bsuc x) ≡ ℕ.suc (toℕ x)
+\end{code}
+%</toN-suc>
+\begin{code}
 toℕ-suc 0b     = refl
 toℕ-suc (x 1b) = refl
 toℕ-suc (x 2b) = cong
   (λ k → (1 N.+ 2 N.· k))
   (toℕ-suc x) ∙ cong ℕ.suc (NP.·-suc 2 (toℕ x)) 
 \end{code}
-%</toN-suc>
 
 %<*fromN-1>
 \AgdaTarget{fromℕ-1+2·}
-\AgdaTarget{fromℕ-2+2·}
 \begin{code}
 fromℕ-1+2· : ∀ x → fromℕ (1 N.+ 2 N.· x) ≡ (fromℕ x) 1b
+\end{code}
+%</fromN-1>
+\begin{code}
 fromℕ-1+2· ℕ.zero    = refl
 fromℕ-1+2· (ℕ.suc x) = cong
   (bsuc ∘ bsuc)
   (cong fromℕ (NP.+-suc x (x N.+ ℕ.zero)) ∙ fromℕ-1+2· x)
-
+\end{code}
+%<*fromN-2>
+\AgdaTarget{fromℕ-2+2·}
+\begin{code}
 fromℕ-2+2· : ∀ x → fromℕ (2 N.+ 2 N.· x) ≡ (fromℕ x) 2b
+\end{code}
+%</fromN-2>
+\begin{code}
 fromℕ-2+2· x = cong bsuc (fromℕ-1+2· x)
 \end{code}
-%</fromN-1>
 
 %<*N-iso-L>
 \AgdaTarget{ℕ↔L}
@@ -149,10 +158,12 @@ open import Prelude.UseAs
 open Iso
 \end{code}
 
+\begin{code}
+{-# TERMINATING #-}
+\end{code}
 %<*plus-def>
 \AgdaTarget{plus-def}
 \begin{code}
-{-# TERMINATING #-}
 plus-def : ∀ x y → Def (fromℕ (toℕ x N.+ toℕ y))
 plus-def 0b y          = ℕ↔L .rightInv y use-as-def
 plus-def (x 1b) 0b     =

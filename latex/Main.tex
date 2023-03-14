@@ -23,6 +23,20 @@
 \newtheorem{remark}{Remark}[section]
 \newtheorem{claim}{Claim}[section]
 
+\renewcommand{\chapterautorefname}{Chapter}%
+\renewcommand{\sectionautorefname}{Section}%
+\renewcommand{\subsectionautorefname}{Subsection}%
+
+\providecommand{\theoremautorefname}{Theorem}%
+\providecommand{\lemmaautorefname}{Lemma}%
+\providecommand{\propautorefname}{Proposition}%
+\providecommand{\corautorefname}{Corollary}%
+
+\providecommand{\defnautorefname}{Definition}%
+\providecommand{\remarkautorefname}{Remark}%
+\providecommand{\claimautorefname}{Claim}%
+
+
 \usepackage[links]{agda}
 \AgdaNoSpaceAroundCode{}
 
@@ -79,7 +93,7 @@ This document is generated from a literate agda file!
     The preliminary goal of this thesis is to introduce, among others, the concepts of the structure identity principle, numerical representations, and ornamentations, which are then combined to simplify the presentation and verification of finger trees, as a demonstration of the generalizability and improved compactness and security of the resulting code. 
 \end{abstract}
 
-\section{Introduction}\label{sec:intro}
+\section{Introduction (to be updated; out of sync since reducing friction)}\label{sec:intro}
 Most of the time when we are Agda-ing \cite{agda} we are trying to un-Haskell ourselves, e.g., not take the head of an empty list. In this example, we can make \AgdaFunction{head} total by switching to length-indexed lists: vectors. We have now effectively doubled the size of our code base, since functions like \AgdaFunction{\_++\_} which we had for lists, will also have to be reimplemented for vectors.
 
 To make things worse; often, after coping with the overloaded names resulting from Agda-ing by shoving them into a different namespace, we also find out that lists nor vectors are efficient containers to begin with. Maybe binary trees are better. We now need four times the number of definitions to keep everything working, and, if we start proving things, we will also have to prove everything fourfold. (Not to mention that reasoning about trees is probably going to be harder than reasoning about lists).  This inefficiency has sparked (my) interest in ways to deal with the situation.

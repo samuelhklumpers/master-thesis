@@ -74,8 +74,7 @@ Note that even though we warned ourselves, we are still talking about sections a
 In terms of ``when is $X \cong \mu D$'', this reduces the problem to showing that $X$ is an initial algebra for the base functor of $D$; $\mu D$ is initial by its fold, and by induction on $\mu D$ using the squares of algebra maps. 
 
 \begin{remark}
-    We need (in general) not hope $\mu D$ is a strict initial object in the category of algebras. For a strict initial object, having a map $a \to \emptyset$ implies $a \cong \emptyset$. This is not the case here. In general strict initial objects satisfy $a \times \emptyset \cong \emptyset$. Consider the algebras $(\mathbb{N}, (0 , \mathrm{suc}))$ and $(2^\mathbb{N}, f)$, for which clearly not $2^\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$.
-    (In particular, $F$ being a left adjoint is sufficient to make $C^F$ have strict initial objects, but then the carrier of the initial algebra is simply $\bot$. \todo{I think.})
+    We need (in general) not hope $\mu D$ is a strict initial object in the category of algebras. For a strict initial object, having a map $a \to \emptyset$ implies $a \cong \emptyset$. This is not the case here: strict initial objects satisfy $a \times \emptyset \cong \emptyset$, but for the $X \mapsto 1 + X$-algebras $\mathbb{N}$ and $2^\mathbb{N}$ clearly $2^\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$ does not hold. On the other hand, the ``obvious'' sufficient condition to let $C^F$ have strict initial objects is that $F$ is a left adjoint, but then the carrier of the initial algebra is simply $\bot$. \todo{I think.}
 \end{remark}
 
 Looking back at \autoref{sec:leibniz}, we see that \AgdaDatatype{Leibniz} is an initial $F: X \mapsto 1 + X$ algebra because for any other algebra, the image of \AgdaFunction{0b} is fixed, and by \AgdaFunction{bsuc} all other values are determined by chasing around the square. Thus, we are looking for a similar structure on $f : FX \to X$ that supports recursion.
@@ -98,17 +97,13 @@ Let us be on our way. Suppose $X$ is well-founded for the mono $f : FX \to X$. T
 
 By \AgdaDatatype{Acc}-recursion and because all $x$ are accessible, we can define a plain map into $Y$
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec}
-This construction is an instance of the broad concept of ``well-founded recursion''\todo{stdlib}, so we let ourselves be inspired by these methods. In particular, we prove an irrelevance lemma
+This construction is an instance of the concept of ``well-founded recursion''\footnote{This is formalized in the \hyperlink{standard-library}{https://agda.github.io/agda-stdlib/Induction.WellFounded.html} with many other examples.}, so we let ourselves be inspired by these methods. In particular, we prove an irrelevance lemma
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec-irr}
 which implies the unfolding lemma
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec-unfold}
-The unfolding lemma ensures that the map we defined by \AgdaFunction{Wf-rec} is a map of algebras.
-
-The proof that this map is unique proceeds analogously to that in the proof that $\mu D$ is initial, but now by \AgdaDatatype{Acc}-recursion
+The unfolding lemma ensures that the map we defined by \AgdaFunction{Wf-rec} is a map of algebras. The proof that this map is unique proceeds analogously to that in the proof that $\mu D$ is initial, but here we instead use \AgdaDatatype{Acc}-recursion
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf+inj=Init}
-Thus, we conclude that $X$ is initial.
-
-The main result is then a corollary of initiality of $X$ and the isomorphism of initial objects
+Thus, we conclude that $X$ is initial. The main result is then a corollary of initiality of $X$ and the isomorphism of initial objects
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf+inj=mu}
 
 
