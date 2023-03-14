@@ -1,4 +1,5 @@
-module Extra.ProgOrn.Desc.Properties where
+-- completely unused "induction" principles for μ
+module Extra.ProgOrn.Mu.Induction where
 
 open import Cubical.Data.Nat
 open import Cubical.Data.Sigma
@@ -19,10 +20,10 @@ open import Extra.ProgOrn.Desc
 private variable
     ℓ ℓ′ : Level
     A B  : Type ℓ
-    D E  : Desc
+    D E  : Desc′
 
 
-□ : (D : Desc) (P : A → Type ℓ) (x : Base A D) → Type ℓ
+□ : (D : Desc′) (P : A → Type ℓ) (x : Base A D) → Type ℓ
 □ (ṿ n)   P (in-ṿ xs)      = All P xs
 □ (σ S D) P (in-σ (s , x)) = □ (D s) P x
 
@@ -42,12 +43,12 @@ module _ (P : μ D → Type ℓ)
   induction-□ (in-σ (s , x)) = induction-□ x
 
 
-□′ : (D : Desc) (Q : (S : Type) → S → Type ℓ) (P : A → Type ℓ′) (x : Base A D) → Type (ℓ-max ℓ ℓ′)
+□′ : (D : Desc′) (Q : (S : Type) → S → Type ℓ) (P : A → Type ℓ′) (x : Base A D) → Type (ℓ-max ℓ ℓ′)
 □′ {ℓ = ℓ} (ṿ n)   Q P (in-ṿ xs) = Lift {j = ℓ} (All P xs)
 □′ (σ S D) Q P (in-σ (s , x))    = Q S s × □′ (D s) Q P x
 
 module _ (Q : (S : Type) → S → Type ℓ) where
-  AllD : Desc → Type ℓ
+  AllD : Desc′ → Type ℓ
   AllD (ṿ n)   = Unit*
   AllD (σ S D) = ∀ s → Q S s × AllD (D s)
 
@@ -56,7 +57,7 @@ module _ (Q : (S : Type) → S → Type ℓ) where
            (alg : ∀ x → □′ D Q P x → P (con x))
            where
 
-    data Below : Desc → Desc → Type (ℓ-suc ℓ) where
+    data Below : Desc′ → Desc′ → Type (ℓ-suc ℓ) where
       self : ∀ {D}                         → Below D     D
       down : ∀ {D S E s} → Below (σ S E) D → Below (E s) D 
 
@@ -107,7 +108,7 @@ Discreteμ {D = D'} d = induction′ (λ S _ → Discrete S) (λ x → (y : μ D
 
   go (in-σ x) a (in-σ y) = mapDec′ (cong in-σ) (cong un-σ) (go' x y (a .fst) (a .snd))
     where
-    go' : ∀ {S : Type} {E : S → Desc} (x y : Σ[ s ∈ S ] (Base (μ D) (E s))) → Discrete S → □′ (E (x .fst)) (λ S _ → Discrete S) (λ z → (w : μ D) → Dec (z ≡ w)) (x .snd) → Dec (x ≡ y)
+    go' : ∀ {S : Type} {E : S → Desc′} (x y : Σ[ s ∈ S ] (Base (μ D) (E s))) → Discrete S → □′ (E (x .fst)) (λ S _ → Discrete S) (λ z → (w : μ D) → Dec (z ≡ w)) (x .snd) → Dec (x ≡ y)
     go' (s , x) (t , y) Sdis a with Sdis s t
     ... | no ¬p = no (λ q → ¬p (cong fst q))
     ... | yes p with Eq.pathToEq p
@@ -124,7 +125,7 @@ isSetμ DiscreteD = Discrete→isSet (Discreteμ DiscreteD)
 
 {-
 -- rip lol
-□′-2 : (D : Desc) (Q : (S : Type) → (s t : S) → Type ℓ) (P : A → B → Type ℓ) (x : Base A D) (y : Base B D) → Type ℓ
+□′-2 : (D : Desc′) (Q : (S : Type) → (s t : S) → Type ℓ) (P : A → B → Type ℓ) (x : Base A D) (y : Base B D) → Type ℓ
 □′-2 (ṿ n)   Q P (in-ṿ xs)      (in-ṿ ys)      = All (uncurry P) (zipWith _,_ xs ys)
 □′-2 (σ S D) Q P (in-σ (s , x)) (in-σ (t , y)) = Q S s t × □′-2 (D s) Q P {!!} {!!}
 

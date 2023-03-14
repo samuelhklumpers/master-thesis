@@ -3,11 +3,25 @@
 \usepackage{comment}
 
 \setlength{\marginparwidth}{2cm} % remove when done
-\usepackage{todonotes}
 
+\usepackage{todonotes}
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 \usepackage{catchfilebetweentags}
+\usepackage{quiver} 
+\usepackage{amsthm}
+
+
+\theoremstyle{plain}% default
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem*{cor}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{claim}{Claim}[section]
 
 \usepackage[links]{agda}
 \AgdaNoSpaceAroundCode{}
@@ -44,6 +58,7 @@
 \newcommand{\investigate}[1]{\par\vspace{1\baselineskip}\textcolor{gray}{\textit{#1}}\vspace{1\baselineskip}\par}
 
 % symbols
+%\AgdaTarget{Leibniz}
 \newcommand{\bN}{\AgdaDatatype{ℕ}}
 \newcommand{\bL}{\AgdaDatatype{Leibniz}}
 
@@ -88,13 +103,8 @@ Currently, all sections mainly reintroduce or reformulate existing research, wit
 \section{Specifying types (ready)}\label{sec:numrep}
 \subfile{TypeGeneration}
 
-\section{Reducing friction}\label{sec:comfort}
-The setup some approaches in earlier sections require makes them tedious or impractical to apply. In this section we will look at some ways how part of this problem could be alleviated through generics [practical generic programming], or by alternative descriptions of concepts like equivalences through the lens of initial algebras.
-
-
-\section{Equivalence from initiality (where does this go?)}\label{sec:initiality}
-
-
+\section{Reducing friction (work in progress)}\label{sec:userfriendly}
+\subfile{UserFriendly}
 
 \section{Is equivalence too strong (finger trees)}\label{sec:weakening}
 

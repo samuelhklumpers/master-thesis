@@ -9,3 +9,6 @@ _build
 *.fdb_latexmk
 *.log
 *.out
+*.blg
+*.toc
+*.bbl

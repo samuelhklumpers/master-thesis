@@ -1,6 +1,6 @@
 {-# OPTIONS --cubical #-}
 
-module TypeIsos where
+module Extra.TypeIsos where
 
 open import Prelude
 

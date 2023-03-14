@@ -1,3 +1,5 @@
+SHELL:=/bin/bash -O globstar
+
 AGDA=agda-2.6.2
 # make sure we stop early if an unsolved meta is going to stop us later anyway
 AFLAGS=-i. --latex -W error
@@ -7,9 +9,9 @@ LATEX=latexmk -pdf -use-make -lualatex -halt-on-error -synctex=1
 SOURCE=Main.tex
 
 
-.PHONY: all bel
 
-targets := $(wildcard src/**/*.lagda)
+.PHONY: all bel
+targets := $(shell ls src/**/*.lagda)
 
 
 lagda = $(AGDA) $(AFLAGS) $(target)

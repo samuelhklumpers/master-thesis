@@ -12,7 +12,7 @@ open import Cubical.Data.Sum
 open import Cubical.Data.Unit
 open import Cubical.Data.Empty
 open import Prelude.UseAs
-open import TypeIsos
+open import Extra.TypeIsos
 \end{code}
 
 %<*leq-split>

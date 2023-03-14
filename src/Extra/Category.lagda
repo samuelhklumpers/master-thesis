@@ -1,12 +1,15 @@
-module Category where
+\documentclass[../../Main.tex]{subfiles}
+
+\begin{document}
+\begin{code}
+module Extra.Category where
 
 open import Cubical.Data.Sigma
-open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Equiv
-open import Data.Unit
+open import Cubical.Foundations.Isomorphism
+open import Cubical.Foundations.Prelude
 open import Cubical.HITs.PropositionalTruncation
 
-import Cubical.Data.Equality as Eq
 open import Function.Base using (id; _∘_)
 
 
@@ -17,12 +20,20 @@ private variable
 
 record RawFunctor ℓ : Type (ℓ-suc ℓ) where
   field
+\end{code}
+%<*RawFunctor>
+\AgdaTarget{F₀}
+\AgdaTarget{fmap, .fmap}
+\begin{code}
     F₀   : Type ℓ → Type ℓ
     fmap : (A → B) → F₀ A → F₀ B
-
+\end{code}
+%</RawFunctor>
+\begin{code}
 open RawFunctor
 
 
+-- keeping these as f x = g x, otherwise we'd have to give the types anyway
 record Functor ℓ : Type (ℓ-suc ℓ) where
   field
     RawF   : RawFunctor ℓ
@@ -30,43 +41,78 @@ record Functor ℓ : Type (ℓ-suc ℓ) where
   open RawFunctor RawF renaming (F₀ to F; fmap to mapF)
  
   field
+\end{code}
+%<*Functor>
+\AgdaTarget{f-id}
+\AgdaTarget{f-comp}
+\begin{code}
     f-id   : (x : F A)
            → mapF id x ≡ x
 
-    -- keeping these as f x = g x: otherwise we'd have to give the types anyway
-
     f-comp : (g : B → C) (f : A → B) (x : F A)
            → mapF (g ∘ f) x ≡ mapF g (mapF f x) 
+\end{code}
+%</Functor>
+\begin{code}
 
 open Functor
 
 
+\end{code}
+%<*Algebra>
+\AgdaTarget{Algebra}
+\AgdaTarget{Carrier}
+\AgdaTarget{forget, .forget}
+\begin{code}
 record Algebra (F : Type ℓ → Type ℓ) : Type (ℓ-suc ℓ) where
   field
     Carrier : Type ℓ
     forget  : F Carrier → Carrier
-
-    --isSetAlg : isSet Carrier
+\end{code}
+%</Algebra>
+\begin{code}
 
 open Algebra
 
 
 Alg→-Sqr : (RawF : RawFunctor ℓ) (AlgA AlgB : Algebra (RawF .F₀)) → (AlgA .Carrier → AlgB .Carrier) → Type ℓ
+\end{code}
+%<*AlgSqr>
+\AgdaTarget{Alg→-Sqr}
+\begin{code}
 Alg→-Sqr F A B f = f ∘ A .forget ≡ B .forget ∘ F .fmap f
+\end{code}
+%</AlgSqr>
+\begin{code}
 
-record Alg→ (RawF : RawFunctor ℓ) (AlgA AlgB : Algebra (RawF .F₀)) : Type ℓ where
+\end{code}
+%<*AlgMap>
+\AgdaTarget{Alg→}
+\AgdaTarget{mor, .mor}
+\AgdaTarget{coh, .coh}
+\begin{code}
+record Alg→ (RawF : RawFunctor ℓ)
+            (AlgA AlgB : Algebra (RawF .F₀)) : Type ℓ where
   constructor alg→
   
   field
     mor : AlgA .Carrier → AlgB .Carrier
-    -- being an equivalence is a property so theoretically we could truncate this...
     coh : ∥ Alg→-Sqr RawF AlgA AlgB mor ∥₁ 
+\end{code}
+%</AlgMap>
+\begin{code}
 
 open Alg→
 
+\end{code}
+%<*AlgPath>
+\AgdaTarget{Alg→-Path}
+\begin{code}
 Alg→-Path : {F : RawFunctor ℓ} {A B : Algebra (F .F₀)}
-          → (g f : Alg→ F A B)
-          → g .mor ≡ f .mor → g ≡ f
+          → (g f : Alg→ F A B) → g .mor ≡ f .mor → g ≡ f
+\end{code}
+%</AlgPath>
+\begin{code}
 Alg→-Path {F = F} {A = A} {B = B} g f p i = alg→ (p i) (∥∥-isPropDep (λ h → Alg→-Sqr F A B h) (g .coh) (f .coh) p i)
 
 id-Alg→ : (FunF : Functor ℓ) (X : Algebra (FunF .RawF .F₀)) → Alg→ (FunF .RawF) X X
@@ -85,11 +131,18 @@ id-Alg→ FunF X .coh = ∣ funExt (λ x → cong (X .forget) (sym (FunF .f-id x
     g (f (X .forget x))           ≡⟨ cong g (funExt⁻ fc x) ⟩
     g (Y .forget (mapF f x))      ≡⟨ funExt⁻ gc _ ⟩
     Z .forget (mapF g (mapF f x)) ≡⟨ cong (Z .forget) (sym (compF _ _ _)) ⟩
-    Z .forget (mapF (g ∘ f) x) ∎
+    Z .forget (mapF (g ∘ f) x)    ∎
 
 
-weakContr : Type ℓ → Type ℓ -- almost connected
+weakContr : Type ℓ → Type ℓ -- mildly stronger than connected?
+\end{code}
+%<*weakContr>
+\AgdaTarget{weakContr}
+\begin{code}
 weakContr A = Σ[ x ∈ A ] (∀ y → ∥ x ≡ y ∥₁)
+\end{code}
+%</weakContr>
+\begin{code}
 
 weakProp : Type ℓ → Type ℓ
 weakProp A = (x y : A) → ∥ x ≡ y ∥₁
@@ -98,22 +151,42 @@ weakContr→weakProp : {A : Type ℓ} → weakContr A → weakProp A
 weakContr→weakProp (x , p) y z = rec2 squash₁ (λ q r → ∣ sym q ∙ r ∣₁) (p y) (p z)
 
 
-record Initial (C : Type ℓ) (R : C → C → Type ℓ′) (Z : C) : Type (ℓ-max (ℓ-suc ℓ) ℓ′) where
+\end{code}
+%<*Initial>
+\AgdaTarget{Initial}
+\AgdaTarget{initiality, .initiality}
+\begin{code}
+record Initial (C : Type ℓ) (R : C → C → Type ℓ′)
+               (Z : C) : Type (ℓ-max (ℓ-suc ℓ) ℓ′) where
   field
     initiality : ∀ X → weakContr (R Z X)
+\end{code}
+%</Initial>
+\begin{code}
 
 open Initial
 
 
-open import Cubical.Foundations.Isomorphism
-
 InitAlg : (RawF : RawFunctor ℓ) (A : Algebra (RawF .F₀)) → Type (ℓ-suc (ℓ-suc ℓ))
+\end{code}
+%<*InitAlg>
+\AgdaTarget{InitAlg}
+\begin{code}
 InitAlg RawF A = Initial (Algebra (RawF .F₀)) (Alg→ RawF) A
+\end{code}
+%</InitAlg>
 
-InitAlg-Iso : (F : Functor ℓ) (A B : Algebra (F .RawF .F₀))
+%<*InitAlg-equiv>
+\AgdaTarget{InitAlg-≃}
+\begin{code}
+InitAlg-≃ : (F : Functor ℓ) (A B : Algebra (F .RawF .F₀))
             → InitAlg (F .RawF) A → InitAlg (F .RawF) B
             → A .Carrier ≃ B .Carrier
-InitAlg-Iso FunF A B IA IB = fun .mor , eq
+\end{code}
+%</InitAlg-equiv>
+
+\begin{code}
+InitAlg-≃ FunF A B IA IB = fun .mor , eq
   where
   RawF' = FunF .RawF
   
@@ -139,3 +212,5 @@ InitAlg-Iso FunF A B IA IB = fun .mor , eq
   eq = rec2 (isPropIsEquiv (fun .mor)) eq'
     (weakContr→weakProp (IB .initiality B) _ _)
     (weakContr→weakProp (IA .initiality A) _ _)
+\end{code}
+\end{document}
