@@ -33,6 +33,10 @@
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Leibniz.Properties}\<%
 \\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Extra.Algebra}\<%
+\\
 \>[0]\AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Cubical.Data.Nat}\AgdaSpace{}%
 \AgdaSymbol{as}\AgdaSpace{}%
@@ -225,7 +229,7 @@
 \AgdaFunction{Glue}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaSymbol{(λ}%
-\>[122I]\AgdaSymbol{\{}\AgdaSpace{}%
+\>[124I]\AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{i0}\AgdaSymbol{)}\AgdaSpace{}%
@@ -234,7 +238,7 @@
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[122I]%
+\>[.][@{}l@{}]\<[124I]%
 \>[35]\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -250,23 +254,6 @@
 
 %<*badplus>
 \begin{code}%
-\>[0]\AgdaFunction{BinOp}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPrimitive{Type}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaPrimitive{Type}\<%
-\\
-\>[0]\AgdaFunction{BinOp}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}+′\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{BinOp}\AgdaSpace{}%

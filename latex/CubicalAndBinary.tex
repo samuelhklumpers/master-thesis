@@ -1,10 +1,13 @@
-Let us quickly review the small set of features in Cubical Agda that we will be using extensively throughout this article.\footnote{\cite{cuagda} gives a comprehensive introduction to cubical agda.} We note that there are some downsides to cubical, such as that
-\ExecuteMetaData[Tex/CubicalAndBinary]{cubical}% \todo{Not sure if it would be helpful to have a more extensive introduction covering all features used.} % at this moment, probably not, as the cubical usage is rather tame, so I'll probably stick to introducing stuff as it becomes necessary. % TODO then write that somewhere
-also implies the negation of axiom K, which in turn complicates both some termination checking and some universe levels.\footnote{In particular, this prompts rather far-reaching (but not fundamental) changes to the code of previous work, such as to that of \cite{progorn} in \autoref{sec:userfriendly}.} Furthermore, if we use certain homotopical constructions, like set quotients, we will also have to prove that our types are sets, before we can use them.
+Let us quickly review the small set of features in Cubical Agda that we will be using extensively throughout this article.\footnote{\cite{cuagda} gives a comprehensive introduction to cubical agda.}
 
-Of course, this downside is more than offset by the benefits of changing our primitive notion of equality, which we will see makes it easier to show that ``equivalent'' structures behave identically. Here, equality arises not (directly) from the indexed inductive definition we are used to, but rather from the presence of the interval type \AgdaPrimitiveType{I}. This type represents a set of two points \AgdaInductiveConstructor{i0} and \AgdaInductiveConstructor{i1}, which are considered ``identified'' in the sense that they are connected by a path. To define a function out of this type, we also have to define the function on all the intermediate points, which is why we call such a function a ``path''. Terms of other types are then considered identified when there is a path between them.
+%Of course, this downside is more than offset by the benefits of changing our primitive notion of equality, which we will see makes it easier to show that ``equivalent'' structures behave identically. 
+In Cubical Agda, the primitive notion of equality arises not (directly) from the indexed inductive definition we are used to, but rather from the presence of the interval type \AgdaPrimitiveType{I}. This type represents a set of two points \AgdaInductiveConstructor{i0} and \AgdaInductiveConstructor{i1}, which are considered ``identified'' in the sense that they are connected by a path. To define a function out of this type, we also have to define the function on all the intermediate points, which is why we call such a function a ``path''. Terms of other types are then considered identified when there is a path between them.
 
-As an added benefit, this different perspective gives intuitive interpretations to some proofs of equality, like
+While the benefits are overwhelming for us, this is not completely without downsides, such as that
+%\ExecuteMetaData[Tex/CubicalAndBinary]{cubical}% \todo{Not sure if it would be helpful to have a more extensive introduction covering all features used.} % at this moment, probably not, as the cubical usage is rather tame, so I'll probably stick to introducing stuff as it becomes necessary. % TODO then write that somewhere
+the negation of axiom K complicates both some termination checking and some universe levels.\footnote{In particular, this prompts rather far-reaching (but not fundamental) changes to the code of previous work, such as to that of \cite{progorn} in \autoref{sec:userfriendly}.} Furthermore, if we use certain homotopical constructions, like set quotients, we will also have to prove that our types are sets, before we can use them.
+
+On the positive side, this different perspective gives intuitive interpretations to some proofs of equality, like
 \ExecuteMetaData[Tex/CubicalAndBinary]{sym}
 where \AgdaFunction{∼\_} is the interval reversal, swapping \AgdaInductiveConstructor{i0} and \AgdaInductiveConstructor{i1}, so that \AgdaFunction{sym} simply reverses the given path.
 
@@ -13,15 +16,15 @@ Furthermore, because we can now interpret paths in records and function differen
 
 Finally, while in ``non-univalent'' Agda bijections or isomorphisms do not play such a central role, much of our work will rest on equivalences, as the ``HoTT-compatible'' generalization of bijections. This is because the \AgdaPrimitiveType{Glue} type tells us that equivalent types fit together in a new type, in a way that guarantees univalence
 \ExecuteMetaData[Tex/CubicalAndBinary]{ua}
-This essentially states that ``equivalent types are identified'', such that type isomorphisms like $1 \to A \simeq A$ actually become paths $1 \to A \equiv A$, making it so that we can transport proofs along them. We will demonstrate this by a slightly more practical example.
+This essentially states that ``equivalent types are identified'', such that type isomorphisms like $1 \to A \simeq A$ actually become paths $1 \to A \equiv A$, making it so that we can transport proofs along them. We will demonstrate this by a slightly more practical example in the next section.
 
 
 \subsection{Binary numbers}\label{ssec:binary}
-Let us motivate the cubical method by showing the equivalence of the ``Peano'' naturals and the ``Leibniz'' naturals. Recall that the Peano naturals are defined as 
+Let us demonstrate an application of univalence by exploiting the equivalence of the ``Peano'' naturals and the ``Leibniz'' naturals. Recall that the Peano naturals are defined as 
 \ExecuteMetaData[Tex/CubicalAndBinary]{Peano}
 This definition enjoys a simple induction principle and has many proofs of its properties in standard libraries. However, it is too slow to be of practical use: most arithmetic operations defined on \bN{} have time complexity in the order of the value of the result.
 
-Of course, the alternative are the more performant binary numbers: the time complexities for binary numbers are usually logarithmic in the resultant values, but these are typically less well-covered in terms of proofs. This does not have to be a problem, because the \bN{} naturals and the binary numbers should be equivalent after all!
+Of course, the alternative are the more performant binary numbers: the time complexities for binary numbers are usually logarithmic in the resultant values. However, the number of cases for a proof about binary numbers also grows quicker than it would for unary numbers. This does not have to be a problem, because the \bN{} naturals and the binary numbers should be equivalent after all!
 
 Let us make this formal. We define the Leibniz naturals as follows:
 \ExecuteMetaData[Leibniz/Base.tex]{Leibniz}
@@ -30,7 +33,7 @@ Here, the \AgdaInductiveConstructor{0b} constructor encodes 0, while the \AgdaIn
 This defines one direction of the equivalence from \bN{} to \bL{}, for the other direction, we can interpret a number in \bN{} as a binary number by repeating the successor operation on binary numbers:
 \ExecuteMetaData[Leibniz/Base.tex]{bsuc}
 \ExecuteMetaData[Leibniz/Base.tex]{fromN}
-To show that \AgdaFunction{toℕ} is an isomorphism, we have to show that it is the inverse of \AgdaFunction{fromℕ}. For this, by induction on \bL{} and basic arithmetic on \bN{} we see that
+To show that \AgdaFunction{toℕ} is an isomorphism, we have to show that it is the inverse of \AgdaFunction{fromℕ}. By induction on \bL{} and basic arithmetic on \bN{} we see that
 \ExecuteMetaData[Leibniz/Properties.tex]{toN-suc}
 so \AgdaFunction{toℕ} respects successors. Similarly, by induction on \bN{} we get
 \ExecuteMetaData[Leibniz/Properties.tex]{fromN-1}
@@ -38,7 +41,7 @@ and % I can't get the code blocks to stick together lol
 \ExecuteMetaData[Leibniz/Properties.tex]{fromN-2}
 so that \AgdaFunction{fromℕ} respects even and odd numbers. We can then prove that applying \AgdaFunction{toℕ} and \AgdaFunction{fromℕ} after each other is the identity by repeating these lemmas
 \ExecuteMetaData[Leibniz/Properties.tex]{N-iso-L}
-This isomorphism generalizes into an equivalence
+This isomorphism can be promoted to an equivalence
 \ExecuteMetaData[Leibniz/Properties.tex]{N-equiv-L}
 which, finally, lets us identify \bN{} and \bL{} by univalence
 \ExecuteMetaData[Leibniz/Properties.tex]{N-is-L}
@@ -47,22 +50,28 @@ The path \AgdaFunction{ℕ≡L} then allows us to transport properties from \bN{
 This can be generalized even further to transport proofs about operations from \bN{} to \bL{}. 
 
 \subsection{Use as definition: functions from specifications}\label{ssec:useas}
-As an example, we will define addition of binary numbers. We could take
+As an example, we will define addition of binary numbers. We could transport binary operations
+\ExecuteMetaData[Extra/Algebra]{BinOp}
+to get
 \ExecuteMetaData[Tex/CubicalAndBinary]{badplus}
-But this would be rather inefficient, incurring an $O(n + m)$ overhead when adding $n + m$, so it would be better define addition on \bL{} directly. We would prefer to give a definition which makes use of the binary nature of \bL{}, while agreeing with the addition on \bN{}. Such a definition can be derived from the specification ``agrees with \AgdaFunction{\_+\_}'', so we implement the following syntax for giving definitions by equational reasoning, inspired by the ``use-as-definition'' notation from \cite{calcdata}:
+but this would be rather inefficient, incurring an $O(n + m)$ overhead when adding $n + m$. It is more efficient to define addition on \bL{} directly, making use of the binary nature of \bL{}, while agreeing with the addition on \bN{}. Such a definition can be derived from the specification ``agrees with \AgdaFunction{\_+\_}'', so we implement the following syntax for giving definitions by equational reasoning, inspired by the ``use-as-definition'' notation from \cite{calcdata}:
 \ExecuteMetaData[Prelude/UseAs.tex]{Def}
 which infers the definition from the right endpoint of a path using an implicit pair type
 \ExecuteMetaData[Prelude/UseAs.tex]{isigma}
 % \investigate{As of now, I am unsure if this reduces the effort of implementing a coherent function, or whether it is more typically possible to give a smarter or shorter proof by just giving a definition and proving an easier property of it\footnote{I will put the alternative in the appendix for now}}
 
-With this we can define addition on \bL{} and show it agrees with addition on \bN{} in one motion\todo{Tidy up these terms}
+With this we can define addition on \bL{} and show it agrees with addition on \bN{} in one motion
 \ExecuteMetaData[Leibniz/Properties.tex]{plus-def}
+Now we can easily extract the definition of \AgdaFunction{plus} and its correctness with respect to \AgdaFunction{\_+\_} 
 \ExecuteMetaData[Leibniz/Properties.tex]{plus-good}
 
+We remark \AgdaFunction{Def} is close in concept to refinement types\footnote{À la \href{https://agda.github.io/agda-stdlib/Data.Refinement.html}{Data.Refinement}.}, but importantly, the equality proof is relevant for us, and the value is inferred rather than given. \footnote{Unfortunately, normalizing an application of a \AgdaFunction{defined-by} function also causes a lot of unnecessary wrapping and unwrapping, so \AgdaFunction{Def} is mostly only useful for presentation.} %for now..
+
+
 \subsection{Structure Identity Principle}
-We see that as a consequence (modulo some \AgdaPrimitiveType{PathP} lemmas), we get a path from (\bN{}, \AgdaFunction{N.+}) to (\bL{}, \AgdaFunction{plus}). More generally, we can view a type $X$ combined with a function $f: X \to X \to X$ as a kind of structure, which in fact coincides with a magma. We can see that paths between magmas correspond to paths between the underlying types $X$ and paths over this between their operations $f$. This observation is further generalized by the Structure Identity Principle (SIP), formalized in \cite{iri}. Given a structure, which in our case is just a binary operation\todo{Use BinOp}
+Now \bN{} with \AgdaFunction{N.+} form, in particular, a magma. The same goes for \bL{} and \AgdaFunction{plus}, but notice that a path in a \AgdaDatatype{Σ} type is just a \AgdaDatatype{Σ} of paths! This means that we get a path from (\bN{}, \AgdaFunction{N.+}) to (\bL{}, \AgdaFunction{plus}). More generally, a magma is simply a type $X$ with some structure, which is a function $f: X \to X \to X$ in the case of a magma. We can see that paths between magmas correspond to paths $p$ between the underlying types $X$ and paths over $p$ between their operations $f$. This observation is further generalized by the Structure Identity Principle (SIP), formalized in \cite{iri}. Given a structure, which in our case is just a binary operation
 \ExecuteMetaData[Extra/Algebra.tex]{MagmaStr}
-this principle produces an appropriate definition ``structured equivalence'' $\iota$. The $\iota$ is such that if structures $X, Y$ are $\iota$-equivalent, then they are identified. In this case, the $\iota$ asks us to provide something with the same type as \AgdaFunction{plus-coherent}, so we have just shown that the \AgdaFunction{plus} magma on \bL{}
+this principle produces an appropriate definition ``structured equivalence'' $\iota$. The $\iota$ is such that if structures $X, Y$ are $\iota$-equivalent, then they are identified. In the case of \AgdaFunction{MagmaStr}, the $\iota$ asks us to provide something with the same type as \AgdaFunction{plus-coherent}, so we have just shown that the \AgdaFunction{plus} magma on \bL{}
 \ExecuteMetaData[Leibniz/Properties.tex]{magmaL}
 and the \AgdaFunction{\_+\_} magma on \bN{} and are identical
 \ExecuteMetaData[Leibniz/Properties.tex]{magma-equal}

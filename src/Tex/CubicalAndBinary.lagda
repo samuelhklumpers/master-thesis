@@ -14,6 +14,7 @@ module Tex.CubicalAndBinary where
 open import Cubical.Foundations.Prelude hiding (sym; funExt)
 open import Leibniz.Base
 open import Leibniz.Properties
+open import Extra.Algebra
 import Cubical.Data.Nat as N
 
 open import Cubical.Foundations.Function
@@ -74,9 +75,6 @@ ua {A = A} {B = B} e i = Glue B (λ { (i = i0) → (A , e)
 
 %<*badplus>
 \begin{code}
-BinOp : Type → Type
-BinOp A = A → A → A
-
 _+′_ : BinOp Leibniz
 _+′_ = subst BinOp ℕ≡L N._+_
 \end{code}

@@ -37,6 +37,24 @@
 \>[0]\AgdaComment{--\ adapting\ https://agda.github.io/cubical/Cubical.Algebra.Semigroup.Base.html}\<%
 \end{code}
 
+%<*BinOp>
+\begin{code}%
+\>[0]\AgdaFunction{BinOp}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Type}\<%
+\\
+\>[0]\AgdaFunction{BinOp}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\end{code}
+%</BinOp>
 
 %<*MagmaStr>
 \begin{code}%
@@ -47,13 +65,8 @@
 \AgdaPrimitive{Type}\<%
 \\
 \>[0]\AgdaFunction{MagmaStr}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\<%
+\AgdaFunction{BinOp}\<%
 \end{code}
 %</MagmaStr>
 

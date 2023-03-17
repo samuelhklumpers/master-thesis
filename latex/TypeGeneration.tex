@@ -1,6 +1,6 @@
-While the practical applications of the last example do not stretch very far\footnote{Considering that \AgdaDatatype{ℕ} is a candidate to be replaced by a more suitable unsigned integer type when compiling to Haskell anyway.}, the approach generalizes to the more relevant containers and their associated laws. In the same vein as the last section, we could define a simple but inefficient array type, and a more efficient implementation using trees. Then we can show that these are equivalent, such that when the simple type satisfies a set of laws, trees will satisfy them as well. We could then start developing all sorts of complex implementations fine-tuned to each operation and figure out how these are equivalent to some simpler type, but let us first take a step back, and investigate how we can make this approach run smoothly in a simpler example.
+While the practical applications of the last example do not stretch very far\footnote{Considering that \AgdaDatatype{ℕ} is a candidate to be replaced by a more suitable unsigned integer type when compiling to Haskell anyway.}, we can generalize the idea to many other types and structures. In the same vein, we could define a simple but inefficient array type, and a more efficient implementation using trees. Then we can show that these are equivalent, such that when the simple type satisfies a set of laws, trees will satisfy them as well. %We could then start developing all sorts of complex implementations fine-tuned to each operation and figure out how these are equivalent to some simpler type, but let us first take a step back, and investigate how we can make this approach run smoothly in a simpler example.
 
-Rather than inductively defining a container and then showing that it is represented by a lookup function, we can go the other way around and define a type by insisting that it is equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations in \cite{purelyfunctional}, and has some formalized examples in, e.g., \cite{calcdata} and \cite{progorn}. Numerical representations form the starting point for defining more complex datastructures based on simpler ones, so let us demonstrate such a calculation. 
+But rather than inductively defining an array-like type and then showing that it is represented by a lookup function, we can go the other way around and define types by insisting that they are equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations in \cite{purelyfunctional}, and has some formalized examples in, e.g., \cite{calcdata} and \cite{progorn}. Numerical representations are our starting point for defining more complex datastructures based on simpler ones, so let us demonstrate such a calculation. 
 
 \subsection{Numerical representations: from numbers to containers}\label{ssec:numrep}
 We can compute the type of vectors starting from \bN{}.\footnote{This is adapted (and fairly abridged) from \cite{calcdata}} For simplicity, we define them as a type computing function via the ``use-as-definition`` notation from before. We expect vectors to be represented by 
@@ -12,11 +12,12 @@ using
 Likewise, vectors can be computed by applying a sequence of type isomorphisms\todo{The reasoning is a bit too close in indentation to the terms?}
 \ExecuteMetaData[Tex/NumRep]{Vec}
 \investigate{SIP doesn't mesh very well with indexed stuff, does HSIP help?}
-Of course, a container would not be of much use without lookup functions, so we define an interface
+
+We can implement the following interface using \AgdaDatatype{Vec}
 \ExecuteMetaData[Tex/NumRep]{Array}
-which at the very least has to satisfy laws like
+and show that this satisfies some usual laws like
 \ExecuteMetaData[Tex/NumRep]{Laws}
-We could directly show that \AgdaDatatype{Vec} satisfies this, but now that we defined \AgdaDatatype{Vec} from \AgdaDatatype{Lookup} we might as well use that.
+However, now that we defined \AgdaDatatype{Vec} from \AgdaDatatype{Lookup} we might as well use that.
 
 The implementation of arrays as functions is very straightforward
 \ExecuteMetaData[Tex/NumRep]{FunArray}
@@ -24,21 +25,19 @@ and clearly satisfies our interface
 \ExecuteMetaData[Tex/NumRep]{FunLaw}
 We can implement arrays based on \AgdaDatatype{Vec} as well\footnote{Note that, like any other type computing representation, we pay the price by not being able to pattern match directly on our type.}
 \ExecuteMetaData[Tex/NumRep]{VecArray}
-which again allows us to transport proofs from \AgdaDatatype{Lookup} to \AgdaDatatype{Vec}.\footnote{Except that due to the simplicity of this case, the laws are trivial for \AgdaDatatype{Vec} as well.}
+but now the equality allows us to transport proofs from \AgdaDatatype{Lookup} to \AgdaDatatype{Vec}.\footnote{Except that due to the simplicity of this case, the laws are trivial for \AgdaDatatype{Vec} as well.}
 \investigate{As you can see, taking ``use-as-definition'' too literally prevents Agda from solving a lot of metavariables.}
 
 \investigate{This computation can of course be generalized to any arity zeroless numeral system; unfortunately beyond this set of base types, this ``straightforward'' computation from numeral system to container loses its efficacy. In a sense, the n-ary natural numbers are exactly the base types for which the required steps are convenient type equivalences like $(A + B) \to C = (A \to C) \times (B \to C)$?}
 
 %\subsection{Relating types by structure: Ornamentation (unfinished)}\label{sec:ornament}
 \subsection{Numerical representations as ornaments}\label{ssec:ornaments}
-We could peform the same computation for \bL{}, which would yield the type of binary trees, but we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. But wait! Such modifications of constructors are already made formal by the concept of ornamentation!
-
-Ornamentation, as exposed in \cite{algorn} and \cite{progorn}, lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped. Furthermore, a one-sided ornament: an ornamental description, lets us describe new datatypes by recording the modifications to an existing description.
-\todo{Again not sure how much space I should use to reiterate Desc, Orn, and OrnDesc.}
+We could perform the same computation for \bL{}, which would yield the type of binary trees, but we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. This kind of ``modifying constructors'' is formalized by ornamentation as exposed in \cite{algorn} and \cite{progorn}, which lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped to go from one description to the other. Furthermore, one-sided ornaments (ornamental descriptions) lets us describe new datatypes by recording the modifications to an existing description.
+\todo{Put some minimal definitions here.}
 
 This links back to the construction in the previous section, since \bN{} and \AgdaDatatype{Vec} share the same recursive structure, so \AgdaDatatype{Vec} can be formed by introducing indices and adding a field holding an element at each node.\footnote{These and similar examples are also documented in \cite{progorn}} 
 
-However, instead deriving \AgdaDatatype{List} from \bN{} generalizes to \bL{} with less notational overhead, so lets tackle that case first. For this, we have to give a description of \bN{} to work with\todo{Clearly this can use more explanation (the question is, how much?)}
+However, instead deriving \AgdaDatatype{List} from \bN{} generalizes to \bL{} with less notational overhead, so lets tackle that case first. For this, we have to give a description of \bN{} to work with
 \ExecuteMetaData[Tex/NumRepOrn]{NatD}
 Recall that \AgdaInductiveConstructor{σ} adds a field, upon which the rest of the description may vary, and \AgdaInductiveConstructor{ṿ} lists the recursive fields and their indices (which can only be \AgdaInductiveConstructor{tt}).
 We can now write down the ornament which adds fields to the \AgdaFunction{suc} constructor
@@ -53,6 +52,7 @@ We use the \AgdaFunction{power} combinator to ensure that the digit at position 
 This ``folding in'' technique using the indices to keep track of structure seems to apply more generally. Let us explore this a bit further, and return later to the generalization of the pattern from numeral systems to datastructures.
 % i.e. why did this even work?
 
+\begin{comment}
 \subsection{Folding in}\label{ssec:flattening}
 Let us describe this procedure of folding a complex recursive structure into a simpler structure more generally. In particular, we will demonstrate that for linear datatypes, such as \bN{} and \bL{}, and for a given unindexed datatype, there is always an indexed datatype isomorphic to it at some index, and an ornament from the linear type to the indexed type. 
 
@@ -75,3 +75,4 @@ Note that \AgdaFunction{subnodes} effectively keeps the shape of the previous fi
 \investigate{I then tried and realized how unpleasant even the functions from the original type to the nested type are to write.}
 
 As a trivialty, we get that any type, interpreted as a container, always decomposes as an ornament over a ``numerical'' base type.\todo{Or at least, that was where I was trying to go with this, but I notice that this still is a bit further away.} This links to the construction of binary heaps in \cite{progorn}, as in hindsight, starting from the usual binary heaps would yield binary numbers and their binary heap ornament (in a much less useful package).
+\end{comment}

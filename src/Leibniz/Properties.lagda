@@ -166,14 +166,6 @@ open Iso
 \begin{code}
 plus-def : ∀ x y → Def (fromℕ (toℕ x N.+ toℕ y))
 plus-def 0b y          = ℕ↔L .rightInv y use-as-def
-plus-def (x 1b) 0b     =
-  bsuc (fromℕ (toℕ x N.+ (toℕ x N.+ ℕ.zero) N.+ ℕ.zero))
-    ≡⟨ cong (bsuc ∘ fromℕ) (NP.+-zero (2 N.· toℕ x)) ⟩
-  bsuc (fromℕ (toℕ x N.+ (toℕ x N.+ ℕ.zero)))
-    ≡⟨ fromℕ-1+2· (toℕ x) ⟩
-  fromℕ (toℕ x) 1b                                         
-    ≡⟨ cong _1b (ℕ↔L .rightInv x) ⟩
-  x 1b ∎ use-as-def
 plus-def (x 1b) (y 1b) = 
   fromℕ ((1 N.+ 2 N.· toℕ x) N.+ (1 N.+ 2 N.· toℕ y))    
     ≡⟨ cong fromℕ (Eq.eqToPath (eq (toℕ x) (toℕ y))) ⟩
@@ -182,14 +174,22 @@ plus-def (x 1b) (y 1b) =
   fromℕ (toℕ x N.+ toℕ y) 2b                            
     ≡⟨ cong _2b (by-definition (plus-def x y)) ⟩
   defined-by (plus-def x y) 2b ∎ use-as-def
-    where
-    eq : ∀ x y
-       → (1 N.+ 2 N.· x) N.+ (1 N.+ 2 N.· y) Eq.≡ 2 N.+ (2 N.· (x N.+ y))
-    eq = NS.solve-∀
 -- similar clauses omitted
 \end{code}
 %</plus-def>
 \begin{code}[hide]
+    where
+    eq : ∀ x y
+       → (1 N.+ 2 N.· x) N.+ (1 N.+ 2 N.· y) Eq.≡ 2 N.+ (2 N.· (x N.+ y))
+    eq = NS.solve-∀
+plus-def (x 1b) 0b     =
+      bsuc (fromℕ (toℕ x N.+ (toℕ x N.+ ℕ.zero) N.+ ℕ.zero))
+        ≡⟨ cong (bsuc ∘ fromℕ) (NP.+-zero (2 N.· toℕ x)) ⟩
+      bsuc (fromℕ (toℕ x N.+ (toℕ x N.+ ℕ.zero)))
+        ≡⟨ fromℕ-1+2· (toℕ x) ⟩
+      fromℕ (toℕ x) 1b                                         
+        ≡⟨ cong _1b (ℕ↔L .rightInv x) ⟩
+      x 1b ∎ use-as-def
 plus-def (x 1b) (y 2b) =
   fromℕ (toℕ (x 1b) N.+ toℕ (y 2b))                      ≡⟨ cong fromℕ (Eq.eqToPath (eq (toℕ x) (toℕ y))) ⟩
   bsuc (fromℕ (2 N.+ (2 N.· (toℕ x N.+ toℕ y))))         ≡⟨ cong bsuc (fromℕ-2+2· (toℕ x N.+ toℕ y)) ⟩

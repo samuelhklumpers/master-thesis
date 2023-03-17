@@ -1,16 +1,16 @@
 % REPLACE X BY A?
 The setup some approaches in earlier sections require makes them tedious or impractical to apply. In this section we will look at some ways how part of this problem could be alleviated through generics, or by alternative descriptions of concepts like equivalences through the lens of initial algebras. 
 
-In later sections we will construct many more equivalences between more complicated types than before, so we will dive right into the latter. Reflecting upon \autoref{sec:leibniz}, we see that when one establishes an equivalence, most of the time is spent working out a series of tedious lemmas to show that the conversion functions are mutual inverses, which tend to be relatively easy to define. We take away two things from this; the first is that the conversion functions are perhaps too obvious, and the second is that we should really avoid talking about sections and retractions lest we incur tedium!\footnote{The latter perhaps less so, because it is useful to show a map to be monic.} In fact, the machinery from \cite{progorn} will come in handy to demonstrate to what extent our hand was actually forced in \autoref{sec:leibniz}.
+In later sections we will construct many more equivalences between more complicated types than before, so we will dive right into the latter. Reflecting upon \autoref{sec:leibniz}, we see that when one establishes an equivalence, most of the time is spent working out a series of tedious lemmas to show that the conversion functions are mutual inverses, which tend to be relatively easy to define. We take away two things from this; the first is that the conversion functions are perhaps too obvious, and the second is that we should really avoid talking about sections and retractions lest we incur tedium!\footnote{The latter perhaps less so, because it is useful to show a map to be monic.} We will reuse the machinery from \cite{progorn} to illustrate how the definitions in \autoref{sec:leibniz} were actually forced for a large part.
 
-We note that like how \bN{} is the fixpoint of \AgdaFunction{NatD}, one of the sides of the equivalence is almost always going to be a datatype, and hence the \AgdaDatatype{μ} of a \AgdaDatatype{Desc′}, so we will use this as the working assumption for the following section.
+First, we remark that \AgdaDatatype{μ} is internalization of the representation of simple\footnote{Of course, indexed datatypes are indexed W-types, mutually recursive datatypes are represented yet differently\dots} datatypes as W-types. Thus, we will assume that one of the sides of the equivalence is always represented as an initial algebra of a polynomial functor, and hence the \AgdaDatatype{μ} of a \AgdaDatatype{Desc′}.
 
 \subsection{Well-founded monic algebras are initial}\label{ssec:wellfounded}
 Unfortunately, the machinery from \cite{progorn} relies on axiom K for a small but crucial part. To be precise, in a cubical setting, the type \AgdaDatatype{μ} as given stops being initial for its base functor! In this section, we will be working with a simplified and repaired version. Namely, we simplify \AgdaDatatype{Desc′} to 
 \ExecuteMetaData[Extra/ProgOrn/Desc]{DescS}
 To complete the definition of \AgdaDatatype{μ}
 \ExecuteMetaData[Extra/ProgOrn/Desc]{mu}
-we will need to implement \AgdaDatatype{Base}. We remark that in \cite{progorn}, the recursion of \AgdaFunction{mapFold} is a structural descent in \AgdaFunction{⟦ D' ⟧ (μ D)}. Because \AgdaFunction{⟦\_⟧} is a function and not a datatype, this descent becomes invalid, and \AgdaFunction{mapFold} fails the termination check. We resolve this by defining \AgdaDatatype{Base} as a datatype
+we will need to implement \AgdaDatatype{Base}. We remark that in \cite{progorn}, the recursion of \AgdaFunction{mapFold} is a structural descent in \AgdaFunction{⟦ D' ⟧ (μ D)}. Because \AgdaFunction{⟦\_⟧} is a type computing function and not a datatype, this descent becomes invalid\footnote{Refer to the  \href{https://agda.readthedocs.io/en/latest/language/without-k.html\#restrictions-on-termination-checking}{without K} page.}, and \AgdaFunction{mapFold} fails the termination check. We resolve this by defining \AgdaDatatype{Base} as a datatype
 \ExecuteMetaData[Extra/ProgOrn/Desc]{Base}
 such that this descent is allowed by the termination checker without axiom K.\footnote{This has, again by the absence of axiom K, the consequence of pushing the universe levels up by one. However, this is not too troublesome, as equivalences can go between two levels, and indeed types are equivalent to their lifts.}
 
@@ -24,7 +24,7 @@ Recall that the \AgdaDatatype{Base} functors of descriptions are special polynom
 \end{tikzcd}\]
 so, we are looking for sufficient conditions on $X$ to get the equivalence $e: X \cong \mu F$. Note that when $X \cong \mu F$, then there necessarily is an initial algebra $F X \to X$. Conversely, if the algebra $(X, f)$ is isomorphic to $(\mu F, \mathrm{con})$, then $X \cong \mu F$ would follow immediately, so it is equivalent to ask for the algebras to be isomorphic instead.
 
-\subsubsection{Algebras of endofunctors}
+\subsubsection{Datatypes as initial algebras}
 To characterize when such algebras are isomorphic, we reiterate some basic category theory, simultaneously rephrasing it in Agda terms.\footnote{We are not reusing a pre-existing category theory library for the simple reasons that it is not that much work to write out the machinery explicitly, and that such libraries tend to phrase initial objects in the correct way, which is too restrictive for us.}\todo{Maybe category theory reference}
 
 Let $C$ be a category, and let $a, b, c$ be objects of $C$, so that in particular we have identity arrows $1_a : a \to a$ and for arrows $g : b \to c, f : a \to b$ composite arrows $gf : a \to c$ subject to associativity. In our case, $C$ is the category of types, with ordinary functions as arrows.
@@ -56,7 +56,7 @@ Recall that an object $\emptyset$ is initial when for each other object $a$, the
 \ExecuteMetaData[Tex/Snippets]{isContr}
 Instead, we again use a truncation
 \ExecuteMetaData[Extra/Category]{weakContr}
-but note that this also, crucially, slightly stronger than connectedness.\todo{I think} We define initiality for arbitrary relations
+but note that this also, crucially, slightly stronger than connectedness. We define initiality for arbitrary relations
 \ExecuteMetaData[Extra/Category]{Initial}
 such that it closely resembles the definition of least element. Then, $A$ is an initial algebra when
 \ExecuteMetaData[Extra/Category]{InitAlg}
@@ -68,13 +68,13 @@ Similarly, we get that
 \ExecuteMetaData[Extra/Category]{InitAlg-equiv}
 However, we only have the equalities from the isomorphism inside a propositional truncation. But fortunately, being an equivalence is a property, so we can eliminate from the truncations to get the wanted result.
 
-Note that even though we warned ourselves, we are still talking about sections and retractions to establish that $f$ is an equivalence! However, this result also makes sure we will not have to speak of them again.\footnote{In this section...}
+Note that even though we warned ourselves, we are still talking about sections and retractions to establish that $f$ is an equivalence! However, this result also makes sure we will not have to speak of them again.\footnote{For now...}
 
 \subsubsection{Accessibility}
-In terms of ``when is $X \cong \mu D$'', this reduces the problem to showing that $X$ is an initial algebra for the base functor of $D$; $\mu D$ is initial by its fold, and by induction on $\mu D$ using the squares of algebra maps. 
+As a consequence, we get that $X$ is isomorphic to $\mu D$ when $X$ is an initial algebra for the base functor of $D$; $\mu D$ is initial by its fold, and by induction on $\mu D$ using the squares of algebra maps. 
 
 \begin{remark}
-    We need (in general) not hope $\mu D$ is a strict initial object in the category of algebras. For a strict initial object, having a map $a \to \emptyset$ implies $a \cong \emptyset$. This is not the case here: strict initial objects satisfy $a \times \emptyset \cong \emptyset$, but for the $X \mapsto 1 + X$-algebras $\mathbb{N}$ and $2^\mathbb{N}$ clearly $2^\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$ does not hold. On the other hand, the ``obvious'' sufficient condition to let $C^F$ have strict initial objects is that $F$ is a left adjoint, but then the carrier of the initial algebra is simply $\bot$. \todo{I think.}
+    We need (in general) not hope $\mu D$ is a strict initial object in the category of algebras. For a strict initial object, having a map $a \to \emptyset$ implies $a \cong \emptyset$. This is not the case here: strict initial objects satisfy $a \times \emptyset \cong \emptyset$, but for the $X \mapsto 1 + X$-algebras $\mathbb{N}$ and $2^\mathbb{N}$ clearly $2^\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$ does not hold. On the other hand, the ``obvious'' sufficient condition to let $C^F$ have strict initial objects is that $F$ is a left adjoint, but then the carrier of the initial algebra is simply $\bot$.
 \end{remark}
 
 Looking back at \autoref{sec:leibniz}, we see that \AgdaDatatype{Leibniz} is an initial $F: X \mapsto 1 + X$ algebra because for any other algebra, the image of \AgdaFunction{0b} is fixed, and by \AgdaFunction{bsuc} all other values are determined by chasing around the square. Thus, we are looking for a similar structure on $f : FX \to X$ that supports recursion.
@@ -87,17 +87,17 @@ Accessibility of an element $x$ of \AgdaFunction{Base A E} is defined by cases o
 Consequently, $X$ is well-founded for an algebra when all its elements are accessible
 \ExecuteMetaData[Extra/Category/Poly]{Wf}
 
-We can see well-foundedness as an upper bound on the size of $X$, if it were larger than $\mu D$, some of its elements would inevitably get out of reach of an algebra. \textit{Now} having $FX \cong X$ also gives us a lower bound, but remark that having a well-founded injection $f: FX \to X$ is already sufficient, as accessibility makes this an epi and an iso. \todo{I think, but I'm not sure how much surjective=epi, injective=mono and "(Type a) is balanced" I can safely sweep under the carpet.} Thus, we claim
+We can see well-foundedness as an upper bound on the size of $X$, if it were larger than $\mu D$, some of its elements would inevitably get out of reach of an algebra. \textit{Now} having $FX \cong X$ also gives us a lower bound, but remark that having a well-founded injection $f: FX \to X$ is already sufficient, as accessibility gives a section of $f$, making it an iso. This leads us to claim
 \begin{claim}\label{claim:wf-inj-init}
     If there is a mono $f : FX \to X$ and $X$ is well-founded for $f$, then $X$ is an initial $F$-algebra.
 \end{claim}
 
 \subsubsection{Proof sketch of \autoref{claim:wf-inj-init}}
-Let us be on our way. Suppose $X$ is well-founded for the mono $f : FX \to X$. To show that $(X, f)$ is initial, let us take another algebra $(Y, g)$, and show that there is a unique arrow $(X, f) \to (Y, g)$.
+Let us be on our way. Suppose $X$ is well-founded for the mono $f : FX \to X$. To show that $(X, f)$ is initial, let us take another algebra $(Y, g)$, and show that there is a unique arrow $(X, f) \to (Y, g)$.\todo{This section is about as digestable as a brick.}
 
 By \AgdaDatatype{Acc}-recursion and because all $x$ are accessible, we can define a plain map into $Y$
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec}
-This construction is an instance of the concept of ``well-founded recursion''\footnote{This is formalized in the \hyperlink{standard-library}{https://agda.github.io/agda-stdlib/Induction.WellFounded.html} with many other examples.}, so we let ourselves be inspired by these methods. In particular, we prove an irrelevance lemma
+This construction is an instance of the concept of ``well-founded recursion''\footnote{This is formalized in the \href{https://agda.github.io/agda-stdlib/Induction.WellFounded.html}{standard-library} with many other examples.}, so we let ourselves be inspired by these methods. In particular, we prove an irrelevance lemma
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec-irr}
 which implies the unfolding lemma
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec-unfold}

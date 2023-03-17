@@ -15,11 +15,17 @@ import Cubical.Structures.Auto                 as Auto
 -- adapting https://agda.github.io/cubical/Cubical.Algebra.Semigroup.Base.html
 \end{code}
 
+%<*BinOp>
+\begin{code}
+BinOp : Type → Type
+BinOp A = A → A → A
+\end{code}
+%</BinOp>
 
 %<*MagmaStr>
 \begin{code}
 MagmaStr : Type → Type
-MagmaStr A = A → A → A
+MagmaStr = BinOp
 \end{code}
 %</MagmaStr>
 

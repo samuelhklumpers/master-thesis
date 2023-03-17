@@ -86,26 +86,28 @@
 \maketitle
 \tableofcontents
 
-This document is generated from a literate agda file!
+%This document is generated from a literate agda file!
 \newpage
 
-\begin{abstract}
-    The preliminary goal of this thesis is to introduce, among others, the concepts of the structure identity principle, numerical representations, and ornamentations, which are then combined to simplify the presentation and verification of finger trees, as a demonstration of the generalizability and improved compactness and security of the resulting code. 
+\begin{abstract} %provisional
+    This thesis aims to introduce the concepts of the structure identity principle, numerical representations, and ornamentations. These concepts are then combined to simplify the presentation and verification of finger trees, demonstrating the generalizability and improved compactness and security of the resulting code. 
 \end{abstract}
 
 \section{Introduction (to be updated; out of sync since reducing friction)}\label{sec:intro}
-Most of the time when we are Agda-ing \cite{agda} we are trying to un-Haskell ourselves, e.g., not take the head of an empty list. In this example, we can make \AgdaFunction{head} total by switching to length-indexed lists: vectors. We have now effectively doubled the size of our code base, since functions like \AgdaFunction{\_++\_} which we had for lists, will also have to be reimplemented for vectors.
+The dependently typed functional programming language Agda \cite{agda} can, when restricted to its reasonable parts, be translated into readable, and safe, Haskell \todo{agda2hs}. However, the intrinsic safety of languages like Agda can also lead to code duplication by encouraging the use of multiple variants of the same datatype: enforcing coverage checking forces the \AgdaFunction{head} function on \AgdaDatatype{List} to return a \AgdaDatatype{Maybe}. The \AgdaDatatype{Maybe} can be avoided by moving to the length-indexed list type \AgdaDatatype{Vec}, at the cost of duplicating functions like \AgdaFunction{\_++\_}, which we want to have for both types.
 
-To make things worse; often, after coping with the overloaded names resulting from Agda-ing by shoving them into a different namespace, we also find out that lists nor vectors are efficient containers to begin with. Maybe binary trees are better. We now need four times the number of definitions to keep everything working, and, if we start proving things, we will also have to prove everything fourfold. (Not to mention that reasoning about trees is probably going to be harder than reasoning about lists).  This inefficiency has sparked (my) interest in ways to deal with the situation.
+Of course, not differently from Haskell, a similar problem arises when implementing binary trees as a more efficient alternative to lists. Furthermore, the proofs of the same properties will differ between list and tree, and tend to be more difficult for the latter. In general, switching between implementations of an interface will not only duplicate code, but also (and sometimes more than) duplicate the effort of verification.
 
-Following \cite{orntrans} and \cite{progorn}, we can describe the relation between list and vector using the mechanism of ornamentation. This leads them to define the concept of patches, which can aid us when defining \AgdaFunction{\_++\_} for the second time by forcing the new version to be coherent. In fact, the algebraic nature of ornaments can even get us the definition of the vector type for free, if we started by defining lists relative to natural numbers \cite{algorn}. Such constructions rely heavily on descriptions of datastructures and often come with limitations in their expressiveness. These descriptions in turn impose additional ballast on the programmer, leading us to investigate reflection like in \cite{practgen} as a means to bring datatypes and descriptions closer when possible.
+On the other hand, the expressive power of dependent types is also such that part of the problems arising from safety or efficiency can be dealt with inside Agda itself; the work in \cite{orntrans} and \cite{progorn}, provides the means to relate similar datatypes, such as lists and vectors, using the mechanism of ornamentation. %This leads them to define the concept of patches, which can aid us when defining \AgdaFunction{\_++\_} for the second time by forcing the new version to be coherent.
+In fact, the algebraic nature of ornaments yields the definition of the vector type for free, provided we relate lists to natural numbers \cite{algorn}. %Such constructions rely heavily on descriptions of datastructures and often come with limitations in their expressiveness. These descriptions in turn impose additional ballast on the programmer, leading us to investigate reflection like in \cite{practgen} as a means to bring datatypes and descriptions closer when possible.
 
-From a different direction, \cite{calcdata} gives methods by which we can show two implementations of some structure to be equivalent. With this, we can simply transport all proofs about \AgdaFunction{\_++\_} we have for lists over to the implementation for trees, provided that we show them to be equivalent as appendable containers. This process can also be automated by some heavy generics, but instead, we resort to cubical; which hosts a range of research like \cite{iri} tailored to the problem describing equivalences of structures.
+From another point of view, lists and trees are not so different at all, provided we look at them through the interface of one-sided flexible arrays; this idea noted in \cite{purelyfunctional} and formalized in \cite{calcdata} where both are shown to be instances of numerical representations by calculating them from a numeral system. 
 
-We can liken the situation to movement on a plane, where ornamentation moves us vertically by modifying constructors or indices, and structured equivalences move us horizontally to and from equivalent but more equivalent implementations. In this paper, we will investigate a variety of means of moving around structures and proofs, and ways to make this more efficient or less intrusive.
+When two types are isomorphic and equivalent under an interface, proofs of properties of these implementations become interconvertible. While this is achievable through meta-programming, substituting conversions to and from into the proof terms, this is internally expressible in Cubical Agda. By using structured equivalences and univalence, \cite{iri} gives a way to derive what is necessary to show that two implementations are equal.
 
-Currently, all sections mainly reintroduce or reformulate existing research, with some spots of new ideas and original examples here and there. In \autoref{sec:leibniz}, we will look at how proofs on unary naturals can be moved to binary naturals. Then in \autoref{sec:numrep} we recall how numeral systems in particular induce container types, which we attempt to reformulate in the language of ornaments in \autoref{ssec:ornaments}.
-%Before we try to improve or generalize upon these approaches, let us clarify some parts of the enviroment we are working in, partially by going through some examples.
+%We can liken the situation to movement on a plane, where ornamentation moves us vertically by modifying constructors or indices, and structured equivalences move us horizontally to and from equivalent but more equivalent implementations. In this paper, we will investigate a variety of means of moving around structures and proofs, and ways to make this more efficient or less intrusive.
+
+In \autoref{sec:leibniz}, we will follow \cite{iri}, and look at how proofs on unary naturals can be transported to the binary naturals. Then in \autoref{sec:numrep} we recall how numeral systems in particular induce container types in \cite{calcdata}, which we attempt to reformulate in the language of ornaments in \autoref{ssec:ornaments}, using the framework of \cite{progorn}. In \autoref{sec:userfriendly} we investigate how we can make the earlier methods more easily accessible to the user, and, ourselves, when we give a description of finger trees in \autoref{sec:fingertrees}.
 
 
 \section{How Cubical Agda helps our binary numbers (ready)}\label{sec:leibniz}
@@ -117,7 +119,7 @@ Currently, all sections mainly reintroduce or reformulate existing research, wit
 \section{Reducing friction (work in progress)}\label{sec:userfriendly}
 \input{UserFriendly}
 
-\section{Is equivalence too strong (finger trees)}\label{sec:weakening}
+\section{Finger trees}\label{sec:fingertrees}
 
 
 
