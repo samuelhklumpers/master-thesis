@@ -1,5 +1,3 @@
-\documentclass[../../../Main.tex]{subfiles}
-
 \begin{document}
 \begin{code}
 {-# OPTIONS --cubical --copatterns --postfix-projections #-}
@@ -29,7 +27,6 @@ open import Extra.ProgOrn.Mu.Properties
 open Algebra
 open Alg→
 open Initial
-
 \end{code}
 
 %<*Wf-rec>
@@ -48,7 +45,7 @@ Wf-rec {A = A} D X wf f x = rec x (wf x)
 
   rec   : ∀ x → Acc D cx x → A
   Ḟ-mapRec  : ∀ E x → Acc' D cx E x → Base A E 
-  V-mapRec : ∀ n (x : Vec CX n) → All (Acc D cx) x → Vec A n 
+  V-mapRec : ∀ n (x : Vec {ℓ = ℓ-suc ℓ-zero} CX n) → All (Acc D cx) x → Vec A n 
 
   rec _ (acc (x' , p) a) = f (Ḟ-mapRec _ x' a)
   
@@ -59,7 +56,7 @@ Wf-rec {A = A} D X wf f x = rec x (wf x)
   V-mapRec (suc n) (x ∷ xs) (ax ∷ a) = (rec x ax) ∷ V-mapRec n xs a
 
 injective : {A : Type ℓ} {B : Type ℓ′} → (A → B) → Type (ℓ-max ℓ ℓ′) 
-injective f = ∀ x y → f x ≡ f y → x ≡ y
+injective {ℓ = ℓ} {ℓ′ = ℓ′} f = ∀ x y → _≡_ {ℓ = ℓ′} (f x) (f y) → _≡_ {ℓ = ℓ} x y
 
 module _ {A : Type₁} (D : Desc′) (X : Algebra (Ḟ D)) (wf : Wf D (X .forget)) (f : (Ḟ D A → A)) (inj : injective (X .forget)) where
   open module WfRec (x : X .Carrier) = Wf-rec D X wf f x
@@ -158,11 +155,11 @@ Wf+inj→Init D X wf inj .initiality Y =
 %<*Wf+inj=mu>
 \AgdaTarget{Wf+inj≡μ}
 \begin{code}
-Wf+inj≡μ : (D : Desc′) (X : Algebra (Ḟ D)) → Wf D (X .forget)
-         → injective (X .forget) → X .Carrier ≡ μ D
+Wf+inj≃μ : (D : Desc′) (X : Algebra (Ḟ D)) → Wf D (X .forget)
+         → injective (X .forget) → X .Carrier ≃ μ D
 \end{code}
 %</Wf+inj=mu>
 \begin{code}
-Wf+inj≡μ D X wf inj = ua (InitAlg-≃ (FunḞ D) X (μ-Alg D) (Wf+inj→Init D X wf inj) (InitM D))
+Wf+inj≃μ D X wf inj = InitAlg-≃ (FunḞ D) X (μ-Alg D) (Wf+inj→Init D X wf inj) (InitM D)
 \end{code}
 \end{document}

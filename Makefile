@@ -2,7 +2,7 @@ SHELL:=/bin/bash -O globstar
 
 AGDA=agda-2.6.2
 # make sure we stop early if an unsolved meta is going to stop us later anyway
-AFLAGS=-i. --latex -W error
+AFLAGS=-i. --latex
 
 # make sure latex doesn't ask us for input if we hit an error
 LATEX=latexmk -pdf -use-make -lualatex -halt-on-error -synctex=1

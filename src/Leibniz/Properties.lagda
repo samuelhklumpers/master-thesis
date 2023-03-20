@@ -275,3 +275,21 @@ plus-assoc = subst
 \end{code}
 %</assoc-transport>
 \end{document}
+
+
+\begin{code}
+injective′ : {A : Type ℓ} {B : Type ℓ′} → (A → B) → Type (ℓ-max ℓ ℓ′) 
+injective′ {ℓ = ℓ} {ℓ′ = ℓ′} f = ∀ x y → Eq._≡_ {a = ℓ′} (f x) (f y) → Eq._≡_ {a = ℓ} x y
+
+0b-not-bsuc : ∀ x → ¬ (0b ≡ bsuc x)
+0b-not-bsuc 0b     p = 0b-not-1b p
+0b-not-bsuc (x 1b) p = 0b-not-2b p
+0b-not-bsuc (x 2b) p = 0b-not-1b p
+
+bsuc-inj : injective′ bsuc
+bsuc-inj 0b 0b p = Eq.refl
+bsuc-inj 0b (y 2b) p = ⊥-rec (0b-not-bsuc y (1b-inj (Eq.eqToPath p)))
+bsuc-inj (x 1b) (y 1b) p = Eq.ap _1b (Eq.pathToEq (2b-inj (Eq.eqToPath p)))
+bsuc-inj (x 2b) 0b p = ⊥-rec (0b-not-bsuc x (sym (1b-inj (Eq.eqToPath p))))
+bsuc-inj (x 2b) (y 2b) p = Eq.ap _2b (bsuc-inj _ _ (Eq.pathToEq (1b-inj (Eq.eqToPath p))))
+\end{code}
