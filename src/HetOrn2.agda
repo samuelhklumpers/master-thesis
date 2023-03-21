@@ -93,12 +93,7 @@ toRDesc (ṗ D)       = ṗ (toRDesc D)
 
 
 
-ListD : Desc ⊤ ℓ-zero
-ListD _ = σ Bool λ
-  { false → ṿ []
-  ; true  → ṗ (ṿ [ tt ]) }
-
-
+-- the heterogenization ornament
 HetO′ : (D : RDesc {ℓ = ℓ-zero} ⊤ ℓ-zero) (E : RDesc {ℓ = ℓ-zero} ⊤ ℓ-zero) (x : Ḟ (λ _ → D) (μ (λ _ → E) Type) Type tt) → ROrnDesc (μ (λ _ → E) Type tt) ! D
 HetO′ (ṿ is) E x = ṿ (map-ṿ is x)
   where
@@ -111,19 +106,44 @@ HetO′ (ṗ D) E (A , x) = Δ[ _ ∈ A ] ṗ (HetO′ D E x)
 HetO : (D : RDesc {ℓ = ℓ-zero} ⊤ ℓ-zero) → OrnDesc (μ (λ _ → D) Type tt) ! λ _ → D
 HetO D (ok (con x)) = HetO′ D D x
 
-HListD = ⌊ HetO (ListD tt) ⌋
+-- "ordinary" list
+ListD : Desc ⊤ ℓ-zero
+ListD _ = σ Bool λ
+  { false → ṿ []
+  ; true  → ṗ (ṿ [ tt ]) }
 
 List′ : Type ℓ → Type ℓ
 List′ A = μ ListD A tt
 
-HList : μ (λ _ → ListD tt) Type tt → Type₁
+-- list of types indexed list: heterogeneous list
+HListD = ⌊ HetO (ListD tt) ⌋
 HList = μ HListD ⊤
-
 
 cons : A → List′ A → List′ A
 cons x xs = con (true , x , xs , _)
 
 hcons : (A : Type) (As : List′ {ℓ = ℓ-suc ℓ-zero} Type) → A → HList As → HList (cons A As)
 hcons A As x xs = con (x , _ , xs , _)
-
 -- nice
+
+-- "ordinary" Maybe
+MaybeD : Desc ⊤ ℓ-zero
+MaybeD _ = σ Bool (λ
+  { false → ṿ []
+  ; true  → ṗ (ṿ []) })
+
+Maybe : Type ℓ → Type ℓ
+Maybe A = μ MaybeD A tt
+
+-- Maybe Type indexed Maybe
+HMaybeD = ⌊ HetO (MaybeD tt) ⌋
+HMaybe = μ HMaybeD ⊤
+
+head : List′ A → Maybe A
+head (con (false , _))     = con (false , _)
+head (con (true  , a , _)) = con (true , a , _)
+
+hhead : (As : List′ {ℓ = ℓ-suc ℓ-zero} Type) → HList As → HMaybe (head As)
+hhead (con (false , _)) (con _) = con _
+hhead (con (true , A , _)) (con (a , _)) = con (a , _ , _)
+-- oooh
