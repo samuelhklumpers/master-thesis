@@ -39,6 +39,10 @@ Alg : Type₁ → Desc′ → Type₁
 Alg X D = Ḟ D X → X
 
 
+-- we don't use Induction.WellFounded, this is because:
+-- * if f is WellFounded, then we still don't have a section of f
+-- * you still end up having to map over the fibers manually
+
 data All {A : Type ℓ} (P : A → Type ℓ′) : ∀ {n} → Vec A n → Set (ℓ-max ℓ ℓ′) where
   []  : All P []
   _∷_ : ∀ {x n} {xs : Vec A n} (px : P x) (pxs : All P xs) → All P (x ∷ xs)

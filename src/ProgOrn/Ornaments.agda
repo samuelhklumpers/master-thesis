@@ -28,6 +28,11 @@ data RDesc (I : Set ℓ) : Set (lsuc ℓ) where
 
 syntax σ S (λ s → D) = σ[ s ∈ S ] D
 
+_σ′_ : ∀ {I : Set ℓ} → Set → RDesc I → RDesc I
+S σ′ D = σ[ _ ∈ S ] D
+
+infixr 10 _σ′_
+
 Desc : Set ℓ → Set (lsuc ℓ)
 Desc I = I → RDesc I
 
