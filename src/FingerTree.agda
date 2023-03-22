@@ -16,6 +16,7 @@ data Three : Type where
 data Four : Type where
   one two three four : Four
 
+-- this is not the "right" FingerNumber
 FingerNumberD : Desc ⊤
 FingerNumberD tt = σ Three λ
   { one   → ṿ []
@@ -62,3 +63,5 @@ a ◁ con (three , .four , j , four x x₁ x₂ x₃ , r , c , _) = con (three ,
 
 -- sweet though
 
+
+-- note that it is wrong and xs does not contain forget xs elements
