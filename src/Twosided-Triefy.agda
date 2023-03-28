@@ -243,12 +243,117 @@ toTree : List A → Tree A
 toTree []       = none
 toTree (x ∷ xs) = cons′ x (toTree xs)
 
+open import CrudeEquiv
+open import Cubical.Functions.Surjection
+open import Cubical.HITs.SetQuotients as SQ
+
+toList-toTree : section (toList {A = A}) toTree
+toList-toTree []       = refl
+toList-toTree (x ∷ xs) = toList-cons′ _ (toTree xs) ∙ cong (x ∷_) (toList-toTree xs)
+
+Tree↠List : Tree A ↠ List A
+Tree↠List = toList , section→isSurjection {g = toTree} toList-toTree
+
+TreeQ : Type → Type
+TreeQ A = Tree A / λ x y → toList x ≡ toList y
+
+TreeQ≃List : isSet A → TreeQ A ≃ List A
+TreeQ≃List isSetA = crude (isOfHLevelList 0 isSetA) Tree↠List
+
+
+open import Cubical.Foundations.SIP
+
+Flex2S-Str : (A : Type) → Type → Type 
+Flex2S-Str A X = (X → Maybe A) × (A → X → X) × (X → A → X)
+
+Flex2S : Type → Type₁
+Flex2S A = TypeWithStr ℓ-zero (Flex2S-Str A)
+
+import Cubical.Structures.Auto as Auto
+
+Flex2S-EquivStr : (A : Type) → (X Y : Flex2S A) → typ X ≃ typ Y → Type 
+Flex2S-EquivStr A = Auto.AutoEquivStr (Flex2S-Str A)
+
+Flex2S-UnivalentStr : (A : Type) → UnivalentStr _ (Flex2S-EquivStr A)
+Flex2S-UnivalentStr A = Auto.autoUnivalentStr (Flex2S-Str A)
+
+Flex2S-ΣPath : (A : Type) → (X Y : Flex2S A) → X ≃[ Flex2S-EquivStr A ] Y → X ≡ Y
+Flex2S-ΣPath A = sip (Flex2S-UnivalentStr A)
+
+headL : List A → Maybe A
+headL []      = nothing
+headL (x ∷ _) = just x
+
+snocL : List A → A → List A
+snocL []       y = L.[ y ]
+snocL (x ∷ xs) y = x ∷ snocL xs y
+
+headQ : TreeQ A → Maybe A
+headQ = SQ.rec {!!} head′ {!!}
+
+List-Flex2S : (A : Type) → Flex2S A
+List-Flex2S A = List A , (headL , L._∷_ , snocL)
+
+TreeQ-Flex2S : (A : Type) → isSet A → Flex2S A
+TreeQ-Flex2S A isSetA = TreeQ A , ({!!} , {!!} , {!!})
+
+TreeQ-Flex2S-List : (A : Type) (isSetA : isSet A) → TreeQ-Flex2S A isSetA ≡ List-Flex2S A
+TreeQ-Flex2S-List A isSetA = Flex2S-ΣPath A _ _ {!!}
+
+{-
+TreeR : ∀ {A n} → Tree′ A n → Tree′ A n → Type
+TreeR xs ys = toList xs ≡ toList ys
+
+open import Cubical.HITs.SetQuotients as SQ
+
+TreeQ : Type → ℕ → Type
+TreeQ A n = Tree′ A n / TreeR
+
+{-
+inQ : ∀ {ℓ ℓ'} {A : Type ℓ} (R : A → A → Type ℓ') → A → A / R
+inQ R x = _/_.[ x ]
+
+TreeREff : {A : Type} (a b : Tree′ A n) → inQ TreeR a ≡ inQ TreeR b → TreeR a b
+TreeREff a b r = effective {!!} {!!} a b r -}
+
+Tree≃List : isSet A → TreeQ A 0 ≃ List A
+Tree≃List {A = A} isSetA = toList′ , record { equiv-proof = isEquivToList }
+  where
+  toList′ = SQ.rec (isOfHLevelList 0 isSetA) toList (λ a b r → r)
+  
+  isEquivToList : (y : List A) → isContr (fiber toList′ y)
+  isEquivToList []       = (_/_.[ none ] , refl) , λ
+    { (y , q) → ΣPathP ({!!} , {!!}) }
+  isEquivToList (x ∷ xs) = {!!}
+-}
+
+{-
 data TreeHIT (A : Type) : ℕ → Type where
   tree   : Tree′ A n → TreeHIT A n
   crunch : (xs ys : Tree′ A n) → toList xs ≡ toList ys → tree xs ≡ tree ys
   squash : isSet (TreeHIT A n)
 
+Tree≃List : isSet A → TreeHIT A 0 ≃ List A
+Tree≃List {A = A} isSetA = toList′ , record { equiv-proof = equiv-proof' }
+  where
+  toList′ : TreeHIT A 0 → List A
+  toList′ (tree x) = toList x
+  toList′ (crunch xs ys p i) = p i
+  toList′ (squash xs ys p q i j) = isOfHLevelList 0 isSetA _ _ (cong toList′ p) (cong toList′ q) i j
 
+  equiv-proof' : (y : List A) → isContr (fiber toList′ y)
+  equiv-proof' []       = (tree none , refl) , {!h!}
+    where
+    h : (y : fiber toList′ []) → (tree (con (t0 , _)) , refl) ≡ y
+    h (tree x , q) i = crunch none x (sym q) i , λ j → q (~ i ∨ j)
+    h (crunch xs ys p i , q) j = {!isSet→SquareP (λ _ _ → isSetΣ squash λ x → isProp→isSet (isOfHLevelList 0 isSetA (toList′ x) [])) ? ? (λ _ → tree none , refl) ? i0 j!}
+    h (squash xs ys p q i j , r) k = {!ΣPathP ({!!} , {!!})!}
+
+  equiv-proof' (x ∷ xs) = {!!}
+-}
+
+-- ΣPathP (crunch _ x (sym q) , isSet→SquareP (λ _ _ → isOfHLevelList 0 isSetA) refl q (sym q) refl)
+{-
 Tree≃List : isSet A → TreeHIT A 0 ≃ List A
 Tree≃List {A = A} isSetA = isoToEquiv (iso toList′ toTree′ sec ret)
   where
@@ -275,7 +380,7 @@ Tree≃List {A = A} isSetA = isoToEquiv (iso toList′ toTree′ sec ret)
   ret (tree x) = crunch _ _ (sec (toList x))
   ret (crunch xs ys p i) j = isSet→SquareP (λ _ _ → squash) (λ i → toTree′ (p i)) (crunch xs ys p) (ret (tree xs)) (ret (tree ys)) j i
   ret (squash xs ys p q i j) k = {!ugh!}
-
+-}
 
 
 -- the following is pretty disgusting, could we change something we did earlier to make this less chaotic?
