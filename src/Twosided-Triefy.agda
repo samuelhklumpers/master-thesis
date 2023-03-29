@@ -288,99 +288,103 @@ snocL : List A → A → List A
 snocL []       y = L.[ y ]
 snocL (x ∷ xs) y = x ∷ snocL xs y
 
-headQ : TreeQ A → Maybe A
-headQ = SQ.rec {!!} head′ {!!}
+-- I probably should have used this as the implementation
+snocL-++ : (xs : List A) (x : A) → xs L.++ L.[ x ] ≡ snocL xs x
+snocL-++ [] x = refl
+snocL-++ (y ∷ xs) x = cong (y ∷_) (snocL-++ xs x)
+
+head-toList : (a : Tree A) → headL (toList a) ≡ head′ a
+head-toList none = refl
+head-toList (single x) = refl
+head-toList (deep (one a) m sf) = refl
+head-toList (deep (two a b) m sf) = refl
+head-toList (deep (three a b c) m sf) = refl
 
 List-Flex2S : (A : Type) → Flex2S A
 List-Flex2S A = List A , (headL , L._∷_ , snocL)
 
-TreeQ-Flex2S : (A : Type) → isSet A → Flex2S A
-TreeQ-Flex2S A isSetA = TreeQ A , ({!!} , {!!} , {!!})
 
-TreeQ-Flex2S-List : (A : Type) (isSetA : isSet A) → TreeQ-Flex2S A isSetA ≡ List-Flex2S A
-TreeQ-Flex2S-List A isSetA = Flex2S-ΣPath A _ _ {!!}
+toList-snoc′ : (xs : Tree′ A n) (x : El A n) → toList (snoc′ xs x) ≡ toList xs L.++ flatten n x
+toList-snoc′ none x = refl
+toList-snoc′ (single y) x = refl
+toList-snoc′ {n = n} (deep pf m (one a)) x = sym (L.++-assoc (DtoList n pf) _ _ ∙ (cong (DtoList n pf L.++_) (L.++-assoc (toList m) (flatten n a) _)))
+toList-snoc′ {n = n} (deep pf m (two a b)) x = sym (L.++-assoc (DtoList n pf) _ _ ∙ cong (DtoList n pf L.++_) (L.++-assoc (toList m) _ _ ∙ cong (toList m L.++_) (L.++-assoc (flatten n a) _ _)))
+toList-snoc′ {n = n} (deep pf m (three a b c)) x = 
+  DtoList n pf L.++ toList (snoc′ m (a , b)) L.++ flatten n c L.++ flatten n x
+    ≡⟨ cong (λ h → DtoList n pf L.++ h L.++ flatten n c L.++ flatten n x) (toList-snoc′ m (a , b)) ⟩
+  DtoList n pf L.++ (toList m L.++ flatten n a L.++ flatten n b) L.++ flatten n c L.++ flatten n x ≡⟨ sym (L.++-assoc (DtoList n pf) _ _) ⟩
+  (DtoList n pf L.++ (toList m L.++ flatten n a L.++ flatten n b)) L.++ flatten n c L.++ flatten n x ≡⟨ sym (L.++-assoc (DtoList n pf L.++ toList m L.++ flatten n a L.++ flatten n b) (flatten n c) (flatten n x)) ⟩
+  ((DtoList n pf L.++ toList m L.++ flatten n a L.++ flatten n b) L.++ flatten n c) L.++ flatten n x ≡⟨ cong (L._++ flatten n x) (L.++-assoc (DtoList n pf) _ _) ⟩
+  (DtoList n pf L.++ ((toList m L.++ flatten n a L.++ flatten n b) L.++ flatten n c)) L.++ flatten n x
+    ≡⟨ cong (λ h → (DtoList n pf L.++ h) L.++ flatten n x) (L.++-assoc (toList m) _ _ ∙ cong (toList m L.++_) (L.++-assoc (flatten n a) _ _)) ⟩
+  (DtoList n pf L.++ toList m L.++ flatten n a L.++ flatten n b L.++ flatten n c) L.++ flatten n x ∎
 
-{-
-TreeR : ∀ {A n} → Tree′ A n → Tree′ A n → Type
-TreeR xs ys = toList xs ≡ toList ys
 
-open import Cubical.HITs.SetQuotients as SQ
+open import Cubical.Structures.Function
+open import Cubical.Structures.Pointed
+open import Cubical.Structures.Constant
 
-TreeQ : Type → ℕ → Type
-TreeQ A n = Tree′ A n / TreeR
+module _ {A : Type} (isSetA : isSet A) where
+  headQ : TreeQ A → Maybe A
+  headQ = SQ.rec (isOfHLevelMaybe 0 isSetA) head′ λ a b p → sym (head-toList a) ∙ cong headL p ∙ head-toList b
 
-{-
-inQ : ∀ {ℓ ℓ'} {A : Type ℓ} (R : A → A → Type ℓ') → A → A / R
-inQ R x = _/_.[ x ]
+  consQ : A → TreeQ A → TreeQ A
+  consQ x = SQ.rec squash/ (_/_.[_] ∘ cons′ x) λ a b p → eq/ (cons′ x a) (cons′ x b) (toList-cons′ x a ∙ cong (x ∷_) p ∙ sym (toList-cons′ x b))
 
-TreeREff : {A : Type} (a b : Tree′ A n) → inQ TreeR a ≡ inQ TreeR b → TreeR a b
-TreeREff a b r = effective {!!} {!!} a b r -}
+  snocQ : TreeQ A → A → TreeQ A
+  snocQ xs x = SQ.rec squash/ (_/_.[_] ∘ λ ys → snoc′ ys x) (λ a b p → eq/ _ _ (toList-snoc′ a x ∙ cong (L._++ L.[ x ]) p ∙ sym (toList-snoc′ b x))) xs
 
-Tree≃List : isSet A → TreeQ A 0 ≃ List A
-Tree≃List {A = A} isSetA = toList′ , record { equiv-proof = isEquivToList }
-  where
-  toList′ = SQ.rec (isOfHLevelList 0 isSetA) toList (λ a b r → r)
-  
-  isEquivToList : (y : List A) → isContr (fiber toList′ y)
-  isEquivToList []       = (_/_.[ none ] , refl) , λ
-    { (y , q) → ΣPathP ({!!} , {!!}) }
-  isEquivToList (x ∷ xs) = {!!}
--}
+  TreeQ-Flex2S : Flex2S A
+  TreeQ-Flex2S = TreeQ A , (headQ , consQ , snocQ)
 
-{-
-data TreeHIT (A : Type) : ℕ → Type where
-  tree   : Tree′ A n → TreeHIT A n
-  crunch : (xs ys : Tree′ A n) → toList xs ≡ toList ys → tree xs ≡ tree ys
-  squash : isSet (TreeHIT A n)
+  toList' = TreeQ≃List isSetA .fst
 
-Tree≃List : isSet A → TreeHIT A 0 ≃ List A
-Tree≃List {A = A} isSetA = toList′ , record { equiv-proof = equiv-proof' }
-  where
-  toList′ : TreeHIT A 0 → List A
-  toList′ (tree x) = toList x
-  toList′ (crunch xs ys p i) = p i
-  toList′ (squash xs ys p q i j) = isOfHLevelList 0 isSetA _ _ (cong toList′ p) (cong toList′ q) i j
+  toList∼ : (a : Tree A) → toList' _/_.[ a ] ≡ toList a
+  toList∼ a = refl
 
-  equiv-proof' : (y : List A) → isContr (fiber toList′ y)
-  equiv-proof' []       = (tree none , refl) , {!h!}
-    where
-    h : (y : fiber toList′ []) → (tree (con (t0 , _)) , refl) ≡ y
-    h (tree x , q) i = crunch none x (sym q) i , λ j → q (~ i ∨ j)
-    h (crunch xs ys p i , q) j = {!isSet→SquareP (λ _ _ → isSetΣ squash λ x → isProp→isSet (isOfHLevelList 0 isSetA (toList′ x) [])) ? ? (λ _ → tree none , refl) ? i0 j!}
-    h (squash xs ys p q i j , r) k = {!ΣPathP ({!!} , {!!})!}
+  head∼ : (a : TreeQ A) → headQ a ≡ headL (toList' a)
+  head∼ = elimProp (λ x → isOfHLevelMaybe 0 isSetA _ _) (λ a → sym (head-toList a))
 
-  equiv-proof' (x ∷ xs) = {!!}
--}
+  cons∼ : (x : A) (a : TreeQ A) → toList' (consQ x a) ≡ x ∷ (toList' a)
+  cons∼ x = elimProp (λ x → isOfHLevelList 0 isSetA _ _) (toList-cons′ x)
 
--- ΣPathP (crunch _ x (sym q) , isSet→SquareP (λ _ _ → isOfHLevelList 0 isSetA) refl q (sym q) refl)
-{-
-Tree≃List : isSet A → TreeHIT A 0 ≃ List A
-Tree≃List {A = A} isSetA = isoToEquiv (iso toList′ toTree′ sec ret)
-  where
-  toList′ : TreeHIT A 0 → List A
-  toList′ (tree x) = toList x
-  toList′ (crunch xs ys p i) = p i
-  toList′ (squash xs ys p q i j) = isOfHLevelList 0 isSetA _ _ (cong toList′ p) (cong toList′ q) i j
+  snoc∼ : (a : TreeQ A) (x : A) → toList' (snocQ a x) ≡ snocL (toList' a) x
+  snoc∼ a x = elimProp (λ a → isOfHLevelList 0 isSetA (toList' (snocQ a x)) (snocL (toList' a) x)) (λ a → toList-snoc′ a x ∙ snocL-++ _ x) a
 
-  toTree′ : List A → TreeHIT A 0
-  toTree′ xs = tree (toTree xs)
+  TreeQ∼List : TreeQ-Flex2S ≃[ Flex2S-EquivStr A ] List-Flex2S A
+  -- here Agda's very unhelpful "either you unfold all the way down or you don't unfold at all" policy makes the types of the holes unreadable, so you just kind of guess them
+  TreeQ∼List = TreeQ≃List isSetA , head∼ , cons∼ , snoc∼
 
-  sec : section toList′ toTree′
-  sec []       = refl
-  sec (x ∷ xs) = toList-cons′ _ (toTree xs) ∙ cong (x ∷_) (sec xs)
+  TreeQ-Flex2S-List : TreeQ-Flex2S ≡ List-Flex2S A
+  TreeQ-Flex2S-List = Flex2S-ΣPath A _ _ TreeQ∼List
 
-  isGroupoid→isPropSquare : ∀ {A : Type} → isGroupoid A → 
-    {a₀₀ a₀₁ : A} (a₀₋ : a₀₀ ≡ a₀₁)
-    {a₁₀ a₁₁ : A} (a₁₋ : a₁₀ ≡ a₁₁)
-    (a₋₀ : a₀₀ ≡ a₁₀) (a₋₁ : a₀₁ ≡ a₁₁)
-    → isProp (Square a₀₋ a₁₋ a₋₀ a₋₁)
-  isGroupoid→isPropSquare Agpd a₀₋ a₁₋ a₋₀ a₋₁ = isOfHLevelRetractFromIso 1 (PathPIsoPath (λ i → a₋₀ i ≡ a₋₁ i) a₀₋ a₁₋) (Agpd _ _ _ _)
 
-  ret : retract toList′ toTree′
-  ret (tree x) = crunch _ _ (sec (toList x))
-  ret (crunch xs ys p i) j = isSet→SquareP (λ _ _ → squash) (λ i → toTree′ (p i)) (crunch xs ys p) (ret (tree xs)) (ret (tree ys)) j i
-  ret (squash xs ys p q i j) k = {!ugh!}
--}
+
+record Flex-2Sided-Law {A} (Flex : Flex2S A) : Type₁ where
+  Arr = Flex .fst
+  op  = Flex .snd
+
+  hd : Arr → Maybe A
+  hd = op .fst
+
+  cons : A → Arr → Arr
+  cons = op .snd .fst
+
+  snc : Arr → A → Arr
+  snc = op .snd .snd
+
+  field
+    sccs : ∀ (x : A) y xs → snc (cons x xs) y ≡ cons x (snc xs y)
+    hc   : ∀ (x : A) xs   → hd (cons x xs)    ≡ just x
+
+open Flex-2Sided-Law using (sccs; hc)
+
+List-Law : {A : Type} → Flex-2Sided-Law (List-Flex2S A)
+List-Law .sccs x y xs = refl
+List-Law .hc   x   xs = refl
+
+TreeQ-Law : {A : Type} → (isSetA : isSet A) → Flex-2Sided-Law (TreeQ-Flex2S isSetA)
+TreeQ-Law isSetA = subst Flex-2Sided-Law (sym (TreeQ-Flex2S-List isSetA)) List-Law
 
 
 -- the following is pretty disgusting, could we change something we did earlier to make this less chaotic?
