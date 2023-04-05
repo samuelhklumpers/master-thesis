@@ -1,5 +1,8 @@
 \documentclass{article}
 
+\usepackage[style=alphabetic]{biblatex}
+\addbibresource{refs.bib}
+
 \usepackage{comment}
 
 \setlength{\marginparwidth}{2cm} % remove when done
@@ -23,7 +26,7 @@
 \newtheorem{remark}{Remark}[section]
 \newtheorem{claim}{Claim}[section]
 
-\renewcommand{\chapterautorefname}{Chapter}%
+\renewcommand{\partautorefname}{part}%
 \renewcommand{\sectionautorefname}{Section}%
 \renewcommand{\subsectionautorefname}{Subsection}%
 
@@ -62,8 +65,6 @@
 \renewcommand{\AgdaCommentFontStyle}[1]{{\AgdaTypewriterFont{}#1}}
 \renewcommand{\AgdaBoundFontStyle}[1]{\textit{\AgdaSerifFont{}#1}}
 
-\usepackage[style=alphabetic]{biblatex}
-\addbibresource{refs.bib}
 
 
 
@@ -75,10 +76,11 @@
 \newcommand{\bL}{\AgdaDatatype{Leibniz}}
 
 
-\title{Restoring (part of) the friendship between recursion schemes and without-K (provisional)\\ \small I'll have to grab a UU-template at some point}
+\title{Generic Proofs and Constructions in Agda}
 \author{Samuel Klumpers\\6057314}
 
 % previous (provisional) titles:
+% Restoring (part of) the friendship between recursion schemes and without-K (provisional)
 % The gentle art of smashing things to bits and pieces
 % Running in circles in Agda
 
@@ -93,8 +95,17 @@
     This thesis aims to introduce the concepts of the structure identity principle, numerical representations, and ornamentations. These concepts are then combined to simplify the presentation and verification of finger trees, demonstrating the generalizability and improved compactness and security of the resulting code. 
 \end{abstract}
 
-\section{Introduction (to be updated; out of sync since reducing friction)}\label{sec:intro}
-The dependently typed functional programming language Agda \cite{agda} can, when restricted to its reasonable parts, be translated into readable, and safe, Haskell \todo{agda2hs}. However, the intrinsic safety of languages like Agda can also lead to code duplication by encouraging the use of multiple variants of the same datatype: enforcing coverage checking forces the \AgdaFunction{head} function on \AgdaDatatype{List} to return a \AgdaDatatype{Maybe}. The \AgdaDatatype{Maybe} can be avoided by moving to the length-indexed list type \AgdaDatatype{Vec}, at the cost of duplicating functions like \AgdaFunction{\_++\_}, which we want to have for both types.
+\part{Outline}
+\section{Problem Statement}
+
+\section{Contributions}
+
+
+\part{Related work}
+
+\part{Preliminary work}
+\section{The Cost of Verification}\label{sec:intro}
+The dependently typed functional programming language Agda \cite{agda} can, when restricted to its reasonable parts, be translated into readable, and safe, Haskell \cite{agda2hs}. However, the intrinsic safety of languages like Agda can also lead to code duplication by encouraging the use of multiple variants of the same datatype: enforcing coverage checking forces the \AgdaFunction{head} function on \AgdaDatatype{List} to return a \AgdaDatatype{Maybe}. The \AgdaDatatype{Maybe} can be avoided by moving to the length-indexed list type \AgdaDatatype{Vec}, at the cost of duplicating functions like \AgdaFunction{\_++\_}, which we want to have for both types.
 
 Of course, not differently from Haskell, a similar problem arises when implementing binary trees as a more efficient alternative to lists. Furthermore, the proofs of the same properties will differ between list and tree, and tend to be more difficult for the latter. In general, switching between implementations of an interface will not only duplicate code, but also (and sometimes more than) duplicate the effort of verification.
 
@@ -110,23 +121,30 @@ When two types are isomorphic and equivalent under an interface, proofs of prope
 In \autoref{sec:leibniz}, we will follow \cite{iri}, and look at how proofs on unary naturals can be transported to the binary naturals. Then in \autoref{sec:numrep} we recall how numeral systems in particular induce container types in \cite{calcdata}, which we attempt to reformulate in the language of ornaments in \autoref{ssec:ornaments}, using the framework of \cite{progorn}. In \autoref{sec:userfriendly} we investigate how we can make the earlier methods more easily accessible to the user, and, ourselves, when we give a description of finger trees in \autoref{sec:fingertrees}.
 
 
-\section{How Cubical Agda helps our binary numbers (ready)}\label{sec:leibniz}
+\section{Proving about binary using unary: the Structure Indentity Principle}\label{sec:leibniz}
 \input{CubicalAndBinary}
 
-\section{Specifying types (ready)}\label{sec:numrep}
+\section{Types from Specification: Ornamentation and Calculation}\label{sec:numrep}
 \input{TypeGeneration}
 
-\section{Reducing friction (work in progress)}\label{sec:userfriendly}
+\section{Getting more from less: Generic Constructions}\label{sec:userfriendly}
 \input{UserFriendly}
 
-\section{Finger trees}\label{sec:fingertrees}
+\section{Case Study: FingerTrees}\label{sec:fingertrees}
+Fingertrees are often (rightfully so) referred to as ``the fastest persistent datastructure for most purposes'', but while simpler than implementations achieving the same bounds, they are still challenging to reason about; in this section, we will investigate how we can fit the description and analysis of fingertrees, or variants upon them, into the frameworks of calculating datastructures and ornamental programming.
+
+We compare the work in calculating datastructures to solving associativity equations in groups by shifting to the Cayley representation, such as in [..]
 
 
-
-\section{Discussion and future work (aka the union of my to-do list and the actual future work section)}\label{sec:discussion}
-
+%\section{Discussion and Future Work}\label{sec:discussion}
 
 
+\part{Proposal}
+
+\section{Planning}
+
+
+\newpage
 \section{Temporary}\label{sec:temp}
 \listoftodos
 %\subfile{Scratch.tex}

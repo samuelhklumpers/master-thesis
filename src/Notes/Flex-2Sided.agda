@@ -9,7 +9,7 @@ open import Cubical.Data.Unit renaming (Unit to ⊤)
 open import Prelude hiding (⌊_⌋; _◁_; _▷_)
 open import Twosided-Triefy
 
-open import ProgOrn.Ornaments hiding (_⋈_)
+open import Ext.ProgOrn.Ornaments hiding (_⋈_)
 
 
 

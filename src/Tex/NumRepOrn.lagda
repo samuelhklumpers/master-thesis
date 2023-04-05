@@ -18,7 +18,7 @@ open import Cubical.Data.Empty
 open import Prelude.UseAs
 open import Extra.TypeIsos
 
-open import ProgOrn.Ornaments hiding (NatD; VecD)
+open import Ext.ProgOrn.Ornaments hiding (NatD; VecD)
 \end{code}
 
 %<*NatD>

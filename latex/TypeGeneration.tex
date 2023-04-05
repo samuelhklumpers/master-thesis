@@ -5,11 +5,11 @@ But rather than inductively defining an array-like type and then showing that it
 \subsection{Numerical representations: from numbers to containers}\label{ssec:numrep}
 We can compute the type of vectors starting from \bN{}.\footnote{This is adapted (and fairly abridged) from \cite{calcdata}} For simplicity, we define them as a type computing function via the ``use-as-definition`` notation from before. We expect vectors to be represented by 
 \ExecuteMetaData[Tex/NumRep]{Lookup}
-where we use the finite type \AgdaDatatype{Fin} as an index into vector. Using this representation as a specification, we can compute both \AgdaDatatype{Fin} and a type of vectors. The finite type can be computed from the evident definition\todo{This is probably more convincing with equational reasoning.}
+where we use the finite type \AgdaDatatype{Fin} as an index into vector. Using this representation as a specification, we can compute both \AgdaDatatype{Fin} and a type of vectors. The finite type can be computed from the evident definition
 \ExecuteMetaData[Tex/NumRep]{Fin-def}
 using
 \ExecuteMetaData[Tex/NumRep]{leq-split}
-Likewise, vectors can be computed by applying a sequence of type isomorphisms\todo{The reasoning is a bit too close in indentation to the terms?}
+Likewise, vectors can be computed by applying a sequence of type isomorphisms
 \ExecuteMetaData[Tex/NumRep]{Vec}
 \investigate{SIP doesn't mesh very well with indexed stuff, does HSIP help?}
 

@@ -3,7 +3,7 @@ module Twosided where
 open import Cubical.Data.Nat
 open import Cubical.Data.List
 open import Cubical.Data.Vec
-open import ProgOrn.Ornaments hiding (_⋈_)
+open import Ext.ProgOrn.Ornaments hiding (_⋈_)
 open import Cubical.Data.Unit renaming (Unit to ⊤)
 open import Prelude hiding (⌊_⌋; _◁_; _▷_)
 

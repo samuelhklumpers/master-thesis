@@ -7,7 +7,7 @@
 module Tex.Flatten where
 
 open import Prelude hiding (⌊_⌋)
-open import ProgOrn.Ornaments
+open import Ext.ProgOrn.Ornaments
 
 open import Data.List
 open import Data.Vec using (Vec)

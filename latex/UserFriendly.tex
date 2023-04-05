@@ -108,4 +108,32 @@ Thus, we conclude that $X$ is initial. The main result is then a corollary of in
 
 
 \subsubsection{Example}
-Let us redo the proof in \autoref{sec:leibniz}, now using this result. 
+Let us redo the proof in \autoref{sec:leibniz}, now using this result. Recall the description of naturals \AgdaFunction{NatD}. To show that \AgdaFunction{Leibniz} is isomorphic to \AgdaFunction{Nat}, we will need a \AgdaFunction{NatD}-algebra and a proof of its well-foundedness. We define the algebra
+\ExecuteMetaData[Tex/Leibniz2]{bsuc'}
+
+For well-foundedness, we use something similar to views [mcbride] (it differs because it views right through the entire structure, instead of a single layer)
+\ExecuteMetaData[Tex/Leibniz2]{Peano-View}
+where the mutually recursive proof of \AgdaFunction{view} is ``almost trivial''. Well-foundedness follows fairly immediately
+\ExecuteMetaData[Tex/Leibniz2]{Wf-bsuc}
+
+Injectivity of \AgdaFunction{bsuc\_1} happens to be harder to prove from retractions than directly, so we prove it directly, from which the wanted statement follows
+\ExecuteMetaData[Tex/Leibniz2]{L-is-mu-N}
+
+Note that in this case it took us more code to prove the same statement! However, we stress that the code that we did write became more forced, and might be more amenable to automation.
+
+
+\subsection{Heterogeneization}
+Here is a small pattern that occurs from time to time when one separates data based on what it ``can do'' rather than what it ``actually is''. For example, if you are making a game in Haskell, you might feel the need to maintain a list of ``Drawables'', which may be of different types.
+
+Regardless of the means, the end result is going to be a ``heterogeneous list''. In Haskell, this is resolved by using an existentially quantified list, which, informally speaking, can contain any type implementing some constraint, but can only be inspected as if it contains the intersection of all types implementing this constraint. 
+
+This of course ports fairly directly to Agda, but is cumbersome when we just want to make a pile of different types, and becomes impractical if we want to be able to inspect the elements. The alternative is to split our heterogeneous list into two parts; one tracking the types, and one tracking the values. In practice, this means that we implement a heterogeneous list as a list of values indexed over a list of types.
+
+If we call this heterogeneization, then we see that heterogeneization is fairly mechanical. We make a small adjustment to \AgdaDatatype{RDesc} to track a type parameter separately from the fields. Using this we define an ornament-computing function, which given a description computes an ornamental description on top of it:
+% HetO
+This ornament relates the original unindexed type to a type indexed over it; we see that this ornament largely keeps all fields and structure indentical, only performing the necessary bookkeeping in the index, and adding extra fields before parameters.
+
+As an example, we adapt the list description
+% ListD
+which is easily heterogeneized to an \AgdaFunction{HList}. In fact, \AgdaFunction{HetO} ``happens'' to do the right thing in most cases, and lets us lift e.g., \AgdaFunction{head} lik
+% maybe, hhead

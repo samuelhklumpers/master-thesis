@@ -4,7 +4,7 @@
 module Initiality where
 
 open import Prelude hiding (⌊_⌋)
-open import ProgOrn.Ornaments hiding (NatD) renaming (_⇉_ to _i⇉_) 
+open import Ext.ProgOrn.Ornaments hiding (NatD) renaming (_⇉_ to _i⇉_) 
 
 open import Data.List
 import Data.Vec as V

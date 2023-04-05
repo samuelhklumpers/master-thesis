@@ -2,7 +2,7 @@
 
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 
-module ProgOrn.Ornaments where
+module Ext.ProgOrn.Ornaments where
 
 open import Function using (const; _∘_; case_of_)
 open import Data.Empty using (⊥)

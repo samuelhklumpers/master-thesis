@@ -2,7 +2,7 @@ module FingerTree where
 
 open import Cubical.Data.Nat
 open import Cubical.Data.List
-open import ProgOrn.Ornaments
+open import Ext.ProgOrn.Ornaments
 open import Cubical.Data.Unit renaming (Unit to ⊤)
 open import Prelude hiding (⌊_⌋; _◁_)
 

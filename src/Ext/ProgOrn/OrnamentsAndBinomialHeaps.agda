@@ -1,8 +1,6 @@
-{-# OPTIONS --without-K #-}
-
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 
-module ProgOrn.Ornaments
+module Ext.ProgOrn.OrnamentsAndBinomialHeaps
   (Val : Set) (_≤_ : Val → Val → Set) (_≤?_ : (x y : Val) → x ≤ y ⊎ y ≤ x) where
 
 open import Function using (const; _∘_; case_of_)
@@ -79,7 +77,6 @@ _++'_ : {A : Set} → List' A → List' A → List' A
 []'       ++' ys = ys
 (x ∷' xs) ++' ys = x ∷' (xs ++' ys)
 
-{-
 mutual
 
   fold : {I : Set} {D : Desc I} {X : I → Set} → Ḟ D X ⇉ X → μ D ⇉ X
@@ -92,7 +89,7 @@ mutual
   mapFold-Ṗ : {I : Set} {D : Desc I} {X : I → Set} → (Ḟ D X ⇉ X) → (is : List I) → Ṗ is (μ D) → Ṗ is X
   mapFold-Ṗ f []       _        = tt
   mapFold-Ṗ f (i ∷ is) (d , ds) = fold f d , mapFold-Ṗ f is ds
--}
+
 
 --------
 -- Ornaments
@@ -128,10 +125,8 @@ erase (∇ s O)          xs       = s , erase O xs
 ornAlg : {I J : Set} {e : J → I} {D : Desc I} {E : Desc J} (O : Orn e D E) → Ḟ E (μ D ∘ e) ⇉ (μ D ∘ e)
 ornAlg O {j} = con ∘ erase (O (ok j))
 
-{-
 ornForget : {I J : Set} {e : J → I} {D : Desc I} {E : Desc J} (O : Orn e D E) → μ E ⇉ (μ D ∘ e)
 ornForget {E = E} O = fold (ornAlg {E = E} O)
--}
 
 ! : {A : Set} → A → ⊤
 ! _ = tt
@@ -304,7 +299,6 @@ record Promotion (X Y : Set) : Set₁ where
     promote    : (x : X) → Predicate x → Y
     coherence  : (x : X) (p : Predicate x) → forget (promote x p) ≡ x
 
-{-
 ornProm : {I J : Set} {e : J → I} {D : Desc I} {E : Desc J} → Orn e D E → (j : J) → Promotion (μ D (e j)) (μ E j)
 ornProm {e = e} {D} {E} O j = record
   { Predicate  = OptP {E = E} O (ok j)
@@ -318,7 +312,6 @@ ornProm {e = e} {D} {E} O j = record
       complement : (y : μ E j) → OptP {E = E} O (ok j) (ornForget O y)
       promote    : (x : μ D (e j)) → OptP {E = E} O (ok j) x → μ E j
       coherence  : (x : μ D (e j)) (com : OptP {E = E} O (ok j) x) → ornForget O (promote x com) ≡ x
--}
 
 record Upgrade (X Y : Set) : Set₁ where
   field
@@ -452,10 +445,8 @@ BHeapOD (ok r) = σ BinTag λ { `nil  → ṿ tt
 BHeap : ℕ → Set
 BHeap = μ ⌊ BHeapOD ⌋
 
-{-
 toBin : {r : ℕ} → BHeap r → Bin
 toBin = ornForget ⌈ BHeapOD ⌉
--}
 
 BHeapᵁ : ℕ → Bin → Set
 BHeapᵁ r b = OptP {E = ⌊ BHeapOD ⌋} ⌈ BHeapOD ⌉ (ok r) b
@@ -464,83 +455,83 @@ pattern nilᵁ     = con (    tt)
 pattern zeroᵁ  h = con (h , tt)
 pattern oneᵁ t h = con (t , h , tt)
 
--- Bin-BHeap : (r : ℕ) → Promotion Bin (BHeap r)
--- Bin-BHeap = ornProm ⌈ BHeapOD ⌉
+Bin-BHeap : (r : ℕ) → Promotion Bin (BHeap r)
+Bin-BHeap = ornProm ⌈ BHeapOD ⌉
 
 
--- --------
--- -- Increment and insertion
+--------
+-- Increment and insertion
 
--- incr : Bin → Bin
--- incr nilᴮ      = oneᴮ nilᴮ
--- incr (zeroᴮ b) = oneᴮ b
--- incr (oneᴮ  b) = zeroᴮ (incr b)
+incr : Bin → Bin
+incr nilᴮ      = oneᴮ nilᴮ
+incr (zeroᴮ b) = oneᴮ b
+incr (oneᴮ  b) = zeroᴮ (incr b)
 
--- incr-upg : Upgrade (Bin → Bin) ({r : ℕ} → BTree r → BHeap r → BHeap r)
--- incr-upg = ∀⁺[[ r ∈ ℕ ]] ∀⁺[ _ ∈ BTree r ] (Bin-BHeap r ⇀ toUpgrade (Bin-BHeap r))
+incr-upg : Upgrade (Bin → Bin) ({r : ℕ} → BTree r → BHeap r → BHeap r)
+incr-upg = ∀⁺[[ r ∈ ℕ ]] ∀⁺[ _ ∈ BTree r ] (Bin-BHeap r ⇀ toUpgrade (Bin-BHeap r))
 
--- insTᵁ : Upgrade.Predicate incr-upg incr
---      -- {r : ℕ} → BTree r → (b : Bin) → BHeapᵁ r b → BHeapᵁ r (incr b)
--- insTᵁ t nilᴮ      nilᵁ       = oneᵁ t nilᵁ
--- insTᵁ t (zeroᴮ b) (zeroᵁ  h) = oneᵁ t h
--- insTᵁ t (oneᴮ  b) (oneᵁ u h) = zeroᵁ (insTᵁ (link t u) b h)
+insTᵁ : Upgrade.Predicate incr-upg incr
+     -- {r : ℕ} → BTree r → (b : Bin) → BHeapᵁ r b → BHeapᵁ r (incr b)
+insTᵁ t nilᴮ      nilᵁ       = oneᵁ t nilᵁ
+insTᵁ t (zeroᴮ b) (zeroᵁ  h) = oneᵁ t h
+insTᵁ t (oneᴮ  b) (oneᵁ u h) = zeroᵁ (insTᵁ (link t u) b h)
 
--- insT : {r : ℕ} → BTree r → BHeap r → BHeap r
--- insT = Upgrade.promote incr-upg incr insTᵁ
+insT : {r : ℕ} → BTree r → BHeap r → BHeap r
+insT = Upgrade.promote incr-upg incr insTᵁ
 
--- incr-insT-coherence : Upgrade.Coherence incr-upg incr insT
---                    -- {r : ℕ} (t : BTree r) (h : BHeap r) → toBin (insT t h) ≡ incr (toBin h)
--- incr-insT-coherence = Upgrade.coherence incr-upg incr insTᵁ
+incr-insT-coherence : Upgrade.Coherence incr-upg incr insT
+                   -- {r : ℕ} (t : BTree r) (h : BHeap r) → toBin (insT t h) ≡ incr (toBin h)
+incr-insT-coherence = Upgrade.coherence incr-upg incr insTᵁ
 
 
--- --------
--- -- Decrement and extraction
+--------
+-- Decrement and extraction
 
--- decr : Bin → Maybe Bin
--- decr nilᴮ      = nothing
--- decr (zeroᴮ b) = Maybe.map oneᴮ (decr b)
--- decr (oneᴮ  b) = just (zeroᴮ b)
+decr : Bin → Maybe Bin
+decr nilᴮ      = nothing
+decr (zeroᴮ b) = Maybe.map oneᴮ (decr b)
+decr (oneᴮ  b) = just (zeroᴮ b)
 
--- _⁺×_ : (X : Set) {Y Z : Set} → Promotion Y Z → Promotion Y (X × Z)
--- X ⁺× p = record
---   { Predicate  = λ y → X × Promotion.Predicate p y
---   ; forget     = Promotion.forget p ∘ proj₂
---   ; complement = λ { (x , z) → x , Promotion.complement p z }
---   ; promote    = λ {y (x , com) → x , Promotion.promote p y com }
---   ; coherence  = λ { y (x , com) → Promotion.coherence p y com } }
+_⁺×_ : (X : Set) {Y Z : Set} → Promotion Y Z → Promotion Y (X × Z)
+X ⁺× p = record
+  { Predicate  = λ y → X × Promotion.Predicate p y
+  ; forget     = Promotion.forget p ∘ proj₂
+  ; complement = λ { (x , z) → x , Promotion.complement p z }
+  ; promote    = λ {y (x , com) → x , Promotion.promote p y com }
+  ; coherence  = λ { y (x , com) → Promotion.coherence p y com } }
 
--- data Maybe' {A : Set} (X : A → Set) : Maybe A → Set where
---   just    : {a : A} → X a → Maybe' X (just a)
---   nothing : Maybe' X nothing
+data Maybe' {A : Set} (X : A → Set) : Maybe A → Set where
+  just    : {a : A} → X a → Maybe' X (just a)
+  nothing : Maybe' X nothing
 
--- MaybeP : {A B : Set} → Promotion A B → Promotion (Maybe A) (Maybe B)
--- MaybeP p = record
---   { Predicate  = Maybe' (Promotion.Predicate p)
---   ; forget     = Maybe.map (Promotion.forget p)
---   ; complement = λ { nothing  → nothing
---                    ; (just b) → just (Promotion.complement p b) }
---   ; promote    = λ { nothing  _        → nothing
---                    ; (just a) (just x) → just (Promotion.promote p a x) }
---   ; coherence  = λ { nothing  _        → refl
---                    ; (just a) (just x) → cong just (Promotion.coherence p a x) } }
+MaybeP : {A B : Set} → Promotion A B → Promotion (Maybe A) (Maybe B)
+MaybeP p = record
+  { Predicate  = Maybe' (Promotion.Predicate p)
+  ; forget     = Maybe.map (Promotion.forget p)
+  ; complement = λ { nothing  → nothing
+                   ; (just b) → just (Promotion.complement p b) }
+  ; promote    = λ { nothing  _        → nothing
+                   ; (just a) (just x) → just (Promotion.promote p a x) }
+  ; coherence  = λ { nothing  _        → refl
+                   ; (just a) (just x) → cong just (Promotion.coherence p a x) } }
 
--- mapMaybe' : {A B : Set} {X : A → Set} {Y : B → Set} →
---             {f : A → B} → ({a : A} → X a → Y (f a)) → {ma : Maybe A} → Maybe' X ma → Maybe' Y (Maybe.map f ma)
--- mapMaybe' f nothing  = nothing
--- mapMaybe' f (just b) = just (f b)
+mapMaybe' : {A B : Set} {X : A → Set} {Y : B → Set} →
+            {f : A → B} → ({a : A} → X a → Y (f a)) → {ma : Maybe A} → Maybe' X ma → Maybe' Y (Maybe.map f ma)
+mapMaybe' f nothing  = nothing
+mapMaybe' f (just b) = just (f b)
 
--- decr-upg : Upgrade (Bin → Maybe Bin) ({r : ℕ} → BHeap r → Maybe (BTree r × BHeap r))
--- decr-upg = ∀⁺[[ r ∈ ℕ ]] (Bin-BHeap r ⇀ toUpgrade (MaybeP (BTree r ⁺× Bin-BHeap r)))
+decr-upg : Upgrade (Bin → Maybe Bin) ({r : ℕ} → BHeap r → Maybe (BTree r × BHeap r))
+decr-upg = ∀⁺[[ r ∈ ℕ ]] (Bin-BHeap r ⇀ toUpgrade (MaybeP (BTree r ⁺× Bin-BHeap r)))
 
--- extractᵁ : Upgrade.Predicate decr-upg decr
---         -- {r : ℕ} (b : Bin) → BHeapᵁ r b → Maybe' (λ b' → BTree r × BHeapᵁ r b') (decr b)
--- extractᵁ nilᴮ      nilᵁ       = nothing
--- extractᵁ (zeroᴮ b) (zeroᵁ  h) = mapMaybe' (λ { ((x , t ◃ ts) , h') → (x , forest ts) , oneᵁ t h' }) (extractᵁ b h)
--- extractᵁ (oneᴮ  b) (oneᵁ x h) = just (x , zeroᵁ h)
+extractᵁ : Upgrade.Predicate decr-upg decr
+        -- {r : ℕ} (b : Bin) → BHeapᵁ r b → Maybe' (λ b' → BTree r × BHeapᵁ r b') (decr b)
+extractᵁ nilᴮ      nilᵁ       = nothing
+extractᵁ (zeroᴮ b) (zeroᵁ  h) = mapMaybe' (λ { ((x , t ◃ ts) , h') → (x , forest ts) , oneᵁ t h' }) (extractᵁ b h)
+extractᵁ (oneᴮ  b) (oneᵁ x h) = just (x , zeroᵁ h)
 
--- extract : {r : ℕ} → BHeap r → Maybe (BTree r × BHeap r)
--- extract = Upgrade.promote decr-upg decr extractᵁ
+extract : {r : ℕ} → BHeap r → Maybe (BTree r × BHeap r)
+extract = Upgrade.promote decr-upg decr extractᵁ
 
--- decr-extract-coherence : Upgrade.Coherence decr-upg decr extract
---                       -- {r : ℕ} (h : BHeap r) → Maybe.map (toBin ∘ proj₂) (extract h) ≡ decr (toBin h)
--- decr-extract-coherence = Upgrade.coherence decr-upg decr extractᵁ
+decr-extract-coherence : Upgrade.Coherence decr-upg decr extract
+                      -- {r : ℕ} (h : BHeap r) → Maybe.map (toBin ∘ proj₂) (extract h) ≡ decr (toBin h)
+decr-extract-coherence = Upgrade.coherence decr-upg decr extractᵁ

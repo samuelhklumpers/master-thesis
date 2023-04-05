@@ -4,7 +4,7 @@
 module MobileOrnaments where
 
 open import Prelude hiding (⌊_⌋)
-open import ProgOrn.Ornaments
+open import Ext.ProgOrn.Ornaments
 
 open import Data.List
 import Data.Vec as V
