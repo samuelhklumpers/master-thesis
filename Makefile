@@ -12,7 +12,7 @@ FAST=false
 .PHONY: all bel fast
 
 # naive fix 
-targets := $(shell git status | grep .lagda$$ | grep -v deleted | grep -v Notes | awk -F 'src/' '{print "src/"$$2}')
+targets := $(shell git status | grep .lagda$$ | grep -v deleted | grep -v Notes | awk -F 'src/' '{print "src/"$$NF}')
 
 lagda=$(AGDA) $(AFLAGS)
 
@@ -27,7 +27,6 @@ try:
 ifeq ($(FAST), true)
 	$(eval lagda=$(lagda) --only-scope-checking)
 endif
-	echo $(targets)
 	$(foreach target, $(targets), $(lagda) $(target) && ) :
 	cd latex/ && \
 	$(LATEX) $(SOURCE)

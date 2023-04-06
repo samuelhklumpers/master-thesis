@@ -52,6 +52,23 @@ We use the \AgdaFunction{power} combinator to ensure that the digit at position 
 This ``folding in'' technique using the indices to keep track of structure seems to apply more generally. Let us explore this a bit further, and return later to the generalization of the pattern from numeral systems to datastructures.
 % i.e. why did this even work?
 
+\subsection{Heterogeneization}
+The situation in which one wants to collect a variety of types is not uncommon, and is typically handled by tuples. However, if e.g., you are making a game in Haskell, you might feel the need to maintain a list of ``Drawables'', which may be of different types. Such a list would have to be a kind of ``heterogeneous list''. In Haskell, this can be resolved by using an existentially quantified list, which, informally speaking, can contain any type implementing some constraint, but can only be inspected as if it contains the intersection of all types implementing this constraint. 
+
+This of course ports fairly directly to Agda, but is cumbersome when we just want to make a pile of different types, and becomes impractical if we want to be able to inspect the elements. The alternative is to split our heterogeneous list into two parts; one tracking the types, and one tracking the values. In practice, this means that we implement a heterogeneous list as a list of values indexed over a list of types. This approach and mainly its specialization to binary trees is investigated in \cite{hetbin}.
+
+We will demonstrate that we can express this ``lift a type over itself'' operation as an ornament. For this, we make a small adjustment to \AgdaDatatype{RDesc} to track a type parameter separately from the fields. Using this we define an ornament-computing function, which given a description computes an ornamental description on top of it:
+\ExecuteMetaData[Tex/Heterogenize]{HetO}
+This ornament relates the original unindexed type to a type indexed over it; we see that this ornament largely keeps all fields and structure indentical, only performing the necessary bookkeeping in the index, and adding extra fields before parameters.
+
+As an example, we adapt the list description
+\ExecuteMetaData[Tex/Heterogenize]{List}
+which is easily heterogeneized to an \AgdaDatatype{HList}. In fact, \AgdaFunction{HetO} seems to act functorially; if we lift \AgdaDatatype{Maybe} like
+\ExecuteMetaData[Tex/Heterogenize]{HMaybe}
+then we can lift functions like \AgdaFunction{head} as
+\ExecuteMetaData[Tex/Heterogenize]{hhead}
+
+
 \begin{comment}
 \subsection{Folding in}\label{ssec:flattening}
 Let us describe this procedure of folding a complex recursive structure into a simpler structure more generally. In particular, we will demonstrate that for linear datatypes, such as \bN{} and \bL{}, and for a given unindexed datatype, there is always an indexed datatype isomorphic to it at some index, and an ornament from the linear type to the indexed type. 

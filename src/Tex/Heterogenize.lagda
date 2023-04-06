@@ -1,13 +1,13 @@
-{-# OPTIONS --cumulativity #-}
-
-module HetOrn2 where
+\begin{code}
+module Tex.Heterogenize where
 
 open import Prelude hiding (⌊_⌋)
 open import Cubical.Data.Bool
 open import Cubical.Data.List
 
 
-
+-- modified version of RDesc with parameter fields ṗ
+-- we introduce a bit more flexibility in the levels so we can make lists of types later
 data RDesc (I : Type ℓ) (ℓ′ : Level) : Type (ℓ-suc (ℓ-max ℓ ℓ′)) where
   ṿ   : (is : List I) → RDesc I ℓ′
   σ   : (S : Type ℓ′) (D : S → RDesc I ℓ′) → RDesc I ℓ′
@@ -24,7 +24,7 @@ Desc : Type ℓ → (ℓ′ : Level) → Type (ℓ-suc (ℓ-max ℓ ℓ′))
 Desc I ℓ′ = I → RDesc I ℓ′
 
 Ṗ : {I : Type ℓ} → List I → (I → Type ℓ′) → Type ℓ′
-Ṗ []       X = ⊤
+Ṗ []       X = Lift ⊤
 Ṗ (i ∷ is) X = X i × Ṗ is X
 
 ⟦_⟧ : {I : Type ℓ} → RDesc I ℓ′ → (I → Type (ℓ-max ℓ (ℓ-max ℓ′ ℓ″))) → Type ℓ″ → Type (ℓ-max ℓ (ℓ-max ℓ′ ℓ″))
@@ -90,23 +90,26 @@ toRDesc (ṗ D)       = ṗ (toRDesc D)
 
 ⌊_⌋ : {I : Type ℓ} {J : Type ℓ′} {e : J → I} {D : Desc {ℓ = ℓ} I ℓ″} → OrnDesc {ℓ′ = ℓ′} J e D → Desc J ℓ″
 ⌊ O ⌋ j = toRDesc (O (ok j))
+\end{code}
 
-
-
--- the heterogenization ornament
-HetO′ : (D : RDesc {ℓ = ℓ-zero} ⊤ ℓ-zero) (E : RDesc {ℓ = ℓ-zero} ⊤ ℓ-zero) (x : Ḟ (λ _ → D) (μ (λ _ → E) Type) Type tt) → ROrnDesc (μ (λ _ → E) Type tt) ! D
+%<*HetO>
+\begin{code}
+HetO′ : (D : RDesc ⊤ ℓ-zero) (E : RDesc ⊤ ℓ-zero) (x : Ḟ (λ _ → D) (μ (λ _ → E) Type) Type tt) → ROrnDesc (μ (λ _ → E) Type tt) ! D
 HetO′ (ṿ is) E x = ṿ (map-ṿ is x)
   where
-  map-ṿ : (is : List ⊤) → Ṗ is (μ (λ _ → E) Type) → Ṗ is (Inv {ℓ = ℓ-suc ℓ-zero} {A = μ (λ _ → E) Type tt} (! {ℓ = ℓ-suc ℓ-zero}))
+  map-ṿ : (is : List ⊤) → Ṗ is (μ (λ _ → E) Type) → Ṗ is (Inv !)
   map-ṿ []       _        = _
   map-ṿ (_ ∷ is) (x , xs) = ok x , map-ṿ is xs
 HetO′ (σ S D) E (s , x) = ∇ s (HetO′ (D s) E x)
-HetO′ (ṗ D) E (A , x) = Δ[ _ ∈ A ] ṗ (HetO′ D E x) 
+HetO′ (ṗ D) E (A , x)   = Δ[ _ ∈ A ] ṗ (HetO′ D E x) 
 
-HetO : (D : RDesc {ℓ = ℓ-zero} ⊤ ℓ-zero) → OrnDesc (μ (λ _ → D) Type tt) ! λ _ → D
+HetO : (D : RDesc ⊤ ℓ-zero) → OrnDesc (μ (λ _ → D) Type tt) ! λ _ → D
 HetO D (ok (con x)) = HetO′ D D x
+\end{code}
+%</HetO>
 
--- "ordinary" list
+%<*List>
+\begin{code}
 ListD : Desc ⊤ ℓ-zero
 ListD _ = σ Bool λ
   { false → ṿ []
@@ -114,19 +117,28 @@ ListD _ = σ Bool λ
 
 List′ : Type ℓ → Type ℓ
 List′ A = μ ListD A tt
+\end{code}
+%</List>
 
--- list of types indexed list: heterogeneous list
+%<*HList>
+\begin{code}
 HListD = ⌊ HetO (ListD tt) ⌋
 HList = μ HListD ⊤
+\end{code}
+%</HList>
 
+%<*hcons>
+\begin{code}
 cons : A → List′ A → List′ A
 cons x xs = con (true , x , xs , _)
 
-hcons : (A : Type) (As : List′ {ℓ = ℓ-suc ℓ-zero} Type) → A → HList As → HList (cons A As)
+hcons : (A : Type) (As : List′ Type) → A → HList As → HList (cons A As)
 hcons A As x xs = con (x , _ , xs , _)
--- nice
+\end{code}
+%</hcons>
 
--- "ordinary" Maybe
+%<*HMaybe>
+\begin{code}
 MaybeD : Desc ⊤ ℓ-zero
 MaybeD _ = σ Bool (λ
   { false → ṿ []
@@ -135,15 +147,19 @@ MaybeD _ = σ Bool (λ
 Maybe : Type ℓ → Type ℓ
 Maybe A = μ MaybeD A tt
 
--- Maybe Type indexed Maybe
 HMaybeD = ⌊ HetO (MaybeD tt) ⌋
 HMaybe = μ HMaybeD ⊤
+\end{code}
+%</HMaybe>
 
+%<*hhead>
+\begin{code}
 head : List′ A → Maybe A
 head (con (false , _))     = con (false , _)
 head (con (true  , a , _)) = con (true , a , _)
 
-hhead : (As : List′ {ℓ = ℓ-suc ℓ-zero} Type) → HList As → HMaybe (head As)
+hhead : (As : List′ Type) → HList As → HMaybe (head As)
 hhead (con (false , _)) (con _) = con _
 hhead (con (true , A , _)) (con (a , _)) = con (a , _ , _)
--- oooh
+\end{code}
+%</hhead>
