@@ -18,13 +18,13 @@ open import Cubical.Data.Empty
 open import Prelude.UseAs
 open import Extra.TypeIsos
 
-open import Ext.ProgOrn.Ornaments hiding (NatD; VecD)
+open import Ext.ProgOrn.Ornaments
 \end{code}
 
 %<*NatD>
 \AgdaTarget{NatD}
 \begin{code}
-NatD : Desc ⊤
+NatD : Desc ⊤ ℓ-zero
 NatD _ = σ Bool λ
   { false → ṿ []
   ; true  → ṿ [ tt ] }
@@ -50,7 +50,7 @@ NatD-VecO A (ok (suc n)) = ∇ true (Δ A (λ _ → ṿ (ok n , _)))
 %<*LeibnizD>
 \AgdaTarget{LeibnizD}
 \begin{code}
-LeibnizD : Desc ⊤
+LeibnizD : Desc ⊤ ℓ-zero
 LeibnizD _ = σ (Fin 3) λ
   { zero             → ṿ []
   ; (suc zero)       → ṿ [ tt ]

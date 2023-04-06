@@ -110,7 +110,7 @@ inj-bsuc (in-σ (true , in-ṿ (lift x ∷ []))) (in-σ (true , in-ṿ (lift y �
 
 %<*L-is-mu-N>
 \begin{code}
-L≃μN : _≃_ Leibniz₁ (μ NatD)
+L≃μN : Leibniz₁ ≃ μ NatD
 L≃μN = Wf+inj≃μ NatD L-Alg Wf-bsuc λ x y p → inj-bsuc x y p
 \end{code}
 %</L-is-mu-N>

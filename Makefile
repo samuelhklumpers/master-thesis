@@ -7,19 +7,27 @@ AFLAGS=-i. --latex
 # make sure latex doesn't ask us for input if we hit an error
 LATEX=latexmk -pdf -use-make -lualatex -halt-on-error -synctex=1
 SOURCE=Main.tex
+FAST=false
 
+.PHONY: all bel fast
 
+# naive fix 
+targets := $(shell git status | grep .lagda$$ | grep -v deleted | grep -v Notes | awk -F 'src/' '{print "src/"$$2}')
 
-.PHONY: all bel
-targets := $(shell ls src/**/*.lagda)
-
-
-lagda = $(AGDA) $(AFLAGS) $(target)
+lagda=$(AGDA) $(AFLAGS)
 
 all:
 	$(MAKE) try ; tput bel
 
+fast:
+	$(eval FAST=true)
+	$(MAKE) all -e FAST=$(FAST)
+
 try:
-	$(foreach target, $(targets), $(lagda) ; )
+ifeq ($(FAST), true)
+	$(eval lagda=$(lagda) --only-scope-checking)
+endif
+	echo $(targets)
+	$(foreach target, $(targets), $(lagda) $(target) && ) :
 	cd latex/ && \
 	$(LATEX) $(SOURCE)
