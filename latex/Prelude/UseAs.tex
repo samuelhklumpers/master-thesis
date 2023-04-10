@@ -77,9 +77,9 @@ Let's try.
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSpace{}%
 \AgdaField{fst}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+%</isigma>
+\begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Σ'}\<%
 \\
@@ -89,7 +89,6 @@ Let's try.
 \AgdaNumber{1}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{}use-as-def}}\<%
 \end{code}
-%</isigma>
 
 %<*Def>
 \AgdaTarget{Def}
@@ -140,12 +139,6 @@ Let's try.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{X}\<%
 \\
-\>[0]\AgdaFunction{defined-by}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{fst}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{by-definition}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
@@ -165,10 +158,16 @@ Let's try.
 \AgdaOperator{\AgdaFunction{≡}}\AgdaSpace{}%
 \AgdaFunction{defined-by}\AgdaSpace{}%
 \AgdaBound{d}\<%
+\end{code}
+%</Def>
+
+\begin{code}%
+\>[0]\AgdaFunction{defined-by}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{fst}\<%
 \\
 \>[0]\AgdaFunction{by-definition}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{snd}\<%
 \end{code}
-%</Def>
 \end{document}

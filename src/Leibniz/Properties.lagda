@@ -174,7 +174,7 @@ plus-def (x 1b) (y 1b) =
   fromℕ (toℕ x N.+ toℕ y) 2b                            
     ≡⟨ cong _2b (by-definition (plus-def x y)) ⟩
   defined-by (plus-def x y) 2b ∎ use-as-def
--- similar clauses omitted
+-- ...
 \end{code}
 %</plus-def>
 \begin{code}[hide]

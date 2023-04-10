@@ -27,12 +27,13 @@ record Σ' (A : Set a) (B : A → Set b) : Set (ℓ-max a b) where
   field
     {fst} : A
     snd : B fst
-
+\end{code}
+%</isigma>
+\begin{code}
 open Σ'
 
 infix 1 _use-as-def
 \end{code}
-%</isigma>
 
 %<*Def>
 \AgdaTarget{Def}
@@ -43,10 +44,12 @@ Def : {X : Type a} → X → Type a
 Def {X = X} x = Σ' X λ y → x ≡ y
 
 defined-by : {X : Type a} {x : X} → Def x → X
-defined-by = fst
-
 by-definition : {X : Type a} {x : X} → (d : Def x) → x ≡ defined-by d
-by-definition = snd
 \end{code}
 %</Def>
+
+\begin{code}
+defined-by = fst
+by-definition = snd
+\end{code}
 \end{document}

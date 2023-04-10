@@ -65,7 +65,8 @@
 \renewcommand{\AgdaCommentFontStyle}[1]{{\AgdaTypewriterFont{}#1}}
 \renewcommand{\AgdaBoundFontStyle}[1]{\textit{\AgdaSerifFont{}#1}}
 
-
+\newcommand{\towrite}[1]{\par\textcolor{blue}{Write here about: ``#1''}\par}
+\newcommand{\toremove}[1]{\textcolor{red}{This is going to be (re)moved: ``#1''}}
 
 
 % macros
@@ -92,7 +93,7 @@
 \newpage
 
 \begin{abstract} %provisional
-    This thesis aims to introduce the concepts of the structure identity principle, numerical representations, and ornamentations. These concepts are then combined to simplify the presentation and verification of finger trees, demonstrating the generalizability and improved compactness and security of the resulting code. 
+    This thesis introduces the concepts of the structure identity principle, numerical representations, and ornamentations, and aims to combine these to simplify the presentation and verification of finger trees, demonstrating the generalizability and improved compactness and security of the resulting code. 
 \end{abstract}
 
 \part{Outline}
@@ -104,33 +105,18 @@
 \part{Related work}
 
 \part{Preliminary work}
-\section{The Cost of Verification}\label{sec:intro}
-The dependently typed functional programming language Agda \cite{agda} can, when restricted to its reasonable parts, be translated into readable, and safe, Haskell \cite{agda2hs}. However, the intrinsic safety of languages like Agda can also lead to code duplication by encouraging the use of multiple variants of the same datatype: enforcing coverage checking forces the \AgdaFunction{head} function on \AgdaDatatype{List} to return a \AgdaDatatype{Maybe}. The \AgdaDatatype{Maybe} can be avoided by moving to the length-indexed list type \AgdaDatatype{Vec}, at the cost of duplicating functions like \AgdaFunction{\_++\_}, which we want to have for both types.
+\input{Introduction}
 
-Of course, not differently from Haskell, a similar problem arises when implementing binary trees as a more efficient alternative to lists. Furthermore, the proofs of the same properties will differ between list and tree, and tend to be more difficult for the latter. In general, switching between implementations of an interface will not only duplicate code, but also (and sometimes more than) duplicate the effort of verification.
-
-On the other hand, the expressive power of dependent types is also such that part of the problems arising from safety or efficiency can be dealt with inside Agda itself; the work in \cite{orntrans} and \cite{progorn}, provides the means to relate similar datatypes, such as lists and vectors, using the mechanism of ornamentation. %This leads them to define the concept of patches, which can aid us when defining \AgdaFunction{\_++\_} for the second time by forcing the new version to be coherent.
-In fact, the algebraic nature of ornaments yields the definition of the vector type for free, provided we relate lists to natural numbers \cite{algorn}. %Such constructions rely heavily on descriptions of datastructures and often come with limitations in their expressiveness. These descriptions in turn impose additional ballast on the programmer, leading us to investigate reflection like in \cite{practgen} as a means to bring datatypes and descriptions closer when possible.
-
-From another point of view, lists and trees are not so different at all, provided we look at them through the interface of one-sided flexible arrays; this idea noted in \cite{purelyfunctional} and formalized in \cite{calcdata} where both are shown to be instances of numerical representations by calculating them from a numeral system. 
-
-When two types are isomorphic and equivalent under an interface, proofs of properties of these implementations become interconvertible. While this is achievable through meta-programming, substituting conversions to and from into the proof terms, this is internally expressible in Cubical Agda. By using structured equivalences and univalence, \cite{iri} gives a way to derive what is necessary to show that two implementations are equal.
-
-%We can liken the situation to movement on a plane, where ornamentation moves us vertically by modifying constructors or indices, and structured equivalences move us horizontally to and from equivalent but more equivalent implementations. In this paper, we will investigate a variety of means of moving around structures and proofs, and ways to make this more efficient or less intrusive.
-
-In \autoref{sec:leibniz}, we will follow \cite{iri}, and look at how proofs on unary naturals can be transported to the binary naturals. Then in \autoref{sec:numrep} we recall how numeral systems in particular induce container types in \cite{calcdata}, which we attempt to reformulate in the language of ornaments in \autoref{ssec:ornaments}, using the framework of \cite{progorn}. In \autoref{sec:userfriendly} we investigate how we can make the earlier methods more easily accessible to the user, and, ourselves, when we give a description of finger trees in \autoref{sec:fingertrees}.
-
-
-\section{Proving about binary using unary: the Structure Indentity Principle}\label{sec:leibniz}
+\section{Proof Transport via the Structure Indentity Principle}\label{sec:leibniz}
 \input{CubicalAndBinary}
 
-\section{Types from Specification: Ornamentation and Calculation}\label{sec:numrep}
+\section{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
 \input{TypeGeneration}
 
-\section{Getting more from less: Generic Constructions}\label{sec:userfriendly}
+\section{More equivalences for less effort}\label{sec:userfriendly}
 \input{UserFriendly}
 
-\section{Case Study: FingerTrees}\label{sec:fingertrees}
+\section{FingerTrees}\label{sec:fingertrees}
 Fingertrees are often (rightfully so) referred to as ``the fastest persistent datastructure for most purposes'', but while simpler than implementations achieving the same bounds, they are still challenging to reason about; in this section, we will investigate how we can fit the description and analysis of fingertrees, or variants upon them, into the frameworks of calculating datastructures and ornamental programming.
 
 We compare the work in calculating datastructures to solving associativity equations in groups by shifting to the Cayley representation, such as in [..]

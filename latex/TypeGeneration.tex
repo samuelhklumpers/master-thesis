@@ -2,7 +2,7 @@ While the practical applications of the last example do not stretch very far\foo
 
 But rather than inductively defining an array-like type and then showing that it is represented by a lookup function, we can go the other way around and define types by insisting that they are equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations in \cite{purelyfunctional}, and has some formalized examples in, e.g., \cite{calcdata} and \cite{progorn}. Numerical representations are our starting point for defining more complex datastructures based on simpler ones, so let us demonstrate such a calculation. 
 
-\subsection{Numerical representations: from numbers to containers}\label{ssec:numrep}
+\subsection{From numbers to containers}\label{ssec:numrep}
 We can compute the type of vectors starting from \bN{}.\footnote{This is adapted (and fairly abridged) from \cite{calcdata}} For simplicity, we define them as a type computing function via the ``use-as-definition`` notation from before. We expect vectors to be represented by 
 \ExecuteMetaData[Tex/NumRep]{Lookup}
 where we use the finite type \AgdaDatatype{Fin} as an index into vector. Using this representation as a specification, we can compute both \AgdaDatatype{Fin} and a type of vectors. The finite type can be computed from the evident definition
