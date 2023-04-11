@@ -30,6 +30,12 @@
 \AgdaSymbol{as}\AgdaSpace{}%
 \AgdaModule{N}\<%
 \\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Cubical.Data.Nat.Base}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSymbol{)}\<%
+\\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
@@ -110,74 +116,13 @@ The successor operation on binary numbers
 Addition on binary numbers
 %<*plus>
 \AgdaTarget{_+_}
-\begin{code}%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}+\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{Leibniz}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaDatatype{Leibniz}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaDatatype{Leibniz}\<%
-\\
-\>[0]\AgdaInductiveConstructor{0b}%
-\>[7]\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaBound{y}%
-\>[12]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{y}\<%
-\\
-\>[0]\AgdaCatchallClause{\AgdaBound{x}}%
-\>[7]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{+}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaInductiveConstructor{0b}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-\>[0]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{1b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{1b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{2b}}\<%
-\\
-\>[0]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{1b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{2b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{bsuc}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{1b}}\<%
-\\
-\>[0]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{2b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{1b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{bsuc}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{1b}}\<%
-\\
-\>[0]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{2b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{2b}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{bsuc}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{+}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{2b}}\<%
-\end{code}
+{- _+_ : Leibniz → Leibniz → Leibniz
+0b     + y  = y
+x      + 0b = x
+(x 1b) + (y 1b) = (x + y) 2b
+(x 1b) + (y 2b) = bsuc (x + y) 1b
+(x 2b) + (y 1b) = bsuc (x + y) 1b
+(x 2b) + (y 2b) = bsuc (x + y) 2b -}
 %</plus>
 
 Right shift the binary number by a peano number of steps
@@ -352,12 +297,12 @@ From peano to leibniz
 \AgdaDatatype{Leibniz}\<%
 \\
 \>[0]\AgdaFunction{fromℕ}\AgdaSpace{}%
-\AgdaInductiveConstructor{ℕ.zero}%
-\>[16]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaNumber{0}%
+\>[14]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{0b}\<%
 \\
 \>[0]\AgdaFunction{fromℕ}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{ℕ.suc}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{bsuc}\AgdaSpace{}%
@@ -365,6 +310,12 @@ From peano to leibniz
 \AgdaBound{n}\AgdaSymbol{)}\<%
 \end{code}
 %</fromN>
+
+\begin{code}%
+\>[0]\AgdaKeyword{infix}\AgdaSpace{}%
+\AgdaNumber{10}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\<%
+\end{code}
 
 From leibniz to peano
 %<*toN>
@@ -404,4 +355,12 @@ From leibniz to peano
 \AgdaBound{n}\<%
 \end{code}
 %</toN>
+
+%<*toN-2>
+\begin{code}%
+\>[0]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{toℕ}\<%
+\end{code}
+%</toN-2>
 \end{document}

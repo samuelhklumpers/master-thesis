@@ -10,6 +10,7 @@ open import Prelude
 open import Extra.Algebra
 
 import Cubical.Data.Nat.Base as N
+open import Cubical.Data.Nat.Base using (suc)
 
 
 infix 20 _1b _2b
@@ -43,15 +44,13 @@ bsuc (n 2b) = (bsuc n) 1b
 Addition on binary numbers
 %<*plus>
 \AgdaTarget{_+_}
-\begin{code}
-_+_ : Leibniz → Leibniz → Leibniz
+{- _+_ : Leibniz → Leibniz → Leibniz
 0b     + y  = y
 x      + 0b = x
 (x 1b) + (y 1b) = (x + y) 2b
 (x 1b) + (y 2b) = bsuc (x + y) 1b
 (x 2b) + (y 1b) = bsuc (x + y) 1b
-(x 2b) + (y 2b) = bsuc (x + y) 2b
-\end{code}
+(x 2b) + (y 2b) = bsuc (x + y) 2b -}
 %</plus>
 
 Right shift the binary number by a peano number of steps
@@ -90,10 +89,14 @@ From peano to leibniz
 \AgdaTarget{fromℕ}
 \begin{code}
 fromℕ : ℕ → Leibniz
-fromℕ ℕ.zero    = 0b
-fromℕ (ℕ.suc n) = bsuc (fromℕ n)
+fromℕ 0       = 0b
+fromℕ (suc n) = bsuc (fromℕ n)
 \end{code}
 %</fromN>
+
+\begin{code}
+infix 10 ⟦_⟧ 
+\end{code}
 
 From leibniz to peano
 %<*toN>
@@ -105,4 +108,10 @@ toℕ (n 1b) = 1 N.+ 2 N.· toℕ n
 toℕ (n 2b) = 2 N.+ 2 N.· toℕ n
 \end{code}
 %</toN>
+
+%<*toN-2>
+\begin{code}
+⟦_⟧ = toℕ
+\end{code}
+%</toN-2>
 \end{document}
