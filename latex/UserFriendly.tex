@@ -25,7 +25,7 @@ Recall that the \AgdaDatatype{Base} functors of descriptions are special polynom
 so, we are looking for sufficient conditions on $X$ to get the equivalence $e: X \cong \mu F$. Note that when $X \cong \mu F$, then there necessarily is an initial algebra $F X \to X$. Conversely, if the algebra $(X, f)$ is isomorphic to $(\mu F, \mathrm{con})$, then $X \cong \mu F$ would follow immediately, so it is equivalent to ask for the algebras to be isomorphic instead.
 
 \subsubsection{Datatypes as initial algebras}
-To characterize when such algebras are isomorphic, we reiterate some basic category theory, simultaneously rephrasing it in Agda terms.\footnote{We are not reusing a pre-existing category theory library for the simple reasons that it is not that much work to write out the machinery explicitly, and that such libraries tend to phrase initial objects in the correct way, which is too restrictive for us.}\todo{Maybe category theory reference}
+To characterize when such algebras are isomorphic, we reiterate some basic category theory, simultaneously rephrasing it in Agda terms.\footnote{We are not reusing a pre-existing category theory library for the simple reasons that it is not that much work to write out the machinery explicitly, and that such libraries tend to phrase initial objects in the correct way, which is too restrictive for us.}\todo[inline]{Maybe category theory reference}
 
 Let $C$ be a category, and let $a, b, c$ be objects of $C$, so that in particular we have identity arrows $1_a : a \to a$ and for arrows $g : b \to c, f : a \to b$ composite arrows $gf : a \to c$ subject to associativity. In our case, $C$ is the category of types, with ordinary functions as arrows.
 
@@ -93,7 +93,7 @@ We can see well-foundedness as an upper bound on the size of $X$, if it were lar
 \end{claim}
 
 \subsubsection{Proof sketch of \autoref{claim:wf-inj-init}}
-Let us be on our way. Suppose $X$ is well-founded for the mono $f : FX \to X$. To show that $(X, f)$ is initial, let us take another algebra $(Y, g)$, and show that there is a unique arrow $(X, f) \to (Y, g)$.\todo{This section is about as digestable as a brick.}
+Let us be on our way. Suppose $X$ is well-founded for the mono $f : FX \to X$. To show that $(X, f)$ is initial, let us take another algebra $(Y, g)$, and show that there is a unique arrow $(X, f) \to (Y, g)$.\todo[inline]{This section is about as digestable as a brick.}
 
 By \AgdaDatatype{Acc}-recursion and because all $x$ are accessible, we can define a plain map into $Y$
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec}
