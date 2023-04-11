@@ -14,7 +14,10 @@ we will need to implement \AgdaDatatype{Base}. We remark that in the original se
 \ExecuteMetaData[Extra/ProgOrn/Desc]{Base}
 such that this descent is allowed by the termination checker without axiom K.\footnote{This has, again by the absence of axiom K, the consequence of pushing the universe levels up by one. However, this is not too troublesome, as equivalences can go between two levels, and indeed types are equivalent to their lifts.}
 
-Recall that the \AgdaDatatype{Base} functors of descriptions are special polynomial functors, and the fixpoint of a base functor is its initial algebra. The situation so far is summarized by the diagram
+Recall that the \AgdaDatatype{Base} functors of descriptions are special polynomial functors, and the fixpoint of a base functor is its initial algebra. We are looking for sufficient conditions on $X$ to get the equivalence $e: X \cong \mu F$. Note that when $X \cong \mu F$, then there necessarily is an initial algebra $F X \to X$. Conversely, if the algebra $(X, f)$ is isomorphic to $(\mu F, \mathrm{con})$, then $X \cong \mu F$ would follow immediately, so it is equivalent to ask for the algebras to be isomorphic instead.
+
+\begin{comment}
+The situation so far is summarized by the diagram
 % https://q.uiver.app/?q=WzAsMyxbMSwwLCJGXFxtdV9GIl0sWzEsMSwiXFxtdSBGIl0sWzAsMSwiWCJdLFswLDEsIlxcbWF0aHJte2Nvbn0iXSxbMiwxLCJlIiwyLHsic3R5bGUiOnsidGFpbCI6eyJuYW1lIjoiYXJyb3doZWFkIn0sImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dXQ==
 \[\begin{tikzcd}[ampersand replacement=\&]
 	\& {F\mu_F} \\
@@ -22,10 +25,9 @@ Recall that the \AgdaDatatype{Base} functors of descriptions are special polynom
 	\arrow["{\mathrm{con}}", from=1-2, to=2-2]
 	\arrow["e"', dashed, tail reversed, from=2-1, to=2-2]
 \end{tikzcd}\]
-so, we are looking for sufficient conditions on $X$ to get the equivalence $e: X \cong \mu F$. Note that when $X \cong \mu F$, then there necessarily is an initial algebra $F X \to X$. Conversely, if the algebra $(X, f)$ is isomorphic to $(\mu F, \mathrm{con})$, then $X \cong \mu F$ would follow immediately, so it is equivalent to ask for the algebras to be isomorphic instead.
-
+\end{comment}
 \subsubsection{Datatypes as initial algebras}
-To characterize when such algebras are isomorphic, we reiterate some basic category theory, simultaneously rephrasing it in Agda terms.\footnote{We are not reusing a pre-existing category theory library for the simple reasons that it is not that much work to write out the machinery explicitly, and that such libraries tend to phrase initial objects in the correct way, which is too restrictive for us.}\todo[inline]{Maybe category theory reference}
+To characterize when such algebras are isomorphic, we reiterate some basic category theory, simultaneously rephrasing it in Agda terms.\footnote{We are not reusing a pre-existing category theory library for the simple reasons that it is not that much work to write out the machinery explicitly, and that such libraries tend to phrase initial objects in the correct way, which is too restrictive for us.}
 
 Let $C$ be a category, and let $a, b, c$ be objects of $C$, so that in particular we have identity arrows $1_a : a \to a$ and for arrows $g : b \to c, f : a \to b$ composite arrows $gf : a \to c$ subject to associativity. In our case, $C$ is the category of types, with ordinary functions as arrows.
 
@@ -52,7 +54,7 @@ Note that we take the propositional truncation of the square, such that algebra 
 \ExecuteMetaData[Extra/Category]{AlgPath}
 The identity and composition in $C^F$ arise directly from those of the underlying arrows in $C$.
 
-Recall that an object $\emptyset$ is initial when for each other object $a$, there is an unique arrow $!: \emptyset \to a$. By reversing the proofs of initiality of \AgdaDatatype{μ} and the main result of this section, we obtain a slight variation upon the usual definition. Namely, unicity is often expressed as contractability of a type
+Recall that an object $\emptyset$ is initial when for each other object $a$, there is a unique arrow $!: \emptyset \to a$. By reversing the proofs of initiality of \AgdaDatatype{μ} and the main result of this section, we obtain a slight variation upon the usual definition. Namely, unicity is often expressed as contractability of a type
 \ExecuteMetaData[Tex/Snippets]{isContr}
 Instead, we again use a truncation
 \ExecuteMetaData[Extra/Category]{weakContr}
@@ -68,7 +70,7 @@ Similarly, we get that
 \ExecuteMetaData[Extra/Category]{InitAlg-equiv}
 However, we only have the equalities from the isomorphism inside a propositional truncation. But fortunately, being an equivalence is a property, so we can eliminate from the truncations to get the wanted result.
 
-Note that even though we warned ourselves, we are still talking about sections and retractions to establish that $f$ is an equivalence! However, this result also makes sure we will not have to speak of them again.\footnote{For now...}
+%Note that even though we warned ourselves, we are still talking about sections and retractions to establish that $f$ is an equivalence! However, this result also makes sure we will not have to speak of them again.
 
 \subsubsection{Accessibility}
 As a consequence, we get that $X$ is isomorphic to $\mu D$ when $X$ is an initial algebra for the base functor of $D$; $\mu D$ is initial by its fold, and by induction on $\mu D$ using the squares of algebra maps. 
@@ -111,7 +113,8 @@ Thus, we conclude that $X$ is initial. The main result is then a corollary of in
 Let us redo the proof in \autoref{sec:leibniz}, now using this result. Recall the description of naturals \AgdaFunction{NatD}. To show that \AgdaFunction{Leibniz} is isomorphic to \AgdaFunction{Nat}, we will need a \AgdaFunction{NatD}-algebra and a proof of its well-foundedness. We define the algebra
 \ExecuteMetaData[Tex/Leibniz2]{bsuc'}
 
-For well-foundedness, we use something similar to views [mcbride] (it differs because it views right through the entire structure, instead of a single layer)
+For well-foundedness, we use something similar to view-patterns %[mcbride]
+(the main difference being that we look through the entire structure, instead of a single layer)
 \ExecuteMetaData[Tex/Leibniz2]{Peano-View}
 where the mutually recursive proof of \AgdaFunction{view} is ``almost trivial''. Well-foundedness follows fairly immediately
 \ExecuteMetaData[Tex/Leibniz2]{Wf-bsuc}

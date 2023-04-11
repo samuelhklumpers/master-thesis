@@ -47,12 +47,15 @@ open import Extra.TypeIsos
 \begin{code}
 Fin-def : ∀ n → Def (Σ[ m ∈ ℕ ] m < n)
 Fin-def zero    =
-  (Σ[ m ∈ ℕ ] m < 0)         ≡⟨ ⊥-strict (λ ()) ⟩
-  ⊥                          ∎ use-as-def
+     (Σ[ m ∈ ℕ ] m < 0)
+  ≡⟨ ⊥-strict (λ ()) ⟩
+     ⊥ ∎ use-as-def
 Fin-def (suc n) =
-  (Σ[ m ∈ ℕ ] m < suc n)     ≡⟨ ua (<-split n) ⟩
-  ⊤ ⊎ (Σ[ m ∈ ℕ ] m < n)     ≡⟨ cong (⊤ ⊎_) (by-definition (Fin-def n)) ⟩
-  ⊤ ⊎ defined-by (Fin-def n) ∎ use-as-def
+     (Σ[ m ∈ ℕ ] m < suc n)
+  ≡⟨ ua (<-split n) ⟩
+     ⊤ ⊎ (Σ[ m ∈ ℕ ] m < n)
+  ≡⟨ cong (⊤ ⊎_) (by-definition (Fin-def n)) ⟩
+     ⊤ ⊎ defined-by (Fin-def n) ∎ use-as-def
 
 Fin : ℕ → Type
 Fin n = defined-by (Fin-def n)
@@ -73,16 +76,18 @@ Lookup A n = Fin n → A
 \AgdaTarget{Vec}
 \begin{code}
 Vec-def : ∀ A n → Def (Lookup A n) 
-Vec-def A zero    = isContr→≡Unit isContr⊥→A use-as-def
+Vec-def A zero    =
+     (⊥ → A)
+  ≡⟨ isContr→≡Unit isContr⊥→A ⟩
+     ⊤ ∎ use-as-def
 Vec-def A (suc n) = 
-  ((⊤ ⊎ Fin n) → A)
-      ≡⟨ ua Π⊎≃ ⟩
-  (⊤ → A) × (Fin n → A)
-      ≡⟨ cong₂ _×_
-         (UnitToTypePath A)
-         (by-definition (Vec-def A n)) ⟩
-  A × (defined-by (Vec-def A n))
-      ∎ use-as-def
+     ((⊤ ⊎ Fin n) → A)
+  ≡⟨ ua Π⊎≃ ⟩
+     (⊤ → A) × (Fin n → A)
+  ≡⟨ cong₂ _×_
+      (UnitToTypePath A)
+      (by-definition (Vec-def A n)) ⟩
+     A × (defined-by (Vec-def A n)) ∎ use-as-def
 
 Vec : ∀ A n → Type
 Vec A n = defined-by (Vec-def A n)
