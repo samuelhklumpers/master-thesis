@@ -100,25 +100,51 @@
 
 
 \part{Proposal}
-\towrite{What is this document?}
-
 \section{Outline}
-\towrite{Summarize everything}
+In this document I propose a master thesis project, which will investigate and attempt to counter the obstacles one can encounter when replacing one datastructure with a more complicated one, while keeping the end-result verifiable.
 
-\section{Introduction}\label{sec:intro}\todo[inline, color=red]{``Spend some more time on the context''}
+\autoref{sec:intro} explains why you might want to do this, and describes some challenges that can arise from this, along with known ways to tackle them.
+
+\autoref{sec:research-question} poses some remaining and new questions regarding this topic, and proposes methods and ideas to tackle and answer the open challenges and questions.
+
+\autoref{sec:resources} lists literate and frameworks relevant to this and similar problems.
+
+\autoref{sec:planning} proposes a planning for the described project.
+
+\autoref{part:preliminary} summarizes and contains the preliminary work done for this project.
+
+\section{Program Vivisection}\label{sec:intro}\todo[inline, color=red]{``Spend some more time on the context''}
 \input{Introduction}
 
-\section{Research Question and Contributions}
-\towrite{Let's aim for a nice presentation of fingertrees and correctness, and see where we can go from there}
+\section{Research Question and Contributions}\label{sec:research-question}
+The research question of this project will be: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?} We expect to encounter a variety of obstacles along the way, and so the project will focus on finding existing or developing new theory to deal with these. For example, an obstacle can be that the corresponding number system has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem, but then through the lens of ornaments.
 
-\section{Related work}
-\towrite{This has been or will be used}
+\section{Related work}\label{sec:resources}
+\towrite{Organize this into a human text}
 
-\section{Planning}
+\begin{tabular}{l l}
+    IRI           & Equivalences from relations, transport over structures \\ 
+    Calcdata      & Prototyping datatypes with properties deriving from the underlying numbers, enjoy the definitional equalities of representables at the inductive types \\  
+    ProgOrn       & Using simple types as stepping stones to more impressive types, generalization of numerical representations? Are ``ornament-computing functions'' powerful, or are they nice party-tricks and is heterogeneization a coincidence? \\  
+    PurelyFunct   & Not so much work in the same direction, but definitely a source of inspiration, and a good reference for which datastructure is good at what \\
+    HetBin        & A predecessor/inspiration for heterogeneization \\
+    GLookup       & Perhaps an inspiration to do more with the numerical representations/ornaments experiment \\
+    OrnTrans      & How many functions do we keep when we turn our naturals into lists or vectors? \\
+    HSIP          & Can we push SIP to eat indexed structures? (I still have to attempt to digest this) \\
+    PractGen      & Source of inspiration for some generic constructions (and perhaps a list of things we don't need to try again) \\
+    TranspGalois  & It claims to achieve what univalence does, without the Cubical/HoTT overhead? (Haven't fully read, even if it doesn't do what this makes me think it does, it references a wealth of other papers that might) \\
+    CoveringBases & Inspiration/application for enumeration \\
+    GuideToRecSch & Like mapFold, but more probably \\
+    InitFinal?    & The least fixpoint of $X \mapsto \top + A \times X$ is a list, the largest is a stream. What happens in between the two? (This might not be relevant at all) \\
+    AmortCoind    & Could we derive the amortized bounds on (our or Ralf's) fingertrees using this? (Not sure if I want to...)
+\end{tabular}
+
+
+\section{Planning}\label{sec:planning}
 \towrite{This will be done}
 
 
-\part{Preliminary work}
+\part{Preliminary work}\label{part:preliminary}
 \towrite{This has been done}
 
 \section{Proof Transport via the Structure Indentity Principle}\label{sec:leibniz}
