@@ -25,7 +25,7 @@ BinOp A = A → A → A
 %<*Magma'>
 \begin{code}
 Magma' : Type₁
-Magma' = Σ[ X ∈ Type ] (X → X → X)
+Magma' = Σ[ X ∈ Type ] BinOp X
 \end{code}
 %</Magma'>
     

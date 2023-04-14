@@ -1,4 +1,4 @@
-Suppose that we started writing and verifying some code using a vector-based implementation of the two-sided flexible array interface, but later decide to reimplement more efficiently using trees. It would be a shame to lay aside our vector lemmas, and rebuild the correctness proofs for trees from scratch. So, we take a step back and note that both vectors and trees can be represented by their \AgdaFunction{lookup} function. In fact, we can ask for more, and rather than defining an array-like type and then showing that it is represented by a lookup function, we can go the other way around and define types by insisting that they are equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations by Okasaki \cite{purelyfunctional}, and has some formalized examples in by Hinze and Swierstra \cite{calcdata} and Ko and Gibbons \cite{progorn}. Numerical representations are our starting point for defining more complex datastructures based on simpler ones, so let us demonstrate such a calculation. 
+Suppose that we started writing and verifying some code using a vector-based implementation of the two-sided flexible array interface, but later decide to reimplement more efficiently using trees. It would be a shame to lay aside our vector lemmas, and rebuild the correctness proofs for trees from scratch. Instead, we note that both vectors and trees can be represented by their \AgdaFunction{lookup} function. In fact, we can ask for more, and rather than defining an array-like type and then showing that it is represented by a lookup function, we can go the other way around and define types by insisting that they are equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations by Okasaki \cite{purelyfunctional}, and has some formalized examples due to Hinze and Swierstra \cite{calcdata} and Ko and Gibbons \cite{progorn}. Numerical representations are our starting point for defining more complex datastructures based on simpler ones, so we demonstrate such a calculation. 
 
 \subsection{From numbers to containers}\label{ssec:numrep}
 We can compute the type of vectors starting from \bN{}.\todo[inline]{Is there a simple twist or other interesting example that we can run through instead, or would anything else be too abrupt without starting from this simple case?}\footnote{This is adapted (and fairly abridged) from Calculating Datastructures \cite{calcdata}} For simplicity, we define them as a type computing function via the ``use-as-definition`` notation from before. We expect vectors to be represented by 
@@ -15,9 +15,9 @@ We can implement the following interface using \AgdaDatatype{Vec}
 \ExecuteMetaData[Tex/NumRep]{Array}
 and show that this satisfies some usual laws like
 \ExecuteMetaData[Tex/NumRep]{Laws}
-However, now that we defined \AgdaDatatype{Vec} from \AgdaDatatype{Lookup} we might as well use that.
+Since we defined \AgdaDatatype{Vec} such that it agrees with \AgdaDatatype{Lookup}, we can relate their implementations as well.
 
-The implementation of arrays as functions is very straightforward
+The implementation of arrays as functions is straightforward
 \ExecuteMetaData[Tex/NumRep]{FunArray}
 and clearly satisfies our interface
 \ExecuteMetaData[Tex/NumRep]{FunLaw}
@@ -30,18 +30,17 @@ Now, rather than rederiving the laws for vectors, the equality allows us to tran
 
 %\subsection{Relating types by structure: Ornamentation (unfinished)}\label{sec:ornament}
 \subsection{Numerical representations as ornaments}\label{ssec:ornaments}
-Reflecting on this derivation for \bN{}, we could perform the same computation for \bL{} to get Braun trees. However, we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. This kind of ``modifying constructors'' is formalized by ornamentation \cite{progorn}, which lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped to go from one description to the other. Furthermore, one-sided ornaments (ornamental descriptions) lets us describe new datatypes by recording the modifications to an existing description.
+Reflecting on this derivation for \bN{}, we could perform the same computation for \bL{} to get Braun trees. However, we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. This kind of ``modifying constructors'' is formalized by ornamentation \cite{progorn}, which lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped to go from one description to the other. \textit{Ornamental descriptions}, which act as one-sided ornaments, let us describe new datatypes by recording the modifications to an existing description.
 \todo[inline]{Put some minimal definitions here.}
 
-This links back to the construction in the previous section, since \bN{} and \AgdaDatatype{Vec} share the same recursive structure, so \AgdaDatatype{Vec} can be formed by introducing indices and adding a field holding an element at each node.%\footnote{These and similar examples are also documented in \cite{progorn}} 
-
-Instead, deriving \AgdaDatatype{List} from \bN{} generalizes to \bL{} with less notational overhead, so we tackle that case first. We use the following description of \bN{}
+Looking back at \AgdaDatatype{Vec}, ornaments let us show that express that \AgdaDatatype{Vec} can be formed by introducing indices and adding a fields holding an elements to \bN{}.%\footnote{These and similar examples are also documented in \cite{progorn}} 
+However, deriving \AgdaDatatype{List} from \bN{} generalizes to \bL{} with less notational overhead, so we tackle that case first. We use the following description of \bN{}
 \ExecuteMetaData[Tex/NumRepOrn]{NatD}
 Here, \AgdaInductiveConstructor{σ} adds a field to the description, upon which the rest of the description can vary, and \AgdaInductiveConstructor{ṿ} lists the recursive fields and their indices (which can only be \AgdaInductiveConstructor{tt}).
 We can now write down the ornament which adds fields to the \AgdaFunction{suc} constructor
 \ExecuteMetaData[Tex/NumRepOrn]{ListO}
 Here, the \AgdaInductiveConstructor{σ} and \AgdaInductiveConstructor{ṿ} are forced to match those of \AgdaDatatype{NatD},
-but the \AgdaInductiveConstructor{Δ} adds a new field. With the least fixpoint and description extraction, this is sufficient to define \AgdaDatatype{List}. Note that we cannot hope to give an unindexed ornament from \bL{}
+but the \AgdaInductiveConstructor{Δ} adds a new field. Using the least fixpoint and description extraction, we can then define \AgdaDatatype{List} from this ornamental description. Note that we cannot hope to give an unindexed ornament from \bL{}
 \ExecuteMetaData[Tex/NumRepOrn]{LeibnizD}
 into trees, since trees have a very different recursive structure! Thus, we must keep track at what level we are in the tree so that we can ask for adequately many elements:
 \ExecuteMetaData[Tex/NumRepOrn]{TreeO}
@@ -51,14 +50,14 @@ We use the \AgdaFunction{power} combinator to ensure that the digit at position 
 % i.e. why did this even work?
 
 \subsection{Heterogeneization}
-The situation in which one wants to collect a variety of types is not uncommon, and is typically handled by tuples. However, if e.g., you are making a game in Haskell, you might feel the need to maintain a list of ``Drawables'', which may be of different types. Such a list would have to be a kind of ``heterogeneous list''. In Haskell, this can be resolved by using an existentially quantified list, which, informally speaking, can contain any type implementing some constraint, but can only be inspected as if it contains the intersection of all types implementing this constraint. 
+The situation in which one wants to collect a variety of types is not uncommon, and is typically handled by tuples. However, if e.g., you are making a game in Haskell, you might feel the need to maintain a list of ``Drawables'', which may be of different types. Such a list would have to be a kind of ``heterogeneous list''. In Haskell, this can be resolved by using an existentially quantified list, which, informally speaking, can contain any type implementing a given constraint, but can only be inspected as if it contains the intersection of all types implementing this constraint. 
 
-This of course ports fairly directly to Agda, but is cumbersome when we just want to make a pile of different types, and becomes impractical if we want to be able to inspect the elements. The alternative is to split our heterogeneous list into two parts; one tracking the types, and one tracking the values. In practice, this means that we implement a heterogeneous list as a list of values indexed over a list of types. This approach and mainly its specialization to binary trees is investigated by Swierstra \cite{hetbin}.
+This ports directly to Agda, but becomes cumbersome quickly, and impractical if we want to be able to inspect the elements. The alternative is to split our heterogeneous list into two parts; one tracking the types, and one tracking the values. In practice, this means that we implement a heterogeneous list as a list of values indexed over a list of types. This approach and mainly its specialization to binary trees is investigated by Swierstra \cite{hetbin}.
 
 We will demonstrate that we can express this ``lift a type over itself'' operation as an ornament. For this, we make a small adjustment to \AgdaDatatype{RDesc} to track a type parameter separately from the fields. Using this we define an ornament-computing function, which given a description computes an ornamental description on top of it:
 \todo{Oops}
 \ExecuteMetaData[Tex/Heterogenize]{HetO}
-This ornament relates the original unindexed type to a type indexed over it; we see that this ornament largely keeps all fields and structure indentical, only performing the necessary bookkeeping in the index, and adding extra fields before parameters.
+This ornament relates the original unindexed type to a type indexed over it; we see that this ornament largely keeps all fields and structure identical, only performing the necessary bookkeeping in the index, and adding extra fields before parameters.
 
 As an example, we adapt the list description
 \ExecuteMetaData[Tex/Heterogenize]{List}

@@ -1,7 +1,6 @@
-% REPLACE X BY A?
-The setup some approaches in earlier sections require makes them tedious or impractical to apply. In this section we will look at some ways how part of this problem could be alleviated through generics, or by alternative descriptions of concepts like equivalences through the lens of initial algebras. 
+Using \autoref{sec:leibniz} we can relate functionally equivalent structures, and using \autoref{sec:numrep} we can relate structurally similar structures. However, both have downsides; the former requires us to construct isomorphisms, and the latter wraps all components behind a layer of constructors.  In this section will alleviate these problems through generics and by alternative descriptions of equivalences.
 
-In later sections we will construct many more equivalences between more complicated types than before, so we will dive right into the latter. Reflecting upon \autoref{sec:leibniz}, we see that when one establishes an equivalence, most of the time is spent working out a series of tedious lemmas to show that the conversion functions are mutual inverses, which tend to be relatively easy to define. We take away two things from this; the first is that the conversion functions are perhaps too obvious, and the second is that we should really avoid talking about sections and retractions lest we incur tedium!\footnote{The latter perhaps less so, because it is useful to show a map to be monic.} We will reuse the machinery of Ko and Gibbons \cite{progorn} to illustrate how the definitions in \autoref{sec:leibniz} were actually forced for a large part.
+In later sections we will construct many more equivalences between more complicated types than before, so we will dive right into the latter. Reflecting upon \autoref{sec:leibniz}, we see that when one establishes an equivalence, most of the time is spent working out a series of lemmas that prove the conversion functions are to be mutual inverses. We note that the functions themselves were, in fact, forced for a large part.  %We will reuse the machinery of Ko and Gibbons \cite{progorn} to illustrate how the definitions in \autoref{sec:leibniz} were actually forced for a large part.
 
 First, we remark that \AgdaDatatype{μ} is internalization of the representation of simple\footnote{Of course, indexed datatypes are indexed W-types, mutually recursive datatypes are represented yet differently\dots} datatypes as W-types. Thus, we will assume that one of the sides of the equivalence is always represented as an initial algebra of a polynomial functor, and hence the \AgdaDatatype{μ} of a \AgdaDatatype{Desc′}.
 
@@ -68,7 +67,7 @@ namely, initiality guarantees that there are arrows $f : a \to b$ and $g : b \to
 
 Similarly, we get that
 \ExecuteMetaData[Extra/Category]{InitAlg-equiv}
-However, we only have the equalities from the isomorphism inside a propositional truncation. But fortunately, being an equivalence is a property, so we can eliminate from the truncations to get the wanted result.
+Because being an equivalence is a property, we can eliminate from the truncations to get the wanted result.
 
 %Note that even though we warned ourselves, we are still talking about sections and retractions to establish that $f$ is an equivalence! However, this result also makes sure we will not have to speak of them again.
 
@@ -76,12 +75,12 @@ However, we only have the equalities from the isomorphism inside a propositional
 As a consequence, we get that $X$ is isomorphic to $\mu D$ when $X$ is an initial algebra for the base functor of $D$; $\mu D$ is initial by its fold, and by induction on $\mu D$ using the squares of algebra maps. 
 
 \begin{remark}
-    We need (in general) not hope $\mu D$ is a strict initial object in the category of algebras. For a strict initial object, having a map $a \to \emptyset$ implies $a \cong \emptyset$. This is not the case here: strict initial objects satisfy $a \times \emptyset \cong \emptyset$, but for the $X \mapsto 1 + X$-algebras $\mathbb{N}$ and $2^\mathbb{N}$ clearly $2^\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$ does not hold. On the other hand, the ``obvious'' sufficient condition to let $C^F$ have strict initial objects is that $F$ is a left adjoint, but then the carrier of the initial algebra is simply $\bot$.
+    The fixpoint $\mu D$ is not in general a strict initial object in the category of algebras. For a strict initial object, having a map $a \to \emptyset$ implies $a \cong \emptyset$. This is not the case here: strict initial objects satisfy $a \times \emptyset \cong \emptyset$, but for the $X \mapsto 1 + X$-algebras $\mathbb{N}$ and $2^\mathbb{N}$ clearly $2^\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$ does not hold. On the other hand, the ``obvious'' sufficient condition to let $C^F$ have strict initial objects is that $F$ is a left adjoint, but then the carrier of the initial algebra is simply $\bot$.
 \end{remark}
 
 Looking back at \autoref{sec:leibniz}, we see that \AgdaDatatype{Leibniz} is an initial $F: X \mapsto 1 + X$ algebra because for any other algebra, the image of \AgdaFunction{0b} is fixed, and by \AgdaFunction{bsuc} all other values are determined by chasing around the square. Thus, we are looking for a similar structure on $f : FX \to X$ that supports recursion.
 
-Clearly we will need something stronger than $FX \cong X$, as in general a functor can have many fixpoints. For this, we define what it means for an element $x$ to be accessible by $f$. This definition uses a mutually recursive datatype as follows:
+We will need something stronger than $FX \cong X$, as in general a functor can have many fixpoints. For this, we define what it means for an element $x$ to be accessible by $f$. This definition uses a mutually recursive datatype as follows:
 We state that an element $x$ of $X$ is accessible when there is an accessible $y$ in its fiber over $f$
 \ExecuteMetaData[Extra/Category/Poly]{Acc}
 Accessibility of an element $x$ of \AgdaFunction{Base A E} is defined by cases on $E$; if $E$ is \AgdaFunction{ṿ n} and $x$ is a \AgdaFunction{Vec A n}, then $x$ is accessible if all its elements are; if $x$ is \AgdaFunction{σ S E'}, then $x$ is accessible if \AgdaFunction{snd x} is
@@ -89,17 +88,16 @@ Accessibility of an element $x$ of \AgdaFunction{Base A E} is defined by cases o
 Consequently, $X$ is well-founded for an algebra when all its elements are accessible
 \ExecuteMetaData[Extra/Category/Poly]{Wf}
 
-We can see well-foundedness as an upper bound on the size of $X$, if it were larger than $\mu D$, some of its elements would inevitably get out of reach of an algebra. \textit{Now} having $FX \cong X$ also gives us a lower bound, but remark that having a well-founded injection $f: FX \to X$ is already sufficient, as accessibility gives a section of $f$, making it an iso. This leads us to claim
+We can see well-foundedness as an upper bound on the size of $X$, if it were larger than $\mu D$, some of its elements would get out of reach of an algebra. \textit{Now} having $FX \cong X$ also gives us a lower bound, but note that having a well-founded injection $f: FX \to X$ is already sufficient, as accessibility gives a section of $f$, making it an iso. This leads us to claim
 \begin{claim}\label{claim:wf-inj-init}
     If there is a mono $f : FX \to X$ and $X$ is well-founded for $f$, then $X$ is an initial $F$-algebra.
 \end{claim}
-
-\subsubsection{Proof sketch of \autoref{claim:wf-inj-init}}
-Let us be on our way. Suppose $X$ is well-founded for the mono $f : FX \to X$. To show that $(X, f)$ is initial, let us take another algebra $(Y, g)$, and show that there is a unique arrow $(X, f) \to (Y, g)$.\todo[inline]{This section is about as digestable as a brick.}
+\begin{proof}[Proof sketch of \autoref{claim:wf-inj-init}]
+Suppose $X$ is well-founded for the mono $f : FX \to X$. To show that $(X, f)$ is initial, let us take another algebra $(Y, g)$, and show that there is a unique arrow $(X, f) \to (Y, g)$.\todo[inline]{This section is about as digestable as a brick.}
 
 By \AgdaDatatype{Acc}-recursion and because all $x$ are accessible, we can define a plain map into $Y$
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec}
-This construction is an instance of the concept of ``well-founded recursion''\footnote{This is formalized in the \href{https://agda.github.io/agda-stdlib/Induction.WellFounded.html}{standard-library} with many other examples.}, so we let ourselves be inspired by these methods. In particular, we prove an irrelevance lemma
+This construction is an instance of the concept of ``well-founded recursion''\footnote{This is formalized in the \href{https://agda.github.io/agda-stdlib/Induction.WellFounded.html}{standard-library} with many other examples.}, so we use a similar strategy. In particular, we prove an irrelevance lemma
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec-irr}
 which implies the unfolding lemma
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf-rec-unfold}
@@ -107,6 +105,7 @@ The unfolding lemma ensures that the map we defined by \AgdaFunction{Wf-rec} is 
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf+inj=Init}
 Thus, we conclude that $X$ is initial. The main result is then a corollary of initiality of $X$ and the isomorphism of initial objects
 \ExecuteMetaData[Extra/Category/WellFounded]{Wf+inj=mu}
+\end{proof}
 
 
 \subsubsection{Example}
@@ -116,11 +115,11 @@ Let us redo the proof in \autoref{sec:leibniz}, now using this result. Recall th
 For well-foundedness, we use something similar to view-patterns %[mcbride]
 (the main difference being that we look through the entire structure, instead of a single layer)
 \ExecuteMetaData[Tex/Leibniz2]{Peano-View}
-where the mutually recursive proof of \AgdaFunction{view} is ``almost trivial''. Well-foundedness follows fairly immediately
+where the mutually recursive proof of \AgdaFunction{view} is ``almost trivial''. Well-foundedness follows immediately
 \ExecuteMetaData[Tex/Leibniz2]{Wf-bsuc}
 
 Injectivity of \AgdaFunction{bsuc\_1} happens to be harder to prove from retractions than directly, so we prove it directly, from which the wanted statement follows
 \ExecuteMetaData[Tex/Leibniz2]{L-is-mu-N}
 
-Note that in this case it took us more code to prove the same statement! However, we stress that the code that we did write became more forced, and might be more amenable to automation.
+In this case, we needed more lines of code to prove the same statement, however, the process of writing became more forced, and might be more amenable to automation.
 

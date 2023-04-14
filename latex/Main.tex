@@ -19,6 +19,7 @@
 \usepackage{catchfilebetweentags}
 \usepackage{quiver} 
 \usepackage{tabularx}
+\usepackage{longtable}
 \usepackage{amsthm}
 
 
@@ -94,10 +95,10 @@
 
 \begin{document}
 \maketitle
-\tableofcontents
+%\tableofcontents
 
 %This document is generated from a literate agda file!
-\newpage
+%\newpage
 
 \begin{comment}
 \begin{abstract} %provisional
@@ -105,80 +106,108 @@
 \end{abstract}
 \end{comment}
 
-\part{Proposal}
-\section{Outline}
-In this document I propose a master thesis project, which will investigate and attempt to counter the obstacles one can encounter when replacing one datastructure with a more complicated one, while keeping the end-result verifiable.
+\section*{Outline}
+In this document I propose a master thesis project, in which I will investigate and attempt to counter the obstacles one can encounter when replacing one datastructure with a more complicated one, while keeping the end-result verifiable.
 
 \autoref{sec:intro} describes some challenges that can arise when replacing structures, along with known ways to tackle them.
 
-\autoref{sec:research-question} lists some remaining and new questions regarding this kind of replacement, and proposes methods and ideas to tackle and answer the open challenges and questions.
-
 \autoref{sec:resources} lists literature and frameworks relevant to these questions.
+
+\autoref{sec:leibniz}, \autoref{sec:numrep}, and \autoref{sec:userfriendly} summarize and contain the preliminary work done for this project.
+
+\autoref{sec:research-question} lists some remaining and new questions regarding the replacement of datastructures and proof transport, and proposes methods and ideas to tackle and answer the open challenges and questions.
 
 \autoref{sec:planning} proposes a planning for the described project.
 
-\autoref{part:preliminary} summarizes and contains the preliminary work done for this project.
 
 \section{Program Vivisection}\label{sec:intro}
 \input{Introduction}
 
-\section{Research Question and Contributions}\label{sec:research-question}
-The research question of this project will be: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?} We expect to encounter a variety of obstacles along the way, and so the project will focus on finding existing or developing new theory to deal with these. For example, an obstacle can be that the corresponding number system has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem, but then through the lens of ornaments.
-
 
 \section{Related work}\label{sec:resources}
-\towrite{Organize this into a human text}
+\subsection{The Structure Identity Principle}
+If we write a program, and replace an expression by an equal one, then we can prove that the behaviour of the program can not change. Likewise, if we replace one implementation of an interface with another, in such a way that the correspondence respects all operations in the interface, then the implementations should be equal when viewed through the interface. Observations like these are instances of ``representation indepencence'', but even in languages with an internal notation of type equality, the applicability is usually exclusive to the metatheory.
 
-\begin{tabularx}{\textwidth}{l | X}
-    \cite{iri}      & Equivalences from relations, transport over structures \\ 
-    \hline 
-    \cite{calcdata} & Prototyping datatypes with properties deriving from the underlying numbers, enjoy the definitional equalities of representables at the inductive types \\  
-    \hline 
-    \cite{progorn}  & Using simple types as stepping stones to more impressive types, generalization of numerical representations? Are ``ornament-computing functions'' powerful, or are they nice party-tricks and is heterogeneization a coincidence? \\  
-    \hline 
-    \cite{purelyfunctional}   & Not so much work in the same direction, but definitely a source of inspiration, and a good reference for which datastructure is good at what \\
-    \hline 
-    \cite{hetbin}        & A predecessor/inspiration for heterogeneization \\
-    \hline 
-    \cite{glookup}       & Perhaps an inspiration to do more with the numerical representations/ornaments experiment \\
-    \hline 
-    \cite{orntrans}      & How many functions do we keep when we turn our naturals into lists or vectors? \\
-    \hline 
-    \cite{hsip}          & Can we push SIP to eat indexed structures? (I still have to attempt to digest this) \\
-    \hline 
-    \cite{practgen}      & Source of inspiration for some generic constructions (and perhaps a list of things we don't need to try again) \\
-    \hline 
-    \cite{tgalois}  & It claims to achieve what univalence does, without the Cubical/HoTT overhead? (Haven't fully read, even if it doesn't do what this makes me think it does, it references a wealth of other papers that might) \\
-    \hline 
-    \cite{coveringbases} & Inspiration/application for enumeration \\
-    \hline 
-    \cite{recschemes} & Like mapFold, but more probably \\
-    %\hline 
-    %InitFinal?    & The least fixpoint of $X \mapsto \top + A \times X$ is a list, the largest is a stream. What happens in between the two? (This might not be relevant at all) \\
-    \hline 
-    \cite{amortcoind}    & Could we derive the amortized bounds on (our or Ralf's) fingertrees using this? (Not sure if I want to...)
-\end{tabularx}
+In our case, moving from Agda's ``usual type theory'' to Cubical Agda, a cubical homotopy type theory, \textit{univalence} \cite{cuagda} lets us internalize a kind of representation independence known as the Structure Identity Principle \cite{iri}, and even generalize it from equivalences to quasi-equivalence relations. We will also be able to apply univalence to get a true ``equational reasoning'' for types when we are looking at numerical representations.
 
+Still, representation independence in non-homotopical settings may be internalized in some cases \cite{tgalois}, and remains of interest in the context of generic constructions that conflict with cubical.
 
-\section{Planning}\label{sec:planning}
-\towrite{This will be done}
+\subsection{Numerical Representations}
+Rather than equating implementations after the fact, we can also ``compute'' datastructures by imposing equations. In the case of container types, one may observe similarities to number systems \cite{purelyfunctional} and call such containers numerical representations. One can then use these representations to prototype new datastructures that automatically inherit properties and equalities from their underlying number systems \cite{calcdata}.
 
+From another perspective, numerical representations run by using representability as a kind of ``strictification'' of types, suggesting that we may be able to generalize the approach of numerical representations, using that any (non-indexed) infinitary inductive-recursive type supports a lookup operation \cite{glookup}.
 
-\part{Preliminary work}\label{part:preliminary}
-\towrite{This has been done}
+% In the original setup \cite{calcdata}, the chains of equality reasoning over types had to be unfolded to transport a property from ``natural lookup tables'' to vectors. We expect that one might generalize the SIP to support indexed types, and use this to directly transport proofs from one side of the equality to the other.
+
+\subsection{Ornamentation}
+While we can derive datastructures from number systems by going through their index types \cite{calcdata}, we may also interpret numerical representations more literally as intstructions to rewrite a number system to a container type. We can record this transformation internally using ornaments, which can then be used to derive an indexed version of the container \cite{algorn}, or can be modified further to naturally integrate other constraints, e.g., ordering, into the resulting structure \cite{progorn}. Furthermore, we can also use the forgetful functions induced by ornaments to generate specifications for functions defined on the ornamented types \cite{orntrans}.
+
+\subsection{Generic constructions}
+Being able to define a datatype and reflect its structure in the same language opens doors to many more interesting constructions \cite{practgen}; a lot of ``recipes'' we recognize, such as defining the eliminators for a given datatype, can be formalized and automated using reflection and macros. We expect that other type transformations can also be interpreted as ornaments, like the extraction of heterogeneous binary trees from level-polymorphic binary trees \cite{hetbin}. 
+
 
 \section{Proof Transport via the Structure Identity Principle}\label{sec:leibniz}
-\input{CubicalAndBinary}
+\towrite{``Summarize'' the hidden sections here}
+%\input{CubicalAndBinary}
 
 \section{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
-\input{TypeGeneration}
+\towrite{``Summarize'' the hidden sections here}
+%\input{TypeGeneration}
 
 \section{More equivalences for less effort}\label{sec:userfriendly}
-\input{UserFriendly}
+\towrite{``Summarize'' the hidden sections here}
+%\input{UserFriendly}
+
+
+\section{Research Question and Contributions}\label{sec:research-question}
+The research question of this project will be: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem, through the lens of ornaments.
+
+\section{Planning}\label{sec:planning}
+\begin{longtable}{l l}
+Date & Target \\
+\hline
+2023-04-24 & Define and work out (better) simplified finger trees               \\
+2023-05-01 & Force representability onto conventional finger trees              \\
+2023-05-08 & Is there an ethical numrep with the bounds of finger trees?        \\
+2023-05-15 & Experiment with enumeration                                        \\
+2023-05-22 & How fair is enumeration/can we make better use of sharing?         \\
+2023-05-29 & "                                                                  \\
+2023-06-05 & Vectors are indexed, finger trees are not, SIP for indexed types?  \\
+2023-06-12 & "                                                                  \\
+2023-06-19 & Small universe ornaments                                           \\
+2023-06-26 & Find out what HSIP means for us                                    \\
+2023-07-03 & Holiday                                                            \\
+2023-07-10 & ?                                                                  \\
+2023-07-17 & "                                                                  \\
+2023-07-24 & "                                                                  \\
+2023-07-31 & "                                                                  \\
+2023-08-07 & "                                                                  \\
+2023-08-14 & "                                                                  \\
+2023-08-21 & "                                                                  \\
+2023-08-28 & ?                                                                  \\
+2023-09-04 & ?                                                                  \\
+2023-09-11 & Find more generic constructions                                    \\
+2023-09-18 & "                                                                  \\
+2023-09-25 & Can patches work better in C-c C-,                                 \\
+2023-10-02 & Write                                                              \\
+2023-10-09 & "                                                                  \\
+2023-10-16 & "                                                                  \\
+2023-10-23 & "                                                                  \\
+2023-10-30 & "                                                                  \\
+2023-11-06 & "                                                                  \\
+2023-11-13 & "                                                                  \\
+2023-11-20 & Prepare presentation                                               \\
+2023-11-27 & "                                                                  \\
+2023-12-04 & "                                                                  \\
+2023-12-11 & Present thesis                                                     \\
+2023-12-18 & -                                                                  \\
+2023-12-22 & End date of research project                                       \\
+\caption{The proposed planning for the research project.}
+\end{longtable}
 
 \begin{comment}
 \section{FingerTrees}\label{sec:fingertrees}
-Fingertrees are often (rightfully so) referred to as ``the fastest persistent datastructure for most purposes'', but while simpler than implementations achieving the same bounds, they are still challenging to reason about; in this section, we will investigate how we can fit the description and analysis of fingertrees, or variants upon them, into the frameworks of calculating datastructures and ornamental programming.
+Finger trees are often (rightfully so) referred to as ``the fastest persistent datastructure for most purposes'', but while simpler than implementations achieving the same bounds, they are still challenging to reason about; in this section, we will investigate how we can fit the description and analysis of fingertrees, or variants upon them, into the frameworks of calculating datastructures and ornamental programming.
 
 We compare the work in calculating datastructures to solving associativity equations in groups by shifting to the Cayley representation, such as in [..]
 
