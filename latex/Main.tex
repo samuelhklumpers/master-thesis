@@ -85,7 +85,7 @@
 \newcommand{\bL}{\AgdaDatatype{Leibniz}}
 
 
-\title{Generic Proofs and Constructions in Agda}
+\title{Master thesis project proposal}
 \author{Samuel Klumpers\\6057314}
 
 % previous (provisional) titles:
@@ -107,17 +107,9 @@
 \end{comment}
 
 \section*{Outline}
-In this document I propose a master thesis project, in which I will investigate and attempt to counter the obstacles one can encounter when replacing one datastructure with a more complicated one, while keeping the end-result verifiable.
+In this document I propose a master thesis project, in which I will investigate and attempt to counter the obstacles one can encounter when replacing one datastructure with a more complicated one, focussing on how we can retain or reuse properties and proofs from the simpler datastructure.
 
-\autoref{sec:intro} describes some challenges that can arise when replacing structures, along with known ways to tackle them.
-
-\autoref{sec:resources} lists literature and frameworks relevant to these questions.
-
-\autoref{sec:leibniz}, \autoref{sec:numrep}, and \autoref{sec:userfriendly} summarize and contain the preliminary work done for this project.
-
-\autoref{sec:research-question} lists some remaining and new questions regarding the replacement of datastructures and proof transport, and proposes methods and ideas to tackle and answer the open challenges and questions.
-
-\autoref{sec:planning} proposes a planning for the described project.
+We introduce the topics of proof transport, ornamentation, and numerical representation by presenting problems and explaining how these topics can be applied to them. Following up on these problems, we make our research question more precise, list some related questions, and propose methods by which we may answer these questions. We then overview related research and existing theory, highlighting the problems they originally solved, and how we may apply them to our research question. Next, we summarize preliminary work done for this project. Finally, we propose a planning, explaining more precisely how we split the research question into parts and what subproblems we intend to solve working towards answering our research question.
 
 
 \section{Program Vivisection}\label{sec:intro}
@@ -145,24 +137,141 @@ While we can derive datastructures from number systems by going through their in
 \subsection{Generic constructions}
 Being able to define a datatype and reflect its structure in the same language opens doors to many more interesting constructions \cite{practgen}; a lot of ``recipes'' we recognize, such as defining the eliminators for a given datatype, can be formalized and automated using reflection and macros. We expect that other type transformations can also be interpreted as ornaments, like the extraction of heterogeneous binary trees from level-polymorphic binary trees \cite{hetbin}. 
 
-
-\section{Proof Transport via the Structure Identity Principle}\label{sec:leibniz}
-\towrite{``Summarize'' the hidden sections here}
+\section{Preliminary work}\label{sec:preliminary}
+\subsection{Proof Transport via the Structure Identity Principle}\label{sec:leibniz}
+%\section{Proof Transport via the Structure Identity Principle}\label{sec:leibniz}
 %\input{CubicalAndBinary}
+To give an understanding of the basics of Cubical Agda \cite{cuagda} and the Structure Identity Principle (SIP), we walk through the steps to transport proofs about addition on Peano naturals to Leibniz naturals. We give an overview of some features of Cubical Agda, such as that paths give the primitive notion of equality, until the simplified statement of univalence. We do note that Cubical Agda has two downsides relating to termination checking and universe levels, which we encounter in later sections.
 
-\section{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
-\towrite{``Summarize'' the hidden sections here}
+Starting by defining the unary Peano naturals and the binary Leibniz naturals, we prove that they are isomorphic by interpreting them into eachother. We explain that these interpretations are easily seen to be mutual inverses by proving lemmas stating that both interpretations ``respect the constructors'' of the types. Next, we demonstrate how this isomorphism can be promoted into an equivalence or an equality, and remark that this is sufficient to transport intrinsic properties, such as having decidable equality, from one natural to the other.
+
+Noting that transporting unary addition to binary addition is possible but not efficient, we define binary addition while ensuring that it corresponds to unary addition. We present a variant on refinement types as a syntax to recover definition from chains of equality reasoning, allowing one to rewrite definitions while preserving equalities.
+
+We clarify that to transport proofs referring to addition from unary to binary naturals, we indeed require that these are meaningfully related. Then, we observe that in this instance, the pairs of ``type and operation'' are actually equated as magmas, and explain that this is an instance of the SIP.
+
+Finally, we describe the use case of the SIP, how it generalizes our observation about magmas, and how it can calculate the minimal requirements to equate to implementations of an interface. This is demonstrated by transporting associativity from unary addition to binary addition, noting that this would save many lines of code provided there is much to be transported.
+
+%\section{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
 %\input{TypeGeneration}
+\subsection{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
+Using an example where we try to safely refactor a piece of code to use trees rather than lists, we motivate the need for a framework to organize different container types under a similar description. We explain that for indexed types, we can use representability, e.g., vectors correspond to functions out of finite types.
 
-\section{More equivalences for less effort}\label{sec:userfriendly}
-\towrite{``Summarize'' the hidden sections here}
+We describe how we can also derive these datastructures from functions \cite{calcdata}, starting from a number system, yielding a numerical representation \cite{purelyfunctional}; this is demonstrated by an example deriving of vectors from unary naturals \cite{calcdata}. The vector type is computed by chains of equality reasoning like in the previous section, giving the correspondence to functions out of the finite type.
+
+We illustrate how both (the functions out of a type and the concrete vectors) can implement an array interface, such as two-sided flexible arrays. We remark that the laws for such interfaces can be more easily proven on the function-based implementations, so that they can be transported to the concrete implementation.
+
+Reflecting on this derivation, we note that the computation for binary naturals would be analogous, amending constructors constructors with fields holding appropriate number of elements. We relate this to ornamentation \cite{progorn}, which lets us relate types by recursive structure. After that, we give a short overview of the capabilities of descriptions and ornaments, and demonstrate these by deriving the list datatype from the unary natural type using an ornamental description.
+
+We remark that this approach needs to be adjusted to use indices before it can be applied to binary naturals; we clarify how ``metaphorical'' this construction of binary trees is to binary numbers by letting the weight of the ``digits'' control the numbers of elements in each constructor. We explain that in doing so, the shape of the binary tree seen as a binary number then corresponds to the number of elements it contains.
+
+After that, we give a completely different application of ornaments; we recall that the construction of heterogeneous lists, lists which contain elements with different types, is rather mechanical. Observing that a ``heterogeneous X'' is expressed as an ``X-indexed X'', we assert that this self-indexing can be captured as an ornament.
+
+To define this ornament, we needed to include a parameter field in the definition of descriptions and ornaments. Then we define ``heterogeneization'' as an ``ornament-computing function'', which takes a description and produces an ornamental description. We demonstrate how we can heterogeneize lists and maybes, allowing us to produce a natural implementation of the heterogeneous head operation, and relate this to earlier work deriving heterogeneous random access lists \cite{hetbin}.
+
+\subsection{More equivalences for less effort}\label{sec:userfriendly}
+%\section{More equivalences for less effort}\label{sec:userfriendly}
 %\input{UserFriendly}
+
+Noting that constructing equivalences directly or from isomorphisms as in \autoref{sec:leibniz} can quickly become challenging when one of the sides is complicated, we work out a different approach making use of the initial semantics of W-types instead. We claim that the functions in the isomorphism of \autoref{sec:leibniz} were partially forced, but this fact was not made use of.
+
+First, we explain that if we assume that one of the two sides of the equivalence is a fixpoint or initial algebra of a polynomial functor (that is, the \AgdaDatatype{μ} of a \AgdaDatatype{Desc′}), this simplifies giving an equivalence to showing that the other side is also initial.
+
+We describe how we altered the original ornaments \cite{progorn} to ensure that \AgdaDatatype{μ} remains initial for its base functor in Cubical Agda, explaining why this fails otherwise, and how defining base functors as datatypes avoids this issue.
+
+In a subsection focussing on the categorical point of view, we show how we can describe initial algebras (and truncate the appropriate parts) in such a way that the construction both applies to general types (rather than only sets), and still produces an equivalence at the end. We explain how this definition, like the usual definition, makes sure that a pair of initial objects always induces a pair of conversion functions, which automatically become inverses. Finally, we explain that we can escape our earlier truncation by appealing to the fact that ``being an equivalence'' is a proposition.
+
+Next, we describe some theory, using which other types can be shown to be initial for a given algebra. This is compared to the construction in \autoref{sec:leibniz}, observing that intuitively, initiality follows because the interpretation of the zero constructor is forced by the square defining algebra maps, and the other values are forced by repeatedly applying similar squares. This is clarified as an instance of recursion over a polynomial functor.
+
+To characterize when this recursion is allowed, we define accessibility with respect to polynomial functors as a mutually recursive datatype as follows. This datatype is constructed using the fibers of the algebra map, defining accessibility of elements of these fibers by cases over the description of the algebra. Then we remark that this construction is an atypical instance of well-founded recursion, and define a type as well-founded for an algebra when all its elements are accessible.
+
+We interpret well-foundedness as an upper bound on the size of a type, leading us to claim that injectivity of the algebra map gives a lower bound, which is sufficient to induce the isomorphism. We sketch the proof of the theorem, relating part of this construction to similar concepts in the formalization of well-founded recursion in the Standard Library. In particular, we prove an irrelevance and an unfolding lemma, which lets us show that the map into any other algebra induced by recursion is indeed an algebra map. By showing that it is also unique, we conclude initiality, and get the isomorphism as a corrolary. 
+
+The theorem is applied and demonstrated to the example of binary naturals. We remark that the construction of well-foundedness looks similar to view-patterns. After this, we conclude that this example takes more lines that the direct deriviation in \autoref{sec:leibniz}, but we argue that most of this code can likely be automated.
 
 
 \section{Research Question and Contributions}\label{sec:research-question}
 The research question of this project will be: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem, through the lens of ornaments.
 
 \section{Planning}\label{sec:planning}
+In the planning of the project, we identify four main topics.
+
+\subsection{Finger trees}
+In the context of numerical representations, we will define and test variants of finger trees. Due to the 2-3 tree structure of the original finger trees \cite{fingertrees}, finger trees are not readily rendered as numerical representations, leading us to the following subexperiments.
+
+First, we will attempt to simplify the definition of finger trees, and test how this changes the performance bounds on their two-sided flexible array operations. Then, we can compute the ``trivial numerical representation'' on the original finger trees, and check to what extent the arising representation simplifies the proofs of the two-sided flexible array laws. Finally, we may try to forget about finger trees for a moment, and try to construct different numerical representations, achieving a subset of, or ideally all of, the performance bounds of finger trees.
+
+Furthermore, the numerical representation of any ``symmetric array'' like finger trees seems to have a redundant associated number system. We know that for most operations, we can either simply ignore this, or place the type in a quotient (quotienting over the fibers of a map directly, or applying quasi-equivalence relations). However, indexing a quotiented type remains challenging; so  as further work, it may be interesting to find a non-redundant symmetric numerical representation, or investigate index types for quotient types further.
+
+\subsection{Enumeration}
+To characterize numerical representations, we first have to describe number systems; from one point of view, we can accept any type with a surjective interpretation into naturals as a number system. This description also allows for redundant number systems. The other point of view is that a number system must be countably infinite, which ensures that the system can be made non-redundant by enumerating it.
+
+We can approach the problem from the other side, and look at enumerations first, investigating how large classes of W-types can always be equipped with an enumeration structure. As side-questions to this, we can look at applications of enumeration to random testing, where not only the existence of the enumeration matters, but also the ``fairness'' and the memory usage. We will investigate if and how enumerations can return unbalanced shapes, and how we can ameliorate this; also keeping in mind how the memory usage of enumerations can be reduced by avoiding the replication of identical subtrees.
+
+\subsection{Ornaments}
+In our preliminary work we apply ornaments to describe numerical representations, express heterogeneization, and we use descriptions to characterize equivalences to initial algebras. One downside is that each result uses a different definition of description or ornament, which all have their advantages and drawbacks. We identify the following interesting directions to further research ornaments:
+
+Heterogeneization uses a variant of descriptions allowing parameter introduction, but this does not allow treating the parameter as a variable, nor supports nested types, which may be fruitful to generalize by changing descriptions to allow for higher order functors \cite{initenough}.
+
+We can also restrict descriptions and ornaments to a closed universe, allowing us to avoid increasing the levels in the cubical compatible setup.  
+
+Furthermore, we have not yet investigated the applicability of patches \cite{orntrans} to our experiments; these could be interesting when lifting flexible two-sided array operations from a number system to custom finger tree, but may also need adjustments to be able to deal with our modifications to descriptions.
+
+Finally, we think that, like heterogeneization, there are more common and intuitive transformations of types which can be captured as ornament-computing functions.
+
+% also descriptions make a mess, and even more so in a closed universe, but this should be resolvable using \cite{practgen}
+
+
+\subsection{SIP}
+The SIP as described earlier allows us to concisely prove the equivalences of implementations of structures. However, by definition of the SIP, this limited to structures over unindexed types, while in the context of vectors we may want to express a structure over an indexed type, in which case the indexes themselves may also be only equivalent rather than definitionally equal. Furthermore, the implementation we will use \cite{iri} restricts the basic structure formers; while in our scenarios we do not need much more complicated structures, we do expect the SIP to apply to structures containing most W-types with a free parameter. Solutions to both problems might be applicable to our research, so both may be interesting as further work.
+
+% wouldn't having sigmas in structures be sufficient to emulate indexed types?
+% > ah I guess that having a sigma-of-structures already means the ``snd structure'' is an ``indexed structure''
+% but that should not be different from the current implemenation, shouldn't the structures always be applied before we have to prove them equivalent?
+
+
+\begin{longtable}{l l}
+Date & Target \\
+\hline
+2023-04-24 & Finger trees               \\
+2023-05-01 & "              \\
+2023-05-08 & "         \\
+2023-05-15 & Enumerations                                        \\
+2023-05-22 & "        \\
+2023-05-29 & "                                                                  \\
+2023-06-05 & "  \\
+2023-06-12 & Ornamentation                                                                  \\
+2023-06-19 & "                                           \\
+2023-06-26 & "                                   \\
+2023-07-03 & Holiday                                                            \\
+2023-07-10 & ?                                                                  \\
+2023-07-17 & "                                                                  \\
+2023-07-24 & "                                                                  \\
+2023-07-31 & "                                                                  \\
+2023-08-07 & "                                                                  \\
+2023-08-14 & "                                                                  \\
+2023-08-21 & "                                                                  \\
+2023-08-28 & ?                                                                  \\
+2023-09-04 & ?                                                                  \\
+2023-09-11 & SIP                                    \\
+2023-09-18 & "                                                                  \\
+2023-09-25 & TBD\footnote{This slot is flexible, and can be filled by one of the earlier experiments if I find that one of them requires more time, or may be filled by another experiment should I encounter new interesting and relevant questions}                                \\
+2023-10-02 & "                                                              \\
+2023-10-09 & Write                                                                  \\
+2023-10-16 & "                                                                  \\
+2023-10-23 & "                                                                  \\
+2023-10-30 & "                                                                  \\
+2023-11-06 & "                                                                  \\
+2023-11-13 & "                                                                  \\
+2023-11-20 & Prepare presentation                                               \\
+2023-11-27 & "                                                                  \\
+2023-12-04 & "                                                                  \\
+2023-12-11 & Present thesis                                                     \\
+2023-12-18 & -                                                                  \\
+2023-12-22 & End date of research project                                       \\
+\caption{The proposed planning for the research project.}
+\end{longtable}
+
+\begin{comment}
 \begin{longtable}{l l}
 Date & Target \\
 \hline
@@ -204,6 +313,9 @@ Date & Target \\
 2023-12-22 & End date of research project                                       \\
 \caption{The proposed planning for the research project.}
 \end{longtable}
+\end{comment}
+
+
 
 \begin{comment}
 \section{FingerTrees}\label{sec:fingertrees}
