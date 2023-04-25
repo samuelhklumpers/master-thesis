@@ -6,6 +6,7 @@
 
 module Prelude.UseAs where
 
+open import Agda.Builtin.Cubical.Path
 open import Prelude
 
 private variable
