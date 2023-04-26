@@ -108,3 +108,78 @@ module Example-2 where
 
 -- Q: can we now compute the associated datastructure Container n, and construct a proof that Container n x A ≡ Ix n x → A?
 -- probably
+
+
+
+-- Q: what "numerical operations" work with numerical representations anyway?
+{-
+
+basically, if we have
+  f : A     → ℕ
+  g : B     → ℕ
+  h : ℕ × ℕ → ℕ
+
+and index types
+  Ix A a ~ Fin (f a)
+  Ix B b ~ Fin (g b)
+
+when can we simplify
+  Ix (A × B) (a , b)?
+
+E.g. if h x y = x + y, then
+  Ix (A × B) (a , b) = Ix A a ⊎ Ix B b
+
+If h x y = x * y, then
+  Ix (A × B) (a , b) = Ix A a × Ix B b
+
+both play nice under an arrow, since
+  (Ix A a ⊎ Ix B b) → C ≡ (Ix A a → C) × (Ix B b → C)
+  (Ix A a × Ix B b) → C ≡ Ix A a → Ix B b → C
+
+But if h x y = x ^ y, then
+  Ix (a , b) = Ix b → Ix a
+  (Ix b → Ix a) → C...
+
+-}
+
+
+{-
+abstracting away some details, we can state that
+1. a number system is a list of constructor descriptions 
+2. a constructor description is a list of n fields and a function f : ℕ ^ n → ℕ
+3. a field is either
+  a. another number system
+  b. recursive
+
+the list of descriptions is interpreted as a disjunction
+  Typ X []       = ⊥
+  Typ X (x ∷ xs) = TypC X x ⊎ Typ X xs
+
+a constructor is interpreted as a product
+  TypC _ []           = ⊤
+  TypC X (x , _ ∷ xs) = TypF X x × TypC X xs
+
+recursively
+  TypF X var   = X
+  TypF X (n N) = Typ N
+
+
+values of μ X = Typ X X can be interpreted into ℕ as follows
+  Val X (x , f ∷ xs) (inl x) = ValC X _ f x
+  Val X (x , _ ∷ xs) (inr x) = Val X xs x
+
+  ValC X []       f tt = f tt
+  ValC X (x ∷ xs) f y  = ValC X xs (f (ValF X x y))
+
+  ValF X var   x = Val X X x
+  ValF X (n N) x = Val N N x
+
+
+
+constants (⊤ , c) tt = Fin c
+
+
+alternatives
+  Ix (A + B) (inl x) = Ix A x
+  Ix (A + B) (inr y) = Ix B y
+-}
