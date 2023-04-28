@@ -15,122 +15,205 @@ open import Data.Fin using (Fin; zero; suc)
 open import Data.Nat
 open import Relation.Binary.PropositionalEquality hiding ([_])
 
+-- Recall NDesc, which describes a functor Set → Set
+-- To allow nesting, we will have to adapt this to describe functors (Set → Set) → Set → Set
+-- in particular, we want to maintain the original descriptions when we give a constant functor
+-- Note that then also μ ND will describe a Set → Set
+
+-- I could put these all in normal form, if that helped anything
+data FunD : Set where
+  ⊕ ⊗ : FunD
+  
+data Poly : Set where
+  par : Poly
+  add : (p q : Poly) → Poly
+  mul : (f : FunD) (p q : Poly) → Poly
 
 NDesc : Set
 
 data FDesc : Set where
-  var : FDesc
-  num : NDesc → FDesc
-
-data FunD : Set where
-  ⊕ ⊗ : FunD
+  var : (p : Poly)              → FDesc
+  par : (p : Poly)              → FDesc
+  num : (p : Poly) (nd : NDesc) → FDesc
 
 data CDesc : Set where
-  nil  : ℕ → CDesc
-  cons : FDesc → FunD → CDesc → CDesc
-
+  constant  : (c : ℕ)                  → CDesc
+  leaf      : (fd : FDesc)             → CDesc
+  node      : (f : FunD) (l r : CDesc) → CDesc
+  
 NDesc = List CDesc
 
-NTyp : NDesc → Set → Set
-data μ (ND : NDesc) : Set where
-  con : NTyp ND (μ ND) → μ ND 
+-- While we would usually look at functors Set → Set, we would rather restrict our universe to "just the numbers"
+data U : Set where
+  top : U
+  bot : U
+  app : (nd : NDesc) (u : U) → U
+  pol : (p : Poly) (u : U) → U -- we pay a bit of duplication to split U → Set and U → U
+-- so we will also have to look at functors U → U
 
-FTyp : FDesc → Set → Set
-FTyp var      X = X
-FTyp (num ND) _ = μ ND
+NTyp : NDesc → (U → U) → U → Set
+data μ (nd : NDesc) (u : U) : Set where
+  con : NTyp nd (app nd) u → μ nd u
 
-CTyp : CDesc → Set → Set
-CTyp (nil _)        _ = ⊤
-CTyp (cons FD _ CD) X = FTyp FD X × CTyp CD X
+UTyp : U → Set
+PTyp : Poly → U → Set
 
-NTyp []        X = ⊥
-NTyp (CD ∷ ND) X = CTyp CD X ⊎ NTyp ND X
+UTyp top = ⊤
+UTyp bot = ⊥
+UTyp (app nd u) = μ nd u
+UTyp (pol p u) = PTyp p u
+
+PTyp par u = UTyp u
+PTyp (add p q) u = PTyp p u ⊎ PTyp q u
+PTyp (mul _ p q) u = PTyp p u × PTyp q u
+
+FTyp : FDesc → (U → U) → U → Set
+FTyp (var p)    X u = UTyp (X (pol p u))
+FTyp (par p)    X u = PTyp p u
+FTyp (num p nd) X u = μ nd (pol p u)
+
+CTyp : CDesc → (U → U) → U → Set
+CTyp (constant c) _ _ = ⊤
+CTyp (leaf fd)    X u = FTyp fd X u
+CTyp (node _ l r) X u = CTyp l X u × CTyp r X u
+
+NTyp []         _ _ = ⊥
+NTyp (cd ∷ cds) X u = (CTyp cd X u) ⊎ (NTyp cds X u)
 
 NatD : NDesc
-NatD = (nil 0) ∷ ((cons var ⊕ (nil 1)) ∷ [])
+NatD = constant 0 ∷ node ⊕ (constant 1) (leaf (var par)) ∷ []
 
-Nat = μ NatD
+Nat = μ NatD top
 
 Nat-2 : Nat
-Nat-2 = con (inj₂ (inj₁ (con (inj₂ (inj₁ (con (inj₁ _) , _))) , _)))
+Nat-2 = con (inj₂ (inj₁ (_ , con (inj₂ (inj₁ (_ , con (inj₁ _)))))))
+
+-- Q: would you still call this a number?
+DtD : NDesc
+DtD = node ⊕ (leaf (par par)) (leaf (par par)) ∷ node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (leaf (par par))) ∷ node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (leaf (par par))) ∷ node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (leaf (par par)))) ∷ node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (leaf (par par))))) ∷ node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (leaf (par par))))) ∷ node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (node ⊕ (leaf (par par)) (leaf (par par)))))) ∷ []
+
+NodeD : Poly
+NodeD = add (mul ⊕ par par) (mul ⊕ par (mul ⊕ par par))
+
+FtD : NDesc
+FtD = constant 0 ∷ leaf (par par)  ∷ node ⊕ (leaf (num par DtD)) (leaf (var NodeD)) ∷ []
+
+Ft = μ FtD top
+
+{-
+F-23 : Ft
+F-23 = con (inj₂ (inj₂ (inj₁ (con (inj₂ (inj₂ (inj₂ (inj₂ (inj₁ _))))) , con (inj₂ (inj₂ (inj₁ (con {!help!} , con (inj₁ _)))))))))
+-}
+
+F-4 : Ft
+F-4 = con (inj₂ (inj₂ (inj₁ (con (inj₁ _) , con (inj₂ (inj₁ (inj₁ _)))))))
+
 
 private variable
-  ND : NDesc
-  CD : CDesc
-  FD : FDesc
+  nd : NDesc
+  cd : CDesc
+  fd : FDesc
+  u  : U
 
-NVal : (D : NDesc) → NTyp D (μ ND) → ℕ
-Val : μ ND → ℕ
+NVal : (nd' : NDesc) → NTyp nd' (app nd) u → ℕ
+Val : μ nd u → ℕ
 Val (con x) = NVal _ x
-
-FVal : (FD : FDesc) → FTyp FD (μ ND) → ℕ
-FVal var      x = Val x
-FVal (num ND) x = Val x
 
 FunV : FunD → ℕ → ℕ → ℕ
 FunV ⊕ = _+_
 FunV ⊗ = _*_
 
-CVal : (CD : CDesc) → CTyp CD (μ ND) → ℕ
-CVal (nil c)        tt      = c
-CVal (cons FD f CD) (x , y) = FunV f (FVal FD x) (CVal CD y)
+PVal : (u : U) (p : Poly) → PTyp p u → ℕ
+UVal : (u : U)    → UTyp u   → ℕ
 
-NVal (CD ∷ ND) (inj₁ x) = CVal CD x
-NVal (CD ∷ ND) (inj₂ y) = NVal ND y
+PVal u par         x        = UVal u x
+PVal u (add p q)   (inj₁ x) = PVal u p x
+PVal u (add p q)   (inj₂ y) = PVal u q y
+PVal u (mul f p q) (x , y)  = FunV f (PVal u p x) (PVal u q y)
+
+UVal top _ = 1
+UVal (app nd u) x = Val x
+UVal (pol p u) x = PVal u p x
+
+FVal : (fd : FDesc) → FTyp fd (app nd) u → ℕ
+FVal (var p)    x = Val x
+FVal (par p)    x = PVal _ p x
+FVal (num p nd) x = Val x
+
+CVal : (cd : CDesc) → CTyp cd (app nd) u → ℕ
+CVal (constant c) x = c
+CVal (leaf fd)    x = FVal fd x
+CVal (node f l r) (x , y) = FunV f (CVal l x) (CVal r y)
+
+NVal (cd ∷ cds) (inj₁ x) = CVal cd x
+NVal (cd ∷ cds) (inj₂ y) = NVal cds y
 
 2≡2 : Val Nat-2 ≡ 2
 2≡2 = refl
 
-NIx : (D : NDesc) → (μ ND → Set) → NTyp D (μ ND) → Set
-data Ix : μ ND → Set where
-  ix : ∀ {x} → NIx ND Ix x → Ix (con x) 
+4≡4 : Val F-4 ≡ 4
+4≡4 = refl
 
-FIx : (FD : FDesc) → (μ ND → Set) → FTyp FD (μ ND) → Set
-FIx var      F x = F x
-FIx (num ND) F x = Ix x
+NIx : ∀ u → (nd' : NDesc) → NTyp nd' (app nd) u → Set
+data Ix : μ nd u → Set where
+  ix : ∀ {u x} → NIx u nd x → Ix (con x) 
+
+UIx : (u : U) → UTyp u → Set
+PIx : (p : Poly) → PTyp p u → Set
+
+UIx top        _ = ⊤
+UIx (app nd u) x = Ix x
+UIx (pol p u)  x = PIx p x
 
 FunIx : FunD → Set → Set → Set
 FunIx ⊕ = _⊎_
 FunIx ⊗ = _×_
 
-CIx : (CD : CDesc) → (μ ND → Set) → CTyp CD (μ ND) → Set
-CIx (nil c)        F tt      = Fin c
-CIx (cons FD f CD) F (x , y) = FunIx f (FIx FD F x) (CIx CD F y)
+PIx {u = u} par x = UIx u x
+PIx (add p q) (inj₁ x) = PIx p x
+PIx (add p q) (inj₂ y) = PIx q y
+PIx (mul f p q) (x , y) = FunIx f (PIx p x) (PIx q y)
 
-NIx (CD ∷ ND) F (inj₁ x) = CIx CD F x
-NIx (CD ∷ ND) F (inj₂ y) = NIx ND F y
+FIx : (fd : FDesc) → FTyp fd (app nd) u → Set
+FIx (var p) x = Ix x
+FIx (par p) x = PIx p x
+FIx (num p nd) x = Ix x
+
+CIx : (cd : CDesc) → CTyp cd (app nd) u → Set
+CIx (constant c) tt      = Fin c
+CIx (leaf fd)    x       = FIx fd x
+CIx (node f l r) (x , y) = FunIx f (CIx l x) (CIx r y)
+
+NIx u (cd ∷ cds) (inj₁ x) = CIx cd x
+NIx u (cd ∷ cds) (inj₂ y) = NIx u cds y
 
 {- Fin-2 : Ix Nat-2
-Fin-2 = ix (inj₁ (ix (inj₁ (ix {!Fin 0!})))) -}
+Fin-2 = ix (inj₂ (ix (inj₂ (ix {!Fin 0!})))) -}
 
 Fin-1/2 : Ix Nat-2
-Fin-1/2 = ix (inj₁ (ix (inj₂ zero)))
+Fin-1/2 = ix (inj₂ (ix (inj₁ zero)))
 
-NTrie : (D : NDesc) → (Set → μ ND → Set) → Set → NTyp D (μ ND) → Set
-{-# NO_POSITIVITY_CHECK #-}
--- Q: I don't directly see why not
-data Trie {ND : NDesc} (A : Set) : μ ND → Set where
-  trie : ∀ {x} → NTrie ND Trie A x → Trie A (con x) 
+FFin-2/4 : Ix F-4
+FFin-2/4 = ix (inj₂ (ix (inj₁ tt)))
 
-FTrie : (FD : FDesc) → (Set → μ ND → Set) → Set → FTyp FD (μ ND) → Set
-FTrie var      F A x = F A x
-FTrie (num ND) F A x = Trie A x
+-- \o/ finger trees are numerical representations after all
 
-{- FunT : FunD → (Set → Set) → (Set → Set) → Set → Set
-FunT ⊕ F G A = F A × G A
-FunT ⊗ F G A = F (G A) -}
+-- NTrie : (D : NDesc) → Set → NTyp D (μ ND) → Set
 
-CTrie : (CD : CDesc) → (Set → μ ND → Set) → Set → CTyp CD (μ ND) → Set
-CTrie (nil c)        F A tt      = Vec A c
-CTrie (cons FD ⊕ CD) F A (x , y) = FTrie FD F A x × CTrie CD F A y
-CTrie (cons FD ⊗ CD) F A (x , y) = FTrie FD F (CTrie CD F A y) x
+-- data Trie {ND : NDesc} (A : Set) : μ ND → Set where
+--   trie : ∀ {x} → NTrie ND A x → Trie A (con x)
 
---FunT f (λ B → FTrie FD F B x) (λ B → CTrie CD F B y) A
+-- FTrie : (FD : FDesc) → Set → FTyp FD (μ ND) → Set
+-- FTrie var      A x = Trie A x
+-- FTrie (num ND) A x = Trie A x
 
-NTrie (CD ∷ ND) F A (inj₁ x) = CTrie CD F A x
-NTrie (CD ∷ ND) F A (inj₂ y) = NTrie ND F A y
+-- CTrie : (CD : CDesc) → Set → CTyp CD (μ ND) → Set
+-- CTrie (nil c)        A tt      = Vec A c
+-- CTrie (cons FD ⊕ CD) A (x , y) = FTrie FD A x × CTrie CD A y
+-- CTrie (cons FD ⊗ CD) A (x , y) = FTrie FD (CTrie CD A y) x
 
-Trie-2 : Trie ℕ Nat-2
-Trie-2 = trie (trie (trie [] , zero ∷ []) , zero ∷ [])
+-- NTrie (CD ∷ ND) A (inj₁ x) = CTrie CD A x
+-- NTrie (CD ∷ ND) A (inj₂ y) = NTrie ND A y
 
--- Q: and now fit nested types into this?
+-- Trie-2 : Trie ℕ Nat-2
+-- Trie-2 = trie (trie (trie [] , zero ∷ []) , zero ∷ [])
