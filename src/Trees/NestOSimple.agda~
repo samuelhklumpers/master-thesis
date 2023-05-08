@@ -1,0 +1,153 @@
+module Trees.NestOSimple where
+
+-- What do descs look like?
+-- KG: ΣDescs because they're cool
+-- Sijsling: List Descs because they represent actual types and trees are annoying
+
+-- our Numbers need Trees, so we will have to go Tree -> List or something
+
+
+-- parameters?
+-- KG: external
+-- Sijsling: contexts
+-- Elliott: * -> *
+
+-- what about us?
+
+-- indices
+-- KG: responses
+-- Sijsling: equalities
+
+-- let's stick to responses
+
+module List+Resp where
+  data RCDesc (I : Set) : Set₁ where
+    1′  :                  RCDesc I
+    fd  : Set → RCDesc I → RCDesc I
+    rec : I   → RCDesc I → RCDesc I
+
+  data RDesc (I : Set) : Set₁ where
+    0′  :                      RDesc I
+    cns : RCDesc I → RDesc I → RDesc I
+  
+
+data ⊥ : Set where
+
+record ⊤ : Set where
+  constructor tt
+
+record _×_ (A B : Set) : Set where
+  constructor _,_
+
+  field
+    fst : A
+    snd : B
+
+open import Agda.Primitive
+
+record Σ {a b} (A : Set a) (B : A → Set b) : Set (a ⊔ b) where
+  constructor _,_
+
+  field
+    fst : A
+    snd : B fst
+
+open Σ
+
+data _⊎_ (A B : Set) : Set where
+  inl : A → A ⊎ B
+  inr : B → A ⊎ B
+
+
+module Closed where
+  Desc : Set → Set₁
+  ADesc = Σ Set Desc
+  data RDesc (I : Set) : Set₁
+  data RCDesc (I : Set) : Set₁ where
+    1′  : RCDesc I
+    fd  : (d : ADesc) → fst d → RCDesc I → RCDesc I
+    rec : I → RCDesc I → RCDesc I
+
+  data RDesc I where
+    0′  :                      RDesc I
+    cns : RCDesc I → RDesc I → RDesc I
+  
+  Desc I = I → RDesc I
+
+  ⟦_⟧D : {I : Set} → Desc I → (I → Set) → I → Set
+  ⟦_⟧RD : {I : Set} → RDesc I → (I → Set) → Set  
+  ⟦_⟧RCD : {I : Set} → RCDesc I → (I → Set) → Set
+  data μ {I : Set} (d : Desc I) : I → Set where
+    con : ∀ {i} → ⟦ d ⟧D (μ d) i → μ d i
+  
+  ⟦ 1′ ⟧RCD            X = ⊤
+  ⟦ fd rd j rcd ⟧RCD X = μ (snd rd) j × ⟦ rcd ⟧RCD X 
+  ⟦ rec i rcd ⟧RCD     X = X i × ⟦ rcd ⟧RCD X
+
+  ⟦ 0′ ⟧RD       X = ⊥
+  ⟦ cns c rd ⟧RD X = ⟦ c ⟧RCD X ⊎ ⟦ rd ⟧RD X
+
+  ⟦ d ⟧D X i = ⟦ d i ⟧RD X
+  
+  
+
+module Parameters where
+  {- we establish a correspondence
+
+    Desc I Γ <-> datatypes with index I and parameters Γ <-> ⟦ Γ ⟧ → I → Set
+
+    a field in a type should be a ⟦ Γ ⟧ → Set
+    in the context of Γ this is equivalently a ⟦ Δ ⟧ → Set and a ⟦ Γ ⟧ → ⟦ Δ ⟧
+    or a ⟦ Δ ⟧ → J → Set with a J and a ⟦ Γ ⟧ → ⟦ Δ ⟧
+
+    we just need a way to access ⟦ ∅ ▷ x ⟧
+  -}
+
+  data Cxt : Set₁
+  ⟦_⟧Cxt : Cxt → Set
+
+  data Cxt where
+    ∅   : Cxt
+    _▷_ : (Γ : Cxt) (S : ⟦ Γ ⟧Cxt → Set) → Cxt 
+
+  ⟦ ∅ ⟧Cxt     = ⊤
+  ⟦ Γ ▷ S ⟧Cxt = Σ ⟦ Γ ⟧Cxt S
+  
+  Desc : Set → Cxt → Set₁
+  ADesc : Cxt → Set₁
+  ADesc Γ = Σ Set (λ x → Desc x Γ)
+
+  data RDesc (I : Set) (Γ : Cxt) : Set₁
+  data RCDesc (I : Set) (Γ : Cxt) : Set₁
+  data FDesc (I : Set) : Cxt → Set₁ where
+    leaf : ∀ {Γ} → ⟦ Γ ⟧Cxt → FDesc I Γ 
+    fd   : ∀ {J Γ Δ} → Desc J Δ → J → (⟦ Γ ⟧Cxt → ⟦ Δ ⟧Cxt) → FDesc I Γ
+    rec  : ∀ {Γ} → I → (⟦ Γ ⟧Cxt → ⟦ Γ ⟧Cxt) → FDesc I Γ
+
+  data RCDesc I Γ where
+    1′  : RCDesc I Γ
+    _⊗_ : FDesc I Γ → RCDesc I Γ → RCDesc I Γ
+
+  data RDesc I Γ where
+    0′  : RDesc I Γ
+    _⊕_ : RCDesc I Γ → RDesc I Γ → RDesc I Γ
+  
+  Desc I Γ = I → RDesc I Γ
+
+
+  -- ⟦_⟧D : {I : Set} → Desc I → (I → Set) → I → Set
+  -- ⟦_⟧RD : {I : Set} → RDesc I → (I → Set) → Set  
+  -- ⟦_⟧RCD : {I : Set} → RCDesc I → (I → Set) → Set
+  -- data μ {I : Set} (d : Desc I) : I → Set where
+  --   con : ∀ {i} → ⟦ d ⟧D (μ d) i → μ d i
+  
+  -- ⟦ 1′ ⟧RCD            X = ⊤
+  -- ⟦ fd rd j rcd ⟧RCD X = μ (snd rd) j × ⟦ rcd ⟧RCD X 
+  -- ⟦ rec i rcd ⟧RCD     X = X i × ⟦ rcd ⟧RCD X
+
+  -- ⟦ 0′ ⟧RD       X = ⊥
+  -- ⟦ cns c rd ⟧RD X = ⟦ c ⟧RCD X ⊎ ⟦ rd ⟧RD X
+
+  -- ⟦ d ⟧D X i = ⟦ d i ⟧RD X
+  
+  

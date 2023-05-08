@@ -198,6 +198,18 @@ FFin-2/4 = ix (inj₂ (ix (inj₁ tt)))
 
 -- \o/ finger trees are numerical representations after all
 
+FT : Ft → Set → Set
+FT x A = Ix x → A
+
+sucFt : Ft → Ft
+sucFt (con (inj₁ tt)) = con (inj₂ (inj₁ tt))
+sucFt (con (inj₂ (inj₁ tt))) = con (inj₂ (inj₂ (inj₁ (con (inj₁ (tt , tt)) , con (inj₁ tt)))))
+sucFt (con (inj₂ (inj₂ (inj₁ (x , m))))) = {!!}
+
+cons : ∀ {n} {A : Set} → A → FT n A → FT (sucFt n) A
+cons x xs = {!!}
+
+
 -- NTrie : (D : NDesc) → Set → NTyp D (μ ND) → Set
 
 -- data Trie {ND : NDesc} (A : Set) : μ ND → Set where

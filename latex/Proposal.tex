@@ -1,0 +1,127 @@
+
+\section{Research Question and Contributions}\label{sec:research-question}
+The research question of this project will be: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem, through the lens of ornaments.
+
+\section{Planning}\label{sec:planning}
+In the planning of the project, we identify four main topics.
+
+\subsection{Finger trees}
+In the context of numerical representations, we will define and test variants of finger trees. Due to the 2-3 tree structure of the original finger trees \cite{fingertrees}, finger trees are not readily rendered as numerical representations, leading us to the following subexperiments.
+
+First, we will attempt to simplify the definition of finger trees, and test how this changes the performance bounds on their two-sided flexible array operations. Then, we can compute the ``trivial numerical representation'' on the original finger trees, and check to what extent the arising representation simplifies the proofs of the two-sided flexible array laws. Finally, we may try to forget about finger trees for a moment, and try to construct different numerical representations, achieving a subset of, or ideally all of, the performance bounds of finger trees.
+
+Furthermore, the numerical representation of any ``symmetric array'' like finger trees seems to have a redundant associated number system. We know that for most operations, we can either simply ignore this, or place the type in a quotient (quotienting over the fibers of a map directly, or applying quasi-equivalence relations). However, indexing a quotiented type remains challenging; so  as further work, it may be interesting to find a non-redundant symmetric numerical representation, or investigate index types for quotient types further.
+
+\subsection{Enumeration}
+To characterize numerical representations, we first have to describe number systems; from one point of view, we can accept any type with a surjective interpretation into naturals as a number system. This description also allows for redundant number systems. The other point of view is that a number system must be countably infinite, which ensures that the system can be made non-redundant by enumerating it.
+
+We can approach the problem from the other side, and look at enumerations first, investigating how large classes of W-types can always be equipped with an enumeration structure. As side-questions to this, we can look at applications of enumeration to random testing, where not only the existence of the enumeration matters, but also the ``fairness'' and the memory usage. We will investigate if and how enumerations can return unbalanced shapes, and how we can ameliorate this; also keeping in mind how the memory usage of enumerations can be reduced by avoiding the replication of identical subtrees.
+
+\subsection{Ornaments}
+In our preliminary work we apply ornaments to describe numerical representations, express heterogeneization, and we use descriptions to characterize equivalences to initial algebras. One downside is that each result uses a different definition of description or ornament, which all have their advantages and drawbacks. We identify the following interesting directions to further research ornaments:
+
+Heterogeneization uses a variant of descriptions allowing parameter introduction, but this does not allow treating the parameter as a variable, nor supports nested types, which may be fruitful to generalize by changing descriptions to allow for higher order functors \cite{initenough}.
+
+We can also restrict descriptions and ornaments to a closed universe, allowing us to avoid increasing the levels in the cubical compatible setup.  
+
+Furthermore, we have not yet investigated the applicability of patches \cite{orntrans} to our experiments; these could be interesting when lifting flexible two-sided array operations from a number system to custom finger tree, but may also need adjustments to be able to deal with our modifications to descriptions.
+
+Finally, we think that, like heterogeneization, there are more common and intuitive transformations of types which can be captured as ornament-computing functions.
+
+% also descriptions make a mess, and even more so in a closed universe, but this should be resolvable using \cite{practgen}
+
+
+\subsection{SIP}
+The SIP as described earlier allows us to concisely prove the equivalences of implementations of structures. However, by definition of the SIP, this limited to structures over unindexed types, while in the context of vectors we may want to express a structure over an indexed type, in which case the indexes themselves may also be only equivalent rather than definitionally equal. Furthermore, the implementation we will use \cite{iri} restricts the basic structure formers; while in our scenarios we do not need much more complicated structures, we do expect the SIP to apply to structures containing most W-types with a free parameter. Solutions to both problems might be applicable to our research, so both may be interesting as further work.
+
+% wouldn't having sigmas in structures be sufficient to emulate indexed types?
+% > ah I guess that having a sigma-of-structures already means the ``snd structure'' is an ``indexed structure''
+% but that should not be different from the current implemenation, shouldn't the structures always be applied before we have to prove them equivalent?
+
+
+\begin{longtable}{l l}
+Date & Target \\
+\hline
+2023-04-24 & Finger trees               \\
+2023-05-01 & "              \\
+2023-05-08 & "         \\
+2023-05-15 & Enumerations                                        \\
+2023-05-22 & "        \\
+2023-05-29 & "                                                                  \\
+2023-06-05 & "  \\
+2023-06-12 & Ornamentation                                                                  \\
+2023-06-19 & "                                           \\
+2023-06-26 & "                                   \\
+2023-07-03 & Holiday                                                            \\
+2023-07-10 & ?                                                                  \\
+2023-07-17 & "                                                                  \\
+2023-07-24 & "                                                                  \\
+2023-07-31 & "                                                                  \\
+2023-08-07 & "                                                                  \\
+2023-08-14 & "                                                                  \\
+2023-08-21 & "                                                                  \\
+2023-08-28 & ?                                                                  \\
+2023-09-04 & ?                                                                  \\
+2023-09-11 & SIP                                    \\
+2023-09-18 & "                                                                  \\
+2023-09-25 & TBD\footnote{This slot is flexible, and can be filled by one of the earlier experiments if I find that one of them requires more time, or may be filled by another experiment should I encounter new interesting and relevant questions}                                \\
+2023-10-02 & "                                                              \\
+2023-10-09 & Write                                                                  \\
+2023-10-16 & "                                                                  \\
+2023-10-23 & "                                                                  \\
+2023-10-30 & "                                                                  \\
+2023-11-06 & "                                                                  \\
+2023-11-13 & "                                                                  \\
+2023-11-20 & Prepare presentation                                               \\
+2023-11-27 & "                                                                  \\
+2023-12-04 & "                                                                  \\
+2023-12-11 & Present thesis                                                     \\
+2023-12-18 & -                                                                  \\
+2023-12-22 & End date of research project                                       \\
+\caption{The proposed planning for the research project.}
+\end{longtable}
+
+\begin{comment}
+\begin{longtable}{l l}
+Date & Target \\
+\hline
+2023-04-24 & Define and work out (better) simplified finger trees               \\
+2023-05-01 & Force representability onto conventional finger trees              \\
+2023-05-08 & Is there an ethical numrep with the bounds of finger trees?        \\
+2023-05-15 & Experiment with enumeration                                        \\
+2023-05-22 & How fair is enumeration/can we make better use of sharing?         \\
+2023-05-29 & "                                                                  \\
+2023-06-05 & Vectors are indexed, finger trees are not, SIP for indexed types?  \\
+2023-06-12 & "                                                                  \\
+2023-06-19 & Small universe ornaments                                           \\
+2023-06-26 & Find out what HSIP means for us                                    \\
+2023-07-03 & Holiday                                                            \\
+2023-07-10 & ?                                                                  \\
+2023-07-17 & "                                                                  \\
+2023-07-24 & "                                                                  \\
+2023-07-31 & "                                                                  \\
+2023-08-07 & "                                                                  \\
+2023-08-14 & "                                                                  \\
+2023-08-21 & "                                                                  \\
+2023-08-28 & ?                                                                  \\
+2023-09-04 & ?                                                                  \\
+2023-09-11 & Find more generic constructions                                    \\
+2023-09-18 & "                                                                  \\
+2023-09-25 & Can patches work better in C-c C-,                                 \\
+2023-10-02 & Write                                                              \\
+2023-10-09 & "                                                                  \\
+2023-10-16 & "                                                                  \\
+2023-10-23 & "                                                                  \\
+2023-10-30 & "                                                                  \\
+2023-11-06 & "                                                                  \\
+2023-11-13 & "                                                                  \\
+2023-11-20 & Prepare presentation                                               \\
+2023-11-27 & "                                                                  \\
+2023-12-04 & "                                                                  \\
+2023-12-11 & Present thesis                                                     \\
+2023-12-18 & -                                                                  \\
+2023-12-22 & End date of research project                                       \\
+\caption{The proposed planning for the research project.}
+\end{longtable}
+\end{comment}
+

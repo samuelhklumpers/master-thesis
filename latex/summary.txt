@@ -1,0 +1,39 @@
+abstract
+
+introduction
+- what and why?
+- program verification, list head, now vector
+- focussing on containers, numerical representations
+- generally adding invariants into the type => correct-by-construction, but also redefine everything
+- generics, descriptions, ornaments
+- using this to look at finger trees
+
+background
+    agda
+    cubical
+    numerical representations
+    ornaments
+    
+proof transport
+- type with structure as implementation of interface
+- SIP gives condition
+- unary ~ binary
+- +N ~ +B
+- explain how this generalizes to everything as opposed to without univalence
+
+numerical representations
+- lists look like naturals, using this we can turn "give lists and prove them correct" into "give naturals and get list correctness"
+
+numerical representations as ornaments
+
+heterogenization
+
+equivalences between fixpoints
+
+universes for nested types
+- actually finger trees don't fit into any part of this
+    interpreting nested numbers
+    nested ornaments
+    number => ornament
+    
+https://q.uiver.app/?q=WzAsMTYsWzQsMiwiXFx0ZXh0e3ZlcmlmaWNhdGlvbn0iXSxbMywzLCJcXHRleHR7bnVtZXJpY2FsIHJlcHJlc2VudGF0aW9uc30iXSxbMyw2LCJcXHRleHR7b3JuYW1lbnRzfSJdLFsyLDQsIlxcdGV4dHtTSVB9Il0sWzEsMywiXFx0ZXh0e2VxdWl2YWxlbmNlc30iXSxbMiw1LCJcXHRleHR7ZGVzY3JpcHRpb25zfSJdLFs0LDMsIlxcdGV4dHtmaW5nZXIgdHJlZXN9Il0sWzEsNiwiXFx0ZXh0e3BhdGhzIGJldHdlZW4gZml4cG9pbnRzfSJdLFszLDcsIlxcdGV4dHtoZXRlcm9nZW5pemF0aW9ufSJdLFs0LDQsIlxcdGV4dHtuZXN0ZWQgdHlwZXN9Il0sWzIsMywiXFx0ZXh0e2N1YmljYWx9Il0sWzAsMCwiXFxidWxsZXQiXSxbMCwxLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzEsMSwiXFxidWxsZXQiXSxbNSwzLCJcXHRleHR7ZW51bWVyYXRpb259Il0sWzEsMiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzEsMywiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzIsNV0sWzQsNywiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzIsOCwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzYsOSwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzUsNywiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzMsMTBdLFszLDRdLFsxMiwxMSwiXFx0ZXh0e3JlcXVpcmVzfSIsMl0sWzEzLDE0LCJcXHRleHR7bGVhZHMgdG8gfSIsMCx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFswLDEsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFswLDYsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFswLDE1LCIiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMSw2LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XV0=

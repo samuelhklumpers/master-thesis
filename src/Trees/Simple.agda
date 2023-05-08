@@ -61,14 +61,37 @@ len  | 1?
 RepD : Set → Digit → Set
 RepD A d = IxD d → A
 
+ixd-1 : IxD 1b ≡ ⊤
+ixd-1 = ua ((λ { 1i → tt }) , record { equiv-proof = λ { tt → (1i , refl) , (λ { (1i , y) → ΣPathP (refl , (λ i j → tt)) }) } })
+
+ixd-2 : IxD 2b ≡ ⊤ ⊎ ⊤
+ixd-2 = isoToPath (iso f g sec ret)
+  where
+  f : IxD 2b → ⊤ ⊎ ⊤
+  f 2i1 = inl _
+  f 2i2 = inr _
+
+  g : ⊤ ⊎ ⊤ → IxD 2b
+  g (inl _) = 2i1
+  g (inr _) = 2i2
+
+  sec : section f g
+  sec (inl _) = refl
+  sec (inr _) = refl
+
+  ret : retract f g
+  ret 2i1 = refl
+  ret 2i2 = refl
+
 Finger′ : ∀ A d → Def (RepD A d)
 Finger′ A 1b = 
-  (IxD 1b → A) ≡⟨ {!!} ⟩
-  (⊤ → A)      ≡⟨ {!!} ⟩
+  (IxD 1b → A) ≡⟨ cong (λ x → (x → A)) ixd-1 ⟩
+  (⊤ → A)      ≡⟨ UnitToTypePath A ⟩
   A            ∎ use-as-def
 Finger′ A 2b = 
-  (IxD 2b → A) ≡⟨ {!!} ⟩
-  (⊤ ⊎ ⊤ → A)  ≡⟨ {!!} ⟩
+  (IxD 2b → A) ≡⟨ cong (λ x → (x → A)) ixd-2 ⟩
+  (⊤ ⊎ ⊤ → A)  ≡⟨ ua Π⊎≃ ⟩
+  (⊤ → A) × (⊤ → A) ≡⟨ cong₂ _×_ (UnitToTypePath A) (UnitToTypePath A) ⟩
   A × A        ∎ use-as-def
 
 Finger : Set → Digit → Set
@@ -101,10 +124,10 @@ Tree′ A 1n =
 Tree′ A (x ⟨ n ⟩ y) = 
   (Ix (x ⟨ n ⟩ y) → A) ≡⟨ cong (λ x → (x → A)) ix-m ⟩
   (IxD x ⊎ (Ix n ⊎ IxD y) → A) ≡⟨ ua Π⊎≃ ⟩
-  {!!} ≡⟨ cong (λ x → x × _) (by-definition (Finger′ A x)) ⟩
-  {!!} ≡⟨ cong (λ x → _ × x) (ua Π⊎≃) ⟩
-  {!!} ≡⟨ cong (λ x → _ × (x × _)) (by-definition (Tree′ A n)) ⟩
-  {!!} ≡⟨ cong (λ x → _ × (_ × x)) (by-definition (Finger′ A y)) ⟩
+  _ ≡⟨ cong (λ x → x × _) (by-definition (Finger′ A x)) ⟩
+  _ ≡⟨ cong (λ x → _ × x) (ua Π⊎≃) ⟩
+  _ ≡⟨ cong (λ x → _ × (x × _)) (by-definition (Tree′ A n)) ⟩
+  _ ≡⟨ cong (λ x → _ × (_ × x)) (by-definition (Finger′ A y)) ⟩
   Finger A x × Tree A n × Finger A y ∎ use-as-def
 
 
