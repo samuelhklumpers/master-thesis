@@ -1,0 +1,78 @@
+Property based testing frameworks often rely on random generation of values, consider for example the Arbitrary class of Quickcheck \cite{quickcheck}. How these values are best generated depends on the property being tested; if we are testing an implementation of \AgdaFunction{insertSorted}, we should probably generate sorted lists \cite{rest}! Some frameworks like Quickcheck do provide deriving mechanisms for Arbitrary instances, but this relinquishes most control over the distribution. This leaves manually re-implementing Arbitrary as necessary as the only option for a user who wants to test properties with more sophisticated preconditions.
+
+A more controllable alternative to random generation is the complete enumeration of all values. Provided that such an enumeration supports efficient (and fair) indexing, one can adjust a random distribution of values by controlling the sampling from enumerations. There is rich theory of enumeration, and this problem has also been tackled numerous times in the context of functional programming. Some approaches focus on the efficient indexing of enumerations \cite{feat}, others focus on generating indexed types as a means of enumerating values with invariants \cite{unique}.
+
+We will describe a framework generalizing these approaches, which will support:
+\begin{enumerate}
+    \item unique and complete enumeration
+    \item indexing by (exact) recursive depth
+    \item fast skipping through the enumeration
+    \item indexed, nested, and mutually recursive types
+\end{enumerate}
+
+We will follow an approach similar to the list-to-list approach \cite{unique}, but rather than expressing enumerations as a step-function, computing the next generation of values from a list of predecessors, we will keep track of the entire depth indexed hierarchies.
+
+\subsection{Basic strategy}
+We define a hierarchy of elements as
+\ExecuteMetaData[Enumeration/Approach1]{hierarchy}
+When applied to a number $n$, a hierarchy should then return the list of elements of exactly depth $n$. To iteratively approximate hierarchies, we define a hierarchy-builder type
+\ExecuteMetaData[Enumeration/Approach1]{buildertype}
+Hierarchy-builders should be able to take a partially defined hierarchy, and return a hierarchy which is defined at one higher level.
+
+We implement some basic hierarchy building blocks, such as the one-element builder
+\ExecuteMetaData[Enumeration/Approach1]{pure}
+which represents nullary constructors, and the shift builder
+\ExecuteMetaData[Enumeration/Approach1]{rec}
+which represents recursive fields.
+
+To interpret sum types, we use an interleaving operation. Consider that for the disjoint sum, the elements at level $n$ must be formed from elements which are also at level $n$, regardless whether they are from the left summand or the right.
+\ExecuteMetaData[Enumeration/Approach1]{alternative}
+For product types, the elements at level $n$ are those which contain at least one component at level $n$, so we have to sum all possible combinations of products
+\ExecuteMetaData[Enumeration/Approach1]{pair}
+We claim that this is sufficient to enumerate the following simple universe of types
+\ExecuteMetaData[Enumeration/Approach1]{Desc}
+In the same vein as other generic constructions, we can define a generic builder by cases over the interpretetation
+\ExecuteMetaData[Enumeration/Approach1]{builder}
+By applying constructors, we can wrap this up into an endomorphism at a fixpoint
+\ExecuteMetaData[Enumeration/Approach1]{gbuilder}
+Finally, we observe that applying this builder $n+1$ times to the empty hierarchy is sufficient to approximate the hierarchy up to level $n$
+\ExecuteMetaData[Enumeration/Approach1]{build}
+which gives us the generic \AgdaFunction{hierarchy}
+
+We can for example apply this to generate binary trees of given depths
+\ExecuteMetaData[Enumeration/Approach1]{TreeD}
+which returns the following trees of level 2 
+\ExecuteMetaData[Enumeration/Approach1]{trees-2}
+
+
+However, it would be even cooler if
+\begin{enumerate}
+    \item An enumeration could tell us how many elements there are of some depth
+    \item An enumeration was a map from constructor to subsequent enumerations
+    \item The possible indices get computed as we go down.
+\end{enumerate}
+The first is essential for sampling. The second would give the user total control over the shapes of their generated values. And the third is particularly crucial when the set of possible indices is small.
+
+\subsection{Cardinalities}
+Simplifying our earlier approach a bit, we can tinker 
+\ExecuteMetaData[Enumeration/Counting]{hierarchy}
+to track the sizes. For example, our interleaving operation becomes
+\ExecuteMetaData[Enumeration/Counting]{alternative}
+We can write down a generic hierarchy
+\ExecuteMetaData[Enumeration/Counting]{ghierarchy}
+Then we can count 
+\ExecuteMetaData[Enumeration/Counting]{numTrees}
+and see that there are 210065930571 trees of level 6, wow! It still takes a bit of time to walk across all branches and products in the description, because there is no memoization at all, but it's a lot better than counting the trees after generating them. Also indexing will be slow, even knowing this information, because we're working with plain lists. Things would probably already get a lot better if we worked with trees that know the sizes of their children.
+
+\subsection{Indexed types}
+Ideally, we get a meaningful list or enumeration of indices at the end: the non-empty ones. However, we do not (yet) require the index type to be enumerable.
+
+The index-first presentation of indexed datatypes, while efficient and succinct, does not seem suitable for this. After all, the descriptions for such a presentation live in the function space from the index to the base descriptions. We would rather want to start ``recklessly applying'' constructors and seeing what kinds of indices that leaves us with.
+
+This example explains why it's also pretty hopeless for Sijsling's descriptions:
+\ExecuteMetaData[Enumeration/Indexed]{Counter}
+We would need a notion of ``forward indexed type'' in which the indices in the arguments must be strictly less crazy than those in the resulting type.
+
+Anyway, we restrict our attention to indexed types that work, that is, we can decide whether an index fits. In the previous example, the constructor would instead compute whether $n$ is $n' + 2$, and return $n'$ if it is. This completely breaks any attempt at counting the enumeration.
+
+In comparison, the index-first presentation tells us nothing about which indices are reachable, but probably does better with counting. I suppose you could combine them at the cost of a lot, and first run the forward idea on only the indices, and then see how much each index has, or something.

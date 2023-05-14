@@ -1,16 +1,16 @@
 %Agda \cite{agda} is a functional programming language and a proof assistant, taking inspiration from languages like Haskell and other proof assistants such as Coq. We can write programs as we would in Haskell, and then express and prove their properties all inside Agda. This allows us to demonstrate the correctness of programs by formal proof rather than by testing. However, this level of formality also trades-off the uncertainty of testing for a time-investment to produce these proofs. In this thesis, we will explore a variety of methods of proving properties of our programs, focusing on the problems that one may encounter, presenting solutions as they arise. Let us sketch some of these problems.
 
-\towrite{Why program verification}
+%\towrite{Why program verification}
 
-\towrite{Lists and vectors}
+%\towrite{Lists and vectors}
 
-\towrite{Numerical representations}
+%\towrite{Numerical representations}
 
-\towrite{To control the consequences of type isomorphisms, we move to cubical type theory}
+%\towrite{To control the consequences of type isomorphisms, we move to cubical type theory}
 
-\towrite{Adding invariants to get correctness by construction, which entails ornaments}
+%\towrite{Adding invariants to get correctness by construction, which entails ornaments}
 
-\towrite{Finger trees}
+%\towrite{Finger trees}
 
 First, merely adapting a program to Agda may already require changes to the datatypes used in it; for example, if a program manipulating a \AgdaDatatype{List} uses the unsafe \AgdaFunction{head} function, then one is forced to replace the \AgdaDatatype{List} by a datatype that ensures non-emptiness, such as a \AgdaDatatype{NonEmpty} list or a length-aware vector \AgdaDatatype{Vec}. On the other hand, there might be sections of a program where the concrete length is not relevant for correctness and only gets in the way. As a result, one might find themselves duplicating common functions like concatenation \AgdaFunction{\_++\_} to only alter their signatures.
 

@@ -31,7 +31,7 @@ Rep : Set → Number → Set
 Rep A n = Ix n → A
 
 
--- also note that the representability of any sufficiently complicated number type is completely useless, as illustrated by
+-- also note that the representability of any sufficiently complicated number type is a bit useless, as illustrated by
 suc : Number → Number
 suc 0n = 1n
 suc 1n = 1b ⟨ 0n ⟩ 1b
@@ -57,7 +57,7 @@ isucc {n = 2b ⟨ _ ⟩ _} (mi i) = mi (isucc i)
 head : ∀ n → Rep A (suc n) → A
 head n xs = xs izero
 
--- you cannot even take the head of a concrete represented tree without specifying its size
+-- you cannot take the head of a concrete represented tree without specifying its size
 {-
 Tree-2 : Rep Number (1b ⟨ 1n ⟩ 2b)
 Tree-2 (li 1i) = 1n
@@ -95,7 +95,7 @@ cons n x xs i with iview n i
 ... | as-izero   = x
 ... | as-isucc i = xs i
 
--- could you even split on Index-View izero in Calculating Datastructures?
+-- could you split on Index-View izero in Calculating Datastructures?
 
 iview-z : ∀ n → iview n izero ≡ as-izero
 iview-z 0n = refl

@@ -1,0 +1,62 @@
+\towrite{Can we prove that the time complexity of head is always less than cons, similarly for lookup and insert?}
+\towrite{Cite everything}
+
+We know that some datastructures can be presented as non-redundant numerical representations, for example lists by unary numbers, random access lists by binary numbers [calculating], and, skew binary heaps by skew binary numbers [progorn]. So far, some of these examples do support amortized constant time consing, but they have at best logarithmic time snocing. This is reflected by their number systems, for which either the natural successor operation is constant time, but can only act at the front, or is logarithmic time to begin with. We will instead look at more redundant number systems, and refine these step-by-step to produce structures similar to finger trees, giving us datastructures with fast access to both ends, and some of their properties for free.
+
+\subsection{Binary finger trees}
+For any numerical representation, we see that the operations on the represented datatype must be coherent with the corresponding operations on the number system. Hence, if we want to have constant time cons and snoc, we must first have constant time suc anc cus. By starting from a more symmetric number system, we can ensure good performance for both. Note that such a system is necessarily redundant, as there must be cases where neither suc nor cus recurses, yet both must clearly yield different values!
+
+The obvious first candidate are symmetric unary numbers
+\[ ... \]
+but we can also see that subtraction has linear time
+\[ ... \]
+which gives a linear lower bound on the time complexity of lookup. By using a binary backbone for the numbers, we can also get a good lookup
+\[ ... \]
+However, this shape is still not ideal. We can see that for values like
+\[ ... \]
+The pair of suc
+\[ ... \]
+and pred
+\[ ... \]
+can compose to always take logarithmic time [fingertrees anew]. To avoid this, we can give the numbers bigger fingers
+\[ ... \]
+Now applying pred to the pathological case produces a value for which suc and pred both are constant time
+\[ ... \]
+More formally, we can use a three-colour scheme [purely functional/tarjan] to prove that any sequence of suc/cus pred/derp will amortize to constant time. Again, the interpretation of this number system is given by
+\[ ... \]
+
+To extract the datastructure, we must find a suitable index type for these numbers. Since the numbers are redundant, we can also get trees of different shapes with the same size, each having a different and incompatible index type. Still, the trees of a fixed shape are represented by functions, and the isomorphisms will still hold. The computation of the index type from the interpretation of the numbers is straightforward
+\[ ... \]
+\dots
+This lets us define the tree type as
+\[ ... \]
+and gives definitions of the basic array operations
+\[ ... \]
+
+We can again trieify this to get a concrete datastructure
+\[ ... \]
+Consequently, since the representable arrays obey head (cons x xs) = x, the concrete arrays obey this as well.
+On the other hand, the redundancy of the numbers, for which suc cus = cus suc does not hold, also causes cons snoc = snoc cons to not hold either; it seems that binary finger trees are not a very nice array type. We would like to quotient the redundancy of the number type away, which would also alleviate our issues related to indexing.
+
+We can do this by imposing the following relation on the numbers
+\[ ... \]
+and turning the number system into a setoid. Eliminating from this setoid should then respect this relation, so for example, we have to prove
+\[ ... \]
+
+Similarly, we can keep the implementation of the binary finger trees, but put this under an appropriate relation as well
+\[ ... \]
+which ensures that the construction of the trees respects the relation on the number as well..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
