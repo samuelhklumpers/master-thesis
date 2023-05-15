@@ -1,6 +1,6 @@
 Property based testing frameworks often rely on random generation of values, consider for example the Arbitrary class of Quickcheck \cite{quickcheck}. How these values are best generated depends on the property being tested; if we are testing an implementation of \AgdaFunction{insertSorted}, we should probably generate sorted lists \cite{rest}! Some frameworks like Quickcheck do provide deriving mechanisms for Arbitrary instances, but this relinquishes most control over the distribution. This leaves manually re-implementing Arbitrary as necessary as the only option for a user who wants to test properties with more sophisticated preconditions.
 
-A more controllable alternative to random generation is the complete enumeration of all values. Provided that such an enumeration supports efficient (and fair) indexing, one can adjust a random distribution of values by controlling the sampling from enumerations. There is rich theory of enumeration, and this problem has also been tackled numerous times in the context of functional programming. Some approaches focus on the efficient indexing of enumerations \cite{feat}, others focus on generating indexed types as a means of enumerating values with invariants \cite{unique}.
+A more controllable alternative to random generation is the complete enumeration of all values. Provided that such an enumeration supports efficient (and fair) indexing, one can adjust a random distribution of values by controlling the sampling from enumerations. There is rich theory of enumeration, and this problem has also been tackled numerous times in the context of functional programming. Some approaches focus on the efficient indexing of enumerations \cite{feat}, others focus on generating indexed types as a means of enumerating values with invariants \cite{uqenum}.
 
 We will describe a framework generalizing these approaches, which will support:
 \begin{enumerate}
@@ -10,7 +10,7 @@ We will describe a framework generalizing these approaches, which will support:
     \item indexed, nested, and mutually recursive types
 \end{enumerate}
 
-We will follow an approach similar to the list-to-list approach \cite{unique}, but rather than expressing enumerations as a step-function, computing the next generation of values from a list of predecessors, we will keep track of the entire depth indexed hierarchies.
+We will follow an approach similar to the list-to-list approach \cite{uqenum}, but rather than expressing enumerations as a step-function, computing the next generation of values from a list of predecessors, we will keep track of the entire depth indexed hierarchies.
 
 \subsection{Basic strategy}
 We define a hierarchy of elements as

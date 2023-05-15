@@ -1,13 +1,17 @@
 \subsection{Agda}
-We formalize our work in Agda \cite{agda}, a functional programming language with dependent types. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. These proofs can then be run as algorithms, or in some cases be extracted to a Haskell program\footnote{Or JavaScript, if you want.}.
-
-The type system of Agda is an extension of (intensional) Martin-Löf type theory (MLTT), a constructive type theory in which we can interpret intuitionistic logic. Compared to Haskell, which extends a polymorphic lambda calculus with inductive types, MLTT allows the type of the codomain of a function to vary with the values in the domain and the type of the second field of a pair type to vary with the value of the first. The interpretation of logic into programs is known as the Curry-Howard isomorphism: propositions or logical formulas are related to types, such that a term of a type constitutes a proof of the related proposition.
+We formalize our work in Agda \cite{agda}, a functional programming language with dependent types. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. \todo{Make sure this does not literally repeat the introduction too often.} These proofs can then be run as algorithms, or in some cases be extracted to a Haskell program\footnote{Or JavaScript, if you want.}.
 
 Syntactically Agda is similar to Haskell, with a few notable differences. One is that Agda allows most characters and words in identifiers with only a small set of exceptions. For example, we can write
 \ExecuteMetaData[Tex/Snippets]{ternary}
 The other is that datatypes are given either as generalized algebraic datatypes (GADTs) or record types in Haskell.
 
-An essential semantical difference is that Agda rules out non-termination by restricting function definitions to structural recursion. The termination checker (together with other restrictions which we will encounter in due time) ensures that the logic interpreted in Agda remains consistent, and does not allow trivial proofs which would be tolerated in Haskell, like
+The type system of Agda is an extension of (intensional) Martin-Löf type theory (MLTT), a constructive type theory in which we can interpret intuitionistic logic. Compared to Haskell, which extends a polymorphic lambda calculus with inductive types, MLTT allows types of codomains of functions to vary with values in the domains: Whereas in Haskell only datatypes can map into types\footnote{Excluding extensions}, in Agda we define functions into \AgdaPrimitiveType{Type}
+\[ \dots \]
+given a function $f$ from $A$ into \AgdaPrimitiveType{Type}, we can then form the type
+\[ \dots \]
+Likewise, the type of the second field of a pair type can vary with the value of the first. The presence of these types enriches the interpretation of logic into programs, known as the Curry-Howard isomorphism: propositions or logical formulas are related to types, such that a term of a type constitutes a proof of the related proposition.
+
+To ensure that the logic interpreted by this isomorphism remains consistent, Agda rules out non-terminating functions by restricting their definitions to structural recursion. The termination checker (together with other restrictions which we will encounter in due time) prevents trivial proofs which would be tolerated in Haskell, like
 \ExecuteMetaData[Tex/Snippets]{loop}
 The propositional part of the Curry-Howard correspondence can then be formulated by the usual type formers. The atomic formulas, true and false, can be represented respectively as the empty record: there always is a proof \AgdaFunction{tt} of true
 \ExecuteMetaData[Tex/Snippets]{true}
@@ -19,7 +23,7 @@ Conjunction (logical and) is given as a product type: having both $A$ and $B$ pr
 \ExecuteMetaData[Tex/Snippets]{pair}
 Predicates, formulas containing variables, correspond to functions into the type of formulas
 \ExecuteMetaData[Tex/Snippets]{predicate}
-allowing interpretations of higher-order logic. Quantifiers are interpreted via dependent types, universal quantification (for all) is a dependent function type: for each $a : A$, give a proof of $P\ a$
+allowing interpretations of higher-order logic. Quantifiers are interpreted via dependent types. Universal quantification (for all) is a dependent function type: for each $a : A$, give a proof of $P\ a$
 \ExecuteMetaData[Tex/Snippets]{forall}
 Likewise, existential quantification (exists) is a dependent pair type: there is an $a : A$ and a proof $P\ a$
 \ExecuteMetaData[Tex/Snippets]{exists}
@@ -27,14 +31,15 @@ Predicates can also be expressed using indexed datatypes, in which the choice of
 \ExecuteMetaData[Tex/Snippets]{eq}
 Closed terms of this type can only be constructed for definitionally equal elements, but crucially, variables can contain equalities between different elements. As the second argument is an index, pattern matching on \AgdaFunction{refl} unifies the elements, such that properties like substitution follow
 \ExecuteMetaData[Tex/Snippets]{subst}
-\towrite{Isomorphisms}
+
+With this, we can do math. For example, we could define natural numbers as an inductive type
+\[ \dots \]
+and set out to prove the elementary properties of prime numbers. But to get the same results to binary numbers (without duplicating the proofs), we need a bit more. The usual notion of equalities of types are isomorphisms: two types $A, B$ are isomorphic if there are functions $A \to B$ and $B \to A$, which are mutually inverse 
+\[ \dots \]
+In ordinary Agda, we cannot directly apply these to transport along like we can for equalities, however.
 
 \subsection{Cubical Agda}
-\towrite{Gluing everything together, making representation independence run.}
-
-The methods described in later sections yield type isomorphisms. One might expect that like how isomorphic groups share the same group-theoretical properties, isomorphic types also share the same type-theoretical properties. Meta-theoretically, this is known as \emph{representation independence}, and is evident: if $e: A \simeq B$, simply modify the type by substituting all variables $x : B$ with $e x'$ for $x' : A$, and replacing the resulting terms $t : B$ by $e^{-1} t$. Then the proof term can be recovered by substituting along the equalities $e^{-1}(e x) \equiv x$ as needed.
-
-Inside (ordinary) Agda this is not so practical, as this independence only holds when applied to concrete types, and is then only realized by manually performing these substitutions. On the other hand, in Cubical Agda, the Structure Identity Principle internalizes a kind of representation independence \cite{iri}.
+Intuitively, one expects that like how isomorphic groups share the same group-theoretical properties, isomorphic types also share the same type-theoretical properties. Meta-theoretically, this is known as \emph{representation independence}, and is evident. Inside (ordinary) Agda this is not so practical, as this independence only holds when applied to concrete types, and is then only realized by manually substituting along the isomorphism. On the other hand, in Cubical Agda, the Structure Identity Principle internalizes a kind of representation independence \cite{iri}.
 
 Cubical Agda modifies the type theory of Agda to a kind of homotopy type theory, looking at equalities as paths between terms rather than the equivalence relation generated by reflexivity. In cubical type theories, the role played by pattern matching on \AgdaFunction{refl} or by axiom J, in MLTT and ``Book HoTT'' respectively, is instead acted out by directly manipulating cubes\footnote{Under the analogy where a term is a point, an equality between points is a line, a line between lines is a square.}. In Cubical Agda, univalence
 % ua
@@ -43,6 +48,24 @@ is not an axiom but a theorem.
 % Why circles are points with K
 
 % Why circles are not points with univalence
+
+
+\subsection{The Structure Identity Principle}\label{sec:leibniz}
+To give an understanding of the basics of Cubical Agda \cite{cuagda} and the Structure Identity Principle (SIP), we walk through the steps to transport proofs about addition on Peano naturals to Leibniz naturals. We give an overview of some features of Cubical Agda, such as that paths give the primitive notion of equality, until the simplified statement of univalence. We do note that Cubical Agda has two downsides relating to termination checking and universe levels, which we encounter in later sections.
+
+Starting by defining the unary Peano naturals and the binary Leibniz naturals, we prove that they are isomorphic by interpreting them into eachother. We explain that these interpretations are easily seen to be mutual inverses by proving lemmas stating that both interpretations ``respect the constructors'' of the types. Next, we demonstrate how this isomorphism can be promoted into an equivalence or an equality, and remark that this is sufficient to transport intrinsic properties, such as having decidable equality, from one natural to the other.
+
+Noting that transporting unary addition to binary addition is possible but not efficient, we define binary addition while ensuring that it corresponds to unary addition. We present a variant on refinement types as a syntax to recover definition from chains of equality reasoning, allowing one to rewrite definitions while preserving equalities.
+
+We clarify that to transport proofs referring to addition from unary to binary naturals, we indeed require that these are meaningfully related. Then, we observe that in this instance, the pairs of ``type and operation'' are actually equated as magmas, and explain that this is an instance of the SIP.
+
+Finally, we describe the use case of the SIP, how it generalizes our observation about magmas, and how it can calculate the minimal requirements to equate to implementations of an interface. This is demonstrated by transporting associativity from unary addition to binary addition, noting that this would save many lines of code provided there is much to be transported.
+
+\towrite{Merge}
+
+\input{CubicalAndBinary}
+
+
 
 \subsection{Numerical representations}
 \towrite{Generalizing the observation that lists look like unary naturals and Braun trees look like binary naturals.}

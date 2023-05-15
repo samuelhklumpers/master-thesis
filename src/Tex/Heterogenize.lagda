@@ -94,7 +94,8 @@ toRDesc (ṗ D)       = ṗ (toRDesc D)
 
 %<*HetO>
 \begin{code}
-HetO′ : (D : RDesc ⊤ ℓ-zero) (E : RDesc ⊤ ℓ-zero) (x : Ḟ (λ _ → D) (μ (λ _ → E) Type) Type tt) → ROrnDesc (μ (λ _ → E) Type tt) ! D
+HetO′ : (D E : RDesc ⊤ ℓ-zero) (x : Ḟ (λ _ → D) (μ (λ _ → E) Type) Type tt)
+      → ROrnDesc (μ (λ _ → E) Type tt) ! D
 HetO′ (ṿ is) E x = ṿ (map-ṿ is x)
   where
   map-ṿ : (is : List ⊤) → Ṗ is (μ (λ _ → E) Type) → Ṗ is (Inv !)

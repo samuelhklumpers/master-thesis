@@ -239,3 +239,62 @@ abstract="Initial algebra semantics is a cornerstone of the theory of modern fun
 isbn="978-3-540-73228-0"
 }
 
+
+@article{quickcheck,
+author = {Claessen, Koen and Hughes, John},
+title = {QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs},
+year = {2000},
+issue_date = {Sept. 2000},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {35},
+number = {9},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/357766.351266},
+doi = {10.1145/357766.351266},
+abstract = {Quick Check is a tool which aids the Haskell programmer in formulating and testing properties of programs. Properties are described as Haskell functions, and can be automatically tested on random input, but it is also possible to define custom test data generators. We present a number of case studies, in which the tool was successfully used, and also point out some pitfalls to avoid. Random testing is especially suitable for functional programs because properties can be stated at a fine grain. When a function is built from separately tested components, then random testing suffices to obtain good coverage of the definition under test.},
+journal = {SIGPLAN Not.},
+month = {9},
+pages = {268–279},
+numpages = {12}
+}
+
+@article{feat,
+author = {Dureg\r{a}rd, Jonas and Jansson, Patrik and Wang, Meng},
+title = {Feat: Functional Enumeration of Algebraic Types},
+year = {2012},
+issue_date = {December 2012},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {47},
+number = {12},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/2430532.2364515},
+doi = {10.1145/2430532.2364515},
+abstract = {In mathematics, an enumeration of a set S is a bijective function from (an initial segment of) the natural numbers to S. We define "functional enumerations" as efficiently computable such bijections. This paper describes a theory of functional enumeration and provides an algebra of enumerations closed under sums, products, guarded recursion and bijections. We partition each enumerated set into numbered, finite subsets.We provide a generic enumeration such that the number of each part corresponds to the size of its values (measured in the number of constructors). We implement our ideas in a Haskell library called testing-feat, and make the source code freely available. Feat provides efficient "random access" to enumerated values. The primary application is property-based testing, where it is used to define both random sampling (for example QuickCheck generators) and exhaustive enumeration (in the style of SmallCheck). We claim that functional enumeration is the best option for automatically generating test cases from large groups of mutually recursive syntax tree types. As a case study we use Feat to test the pretty-printer of the Template Haskell library (uncovering several bugs).},
+journal = {SIGPLAN Not.},
+month = {9},
+pages = {61–72},
+numpages = {12},
+keywords = {enumeration, memoisation, property-based testing}
+}
+
+
+@article{uqenum,
+author = {van der Rest, Cas and Swierstra, Wouter},
+title = {A Completely Unique Account of Enumeration},
+year = {2022},
+issue_date = {August 2022},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {6},
+number = {ICFP},
+url = {https://doi.org/10.1145/3547636},
+doi = {10.1145/3547636},
+abstract = {How can we enumerate the inhabitants of an algebraic datatype? This paper explores a datatype generic solution that works for all regular types and indexed families. The enumerators presented here are provably both complete and unique—they will eventually produce every value exactly once—and fair—they avoid bias when composing enumerators. Finally, these enumerators memoise previously enumerated values whenever possible, thereby avoiding repeatedly recomputing recursive results.},
+journal = {Proc. ACM Program. Lang.},
+month = {8},
+articleno = {105},
+numpages = {27},
+keywords = {property-based testing, Agda, datatype generic programming, dependently typed programming, interactive proof assistants}
+}

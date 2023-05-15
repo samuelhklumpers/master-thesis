@@ -3,25 +3,20 @@ Let us quickly review some features of Cubical Agda \cite{cuagda} that we will u
 %Of course, this downside is more than offset by the benefits of changing our primitive notion of equality, which we will see makes it easier to show that ``equivalent'' structures behave identically. 
 In Cubical Agda, the primitive notion of equality arises not (directly) from the indexed inductive definition we are used to, but rather from the presence of the interval type \AgdaPrimitiveType{I}. This type represents a set of two points \AgdaInductiveConstructor{i0} and \AgdaInductiveConstructor{i1}, which are considered ``identified'' in the sense that they are connected by a path. To define a function out of this type, we also have to define the function on all the intermediate points, which is why we call such a function a ``path''. Terms of other types are then considered identified when there is a path between them.
 
-While the benefits are overwhelming for us\todo[inline, color=red]{Which?}, this is not completely without downsides, such as that
-%\ExecuteMetaData[Tex/CubicalAndBinary]{cubical}% \todo[inline]{Not sure if it would be helpful to have a more extensive introduction covering all features used.} % at this moment, probably not, as the cubical usage is rather tame, so I'll probably stick to introducing stuff as it becomes necessary. % TODO then write that somewhere
-the negation of axiom K complicates both some termination checking and some universe levels.\footnote{In particular, this prompts rather far-reaching (but not fundamental) changes to the code of previous work, such as to the machinery of ornaments \cite{progorn} in \autoref{sec:userfriendly}.} Furthermore, if we use certain homotopical constructions, and we wish to eliminate from our types as if they were sets, then we will also have to prove that they are indeed sets.
+Paths between types are incredibly useful, as they effectively let us directly transport properties between isomorphic structures. However, they do not come without downsides, such as that the negation of axiom K complicates both some termination checking and some universe levels.\footnote{In particular, this prompts rather far-reaching (but not fundamental) changes to the code of previous work, such as to the machinery of ornaments \cite{progorn} in \autoref{sec:userfriendly}.} %Furthermore, if we use certain homotopical constructions, and we wish to eliminate from our types as if they were sets, then we will also have to prove that they are indeed sets.
 
-On the positive side, this different perspective gives intuitive interpretations to some proofs of equality, like
+We will discuss how to deal with these issues in later sections, so let us not be distracted from what we \emph{can} do with paths. For example, the different perspective gives intuitive interpretations to some proofs of equality, like
 \ExecuteMetaData[Tex/CubicalAndBinary]{sym}
 where \AgdaFunction{∼\_} is the interval reversal, swapping \AgdaInductiveConstructor{i0} and \AgdaInductiveConstructor{i1}, so that \AgdaFunction{sym} simply reverses the given path.
 
-Furthermore, because we can now interpret paths in record and function types in a new way, we get a host of ``extensionality'' for free. For example, a path in $A \to B$ is indeed a function which takes each $i$ in \AgdaPrimitiveType{I} to a function $A \to B$. Using this, function extensionality becomes tautological 
+Also, because we can now interpret paths in record and function types in a new way, we get a host of ``extensionality'' for free. For example, a path in $A \to B$ is indeed a function which takes each $i$ in \AgdaPrimitiveType{I} to a function $A \to B$. Using this, function extensionality becomes tautological 
 \ExecuteMetaData[Tex/CubicalAndBinary]{funExt}
 
-Finally, %while in ``non-univalent'' Agda bijections or isomorphisms do not play such a central role,
-much of our work will rest on equivalences, as the ``HoTT-compatible'' generalization of bijections. This is because in Cubical Agda, we have the univalence theorem 
-%the \AgdaPrimitiveType{Glue} type tells us that equivalent types fit together in a new type, in a way that guarantees univalence
+Finally, equivalences, the HoTT-compatible variant of bijections, have the univalence theorem 
 \ExecuteMetaData[Tex/CubicalAndBinary]{ua}
-stating that ``equivalent types are identified'', such that type isomorphisms like $1 \to A \simeq A$ become paths $1 \to A \equiv A$, making it so that we can transport proofs along them. We will demonstrate this by a more practical example in the next section.
+stating that ``equivalent types are identified'', such that equivalences like $1 \to A \simeq A$ become paths $1 \to A \equiv A$, making it so that we can transport proofs along them. We will demonstrate this by a more practical example in the next section.
 
-
-\subsection{Unary numbers are binary numbers}\label{ssec:binary}
+\subsubsection{Unary numbers are binary numbers}\label{ssec:binary}
 Let us demonstrate an application of univalence by exploiting the equivalence of the ``Peano'' naturals and the ``Leibniz'' naturals. Recall that the Peano naturals are defined as 
 \ExecuteMetaData[Tex/CubicalAndBinary]{Peano}
 This definition enjoys a simple induction principle and is well-covered in most libraries. However, the definition is also impractically slow, since most arithmetic operations defined on \bN{} have time complexity in the order of the value of the result.
@@ -52,7 +47,7 @@ The path \AgdaFunction{ℕ≡L} then allows us to transport properties from \bN{
 \ExecuteMetaData[Leibniz/Properties.tex]{DiscreteL}
 This can be generalized even further to transport proofs about operations from \bN{} to \bL{}.
 
-\subsection{Functions from specifications}\label{ssec:useas}
+\subsubsection{Functions from specifications}\label{ssec:useas}
 As an example, we will define addition of binary numbers. We could transport \AgdaFunction{\_+\_} as a binary operation
 \ExecuteMetaData[Extra/Algebra]{BinOp}
 from \bN to \bL to get
@@ -72,7 +67,7 @@ Now we can easily extract the definition of \AgdaFunction{plus} and its correctn
 We remark that \AgdaFunction{Def} is close in concept to refinement types\footnote{À la \href{https://agda.github.io/agda-stdlib/Data.Refinement.html}{Data.Refinement}.}, but extracts the value from the proof, rather than requiring it before. \footnote{Unfortunately, normalizing an application of a \AgdaFunction{defined-by} function also causes a lot of unnecessary wrapping and unwrapping, so \AgdaFunction{Def} is mostly only useful for presentation.} %for now..
 
 
-\subsection{The Structure Identity Principle}
+\subsubsection{The Structure Identity Principle}
 We point out that \bN{} with \AgdaFunction{N.+} and \bL{} with \AgdaFunction{plus} form magmas, that is, inhabitants of
 \ExecuteMetaData[Extra/Algebra.tex]{Magma'}
 Using that a path in a dependent pair corresponds to a dependent pair of paths, we get a path from (\bN{}, \AgdaFunction{N.+}) to (\bL{}, \AgdaFunction{plus}). %More generally, a magma is simply a type $X$ with some structure, which is a function $f: X \to X \to X$ in the case of a magma. We can see that paths between magmas correspond to paths $p$ between the underlying types $X$ and paths over $p$ between their operations $f$.
