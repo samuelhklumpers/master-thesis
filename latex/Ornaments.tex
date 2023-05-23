@@ -1,0 +1,31 @@
+In this section we will work out descriptions and ornaments suitable for nested datatypes.
+
+\subsection{Descriptions}
+At the very least, descriptions will need sums, products, and recursive positions as well. While we could use coinductive descriptions, bringing normal and recursive fields to the same level, we avoid this as it also makes ornaments a bit more wild\footnote{For better or worse, an ornament could refer to a different ornament for a recursive field.}. We represent indexed types by parametrizing over a type $I$. Since we are aiming for nested types, external polymorphism\footnote{E.g., for each type $A$ a description of lists of $A$ à la \cite{progorn}} does not suffice: we need to let descriptions control their contexts.
+
+We describe parameters by defining descriptions relative to a context. Here, a context is a telescope of types, where each type can depend on all preceding types:
+\[ \dots \]
+Much like the work Escot and Cockx \cite{practgen} we shove everything into \AgdaFunction{Typeω}, but we do not (yet) allow parameters to depend on previous values, or indices on parameters\footnote{I do not know yet what that would mean for ornaments.}.
+
+We use equalities to enforce indices, simply because index-first types are not honest about being finite, and consequently mess up our levels. For an index type and a context a description represents a list of constructors:
+\[ \dots \]
+These represent lists of alternative constructors, which each represent a list of fields:
+\[ \dots \]
+We separate mere fields from ``known'' fields, which are given by descriptions rather than arbitrary types. Note that we do not split off fields to another description, as subsequent fields should be able to depend on previous fields
+\[ \dots. \]
+
+
+We parametrize over the levels, because unlike practical generic, we stay at one level.
+
+Q: it doesn't seem like we can get rid of σf′ by adding something like drop. Why?
+
+Q: what happens when you precompose a datatype with a function? E.g. (List . f) A = List (f A) 
+
+Q: practgen is cool, compact, and probably necessary to have all datatypes. Note that in comparison, most other implementations (like Sijsling) do not allow functions as inductive arguments. Reasonably so.
+
+Q: I should probably update my agda and make use of the new opaque features to make things readable when refining
+
+\subsection{Ornaments}
+We can now discuss the relation on descriptions which we will impose.
+
+
