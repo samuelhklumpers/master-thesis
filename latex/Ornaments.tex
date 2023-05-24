@@ -1,4 +1,52 @@
-In this section we will work out descriptions and ornaments suitable for nested datatypes.
+To capture finger trees as an ornament over a number system, we will need to describe ornaments over nested datatypes. In this section we will work out descriptions and ornaments suitable for nested datatypes.
+
+\subsection{Comparison}
+We compare our, still immature, implementation to a selection of previous work, based on the following features
+\begin{tabular}{c | c c c c c c c c c c}
+             & Haskell        & \cite{initenough} & \cite{levitation} & \cite{algorn} & \cite{progorn} & \cite{sijsling} & \cite{effectfully} & \cite{practgen} & Shallow  & Deep    \\
+    \hline
+    Fixpoint & yes*           & yes               & no                & yes?          & yes            & yes             & yes                & no              & yes       & yes     \\
+    Index    & —              & —                 & first**           & equality      & first          & equality        & equality           & equality        & equality  &         \\
+    Poly     & yes            & 1                 & external          & external      & external       & telescope       & external           & telescope       & telescope &         \\
+    Levels   & —              & —                 & no                & no            & no             & no***           & cumulative         & Typeω           & Typeω*4   &         \\
+    Sums     & list           & —                 & large             & large         & large          & list            & large              & list            & list      &         \\
+    IndArg   & any            & any               & $\dots \to X\ i$  & $X\ i$        & $X\ i$         & $X\ pv\ i$      & $\dots\to X\ v\ i$ & $\dots\to X\ pv\ i$ & $X (f pv) i$ & ?1 \\
+    Compose  & yes            & yes               & no                & no            & no             & no              & yes?2              & no              & yes       &         \\
+    Extension& —              & —                 & no                & —             & —              & —               & yes                & yes             & no        &         \\
+    Ignore   & —              & —                 & —                 & —             & —              & no              & ?                  & ?               & *5        &         \\
+    Set      & —              & —                 & —                 & —             & —              & no              & no                 & no              & no        & yes     \\
+\end{tabular}
+
+\begin{itemize}
+    \item IndArg: the allowed shapes of inductive arguments. Note that none other than Haskell, higher-order functors, and potentially ?1, allow full positive nested types!
+    \item Compose: can a description refer to another description?
+    \item Extension: do inductive arguments and end nodes, and sums and products coincide through a top-level extension?
+    \item Ignore: can subsequent constructor descriptions ignore values of previous ones? (Either this, or thinnings, are essential to make composites work)
+    \item Set: are sets internalized in this description?
+\end{itemize}
+
+\begin{itemize}
+    \item[*] These descriptions are ``coinductive'' in that they can contain themselves, so the ``fixpoint'' is more like a deep interpretation.
+    \item[**] This has no fixpoint, and the generalization over the index is external.
+    \item[***] But you could bump the parameter telescope to Typeω and lose nothing.
+    \item[*4] A variant keeps track of the highest level in the index.
+    \item[*5] ``Postulated'', \emph{cannot be wired in like in ?, because of the endo in recursive fields}.
+    \item[?1] Deeply encoding all involved functors would remove the need for positivity annotations for full nested types like in other implementations.
+    \item[?2] The ``simplicity'' of this implementation, where data and constructor descriptions coincide, automatically allows composite descriptions.
+\end{itemize}
+
+We take away some interesting points from this:
+\begin{itemize}
+    \item Levels are important, because index-first descriptions are incompatible with benign cumulativity when not emulating it using equalities! 
+    \item Coinductive descriptions can generate inductive types!
+    \item Typeω descriptions can generate types of any level!
+    \item Large sums do not reflect Agda (The fixpoint has no retraction)! On the other hand, they make lists unnecessary, and simplify the definition of ornaments as well.
+    \item We can group/collapse multiple signatures into one using tags, this might be nice for defining generic functions in a more collected way.
+    \item We should probably pair descriptions and thinnings, which gives a succinct full nested types and simplifies ignoring.
+    \item Everything becomes completely unreadable without opacity.
+    \item Why don't we just parametrize descriptions and ornaments over some functor that describes the extra domain-specific information, e.g., the enumerable descriptions can just be normal ones, asking also for sub-enumerators. 
+\end{itemize}
+
 
 \subsection{Descriptions}
 At the very least, descriptions will need sums, products, and recursive positions as well. While we could use coinductive descriptions, bringing normal and recursive fields to the same level, we avoid this as it also makes ornaments a bit more wild\footnote{For better or worse, an ornament could refer to a different ornament for a recursive field.}. We represent indexed types by parametrizing over a type $I$. Since we are aiming for nested types, external polymorphism\footnote{E.g., for each type $A$ a description of lists of $A$ à la \cite{progorn}} does not suffice: we need to let descriptions control their contexts.
