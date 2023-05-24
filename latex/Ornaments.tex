@@ -2,20 +2,40 @@ To capture finger trees as an ornament over a number system, we will need to des
 
 \subsection{Comparison}
 We compare our, still immature, implementation to a selection of previous work, based on the following features
-\begin{tabular}{c | c c c c c c c c c c}
-             & Haskell        & \cite{initenough} & \cite{levitation} & \cite{algorn} & \cite{progorn} & \cite{sijsling} & \cite{effectfully} & \cite{practgen} & Shallow  & Deep    \\
-    \hline
-    Fixpoint & yes*           & yes               & no                & yes?          & yes            & yes             & yes                & no              & yes       & yes     \\
-    Index    & —              & —                 & first**           & equality      & first          & equality        & equality           & equality        & equality  &         \\
-    Poly     & yes            & 1                 & external          & external      & external       & telescope       & external           & telescope       & telescope &         \\
-    Levels   & —              & —                 & no                & no            & no             & no***           & cumulative         & Typeω           & Typeω*4   &         \\
-    Sums     & list           & —                 & large             & large         & large          & list            & large              & list            & list      &         \\
-    IndArg   & any            & any               & $\dots \to X\ i$  & $X\ i$        & $X\ i$         & $X\ pv\ i$      & $\dots\to X\ v\ i$ & $\dots\to X\ pv\ i$ & $X (f pv) i$ & ?1 \\
-    Compose  & yes            & yes               & no                & no            & no             & no              & yes?2              & no              & yes       &         \\
-    Extension& —              & —                 & no                & —             & —              & —               & yes                & yes             & no        &         \\
-    Ignore   & —              & —                 & —                 & —             & —              & no              & ?                  & ?               & *5        &         \\
-    Set      & —              & —                 & —                 & —             & —              & no              & no                 & no              & no        & yes     \\
+
+
+\begin{tabular}{c | c c c c c}
+             & Haskell        & \cite{initenough} & \cite{levitation} & \cite{algorn} & \cite{progorn} \\
+    \hline                                                                                             \\
+    Fixpoint & yes*           & yes               & no                & yes?          & yes            \\
+    Index    & —              & —                 & first**           & equality      & first          \\
+    Poly     & yes            & 1                 & external          & external      & external       \\
+    Levels   & —              & —                 & no                & no            & no             \\
+    Sums     & list           & —                 & large             & large         & large          \\
+    IndArg   & any            & any               & $\dots \to X\ i$  & $X\ i$        & $X\ i$         \\
+    Compose  & yes            & yes               & no                & no            & no             \\
+    Extension& —              & —                 & no                & —             & —              \\
+    Ignore   & —              & —                 & —                 & —             & —              \\
+    Set      & —              & —                 & —                 & —             & —              \\
 \end{tabular}
+
+
+\begin{tabular}{c | c c c c c}
+             & \cite{sijsling} & \cite{effectfully} & \cite{practgen} & Shallow (WIP) & Deep (old)    \\
+    \hline   
+    Fixpoint & yes             & yes                & no              & yes       & yes     \\
+    Index    & equality        & equality           & equality        & equality  &         \\
+    Poly     & telescope       & external           & telescope       & telescope &         \\
+    Levels   & no***           & cumulative         & Typeω           & Typeω*4   &         \\
+    Sums     & list            & large              & list            & list      &         \\
+    IndArg   & $X\ pv\ i$      & $\dots\to X\ v\ i$ & $\dots\to X\ pv\ i$ & $X (f pv) i$ & ?1 \\
+    Compose  & no              & yes?2              & no              & yes       &         \\
+    Extension& —               & yes                & yes             & no        &         \\
+    Ignore   & no              & ?                  & ?               & *5        &         \\
+    Set      & no              & no                 & no              & no        & yes     \\
+\end{tabular}
+
+
 
 \begin{itemize}
     \item IndArg: the allowed shapes of inductive arguments. Note that none other than Haskell, higher-order functors, and potentially ?1, allow full positive nested types!
