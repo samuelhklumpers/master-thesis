@@ -1,5 +1,3 @@
-{-# OPTIONS --safe #-}
-
 module Ornament.DescL where
 
 open import Agda.Primitive public
@@ -55,6 +53,7 @@ Cxf-both f S (x , y) = f x , y
 -- descriptions
 -- note that we're not using Practical Generic Programming
 -- you could probably always shove this layer under rec, if you cared
+{-# NO_POSITIVITY_CHECK #-}
 data Con (I : Type a) : Tel b → Level → Typeω
 data Desc (I : Type a) (Γ : Tel b) : Level → Typeω where
   []  : Desc I Γ (ℓ-max a c)
@@ -96,7 +95,7 @@ levelOfCon (rec i f D) = levelOfCon D
 
 ⟦_⟧Con-ℓ : (D : Con I Γ a) → ∀ b → (⟦ Γ ⟧tel → I → Type (ℓ-max a b)) → (⟦ Γ ⟧tel → I → Type (ℓ-max a b))
 ⟦ 𝟙 j         ⟧Con-ℓ b X p i = Lift b (i ≡ (j p)) 
-⟦ σf  {c = c} S     D ⟧Con-ℓ b X p i = Σ[ s ∈ S p ] ⟦ D ⟧Con-ℓ (ℓ-max b c) (X ∘ proj₁) (p , s) i 
+⟦ σf  {c = c} S     D ⟧Con-ℓ b X p i = Σ[ s ∈ S p ] ⟦ D ⟧Con-ℓ (ℓ-max b c) {!!} (p , s) i 
 ⟦ σf′ {c = c} S     D ⟧Con-ℓ b X p i = S p × ⟦ D ⟧Con-ℓ (ℓ-max b c) X p i 
 ⟦ σd  {J = J} {c = c} j f R D ⟧Con-ℓ b X p i = Σ[ r ∈ μ R (f p) (j p) ] ⟦ D ⟧Con-ℓ (ℓ-max b (ℓ-max c (levelOf J))) (X ∘ proj₁) (p , r) i
 ⟦ σd′ {J = J} {c = c} j f R D ⟧Con-ℓ b X p i = μ R (f p) (j p) × ⟦ D ⟧Con-ℓ (ℓ-max b (ℓ-max c (levelOf J))) X p i

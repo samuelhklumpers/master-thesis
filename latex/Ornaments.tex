@@ -6,7 +6,7 @@ We compare our, still immature, implementation to a selection of previous work, 
 
 \begin{tabular}{c | c c c c c}
              & Haskell        & \cite{initenough} & \cite{levitation} & \cite{algorn} & \cite{progorn} \\
-    \hline                                                                                             \\
+    \hline                                                                                             
     Fixpoint & yes*           & yes               & no                & yes?          & yes            \\
     Index    & —              & —                 & first**           & equality      & first          \\
     Poly     & yes            & 1                 & external          & external      & external       \\
@@ -50,7 +50,7 @@ We compare our, still immature, implementation to a selection of previous work, 
     \item[**] This has no fixpoint, and the generalization over the index is external.
     \item[***] But you could bump the parameter telescope to Typeω and lose nothing.
     \item[*4] A variant keeps track of the highest level in the index.
-    \item[*5] ``Postulated'', \emph{cannot be wired in like in ?, because of the endo in recursive fields}.
+    \item[*5] ``Postulated'', \emph{cannot} be wired in like in ?, because of the endo in recursive fields.
     \item[?1] Deeply encoding all involved functors would remove the need for positivity annotations for full nested types like in other implementations.
     \item[?2] The ``simplicity'' of this implementation, where data and constructor descriptions coincide, automatically allows composite descriptions.
 \end{itemize}
