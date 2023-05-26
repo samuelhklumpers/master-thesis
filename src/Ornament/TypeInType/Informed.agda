@@ -1,7 +1,7 @@
 {-# OPTIONS --type-in-type --with-K #-}
 
 
-module Ornament.TypeInType.Desc where
+module Ornament.TypeInType.Informed where
 
 open Agda.Primitive renaming (Set to Type)
 
@@ -102,65 +102,75 @@ record Info : Type where
   field
     𝟙i : Type
     ρi : Type
-    σi : ∀ Γ V → (S : Γ & V ⊢ Type) → Type
+    σi : ∀ {Γ V} → (S : Γ & V ⊢ Type) → Type
+    δi : Type
+    -- informed descriptions know who they are! we don't need to introduce ourselves twice, unlike newcomers like (S : Γ & V ⊢ Type)
 
 open Info
 
 Plain : Info
 Plain .𝟙i = ⊤
 Plain .ρi = ⊤
-Plain .σi _ _ _ = ⊤
+Plain .σi _ = ⊤
+Plain .δi = ⊤
+
+private variable
+  If : Info
 
 {-# NO_POSITIVITY_CHECK #-}
-data Desc (Γ : Tel ⊤) (J : Type) : Type
-data μ (D : Desc Γ J) (p : ⟦ Γ ⟧tel tt) : J → Type
-data Con (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
-  𝟙 : Γ & V ⊢ J → Con Γ J V
-  ρ : Γ & V ⊢ J → Cxf Γ Γ → Con Γ J V → Con Γ J V
-  σ : (S : Γ & V ⊢ Type) → Vxf Γ (V ▷ S) W → Con Γ J W → Con Γ J V
-  δ : (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : Desc Δ K) (h : Vxf Γ (V ▷ liftM2 (μ D) g j) W) → Con Γ J W → Con Γ J V
+data DescI (If : Info) (Γ : Tel ⊤) (J : Type) : Type
+data μ (D : DescI If Γ J) (p : ⟦ Γ ⟧tel tt) : J → Type
+data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
+  𝟙 : {if : If .𝟙i} → Γ & V ⊢ J → ConI If Γ J V
+  ρ : {if : If .ρi} → Γ & V ⊢ J → Cxf Γ Γ → ConI If Γ J V → ConI If Γ J V
+  σ : (S : Γ & V ⊢ Type) → {if : If .σi S} → Vxf Γ (V ▷ S) W → ConI If Γ J W → ConI If Γ J V
+  δ : {if : If .δi} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → (h : Vxf Γ (V ▷ liftM2 (μ D) g j) W) → ConI If Γ J W → ConI If Γ J V
 
-σ+ : (S : Γ & V ⊢ Type) → Con Γ J (V ▷ S) → Con Γ J V
-σ+ S C = σ S id C
+σ+ : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J (V ▷ S) → ConI If Γ J V
+σ+ S {if = if} C = σ S {if = if} id C
 
-σ- : (S : Γ & V ⊢ Type) → Con Γ J V → Con Γ J V
-σ- S C = σ S proj₁ C
+σ- : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J V → ConI If Γ J V
+σ- S {if = if} C = σ S {if = if} proj₁ C
 
-δ+ : (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : Desc Δ K) → Con Γ J (V ▷ liftM2 (μ D) g j) → Con Γ J V
-δ+ j g R D = δ j g R id D
+δ+ : {if : If .δi} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J (V ▷ liftM2 (μ D) g j) → ConI If Γ J V
+δ+ {if = if} j g R D = δ {if = if} j g R id D
 
-δ- : (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : Desc Δ K) → Con Γ J V → Con Γ J V
-δ- j g R D = δ j g R proj₁ D
+δ- : {if : If .δi} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J V → ConI If Γ J V
+δ- {if = if} j g R D = δ {if = if} j g R proj₁ D
 
-ρ0 : Γ & V ⊢ J → Con Γ J V → Con Γ J V
-ρ0 i D = ρ i id D
+ρ0 : {if : If .ρi} → Γ & V ⊢ J → ConI If Γ J V → ConI If Γ J V
+ρ0 {if = if} r D = ρ {if = if} r id D
 
 
-data Desc Γ J where
-  []  : Desc Γ J
-  _∷_ : Con Γ J ∅ → Desc Γ J → Desc Γ J 
+data DescI If Γ J where
+  []  : DescI If Γ J
+  _∷_ : ConI If Γ J ∅ → DescI If Γ J → DescI If Γ J 
+
+Con = ConI Plain
+Desc = DescI Plain
 
 data Tag Γ : Type where
   CT : ExTel Γ → Tag Γ
   DT : Tag Γ
 
-UnTag : (Γ : Tel ⊤) (J : Type) → Tag Γ → Type
-UnTag Γ J (CT V) = Con Γ J V
-UnTag Γ J DT     = Desc Γ J
+module _ {If : Info} where
+  UnTag : (Γ : Tel ⊤) (J : Type) → Tag Γ → Type
+  UnTag Γ J (CT V) = ConI If Γ J V
+  UnTag Γ J DT     = DescI If Γ J
 
-UnFun : (Γ : Tel ⊤) (J : Type) → Tag Γ → Type
-UnFun Γ J (CT V) = ⟦ Γ & V ⟧tel → J → Type
-UnFun Γ J DT     = Fun Γ J
+  UnFun : (Γ : Tel ⊤) (J : Type) → Tag Γ → Type
+  UnFun Γ J (CT V) = ⟦ Γ & V ⟧tel → J → Type
+  UnFun Γ J DT     = Fun Γ J
 
 
--- interpretation
-⟦_⟧ : {t : Tag Γ} → UnTag Γ J t → Fun Γ J → UnFun Γ J t
-⟦_⟧ {t = CT V} (𝟙 j)         X pv i         = i ≡ j pv
-⟦_⟧ {t = CT V} (ρ j f D)     X pv@(p , v) i = X (f p) (j pv) × ⟦ D ⟧ X pv i
-⟦_⟧ {t = CT V} (σ S h D)     X pv@(p , v) i = Σ[ s ∈ S pv ] ⟦ D ⟧ X (p , h (v , s)) i
-⟦_⟧ {t = CT V} (δ j g R h D) X pv@(p , v) i = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧ X (p , h (v , s)) i
-⟦_⟧ {t = DT}   []            X p i = ⊥
-⟦_⟧ {t = DT}   (C ∷ D)       X p i = (⟦ C ⟧ X (p , tt) i) ⊎ (⟦ D ⟧ X p i) 
+  -- interpretation
+  ⟦_⟧ : {t : Tag Γ} → UnTag Γ J t → Fun Γ J → UnFun Γ J t
+  ⟦_⟧ {t = CT V} (𝟙 j)         X pv i         = i ≡ j pv
+  ⟦_⟧ {t = CT V} (ρ j f D)     X pv@(p , v) i = X (f p) (j pv) × ⟦ D ⟧ X pv i
+  ⟦_⟧ {t = CT V} (σ S h D)     X pv@(p , v) i = Σ[ s ∈ S pv ] ⟦ D ⟧ X (p , h (v , s)) i
+  ⟦_⟧ {t = CT V} (δ j g R h D) X pv@(p , v) i = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧ X (p , h (v , s)) i
+  ⟦_⟧ {t = DT}   []            X p i = ⊥
+  ⟦_⟧ {t = DT}   (C ∷ D)       X p i = (⟦ C ⟧ X (p , tt) i) ⊎ (⟦ D ⟧ X p i) 
 
 
 data μ D p where
@@ -197,6 +207,8 @@ module Descriptions where
 
 
 -- ornaments
+data Orn (f : Cxf Δ Γ) (e : K → J) : Desc Γ J → Desc Δ K → Type
+ornForget : {f : Cxf Δ Γ} {e : K → J} {D : Desc Γ J} {E : Desc Δ K} → Orn f e D E → ∀ p {i} → μ E p i → μ D (f p) (e i)  
 data ConOrn (f : Exf Δ Γ W V) (e : K → J) : Con Γ J V → Con Δ K W → Type where
   -- preserving
   𝟙 : ∀ {k j}
@@ -209,7 +221,7 @@ data ConOrn (f : Exf Δ Γ W V) (e : K → J) : Con Γ J V → Con Δ K W → Ty
     → Σ[ m ∈ Cxf Δ Γ ] (∀ p → g (m p) ≡ m (h p))
     → (∀ p → e (k p) ≡ j (f p)) 
     → ConOrn f e (ρ j g D) (ρ k h E)
-  -- note, using (ρ (e ∘ k) ...) (ρ (k ∘ f) ...) here gives a nasty metavariable out of scope when writing ornaments later, for some reason
+  -- (*1) note, using (ρ (e ∘ k) ...) (ρ (k ∘ f) ...) here gives a nasty metavariable out of scope when writing ornaments later, for some reason
 
   σ : ∀ {S} {V'} {W'} {D : Con Γ J V'} {E : Con Δ K W'} {g : Vxf Γ _ _} {h : Vxf Δ _ _}
     → ∀ f'
@@ -250,7 +262,13 @@ data ConOrn (f : Exf Δ Γ W V) (e : K → J) : Con Γ J V → Con Δ K W → Ty
      → ConOrn (Vxf-Exf (g ∘ ⊧-▷ s) ∘ f) e D E
      → ConOrn f e (δ k m R g D) E
 
-  -- composition (extend along δ)
+  -- composition
+  ∙δ : ∀ {D : Con Γ J V} {W'} {R : Desc Θ L} {Λ} {M} {R' : Desc Λ M} {R'} {f' : Cxf Λ Θ} {e'} {E : Con Δ K W'} {f'} {m} {k} {h : Vxf Δ _ _}
+     → ConOrn f e D (δ (e' ∘ m) (f' ∘ k) R h E)
+     → (O : Orn {Δ = Λ} {K = M} f' e' R R')
+     → ConOrn f e D (δ m k R' (h ∘ map₂ (λ {x} → ornForget O (k (par x , x)))) E)
+     --                            ^ shove this into a corner where nobody will ever find it
+     -- also this will probably end your life if you try to get any decently complicated h, similarly to (*1)
 
 -- 𝟙 : ∀ {i j} → (∀ p → e (j p) ≡ i (f p)) → ConOrn f e (𝟙 i) (𝟙 j)
 
@@ -267,10 +285,12 @@ https://q.uiver.app/#q=WzAsNixbMCwxLCJcXERlbHRhLFciXSxbMSwxLCJcXEdhbW1hLFYiXSxbM
 
 -}
 
-data Orn (f : Cxf Δ Γ) (e : K → J) : Desc Γ J → Desc Δ K → Type where
+data Orn f e where
   []  : Orn f e [] []
   _∷_ : ∀ {D E D' E'} → ConOrn (Cxf-Exf f) e D' E' → Orn f e D E → Orn f e (D' ∷ D) (E' ∷ E)
 
+-- not again (should probably define fold at some point)
+ornForget D p x = {!!}
 
 -- examples
 module Ornaments where
@@ -290,3 +310,18 @@ module Ornaments where
   ListD-VecD = 𝟙 (λ _ i → tt)
              ∷ σ id (Δσ (λ { (p , v) → (p , _) }) (ρ (𝟙 (λ _ i → tt)) (id , (λ p i → p)) (λ _ i → tt)) λ { (q , tt , p) → λ i → (q , tt) }) (λ p → (λ i → p .proj₁ , tt))
              ∷ []
+
+module Numbers where
+  data Op : Type where
+    ⊕ ⊛ : Op
+
+  Number : Info
+  Number .𝟙i = ℕ
+  Number .ρi = Op
+  Number .σi S = Op × ∀ p → S p → ℕ
+  Number .δi = Op
+
+  NatND : DescI Number ∅ ⊤
+  NatND = 𝟙 {if = 0} _
+        ∷ ρ0 {if = ⊕} _ (𝟙 {if = 1} _)
+        ∷ []
