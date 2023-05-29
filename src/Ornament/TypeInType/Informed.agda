@@ -14,6 +14,8 @@ open import Function.Base
 
 open import Agda.Primitive.Cubical
 open import Agda.Builtin.Cubical.Path
+open import Cubical.Foundations.Prelude using (cong; sym; refl; _∙_; subst)
+
 --open import Relation.Binary.PropositionalEquality hiding (J)
 
 
@@ -69,6 +71,9 @@ Cxf Γ Δ = ⟦ Γ ⟧tel tt → ⟦ Δ ⟧tel tt
 Exf : (Γ Δ : Tel ⊤) (V : ExTel Γ) (W : ExTel Δ) → Type
 Exf Γ Δ V W = ⟦ Γ & V ⟧tel → ⟦ Δ & W ⟧tel
 
+Oxf : (Γ Δ : Tel ⊤) (V : ExTel Γ) (W : ExTel Δ) → Type
+Oxf Γ Δ V W = Σ[ f ∈ Cxf Γ Δ ] (∀ {p} → ⟦ V ⟧tel p → ⟦ W ⟧tel (f p))
+
 Vxf : (Γ : Tel ⊤) (V W : ExTel Γ) → Type
 Vxf Γ V W = ∀ {p} → ⟦ V ⟧tel p → ⟦ W ⟧tel p
 
@@ -77,6 +82,9 @@ Cxf-Exf f (p , _) = f p , _
 
 Vxf-Exf : Vxf Γ V W → Exf Γ Γ V W
 Vxf-Exf f (p , v) = p , f v
+
+O→E : Oxf Γ Δ V W → Exf Γ Δ V W
+O→E (f , g) (p , v) = f p , g v
 
 Vxf-▷ : (f : Vxf Γ V W) (S : Γ & W ⊢ Type) → Vxf Γ (V ▷ (S ∘ Vxf-Exf f)) (W ▷ S)
 Vxf-▷ f S (p , v) = f p , v
@@ -121,10 +129,10 @@ private variable
 data DescI (If : Info) (Γ : Tel ⊤) (J : Type) : Type
 data μ (D : DescI If Γ J) (p : ⟦ Γ ⟧tel tt) : J → Type
 data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
-  𝟙 : {if : If .𝟙i} → Γ & V ⊢ J → ConI If Γ J V
-  ρ : {if : If .ρi} → Γ & V ⊢ J → Cxf Γ Γ → ConI If Γ J V → ConI If Γ J V
-  σ : (S : Γ & V ⊢ Type) → {if : If .σi S} → Vxf Γ (V ▷ S) W → ConI If Γ J W → ConI If Γ J V
-  δ : {if : If .δi} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → (h : Vxf Γ (V ▷ liftM2 (μ D) g j) W) → ConI If Γ J W → ConI If Γ J V
+  𝟙 : {if : If .𝟙i} (j : Γ & V ⊢ J) → ConI If Γ J V
+  ρ : {if : If .ρi} (j : Γ & V ⊢ J) (g : Cxf Γ Γ) (C : ConI If Γ J V) → ConI If Γ J V
+  σ : (S : Γ & V ⊢ Type) {if : If .σi S} (h : Vxf Γ (V ▷ S) W) (C : ConI If Γ J W) → ConI If Γ J V
+  δ : {if : If .δi} (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If Δ K) (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ J W) → ConI If Γ J V
 
 σ+ : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J (V ▷ S) → ConI If Γ J V
 σ+ S {if = if} C = σ S {if = if} id C
@@ -209,30 +217,30 @@ module Descriptions where
 -- ornaments
 data Orn (f : Cxf Δ Γ) (e : K → J) : Desc Γ J → Desc Δ K → Type
 ornForget : {f : Cxf Δ Γ} {e : K → J} {D : Desc Γ J} {E : Desc Δ K} → Orn f e D E → ∀ p {i} → μ E p i → μ D (f p) (e i)  
-data ConOrn (f : Exf Δ Γ W V) (e : K → J) : Con Γ J V → Con Δ K W → Type where
+data ConOrn (f : Oxf Δ Γ W V) (e : K → J) : Con Γ J V → Con Δ K W → Type where
   -- preserving
   𝟙 : ∀ {k j}
-    → (∀ p → e (k p) ≡ j (f p)) 
+    → (∀ p → e (k p) ≡ j (O→E f p)) 
     → ConOrn f e (𝟙 j) (𝟙 k)
   --  → ConOrn f e (𝟙 (e ∘ k)) (𝟙 (k ∘ f))
     
   ρ : ∀ {k j g h D E}
     → ConOrn f e D E
-    → Σ[ m ∈ Cxf Δ Γ ] (∀ p → g (m p) ≡ m (h p))
-    → (∀ p → e (k p) ≡ j (f p)) 
+    → (∀ p → g (f .proj₁ p) ≡ f .proj₁ (h p))
+    → (∀ p → e (k p) ≡ j (O→E f p)) 
     → ConOrn f e (ρ j g D) (ρ k h E)
   -- (*1) note, using (ρ (e ∘ k) ...) (ρ (k ∘ f) ...) here gives a nasty metavariable out of scope when writing ornaments later, for some reason
 
   σ : ∀ {S} {V'} {W'} {D : Con Γ J V'} {E : Con Δ K W'} {g : Vxf Γ _ _} {h : Vxf Δ _ _}
-    → ∀ f'
-    → ConOrn f' e D E
-    → (∀ p → Vxf-Exf g (Exf-▷ f S p) ≡ f' (Vxf-Exf h p))
-    → ConOrn f e (σ S g D) (σ (S ∘ f) h E)
+    → (f' : ∀ {p} → ⟦ W' ⟧tel p → ⟦ V' ⟧tel (f .proj₁ p))
+    → ConOrn (f .proj₁ , f') e D E
+    → (∀ p → Vxf-Exf g (Exf-▷ (O→E f) S p) ≡ O→E (f .proj₁ , f') (Vxf-Exf h p))
+    → ConOrn f e (σ S g D) (σ (S ∘ O→E f) h E)
     
   δ : ∀ {R : Desc Θ L} {V'} {W'} {D : Con Γ J V'} {E : Con Δ K W'} {j : Γ & V ⊢ L} {k} {g : Vxf Γ _ _} {h : Vxf Δ _ _} {f'}
     → ConOrn f' e D E
-    → (∀ p → Vxf-Exf g (Exf-▷ f _ p) ≡ f' (Vxf-Exf h p))
-    → ConOrn f e (δ j k R g D) (δ (j ∘ f) (k ∘ f) R h E)
+    → (∀ p → Vxf-Exf g (Exf-▷ (O→E f) _ p) ≡ O→E f' (Vxf-Exf h p))
+    → ConOrn f e (δ j k R g D) (δ (j ∘ O→E f) (k ∘ O→E f) R h E)
 
   -- extending
   Δρ : ∀ {D : Con Γ J V} {E} {k} {h}
@@ -243,23 +251,23 @@ data ConOrn (f : Exf Δ Γ W V) (e : K → J) : Con Γ J V → Con Δ K W → Ty
   Δσ : ∀ {W'} {S} {D : Con Γ J V} {E : Con Δ K W'}
      → ∀ f' → {h : Vxf Δ _ _}
      → ConOrn f' e D E
-     → (∀ p → f (&-drop-▷ p) ≡ f' (Vxf-Exf h p))
+     → (∀ p → O→E f (&-drop-▷ p) ≡ O→E f' (Vxf-Exf h p))
      → ConOrn f e D (σ S h E)
 
   Δδ : ∀ {W'} {R : Desc Θ L} {D : Con Γ J V} {E : Con Δ K W'} {f'} {m} {k} {h : Vxf Δ _ _}
      → ConOrn f' e D E
-     → (∀ p → f (&-drop-▷ p) ≡ f' (Vxf-Exf h p))
+     → (∀ p → O→E f (&-drop-▷ p) ≡ O→E f' (Vxf-Exf h p))
      → ConOrn f e D (δ k m R h E)
 
   -- fixing
   ∇σ : ∀ {S} {V'} {D : Con Γ J V'} {E : Con Δ K W} {g : Vxf Γ _ _}
      → (s : V ⊧ S)
-     → ConOrn (Vxf-Exf (g ∘ ⊧-▷ s) ∘ f) e D E
+     → ConOrn {!Vxf-Exf (g ∘ ⊧-▷ s) ∘ O→E f!} e D E
      → ConOrn f e (σ S g D) E
      
   ∇δ : ∀ {R : Desc Θ L} {V'} {D : Con Γ J V'} {E : Con Δ K W} {m} {k} {g : Vxf Γ _ _}
      → (s : V ⊧ _)
-     → ConOrn (Vxf-Exf (g ∘ ⊧-▷ s) ∘ f) e D E
+     → ConOrn {!Vxf-Exf (g ∘ ⊧-▷ s) ∘ O→E f!} e D E
      → ConOrn f e (δ k m R g D) E
 
   -- composition
@@ -287,41 +295,89 @@ https://q.uiver.app/#q=WzAsNixbMCwxLCJcXERlbHRhLFciXSxbMSwxLCJcXEdhbW1hLFYiXSxbM
 
 data Orn f e where
   []  : Orn f e [] []
-  _∷_ : ∀ {D E D' E'} → ConOrn (Cxf-Exf f) e D' E' → Orn f e D E → Orn f e (D' ∷ D) (E' ∷ E)
+  _∷_ : ∀ {D E D' E'} → ConOrn (f , id) e D' E' → Orn f e D E → Orn f e (D' ∷ D) (E' ∷ E)
 
--- not again (should probably define fold at some point)
-ornForget D p x = {!!}
 
--- examples
-module Ornaments where
-  open Descriptions
+_⇉_ : (X Y : A → Set) → Set
+X ⇉ Y = ∀ a → X a → Y a
+
+_⇶_ : (X Y : A → B → Set) → Set
+X ⇶ Y = ∀ a b → X a b → Y a b
+
+{-# TERMINATING #-}
+fold : ∀ {D : Desc Γ J} {X} → ⟦ D ⟧ X ⇶ X → μ D ⇶ X
+mapDesc : ∀ {D' : Desc Γ J} (D : Desc Γ J) {X} → ∀ p j → ⟦ D' ⟧ X ⇶ X → ⟦ D ⟧ (μ D') p j → ⟦ D ⟧ X p j
+mapCon : ∀ {D' : Desc Γ J} {X V} (C : ConI Plain Γ J V) → ∀ p j v → ⟦ D' ⟧ X ⇶ X  → ⟦ C ⟧ (μ D') (p , v) j → ⟦ C ⟧ X (p , v) j
+
+
+fold f p i (con x) = f p i (mapDesc _ p i f x)
+
+mapDesc (C ∷ D) p j f (inj₁ x) = inj₁ (mapCon C p j tt f x)
+mapDesc (C ∷ D) p j f (inj₂ y) = inj₂ (mapDesc D p j f y)
+
+mapCon (𝟙 k) p j v f x = x
+mapCon (ρ k g C) p j v f (r , x) = fold f (g p) (k (p , v)) r , mapCon C p j v f x
+mapCon (σ S h C) p j v f (s , x) = s , mapCon C p j (h (v , s)) f x
+mapCon (δ k g R h C) p j v f (r , x) = r , mapCon C p j (h (v , r)) f x
+
+
+{-# TERMINATING #-}
+erase : ∀ {D : Desc Γ J} {E : Desc Δ K} {f} {e} {X : Fun Γ J} → Orn f e D E → ∀ p k → ⟦ E ⟧ (λ p k → X (f p) (e k)) p k → ⟦ D ⟧ X (f p) (e k)
+erase' : ∀ {V W} {X : Fun Γ J} {D' : Con Γ J V} {E' : Con Δ K W} {f} {e} (O : ConOrn f e D' E') → ∀ pv k → ⟦ E' ⟧ (λ p k → X (f .proj₁ p) (e k)) pv k → ⟦ D' ⟧ X (O→E f pv) (e k)
+
+erase (O ∷ Os) p k (inj₁ x) = inj₁ (erase' O (p , tt) k x)
+erase (O ∷ Os) p k (inj₂ y) = inj₂ (erase Os p k y)
+
+erase' (𝟙 j)       p k x = cong _ x ∙ j p
+erase' {X = X} (ρ O q r) p k (x , y) = subst (X _) (r p) (subst (λ z → X z _) (sym (q (p .proj₁))) x) , erase' O p k y
+erase' {X = X} (σ {D = D} {h = h} f' O q) p k (s , x) = s , subst (λ z → ⟦ D ⟧ X z _) (sym (q _)) (erase' O (Vxf-Exf h (p .proj₁ , p .proj₂ , s)) k x)
+erase' (δ O q)     p k x = {!!} , {!!}
+erase' (Δρ O)      p k x = {!!}
+erase' (Δσ f' O q) p k x = {!!}
+erase' (Δδ O q)    p k x = {!!}
+erase' (∇σ s O)    p k x = {!!}
+erase' (∇δ s O)    p k x = {!!}
+erase' (∙δ R O)    p k (x , y) = erase' R p k (ornForget O _ x , y)
+
+-- notes fix some of the O→Es
+-- do something about the unnecessary Exfs in ConOrns
+-- why does everything get split like (p .proj₁ , p .proj₂)
+
+ornAlg : ∀ {D : Desc Γ J} {E : Desc Δ K} {f} {e} → Orn f e D E → ⟦ E ⟧ (λ p k → μ D (f p) (e k)) ⇶ λ p k → μ D (f p) (e k)
+ornAlg O p k x = con (erase O p k x)
+
+ornForget O p = fold (ornAlg O) p _
+
+-- -- examples
+-- module Ornaments where
+--   open Descriptions
   
-  ListD : Desc (∅ ▷ const Type) ⊤
-  ListD = 𝟙 _
-        ∷ σ- (proj₂ ∘ proj₁) (ρ0 _ (𝟙 _))
-        ∷ []
+--   ListD : Desc (∅ ▷ const Type) ⊤
+--   ListD = 𝟙 _
+--         ∷ σ- (proj₂ ∘ proj₁) (ρ0 _ (𝟙 _))
+--         ∷ []
 
-  NatD-ListD : Orn ! ! NatD ListD
-  NatD-ListD = 𝟙 (λ _ i → tt)
-             ∷ Δσ (const _) (ρ (𝟙 λ _ i → tt) (! , const (λ i → _)) (const (λ i → _))) (const (λ i → _))
-             ∷ []
+--   NatD-ListD : Orn ! ! NatD ListD
+--   NatD-ListD = 𝟙 (λ _ i → tt)
+--              ∷ Δσ (const _) (ρ (𝟙 λ _ i → tt) (! , const (λ i → _)) (const (λ i → _))) (const (λ i → _))
+--              ∷ []
 
-  ListD-VecD : Orn id ! ListD VecD
-  ListD-VecD = 𝟙 (λ _ i → tt)
-             ∷ σ id (Δσ (λ { (p , v) → (p , _) }) (ρ (𝟙 (λ _ i → tt)) (id , (λ p i → p)) (λ _ i → tt)) λ { (q , tt , p) → λ i → (q , tt) }) (λ p → (λ i → p .proj₁ , tt))
-             ∷ []
+--   ListD-VecD : Orn id ! ListD VecD
+--   ListD-VecD = 𝟙 (λ _ i → tt)
+--              ∷ σ id (Δσ (λ { (p , v) → (p , _) }) (ρ (𝟙 (λ _ i → tt)) (id , (λ p i → p)) (λ _ i → tt)) λ { (q , tt , p) → λ i → (q , tt) }) (λ p → (λ i → p .proj₁ , tt))
+--              ∷ []
 
-module Numbers where
-  data Op : Type where
-    ⊕ ⊛ : Op
+-- module Numbers where
+--   data Op : Type where
+--     ⊕ ⊛ : Op
 
-  Number : Info
-  Number .𝟙i = ℕ
-  Number .ρi = Op
-  Number .σi S = Op × ∀ p → S p → ℕ
-  Number .δi = Op
+--   Number : Info
+--   Number .𝟙i = ℕ
+--   Number .ρi = Op
+--   Number .σi S = Op × ∀ p → S p → ℕ
+--   Number .δi = Op
 
-  NatND : DescI Number ∅ ⊤
-  NatND = 𝟙 {if = 0} _
-        ∷ ρ0 {if = ⊕} _ (𝟙 {if = 1} _)
-        ∷ []
+--   NatND : DescI Number ∅ ⊤
+--   NatND = 𝟙 {if = 0} _
+--         ∷ ρ0 {if = ⊕} _ (𝟙 {if = 1} _)
+--         ∷ []
