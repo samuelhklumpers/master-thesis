@@ -123,7 +123,7 @@ record Info : Type where
     𝟙i : Type
     ρi : Type
     σi : ∀ {Γ V} → (S : Γ & V ⊢ Type) → Type
-    δi : Type
+    δi : Tel ⊤ → Type → Type
     -- informed descriptions know who they are! we don't need to introduce ourselves twice, unlike newcomers like (S : Γ & V ⊢ Type)
 
 open Info
@@ -132,7 +132,7 @@ Plain : Info
 Plain .𝟙i = ⊤
 Plain .ρi = ⊤
 Plain .σi _ = ⊤
-Plain .δi = ⊤
+Plain .δi _ _ = ⊤
 
 private variable
   If If′ : Info
@@ -144,7 +144,7 @@ data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
   𝟙 : {if : If .𝟙i} (j : Γ & V ⊢ J) → ConI If Γ J V
   ρ : {if : If .ρi} (j : Γ & V ⊢ J) (g : Cxf Γ Γ) (C : ConI If Γ J V) → ConI If Γ J V
   σ : (S : Γ & V ⊢ Type) {if : If .σi S} (h : Vxf Γ (V ▷ S) W) (C : ConI If Γ J W) → ConI If Γ J V
-  δ : {if : If .δi} (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If Δ K) (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ J W) → ConI If Γ J V
+  δ : {if : If .δi Δ K} (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If Δ K) (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ J W) → ConI If Γ J V
 
 σ+ : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J (V ▷ S) → ConI If Γ J V
 σ+ S {if = if} C = σ S {if = if} id C
@@ -152,10 +152,10 @@ data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
 σ- : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J V → ConI If Γ J V
 σ- S {if = if} C = σ S {if = if} proj₁ C
 
-δ+ : {if : If .δi} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J (V ▷ liftM2 (μ D) g j) → ConI If Γ J V
+δ+ : {if : If .δi Δ K} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J (V ▷ liftM2 (μ D) g j) → ConI If Γ J V
 δ+ {if = if} j g R D = δ {if = if} j g R id D
 
-δ- : {if : If .δi} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J V → ConI If Γ J V
+δ- : {if : If .δi Δ K} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J V → ConI If Γ J V
 δ- {if = if} j g R D = δ {if = if} j g R proj₁ D
 
 ρ0 : {if : If .ρi} → Γ & V ⊢ J → ConI If Γ J V → ConI If Γ J V
