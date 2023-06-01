@@ -1,4 +1,4 @@
-{-# OPTIONS --type-in-type --with-K -W noUnreachableClauses #-}
+{-# OPTIONS --type-in-type --with-K #-}
 
 
 module Ornament.TypeInType.OrnDesc where
@@ -16,9 +16,7 @@ open import Data.Sum hiding (map₂)
 open import Data.Nat
 open import Function.Base
 
-open import Agda.Primitive.Cubical
-open import Agda.Builtin.Cubical.Path
-open import Cubical.Foundations.Prelude using (cong; sym; refl; _∙_; subst; subst2)
+open import Relation.Binary.PropositionalEquality using (_≡_; cong; sym; refl; subst) renaming (trans to _∙_; subst₂ to subst2)
 
 
 private variable
@@ -30,8 +28,15 @@ private variable
   If If′ : Info
 
 
-data OrnDesc Δ (f : Cxf Δ Γ) K (e : K → J) : Desc Γ J → Type
-data ConOrnDesc {c : Cxf Δ Γ} (f : VxfO c W V) (e : K → J) : Con Γ J V → Type where
+data OrnDesc Δ (f : Cxf Δ Γ) (K : Type) (e : K → J) : Desc Γ J → Type
+data ConOrnDesc {Γ} {Δ} {c : Cxf Δ Γ} {W} {V} {K} {J} (f : VxfO c W V) (e : K → J) : Con Γ J V → Type
+
+toDesc : {f : Cxf Δ Γ} {e : K → J} {D : Desc Γ J} → OrnDesc Δ f K e D → Desc Δ K
+toCon  : {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : Con Γ J V} → ConOrnDesc f e D → Con Δ K W
+toOrn : {f : Cxf Δ Γ} {e : K → J} {D : Desc Γ J} (OD : OrnDesc Δ f K e D) → Orn f e D (toDesc OD)
+toConOrn  : {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : Con Γ J V} (OD : ConOrnDesc f e D) → ConOrn f e D (toCon OD)
+
+data ConOrnDesc {Γ} {Δ} {c} {W} {V} {K} {J} f e where
   𝟙 : ∀ {j} (k : Δ & W ⊢ K) → (∀ p → e (k p) ≡ j (over f p)) → ConOrnDesc f e (𝟙 j)
     
   ρ : ∀ {j g D} (k : Δ & W ⊢ K) (h : Cxf Δ Δ) 
@@ -80,25 +85,41 @@ data ConOrnDesc {c : Cxf Δ Γ} (f : VxfO c W V) (e : K → J) : Con Γ J V → 
      → ConOrnDesc f e (δ k m R g D)
 
   -- composition
+  ∙δ : ∀ {Θ Λ M L W' V'} {D : Con Γ J V'} {R : Desc Θ L}
+         {c' : Cxf Λ Θ} {e' : M → L} {f'' : VxfO c W' V'} {fΘ : V ⊢ ⟦ Θ ⟧tel tt} (fΛ : W ⊢ ⟦ Λ ⟧tel tt)
+         {l : V ⊢ L} (m : W ⊢ M) 
+     → (DE : ConOrnDesc f'' e D)
+     → (RR' : OrnDesc Λ c' M e' R)
+     → {g : Vxf _ (V ▷ _) V'} (h : Vxf _ (W ▷ _) W')
+     → (p₁ : ∀ q w → c' (fΛ (q , w)) ≡ fΘ (c q , f w))
+     → (p₂ : ∀ q w → e' (m (q , w))  ≡ l (c q , f w))
+     → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ (toDesc RR')) fΛ m ⟧tel p') → f'' (h p) ≡ g (VxfO-▷-map f (liftM2 (μ R) fΘ l) (liftM2 (μ (toDesc RR')) fΛ m) (λ q w x → subst2 (μ R) (p₁ _ _) (p₂ _ _) (ornForget (toOrn RR') (fΛ (q , w)) x)) p))
+     → ConOrnDesc f e (δ l fΘ R g D)
+
+{-
+  ∙δ : ∀ {Θ Λ M L W' V'} {D : Con Γ J V'} {R : Desc Θ L} (R' : Desc Λ M)
+         {c' : Cxf Λ Θ} {e' : M → L} {f'' : VxfO c W' V'} {fΘ : V ⊢ ⟦ Θ ⟧tel tt} (fΛ : W ⊢ ⟦ Λ ⟧tel tt)
+         {l : V ⊢ L} (m : W ⊢ M) {g : Vxf _ (V ▷ _) V'} {h : Vxf _ (W ▷ _) W'}
+     → (DE : ConOrnDesc f'' e D)
+     → (RR' : Orn c' e' R R')
+     → (p₁ : ∀ q w → c' (fΛ (q , w)) ≡ fΘ (c q , f w))
+     → (p₂ : ∀ q w → e' (m (q , w))  ≡ l (c q , f w))
+     → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R') fΛ m ⟧tel p') → f'' (h p) ≡ g (VxfO-▷-map f (liftM2 (μ R) fΘ l) (liftM2 (μ R') fΛ m) (λ q w x → subst2 (μ R) (p₁ _ _) (p₂ _ _) (ornForget RR' (fΛ (q , w)) x)) p))
+     --→ ConOrn f e (δ l fΘ R g D) (δ m fΛ R' h E)
+     → ConOrnDesc f e (δ l fΘ R g D)
+
+
   ∙δ : ∀ {D : Con Γ J V} {W'} (R : Desc Θ L) {Λ} {M} {f' : Cxf Λ Θ} {e'} (f' : Cxf Λ Θ) (m : W ⊢ M) (k : W ⊢ ⟦ Λ ⟧tel tt) (h : Vxf Δ (W ▷ liftM2 (μ R) (f' ∘ k) (e' ∘ m)) W') E
      → ConOrn f e D (δ (e' ∘ m) (f' ∘ k) R h E)
      -- ehhh
      → (O : OrnDesc Λ f' M e' R)
      → ConOrnDesc f e D 
-  
+-}
 
 
 data OrnDesc Γ f J e where
   []  : OrnDesc Γ f J e []
   _∷_ : ∀ {D D'} → ConOrnDesc {c = f} id e D' → OrnDesc Γ f J e D → OrnDesc Γ f J e (D' ∷ D)
-
-
-
-{-# TERMINATING #-}
-toDesc : {f : Cxf Δ Γ} {e : K → J} {D : Desc Γ J} → OrnDesc Δ f K e D → Desc Δ K
-toCon  : {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : Con Γ J V} → ConOrnDesc f e D → Con Δ K W
-toOrn : {f : Cxf Δ Γ} {e : K → J} {D : Desc Γ J} (OD : OrnDesc Δ f K e D) → Orn f e D (toDesc OD)
-toConOrn  : {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : Con Γ J V} (OD : ConOrnDesc f e D) → ConOrn f e D (toCon OD)
 
 toDesc []      = []
 toDesc (C ∷ D) = toCon C ∷ toDesc D 
@@ -112,7 +133,7 @@ toCon (Δσ S f' h D x) = σ S h (toCon D)
 toCon (Δδ R k m h D x) = δ k m R h (toCon D)
 toCon (∇σ s D) = toCon D
 toCon (∇δ s D) = toCon D
-toCon (∙δ R f' m k h E D O) = δ m k (toDesc O) (h ∘ map₂ (λ {x} → ornForget (toOrn O) (k (_ , x)))) E
+toCon (∙δ fΛ m D RR' h p₁ p₂ x) = δ m fΛ (toDesc RR') h (toCon D)
 
 toOrn []      = []
 toOrn (C ∷ D) = toConOrn C ∷ toOrn D 
@@ -126,4 +147,4 @@ toConOrn (Δσ S f' h D x) = Δσ f' (toConOrn D) x
 toConOrn (Δδ R k m h D x) = Δδ (toConOrn D) x
 toConOrn (∇σ s D) = ∇σ s (toConOrn D)
 toConOrn (∇δ s D) = ∇δ s (toConOrn D)
-toConOrn (∙δ R f' m k h E D O) = ∙δ {f' = f'} D (toOrn O)
+toConOrn (∙δ fΛ m D RR' h p₁ p₂ x) = ∙δ (toConOrn D) (toOrn RR') p₁ p₂ x

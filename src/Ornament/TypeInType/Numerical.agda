@@ -18,9 +18,8 @@ open import Data.Nat
 open import Function.Base
 open import Data.Vec using (Vec)
 
-open import Agda.Primitive.Cubical
-open import Agda.Builtin.Cubical.Path
-open import Cubical.Foundations.Prelude using (cong; sym; refl; _∙_; subst; subst2)
+
+open import Relation.Binary.PropositionalEquality using (_≡_; cong; sym; refl; subst) renaming (trans to _∙_; subst₂ to subst2)
 
 
 
@@ -36,15 +35,27 @@ open Info
 
 {- data Op : Type where
   ⊕ ⊛ : Op -}
-
-Op = ℕ
   
 
 Number : Info
 Number .𝟙i = ℕ
-Number .ρi = Op
+Number .ρi = ℕ
 Number .σi S = ∀ p → S p → ℕ
-Number .δi Γ J = Γ ≡ ∅ × J ≡ ⊤ × Op
+Number .δi Γ J = Γ ≡ ∅ × J ≡ ⊤ × ℕ
+
+eval : (D : DescI Number Γ ⊤) → ∀ {p} → μ D p tt → ℕ
+eval D = fold (λ _ _ → ev D) _ tt
+  where
+  ev : (D : DescI Number Γ ⊤) → ∀ {a b} → ⟦ D ⟧ (λ _ _ → ℕ) a b → ℕ
+  ev' : (C : ConI Number Γ ⊤ V) → ∀ {a b} → ⟦ C ⟧ (λ _ _ → ℕ) a b → ℕ
+
+  ev (C ∷ D) (inj₁ x) = ev' C x
+  ev (C ∷ D) (inj₂ y) = ev D y
+
+  ev' (𝟙 {if = k} j) refl                          = k
+  ev' (ρ {if = k} j g C)                   (n , x) = k * n + ev' C x
+  ev' (σ S {if = S→ℕ} h C)                 (s , x) = S→ℕ _ s + ev' C x
+  ev' (δ {if = refl , refl , k} j g R h C) (r , x) = k * eval R r + ev' C x
 
 NatND : DescI Number ∅ ⊤
 NatND = 𝟙 {if = 0} _
@@ -57,17 +68,24 @@ BinND = 𝟙 {if = 0} _
       ∷ ρ0 {if = 2} _ (𝟙 {if = 2} _)
       ∷ []
 
-DigND : DescI Number ∅ ⊤
-DigND = 𝟙 {if = 1} _
-      ∷ 𝟙 {if = 2} _
-      ∷ 𝟙 {if = 3} _
-      ∷ []
+bin-2 : μ BinND tt tt
+bin-2 = con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , refl))))
 
-FingND : DescI Number (∅ ▷ const Type) ⊤
-FingND = 𝟙 {if = 0} _
-       ∷ 𝟙 {if = 1} _
-       ∷ δ- {if = refl , refl , 1} _ _ DigND (ρ0 {if = 1} _ (δ- {if = refl , refl , 1} _ _ DigND (𝟙 {if = 0} _)))
-       ∷ []
+bin-5 : μ BinND tt tt
+bin-5 = con (inj₂ (inj₁ (con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , refl)))) , refl)))
+
+module Simple where
+  DigND : DescI Number ∅ ⊤
+  DigND = 𝟙 {if = 1} _
+        ∷ 𝟙 {if = 2} _
+        ∷ 𝟙 {if = 3} _
+        ∷ []
+
+  FingND : DescI Number ∅ ⊤
+  FingND = 𝟙 {if = 0} _
+         ∷ 𝟙 {if = 1} _
+         ∷ δ- {if = refl , refl , 1} _ _ DigND (ρ0 {if = 2} _ (δ- {if = refl , refl , 1} _ _ DigND (𝟙 {if = 0} _)))
+         ∷ []
 
 -- goal : D2 = toDesc (TrieO-1 D) ⇒ μ (D2 A n) ≃ Vec A (toℕ n)
 -- if D = C ∷ D′, then D2 = C2 ∷ D′2 and we need
@@ -98,14 +116,13 @@ FingND = 𝟙 {if = 0} _
 -- let's keep it as just a variable + for now
 
 -- similarly δ breaks a bit because all of the sudden numbers can sneak parameters back in
--- can we use Info to enforce constraints on the components? (actually, probably yes)
 
-{-# TERMINATING #-}
+--{-# TERMINATING #-}
 TrieO-1  : (D : DescI Number ∅ ⊤) → OrnDesc (∅ ▷ const Type) ! (μ D tt _) ! (plainDesc D)
 
 module _ {D' : DescI Number ∅ ⊤} where
   TrieO  : (D : DescI Number ∅ ⊤) → (⟦ D ⟧ (μ D') tt _ → μ D' tt _) → OrnDesc (∅ ▷ const Type) ! (μ D' tt _) ! (plainDesc D)
-  TrieOC : ∀ {V} {W : ExTel (∅ ▷ const Type)} {f : VxfO ! W V} (C : ConI Number ∅ ⊤ V) → (∀ {p} w → ⟦ C ⟧ (μ D') (tt , f {p = p} w) _ → μ D' tt _) → ConOrnDesc {K = μ D' tt _} f ! (plainCon C)
+  TrieOC : ∀ {V} {W : ExTel (∅ ▷ const Type)} {f : VxfO ! W V} (C : ConI Number ∅ ⊤ V) → (∀ {p} w → ⟦ C ⟧ (μ D') (tt , f {p = p} w) _ → μ D' tt _) → ConOrnDesc {W = W} {K = μ D' tt _} f ! (plainCon C)
   
   TrieO []      ix = []
   TrieO (C ∷ D) ix = TrieOC C (λ v x → ix (inj₁ x)) ∷ TrieO D (ix ∘ inj₂)
@@ -127,10 +144,24 @@ module _ {D' : DescI Number ∅ ⊤} where
     (TrieOC C λ { ((w , s) , x) n → ix w (s , n) })
     λ p → refl) (λ p → refl)
 
-  TrieOC {f = f} (δ {if = Δ≡∅ , J≡⊤ , if} j g R h C) ix =
-    Δσ (const (μ D' tt tt)) (f ∘ proj₁) id
-    (∙δ {!!} {!!} {!!} {!!} {!!} {!!} {!!}
-    (TrieO-1 (subst2 (DescI Number) Δ≡∅ J≡⊤ R)))
-    λ p → refl
+  TrieOC {f = f} (δ {if = refl , refl , if} j g R h C) ix =
+    Δσ (const (μ R tt tt)) (f ∘ proj₁) id
+    (Δσ (const (μ D' tt tt)) (f ∘ proj₁ ∘ proj₁) id
+    (∙δ (λ { ((_ , A) , ((w , r) , n)) → _ , Vec A if }) (proj₂ ∘ proj₁ ∘ proj₂)
+    (TrieOC C λ { (w , r) x → ix w (r , x) })
+    (TrieO-1 R) (λ { (((w , r) , x2) , x3) → w , r }) (λ _ _ → refl) (λ _ _ → refl) λ { (((p , q) , r) , s) → {!this reads as "if I remove the information, and insert it back the way it was, do I get where I start?!} })
+    λ p → refl) λ p → refl
 
 TrieO-1 D = TrieO {D' = D} D con
+
+
+Bin = μ BinND tt tt
+
+BTreeOD = TrieO-1 BinND
+BTreeD = toDesc BTreeOD
+
+BTree : Type → Bin → Type
+BTree A n = μ BTreeD (_ , A) n
+
+btree-5 : BTree ℕ bin-5
+btree-5 = con (inj₂ (inj₁ (bin-2 , (con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , con (inj₁ ({!0!} , refl)) , {!2 * 2!} , refl)))) , {!1!} , refl))))

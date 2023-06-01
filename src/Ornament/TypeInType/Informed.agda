@@ -12,9 +12,7 @@ open import Data.Sum hiding (map₂)
 open import Data.Nat
 open import Function.Base
 
-open import Agda.Primitive.Cubical
-open import Agda.Builtin.Cubical.Path
-open import Cubical.Foundations.Prelude using (cong; sym; refl; _∙_; subst; subst2)
+open import Relation.Binary.PropositionalEquality using (_≡_; cong; sym; refl; subst) renaming (trans to _∙_; subst₂ to subst2)
 
 
 
@@ -34,6 +32,9 @@ X ⇉ Y = ∀ a → X a → Y a
 
 _⇶_ : (X Y : A → B → Set) → Set
 X ⇶ Y = ∀ a b → X a b → Y a b
+
+liftM2 : (A → B → C) → (X → A) → (X → B) → X → C
+liftM2 f g h x = f (g x) (h x)
 
 ! : {A : Type} → A → ⊤
 ! _ = tt
@@ -98,6 +99,9 @@ Vxf-▷ f S (p , v) = f p , v
 VxfO-▷ : ∀ {c : Cxf Γ Δ} (f : VxfO c V W) (S : Δ & W ⊢ Type) → VxfO c (V ▷ (S ∘ over f)) (W ▷ S)
 VxfO-▷ f S (p , v) = f p , v
 
+VxfO-▷-map : {c : Cxf Γ Δ} (f : VxfO c V W) (S : W ⊢ Type) (T : V ⊢ Type) → (∀ p v → T (p , v) → S (c p , f v)) → VxfO c (V ▷ T) (W ▷ S)
+VxfO-▷-map f S T m (v , t) = (f v , m _ v t)
+
 Exf-▷ : (f : Exf Γ Δ V W) (S : Δ & W ⊢ Type) → Exf Γ Δ (V ▷ (S ∘ f)) (W ▷ S)
 Exf-▷ f S (p , v , s) = let (p' , v') = f (p , v) in p' , v' , s
 
@@ -112,9 +116,6 @@ ExPar {p = p} _ = p
 
 ⊧-▷ : ∀ {V : ExTel Γ} {S} → V ⊧ S → Vxf Γ V (V ▷ S)
 ⊧-▷ s v = v , s (ExPar v , v)
-
-liftM2 : (A → B → C) → (X → A) → (X → B) → X → C
-liftM2 f g h x = f (g x) (h x)
 
 
 -- descriptions
@@ -137,7 +138,6 @@ Plain .δi _ _ = ⊤
 private variable
   If If′ : Info
 
-{-# NO_POSITIVITY_CHECK #-}
 data DescI (If : Info) (Γ : Tel ⊤) (J : Type) : Type
 data μ (D : DescI If Γ J) (p : ⟦ Γ ⟧tel tt) : J → Type
 data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
@@ -197,7 +197,6 @@ data μ D p where
   con : ∀ {i} → ⟦ D ⟧ (μ D) p i → μ D p i
 
 
-{-# TERMINATING #-}
 fold : ∀ {D : DescI If Γ J} {X} → ⟦ D ⟧ X ⇶ X → μ D ⇶ X
 mapDesc : ∀ {D' : DescI If Γ J} (D : DescI If Γ J) {X} → ∀ p j → ⟦ D' ⟧ X ⇶ X → ⟦ D ⟧ (μ D') p j → ⟦ D ⟧ X p j
 mapCon : ∀ {D' : DescI If Γ J} {X V} (C : ConI If Γ J V) → ∀ p j v → ⟦ D' ⟧ X ⇶ X  → ⟦ C ⟧ (μ D') (p , v) j → ⟦ C ⟧ X (p , v) j
@@ -241,13 +240,6 @@ unplainCon (ρ j₁ g D) p j (x , y) = x , unplainCon D _ j y
 unplainCon (σ S h D) p j (x , y) = x , unplainCon D _ j y
 unplainCon (δ j₁ g R h D) p j (x , y) = unplainμ (g p) (j₁ p) x , unplainCon D _ j y
 
-{-
-par : Γ ⊢ A → Γ & V ⊢ A
-par f = f ∘ (tt ,_) ∘ proj₁
-
-val : {V : ExTel Γ} → (∀ {p} → ⟦ V ⟧tel p → A) → Γ & V ⊢ A
-val f = f ∘ proj₂
--}
 
 -- examples
 module Descriptions where
