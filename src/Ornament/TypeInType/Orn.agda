@@ -3,7 +3,7 @@
 
 module Ornament.TypeInType.Orn where
 
-open import Ornament.TypeInType.Informed
+open import Ornament.TypeInType.Desc
 
 
 open Agda.Primitive renaming (Set to Type)
@@ -25,66 +25,78 @@ private variable
   Γ Δ Θ : Tel P
   U V W   : ExTel Γ
 
+private variable
+  If If′ If″ If‴ : Info
 
 -- ornaments
-data Orn (f : Cxf Δ Γ) (e : K → J) : Desc Γ J → Desc Δ K → Type
-ornForget : {f : Cxf Δ Γ} {e : K → J} {D : Desc Γ J} {E : Desc Δ K} → Orn f e D E → ∀ p {i} → μ E p i → μ D (f p) (e i)
+data Orn {If} {If′} (f : Cxf Δ Γ) (e : K → J) : DescI If Γ J → DescI If′ Δ K → Type
+ornForget : {f : Cxf Δ Γ} {e : K → J} {D : DescI If Γ J} {E : DescI If′ Δ K} → Orn f e D E → ∀ p {i} → μ E p i → μ D (f p) (e i)
 
-data ConOrn {c : Cxf Δ Γ} (f : VxfO c W V) (e : K → J) : Con Γ J V → Con Δ K W → Type where
+data ConOrn {If} {If′} {c : Cxf Δ Γ} (f : VxfO c W V) (e : K → J) : ConI If Γ J V → ConI If′ Δ K W → Type where
   -- preserving
   𝟙 : ∀ {k j}
-    → (∀ p → e (k p) ≡ j (over f p)) 
-    → ConOrn f e (𝟙 j) (𝟙 k)
+    → (∀ p → e (k p) ≡ j (over f p))
+    → ∀ {if if′}
+    → ConOrn f e (𝟙 {if = if} j) (𝟙 {if = if′} k)
   --  → ConOrn f e (𝟙 (e ∘ k)) (𝟙 (k ∘ f))
     
   ρ : ∀ {k j g h D E}
     → ConOrn f e D E
     → (∀ p → g (c p) ≡ c (h p))
-    → (∀ p → e (k p) ≡ j (over f p)) 
-    → ConOrn f e (ρ j g D) (ρ k h E)
+    → (∀ p → e (k p) ≡ j (over f p))
+    → ∀ {if if′}
+    → ConOrn f e (ρ {if = if} j g D) (ρ {if = if′} k h E)
   -- note, using (ρ (e ∘ k) ...) (ρ (k ∘ f) ...) here gives a nasty metavariable out of scope when writing ornaments later, for some reason
 
-  σ : ∀ {S} {V'} {W'} {D : Con Γ J V'} {E : Con Δ K W'} {g : Vxf Γ (V ▷ S) _} {h : Vxf Δ (W ▷ (S ∘ over f)) _}
+  σ : ∀ {S} {V'} {W'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W'} {g : Vxf Γ (V ▷ S) _} {h : Vxf Δ (W ▷ (S ∘ over f)) _}
     → (f' : VxfO c W' V')
     → ConOrn f' e D E
     → (∀ {p'} (p : ⟦ W ▷ (S ∘ over f) ⟧tel p') → g (VxfO-▷ f S p) ≡ f' (h p))
-    → ConOrn f e (σ S g D) (σ (S ∘ over f) h E)
+    → ∀ {if if′}
+    → ConOrn f e (σ S {if = if} g D) (σ (S ∘ over f) {if = if′} h E)
     
-  δ : ∀ {R : Desc Θ L} {V'} {W'} {D : Con Γ J V'} {E : Con Δ K W'} {j : Γ & V ⊢ L} {k} {g : Vxf Γ _ _} {h : Vxf Δ _ _} {f' : VxfO c _ _}
+  δ : ∀ {R : DescI If″ Θ L} {V'} {W'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W'} {j : Γ & V ⊢ L} {k} {g : Vxf Γ _ _} {h : Vxf Δ _ _} {f' : VxfO c _ _}
     → ConOrn f' e D E
     → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R) (k ∘ over f) (j ∘ over f) ⟧tel p') → g (VxfO-▷ f (liftM2 (μ R) k j) p) ≡ f' (h p))
-    → ConOrn f e (δ j k R g D) (δ (j ∘ over f) (k ∘ over f) R h E)
+    → ∀ {if if′}
+    → ∀ {iff iff′}
+    → ConOrn f e (δ {if = if} {iff = iff} j k R g D) (δ {if = if′} {iff = iff′} (j ∘ over f) (k ∘ over f) R h E)
 
   -- extending
-  Δρ : ∀ {D : Con Γ J V} {E} {k} {h}
+  Δρ : ∀ {D : ConI If Γ J V} {E} {k} {h}
      → ConOrn f e D E
-     → ConOrn f e D (ρ k h E) 
+    → ∀ {if}
+     → ConOrn f e D (ρ {if = if} k h E) 
   -- ^ you might want to disable this if you want to preserve recursive structure
 
-  Δσ : ∀ {W'} {S} {D : Con Γ J V} {E : Con Δ K W'}
+  Δσ : ∀ {W'} {S} {D : ConI If Γ J V} {E : ConI If′ Δ K W'}
      → (f' : VxfO c _ _) → {h : Vxf Δ _ _}
      → ConOrn f' e D E
      → (∀ {p'} (p : ⟦ W ▷ S ⟧tel p') → f (p .proj₁) ≡ f' (h p))
-     → ConOrn f e D (σ S h E)
+    → ∀ {if′}
+     → ConOrn f e D (σ S {if = if′} h E)
 
-  Δδ : ∀ {W'} {R : Desc Θ L} {D : Con Γ J V} {E : Con Δ K W'} {f' : VxfO c _ _} {m} {k} {h : Vxf Δ _ _}
+  Δδ : ∀ {W'} {R : DescI If″ Θ L} {D : ConI If Γ J V} {E : ConI If′ Δ K W'} {f' : VxfO c _ _} {m} {k} {h : Vxf Δ _ _}
      → ConOrn f' e D E
      → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R) m k ⟧tel p') → f (p .proj₁) ≡ f' (h p))
-     → ConOrn f e D (δ k m R h E)
+    → ∀ {if′ iff′}
+     → ConOrn f e D (δ {if = if′} {iff = iff′} k m R h E)
 
   -- fixing
-  ∇σ : ∀ {S} {V'} {D : Con Γ J V'} {E : Con Δ K W} {g : Vxf Γ _ _}
+  ∇σ : ∀ {S} {V'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W} {g : Vxf Γ _ _}
      → (s : V ⊧ S)
      → ConOrn ((g ∘ ⊧-▷ s) ∘ f) e D E
-     → ConOrn f e (σ S g D) E
+    → ∀ {if}
+     → ConOrn f e (σ S {if = if} g D) E
      
-  ∇δ : ∀ {R : Desc Θ L} {V'} {D : Con Γ J V'} {E : Con Δ K W} {m} {k} {g : Vxf Γ _ _}
+  ∇δ : ∀ {R : DescI If″ Θ L} {V'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W} {m} {k} {g : Vxf Γ _ _}
      → (s : V ⊧ liftM2 (μ R) m k)
      → ConOrn ((g ∘ ⊧-▷ s) ∘ f) e D E
-     → ConOrn f e (δ k m R g D) E
+    → ∀ {if iff}
+     → ConOrn f e (δ {if = if} {iff = iff} k m R g D) E
 
   -- composition
-  ∙δ : ∀ {Θ Λ M L W' V'} {D : Con Γ J V'} {E : Con Δ K W'} {R : Desc Θ L} {R' : Desc Λ M}
+  ∙δ : ∀ {Θ Λ M L W' V'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W'} {R : DescI If″ Θ L} {R' : DescI If‴ Λ M}
          {c' : Cxf Λ Θ} {e' : M → L} {f'' : VxfO c W' V'} {fΘ : V ⊢ ⟦ Θ ⟧tel tt} {fΛ : W ⊢ ⟦ Λ ⟧tel tt}
          {l : V ⊢ L} {m : W ⊢ M} {g : Vxf _ (V ▷ _) V'} {h : Vxf _ (W ▷ _) W'}
      → ConOrn f'' e D E
@@ -92,7 +104,9 @@ data ConOrn {c : Cxf Δ Γ} (f : VxfO c W V) (e : K → J) : Con Γ J V → Con 
      → (p₁ : ∀ q w → c' (fΛ (q , w)) ≡ fΘ (c q , f w))
      → (p₂ : ∀ q w → e' (m (q , w))  ≡ l (c q , f w))
      → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R') fΛ m ⟧tel p') → f'' (h p) ≡ g (VxfO-▷-map f (liftM2 (μ R) fΘ l) (liftM2 (μ R') fΛ m) (λ q w x → subst2 (μ R) (p₁ _ _) (p₂ _ _) (ornForget O (fΛ (q , w)) x)) p))
-     → ConOrn f e (δ l fΘ R g D) (δ m fΛ R' h E) 
+    → ∀ {if if′}
+    → ∀ {iff iff′}
+     → ConOrn f e (δ {if = if} {iff = iff} l fΘ R g D) (δ {if = if′} {iff = iff′} m fΛ R' h E) 
 
   {-
   ∙δ : ∀ {D : Con Γ J V} {W'} {E : Con Δ K W'} {c'} {f'' : VxfO c' W V} {e''} {R : Desc Θ L} {Λ} {M} {R' : Desc Λ M} {f' : Cxf Λ Θ} {e'} {m} {k} {h : Vxf Γ _ _} {g : Vxf Δ _ _}
@@ -129,8 +143,8 @@ pre₂ : (A → B → C) → (X → A) → (Y → B) → X → Y → C
 pre₂ f a b x y = f (a x) (b y)
 
 
-erase : ∀ {D : Desc Γ J} {E : Desc Δ K} {f} {e} {X : Fun Γ J} → Orn f e D E → ∀ p k → ⟦ E ⟧ (pre₂ X f e) p k → ⟦ D ⟧ X (f p) (e k)
-erase' : ∀ {V W} {X : Fun Γ J} {D' : Con Γ J V} {E' : Con Δ K W} {c : Cxf Δ Γ} {f : VxfO c _ _} {e} (O : ConOrn f e D' E') → ∀ p k → ⟦ E' ⟧ (pre₂ X c e) p k → ⟦ D' ⟧ X (over f p) (e k)
+erase : ∀ {D : DescI If Γ J} {E : DescI If′ Δ K} {f} {e} {X : Fun Γ J} → Orn f e D E → ∀ p k → ⟦ E ⟧ (pre₂ X f e) p k → ⟦ D ⟧ X (f p) (e k)
+erase' : ∀ {V W} {X : Fun Γ J} {D' : ConI If Γ J V} {E' : ConI If′ Δ K W} {c : Cxf Δ Γ} {f : VxfO c _ _} {e} (O : ConOrn f e D' E') → ∀ p k → ⟦ E' ⟧ (pre₂ X c e) p k → ⟦ D' ⟧ X (over f p) (e k)
 
 erase (O ∷ Os) p k (inj₁ x) = inj₁ (erase' O (p , tt) k x)
 erase (O ∷ Os) p k (inj₂ y) = inj₂ (erase Os p k y)
@@ -146,7 +160,7 @@ erase' (∇σ s O) (p , v) k x = s _ , erase' O _ k x
 erase' (∇δ s O) (p , v) k x = s _ , erase' O _ k x
 erase' {X = X} {c = c} (∙δ {D = D} DE RR' p₁ p₂ p₃) (p , v) k (x , y) = subst2 (μ _) (p₁ _ _) (p₂ _ _) (ornForget RR' _ x) , subst (λ z → ⟦ D ⟧ X z _) (cong (c p ,_) (p₃ _)) (erase' DE _ _ y)
 
-ornAlg : ∀ {D : Desc Γ J} {E : Desc Δ K} {f} {e} → Orn f e D E → ⟦ E ⟧ (λ p k → μ D (f p) (e k)) ⇶ λ p k → μ D (f p) (e k)
+ornAlg : ∀ {D : DescI If Γ J} {E : DescI If′ Δ K} {f} {e} → Orn f e D E → ⟦ E ⟧ (λ p k → μ D (f p) (e k)) ⇶ λ p k → μ D (f p) (e k)
 ornAlg O p k x = con (erase O p k x)
 
 ornForget O p = fold (ornAlg O) p _

@@ -1,7 +1,7 @@
 {-# OPTIONS --type-in-type --with-K #-}
 
 
-module Ornament.TypeInType.Informed where
+module Ornament.TypeInType.Desc where
 
 open Agda.Primitive renaming (Set to Type)
 
@@ -127,7 +127,22 @@ record Info : Type where
     δi : Tel ⊤ → Type → Type
     -- informed descriptions know who they are! we don't need to introduce ourselves twice, unlike newcomers like (S : Γ & V ⊢ Type)
 
-open Info
+open Info public
+
+record InfoF (L R : Info) : Type where
+  field
+    𝟙f : L .𝟙i → R .𝟙i
+    ρf : L .ρi → R .ρi
+    σf : {V : ExTel Γ} (S : V ⊢ Type) → L .σi S → R .σi S
+    δf : ∀ Γ A → L .δi Γ A → R .δi Γ A
+
+open InfoF public
+
+_∘InfoF_ : ∀ {X Y Z} → InfoF Y Z → InfoF X Y → InfoF X Z
+(ϕ ∘InfoF ψ) .𝟙f x = ϕ .𝟙f (ψ .𝟙f x)
+(ϕ ∘InfoF ψ) .ρf x = ϕ .ρf (ψ .ρf x)
+(ϕ ∘InfoF ψ) .σf S x = ϕ .σf S (ψ .σf S x)
+(ϕ ∘InfoF ψ) .δf Γ A x = ϕ .δf Γ A (ψ .δf Γ A x)
 
 Plain : Info
 Plain .𝟙i = ⊤
@@ -144,7 +159,7 @@ data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
   𝟙 : {if : If .𝟙i} (j : Γ & V ⊢ J) → ConI If Γ J V
   ρ : {if : If .ρi} (j : Γ & V ⊢ J) (g : Cxf Γ Γ) (C : ConI If Γ J V) → ConI If Γ J V
   σ : (S : Γ & V ⊢ Type) {if : If .σi S} (h : Vxf Γ (V ▷ S) W) (C : ConI If Γ J W) → ConI If Γ J V
-  δ : {if : If .δi Δ K} (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If Δ K) (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ J W) → ConI If Γ J V
+  δ : {if : If .δi Δ K} {iff : InfoF If′ If} (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If′ Δ K) (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ J W) → ConI If Γ J V
 
 σ+ : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J (V ▷ S) → ConI If Γ J V
 σ+ S {if = if} C = σ S {if = if} id C
@@ -152,11 +167,11 @@ data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
 σ- : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J V → ConI If Γ J V
 σ- S {if = if} C = σ S {if = if} proj₁ C
 
-δ+ : {if : If .δi Δ K} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J (V ▷ liftM2 (μ D) g j) → ConI If Γ J V
-δ+ {if = if} j g R D = δ {if = if} j g R id D
+δ+ : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ J (V ▷ liftM2 (μ D) g j) → ConI If Γ J V
+δ+ {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R id D
 
-δ- : {if : If .δi Δ K} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If Δ K) → ConI If Γ J V → ConI If Γ J V
-δ- {if = if} j g R D = δ {if = if} j g R proj₁ D
+δ- : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ J V → ConI If Γ J V
+δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R proj₁ D
 
 ρ0 : {if : If .ρi} → Γ & V ⊢ J → ConI If Γ J V → ConI If Γ J V
 ρ0 {if = if} r D = ρ {if = if} r id D
@@ -216,6 +231,7 @@ mapμ : ∀ {D : DescI If Γ J} {E : DescI If′ Γ J} → (∀ {X} → ⟦ D �
 mapμ f p j x = fold (λ p j → con ∘ f p j) p j x
 
 
+{-
 plainDesc : DescI If Γ J → Desc Γ J
 plainCon : ConI If Γ J V → Con Γ J V
 unplainμ : {D : DescI If Γ J} → μ (plainDesc D) ⇶ μ D
@@ -239,7 +255,7 @@ unplainCon (𝟙 j₁) p j x = x
 unplainCon (ρ j₁ g D) p j (x , y) = x , unplainCon D _ j y
 unplainCon (σ S h D) p j (x , y) = x , unplainCon D _ j y
 unplainCon (δ j₁ g R h D) p j (x , y) = unplainμ (g p) (j₁ p) x , unplainCon D _ j y
-
+-}
 
 -- examples
 module Descriptions where
