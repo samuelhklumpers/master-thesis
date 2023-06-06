@@ -1,7 +1,7 @@
 {-# OPTIONS --type-in-type --with-K #-}
 
 
-module Ornament.TypeInType.Desc where
+module Ornament.Desc where
 
 open Agda.Primitive renaming (Set to Type)
 

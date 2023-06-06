@@ -1,10 +1,10 @@
 {-# OPTIONS --type-in-type --with-K #-}
 
 
-module Ornament.TypeInType.OrnDesc where
+module Ornament.OrnDesc where
 
-open import Ornament.TypeInType.Desc
-open import Ornament.TypeInType.Orn
+open import Ornament.Desc
+open import Ornament.Orn
 
 
 open Agda.Primitive renaming (Set to Type)
