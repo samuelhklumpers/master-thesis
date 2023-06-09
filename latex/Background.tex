@@ -1,53 +1,56 @@
 \subsection{Agda}
-We formalize our work in Agda \cite{agda}, a functional programming language with dependent types. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. \todo{Make sure this does not literally repeat the introduction too often.} These proofs can then be run as algorithms, or in some cases be extracted to a Haskell program\footnote{Or JavaScript, if you want.}.
+We formalize our work in Agda \cite{agda}, a functional programming language with dependent types. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. These proofs can then be run as algorithms, or in some cases be extracted to a Haskell program\footnote{Or JavaScript, if you want.}.
 
-Syntactically Agda is similar to Haskell, with a few notable differences. One is that Agda allows most characters and words in identifiers with only a small set of exceptions. For example, we can write
-\ExecuteMetaData[Tex/Snippets]{ternary}
-The other is that datatypes are given either as generalized algebraic datatypes (GADTs) or record types in Haskell.
+Syntactically Agda is remeniscent of Haskell. One difference is that Agda allows most characters and words in identifiers with only a small set of exceptions. For example, we can write
+\ExecuteMetaData[Tex/Background]{ternary}
+Another is that datatypes are always either given as generalized algebraic datatypes (GADTs) or record types.
 
-The type system of Agda is an extension of (intensional) Martin-Löf type theory (MLTT), a constructive type theory in which we can interpret intuitionistic logic. Compared to Haskell, which extends a polymorphic lambda calculus with inductive types, MLTT allows types of codomains of functions to vary with values in the domains: Whereas in Haskell only datatypes can map into types\footnote{Excluding extensions}, in Agda we define functions into \AgdaPrimitiveType{Type}
-\[ \dots \]
-given a function $f$ from $A$ into \AgdaPrimitiveType{Type}, we can then form the type
-\[ \dots \]
-Likewise, the type of the second field of a pair type can vary with the value of the first. The presence of these types enriches the interpretation of logic into programs, known as the Curry-Howard isomorphism: propositions or logical formulas are related to types, such that a term of a type constitutes a proof of the related proposition.
+The type system of Agda is an extension of (intensional) Martin-Löf type theory (MLTT), a constructive type theory in which we can interpret intuitionistic logic: the Curry-Howard isomorphism states that certain formulas correspond to certain types, and proofs of a formula correspond to terms of the corresponding type. The atomic formula true can be represented as the empty record
+\ExecuteMetaData[Tex/Background]{true}
+so that \AgdaFunction{tt} proves \AgdaDatatype{⊤}. False can be represented by a datatype with no constructors
+\ExecuteMetaData[Tex/Background]{false}
+since there is (hopefully) no way to make get a term of \AgdaDatatype{⊥} without inconsistent assumptions. The logical implication $A \implies B$ corresponds to the type of functions $A \to B$: a proof of $A$ can be converted to a proof of $B$. Using implication, we can define the negation $\lnot A$ of a formula $A$ as the type $A \to \bot$. Disjunction (logical or) is described by a sum type $A + B$:
+\ExecuteMetaData[Tex/Background]{either}
+if we have either $A$ or $B$, we can prove $A + B$. Conjunction (logical and) is given as a product type:
+\ExecuteMetaData[Tex/Background]{pair}
+we need both $A$ and $B$ to prove $A \times B$. Using the correspondence, we reason in propositional logic by writing functional programs. As an example, consider the proof of the tautology 
+\ExecuteMetaData[Tex/Background]{distr}
 
-To ensure that the logic interpreted by this isomorphism remains consistent, Agda rules out non-terminating functions by restricting their definitions to structural recursion. The termination checker (together with other restrictions which we will encounter in due time) prevents trivial proofs which would be tolerated in Haskell, like
-\ExecuteMetaData[Tex/Snippets]{loop}
-The propositional part of the Curry-Howard correspondence can then be formulated by the usual type formers. The atomic formulas, true and false, can be represented respectively as the empty record: there always is a proof \AgdaFunction{tt} of true
-\ExecuteMetaData[Tex/Snippets]{true}
-and the type with no constructors: there is no way to make a proof of false
-\ExecuteMetaData[Tex/Snippets]{false}
-Implication $A \implies B$ corresponds to function types $A \to B$: a proof of $A$ can be converted to a proof of $B$. Implication also gives an interpretation of negation as functions into false $A \to \bot$. Disjunction (logical or) is described by a sum type $A + B$: either of $A$ or $B$ can prove $A + B$
-\ExecuteMetaData[Tex/Snippets]{either}
-Conjunction (logical and) is given as a product type: having both $A$ and $B$ proves $A \times B$
-\ExecuteMetaData[Tex/Snippets]{pair}
-Predicates, formulas containing variables, correspond to functions into the type of formulas
-\ExecuteMetaData[Tex/Snippets]{predicate}
-allowing interpretations of higher-order logic. Quantifiers are interpreted via dependent types. Universal quantification (for all) is a dependent function type: for each $a : A$, give a proof of $P\ a$
-\ExecuteMetaData[Tex/Snippets]{forall}
-Likewise, existential quantification (exists) is a dependent pair type: there is an $a : A$ and a proof $P\ a$
-\ExecuteMetaData[Tex/Snippets]{exists}
-Predicates can also be expressed using indexed datatypes, in which the choice of constructor can influence the index, whereas parameters must be constant over all constructors. Equality of elements of a type $A$ can then be interpreted as the type
-\ExecuteMetaData[Tex/Snippets]{eq}
-Closed terms of this type can only be constructed for definitionally equal elements, but crucially, variables can contain equalities between different elements. As the second argument is an index, pattern matching on \AgdaFunction{refl} unifies the elements, such that properties like substitution follow
-\ExecuteMetaData[Tex/Snippets]{subst}
+Compared to Haskell, Agda allows the type of a codomain of a function to vary with the applied value:
+given a function $P$ from $A$ into \AgdaPrimitiveType{Type}, a type family over $A$, we can form the dependent function type $(a : A) \to P\ a$. Applying a function $f: (a : A) \to P\ a$ to a value $a : A$ then will have type $f\ a : P\ a$. Similarly, the type of a field in a record type can depend on values of earlier fields, e.g.,
+\ExecuteMetaData[Tex/Background]{exists}
+The presence of these dependent types enriches the interpretation of logic into programs. To interpret first-order logic we need to describe formulas containing variables, which are called predicates. Predicates correspond to functions into \AgdaDatatype{Type}
+\ExecuteMetaData[Tex/Background]{predicate}
+Using predicates, we can interpret quantifiers as the dependent types above. Universal quantification (for all) is a dependent function type 
+\ExecuteMetaData[Tex/Background]{forall}
+since for each $a : A$, we have a proof of $P\ a$. Likewise, existential quantification (exists) is the dependent pair type $\exists$, since this gives an $a : A$ and a proof $P\ a$. 
 
+\towrite{Indexed what, example fin}
+Predicates can also be expressed using indexed datatypes, in which the choice of constructor can influence the index. Equality of elements of a type $A$ can then be interpreted as the type
+\ExecuteMetaData[Tex/Background]{eq}
+Closed terms of this type can only be constructed for definitionally equal elements, but crucially, variables of this type can contain equalities between different elements. As the second argument is an index, pattern matching on \AgdaFunction{refl} unifies the elements, such that properties like substitution follow
+\ExecuteMetaData[Tex/Background]{subst}
+
+Unlike most languages, Agda rules out non-terminating functions by restricting their definitions to structural recursion. The termination checker (together with other restrictions which we will encounter in due time) prevents trivial proofs which would be tolerated in Haskell, like
+\ExecuteMetaData[Tex/Background]{loop}
+This ensures that all our interpretations mentioned above remain consistent.
+
+\begin{comment}
 With this, we can do math. For example, we could define natural numbers as an inductive type
 \[ \dots \]
-and set out to prove the elementary properties of prime numbers. But to get the same results to binary numbers (without duplicating the proofs), we need a bit more. The usual notion of equalities of types are isomorphisms: two types $A, B$ are isomorphic if there are functions $A \to B$ and $B \to A$, which are mutually inverse 
+and prove some properties of prime numbers. But to get the same results to binary numbers (without duplicating the proofs), we need a bit more. The usual notion of equalities of types are isomorphisms: two types $A, B$ are isomorphic if there are functions $A \to B$ and $B \to A$, which are mutually inverse 
 \[ \dots \]
 In ordinary Agda, we cannot directly apply these to transport along like we can for equalities, however.
+\end{comment}
 
 \subsection{Cubical Agda}
 Intuitively, one expects that like how isomorphic groups share the same group-theoretical properties, isomorphic types also share the same type-theoretical properties. Meta-theoretically, this is known as \emph{representation independence}, and is evident. Inside (ordinary) Agda this is not so practical, as this independence only holds when applied to concrete types, and is then only realized by manually substituting along the isomorphism. On the other hand, in Cubical Agda, the Structure Identity Principle internalizes a kind of representation independence \cite{iri}.
 
 Cubical Agda modifies the type theory of Agda to a kind of homotopy type theory, looking at equalities as paths between terms rather than the equivalence relation generated by reflexivity. In cubical type theories, the role played by pattern matching on \AgdaFunction{refl} or by axiom J, in MLTT and ``Book HoTT'' respectively, is instead acted out by directly manipulating cubes\footnote{Under the analogy where a term is a point, an equality between points is a line, a line between lines is a square.}. In Cubical Agda, univalence
-% ua
+\[ ... \]
 is not an axiom but a theorem.
 
-% Why circles are points with K
-
-% Why circles are not points with univalence
+\towrite{Why circles are points with K. Why circles are not points with univalence}
 
 
 \subsection{The Structure Identity Principle}\label{sec:leibniz}
@@ -70,6 +73,15 @@ Finally, we describe the use case of the SIP, how it generalizes our observation
 \subsection{Numerical representations}
 \towrite{Generalizing the observation that lists look like unary naturals and Braun trees look like binary naturals.}
 
-\subsection{Generic programming and ornaments}
-\towrite{Taking the writing out of our hands, formalizing the ``looks like relation''.}
+\subsection{Generic programming and ornaments}\label{ssec:bg-desc}
+The deriving-mechanism in Haskell can take writing functions which consist primarily of boilerplate out of the hands of the programmer by deriving default implementations. Using reflection we can write similar macros and generic programs inside the type-checking monad; with it one can quote types or values, inspect their definitions, and unquote terms them to inject them into the code as if they were written manually.
+
+However, programming in this monad is generally not pleasant, as terms enjoy none of the safety we are used to from Agda, and type errors are only detected when applying macros as opposed to when writing them. That is not to say that effective generic programming is impossible in Agda, and quite the opposite is true \cite{practgen}\todo{And more}. We will take a closer look at constructions which we can use for datatype generic programming. 
+
+\input{Tex/Desc.Tex}
+
+
+
+
+\towrite{Formalizing the ``looks like relation''.}
 

@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 
 \usepackage[style=alphabetic]{biblatex}
 \addbibresource{refs.bib}
@@ -51,6 +51,7 @@
 
 
 \usepackage[links]{agda}
+%\AtBeginEnvironment{code}{\fontsize{8}{10}}
 \AgdaNoSpaceAroundCode{}
 
 % from: https://agda.readthedocs.io/en/v2.6.3/_downloads/59877ce886494c991a213f09e29b712c/article-luaxelatex-different-fonts.lagda.tex
@@ -70,9 +71,9 @@
 
 \setmainfont{Latin Modern Roman}
 
-\newfontfamily{\AgdaSerifFont}{Linux Libertine O}
-\newfontfamily{\AgdaSansSerifFont}{Linux Biolinum O}
-\newfontfamily{\AgdaTypewriterFont}{inconsolata}
+\newfontfamily{\AgdaSerifFont}{JuliaMono Regular}[Scale=0.8]
+\newfontfamily{\AgdaSansSerifFont}{JuliaMono Regular}[Scale=0.8]
+\newfontfamily{\AgdaTypewriterFont}{JuliaMono Regular}[Scale=0.8]
 \renewcommand{\AgdaFontStyle}[1]{{\AgdaSansSerifFont{}#1}}
 \renewcommand{\AgdaKeywordFontStyle}[1]{{\AgdaSansSerifFont{}#1}}
 \renewcommand{\AgdaStringFontStyle}[1]{{\AgdaTypewriterFont{}#1}}
@@ -110,16 +111,16 @@
 \input{Introduction}
 
 \subsection{The Problem}
-The main question of this project is: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?}\todo{poke} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. %If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem.
+The main question of this project is: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?}\todo{revisit this when further} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. %If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem.
 
 
 \subsection{Contributions}
-In this paper, we\todo{poke}
+In this paper, we\todo{revisit this when further}
 \begin{itemize}
-    \item adapt ornaments to nested types
-    \item allow ornaments to refer to sub-ornaments
+    \item[x] adapt ornaments to nested types
+    \item[x] allow ornaments to refer to sub-ornaments
     \item[x] define a small universe of typical number systems
-    \item give a generic derivation of numerical representations as ornaments from these number systems
+    \item[x] give a generic derivation of numerical representations as ornaments from these number systems
     \item instantiate a Structure Identity Principle for these representations.
 \end{itemize}
 We follow this up by enumerating these, and more structures. We
@@ -128,7 +129,7 @@ We follow this up by enumerating these, and more structures. We
     \item[x] track the cardinalities of each level
     \item include parametrized datatypes into this setup
     \item modify this to include nested types
-    \item adapt this approach to index-first datatypes
+    \item[?] adapt this approach to index-first datatypes
     \item iterate the accessible indices per level
 \end{itemize}
 Along the way, we also
@@ -151,6 +152,9 @@ Along the way, we also
 \section{Finger trees}
 \input{Fingertrees}
 
+\section{Nested ornaments}
+\input{Ornaments}
+
 
 \part{Enumeration}
 \section{Enumeration}
@@ -158,8 +162,6 @@ Along the way, we also
 
 
 \part{Temporary}
-\include{Ornaments.tex}
-
 
 \part{Related work}
 \section{Related work}\label{sec:resources}
