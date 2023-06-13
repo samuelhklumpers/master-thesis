@@ -1,7 +1,7 @@
 \subsection{Agda}
 We formalize our work in Agda \cite{agda}, a functional programming language with dependent types. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. These proofs can then be run as algorithms, or in some cases be extracted to a Haskell program\footnote{Or JavaScript, if you want.}.
 
-Syntactically Agda is remeniscent of Haskell. One difference is that Agda allows most characters and words in identifiers with only a small set of exceptions. For example, we can write
+Syntactically Agda is reminiscent of Haskell. One difference is that Agda allows most characters and words in identifiers with only a small set of exceptions. For example, we can write
 \ExecuteMetaData[Tex/Background]{ternary}
 Another is that datatypes are always either given as generalized algebraic datatypes (GADTs) or record types.
 
@@ -16,7 +16,7 @@ if we have either $A$ or $B$, we can prove $A + B$. Conjunction (logical and) is
 we need both $A$ and $B$ to prove $A \times B$. Using the correspondence, we reason in propositional logic by writing functional programs. As an example, consider the proof of the tautology 
 \ExecuteMetaData[Tex/Background]{distr}
 
-Compared to Haskell, Agda allows the type of a codomain of a function to vary with the applied value:
+Compared to Haskell, Agda allows the type of the codomain of a function to vary with the applied value:
 given a function $P$ from $A$ into \AgdaPrimitiveType{Type}, a type family over $A$, we can form the dependent function type $(a : A) \to P\ a$. Applying a function $f: (a : A) \to P\ a$ to a value $a : A$ then will have type $f\ a : P\ a$. Similarly, the type of a field in a record type can depend on values of earlier fields, e.g.,
 \ExecuteMetaData[Tex/Background]{exists}
 The presence of these dependent types enriches the interpretation of logic into programs. To interpret first-order logic we need to describe formulas containing variables, which are called predicates. Predicates correspond to functions into \AgdaDatatype{Type}
@@ -36,7 +36,7 @@ Unlike most languages, Agda rules out non-terminating functions by restricting t
 This ensures that all our interpretations mentioned above remain consistent.
 
 \begin{comment}
-With this, we can do math. For example, we could define natural numbers as an inductive type
+With this, we can do maths. For example, we could define natural numbers as an inductive type
 \[ \dots \]
 and prove some properties of prime numbers. But to get the same results to binary numbers (without duplicating the proofs), we need a bit more. The usual notion of equalities of types are isomorphisms: two types $A, B$ are isomorphic if there are functions $A \to B$ and $B \to A$, which are mutually inverse 
 \[ \dots \]
@@ -56,7 +56,7 @@ is not an axiom but a theorem.
 \subsection{The Structure Identity Principle}\label{sec:leibniz}
 To give an understanding of the basics of Cubical Agda \cite{cuagda} and the Structure Identity Principle (SIP), we walk through the steps to transport proofs about addition on Peano naturals to Leibniz naturals. We give an overview of some features of Cubical Agda, such as that paths give the primitive notion of equality, until the simplified statement of univalence. We do note that Cubical Agda has two downsides relating to termination checking and universe levels, which we encounter in later sections.
 
-Starting by defining the unary Peano naturals and the binary Leibniz naturals, we prove that they are isomorphic by interpreting them into eachother. We explain that these interpretations are easily seen to be mutual inverses by proving lemmas stating that both interpretations ``respect the constructors'' of the types. Next, we demonstrate how this isomorphism can be promoted into an equivalence or an equality, and remark that this is sufficient to transport intrinsic properties, such as having decidable equality, from one natural to the other.
+Starting by defining the unary Peano naturals and the binary Leibniz naturals, we prove that they are isomorphic by interpreting them into each other. We observe how the interpretations are mutual inverses by proving lemmas stating that both interpretations ``respect the constructors'' of the types. Next, we demonstrate how this isomorphism can be promoted into an equivalence or an equality, and remark that this is sufficient to transport intrinsic properties, such as having decidable equality, from one natural to the other.
 
 Noting that transporting unary addition to binary addition is possible but not efficient, we define binary addition while ensuring that it corresponds to unary addition. We present a variant on refinement types as a syntax to recover definition from chains of equality reasoning, allowing one to rewrite definitions while preserving equalities.
 

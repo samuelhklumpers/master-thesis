@@ -29,6 +29,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{prop}[theorem]{Proposition}
+\newtheorem{conjecture}{Conjecture}[section]
 \newtheorem*{cor}{Corollary}
 
 \theoremstyle{definition}
@@ -43,6 +44,7 @@
 \providecommand{\theoremautorefname}{Theorem}%
 \providecommand{\lemmaautorefname}{Lemma}%
 \providecommand{\propautorefname}{Proposition}%
+\providecommand{\conjectureautorefname}{Conjecture}%
 \providecommand{\corautorefname}{Corollary}%
 
 \providecommand{\defnautorefname}{Definition}%
@@ -81,6 +83,9 @@
 \renewcommand{\AgdaCommentFontStyle}[1]{{\AgdaTypewriterFont{}#1}}
 \renewcommand{\AgdaBoundFontStyle}[1]{\textit{\AgdaSerifFont{}#1}}
 
+\definecolor{git-green}{HTML}{13A10E}
+
+\newcommand{\added}[1]{\textcolor{git-green}{+#1}}
 \newcommand{\towrite}[1]{\todo[color=cyan]{#1}}
 \newcommand{\toremove}[1]{\textcolor{red}{This is going to be (re)moved: ``#1''}}
 
@@ -112,31 +117,31 @@
 \input{Introduction}
 
 \subsection{The Problem}
-The main question of this project is: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?}\todo{revisit this when further} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. %If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem.
+The main question of this project is: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?}\todo{Revisit this when further} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. %If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem.
 
 
 \subsection{Contributions}
-In this paper, we\todo{revisit this when further}
+In this paper, we:\todo{Revisit this when further}
 \begin{itemize}
-    \item[x] adapt ornaments to nested types
-    \item[x] allow ornaments to refer to sub-ornaments
-    \item[x] define a small universe of typical number systems
-    \item[x] give a generic derivation of numerical representations as ornaments from these number systems
-    \item instantiate a Structure Identity Principle for these representations.
+    \item[x] Adapt ornaments to nested types.
+    \item[x] Allow ornaments to refer to sub-ornaments.
+    \item[x] Define a small universe of typical number systems.
+    \item[x] Give a generic derivation of numerical representations as ornaments from these number systems.
+    \item Instantiate a Structure Identity Principle for these representations.
 \end{itemize}
-We follow this up by enumerating these, and more structures. We
+We follow this up by enumerating these, and more structures. We:
 \begin{itemize}
-    \item[x] define hierarchies to enumerate terms by levels
-    \item[x] track the cardinalities of each level
-    \item include parametrized datatypes into this setup
-    \item modify this to include nested types
-    \item[?] adapt this approach to index-first datatypes
-    \item iterate the accessible indices per level
+    \item[x] Define hierarchies to enumerate terms by levels.
+    \item[x] Track the cardinalities of each level.
+    \item Include parametrized datatypes into this setup.
+    \item Modify this to include nested types.
+    \item[?] Adapt this approach to index-first datatypes.
+    \item Iterate the accessible indices per level.
 \end{itemize}
-Along the way, we also
+Along the way, we also:
 \begin{itemize}
-    \item[x] characterize identities of W-types
-    \item[x] express heterogeneous variants of datastructures as ornaments.
+    \item[x] Characterize identities of W-types.
+    \item[x] Express heterogeneous variants of datastructures as ornaments.
 \end{itemize}
 
 
@@ -145,7 +150,7 @@ Along the way, we also
 
 
 \part{Numerical representations and ornaments}
-\towrite{Adapt and split into background and actual work}
+\towrite{Adapt and split into background and actual work.}
 
 \section{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
 \input{TypeGeneration}
@@ -166,24 +171,24 @@ Along the way, we also
 
 \part{Related work}
 \section{Related work}\label{sec:resources}
-\towrite{Adapt this to the non-proposal form}
+\towrite{Adapt this to the non-proposal form.}
 
 \subsection{The Structure Identity Principle}
-If we write a program, and replace an expression by an equal one, then we can prove that the behaviour of the program can not change. Likewise, if we replace one implementation of an interface with another, in such a way that the correspondence respects all operations in the interface, then the implementations should be equal when viewed through the interface. Observations like these are instances of ``representation indepencence'', but even in languages with an internal notation of type equality, the applicability is usually exclusive to the metatheory.
+If we write a program, and replace an expression by an equal one, then we can prove that the behaviour of the program can not change. Likewise, if we replace one implementation of an interface with another, in such a way that the correspondence respects all operations in the interface, then the implementations should be equal when viewed through the interface. Observations like these are instances of ``representation independence'', but even in languages with an internal notation of type equality, the applicability is usually exclusive to the metatheory.
 
-In our case, moving from Agda's ``usual type theory'' to Cubical Agda, a cubical homotopy type theory, \textit{univalence} \cite{cuagda} lets us internalize a kind of representation independence known as the Structure Identity Principle \cite{iri}, and even generalize it from equivalences to quasi-equivalence relations. We will also be able to apply univalence to get a true ``equational reasoning'' for types when we are looking at numerical representations.
+In our case, moving from Agda's ``usual type theory'' to Cubical Agda, \textit{univalence} \cite{cuagda} lets us internalize a kind of representation independence known as the Structure Identity Principle \cite{iri}, and even generalize it from equivalences to quasi-equivalence relations. 
+%a cubical homotopy type theory,
+We will also be able to apply univalence to get a true ``equational reasoning'' for types when we are looking at numerical representations.
 
-Still, representation independence in non-homotopical settings may be internalized in some cases \cite{tgalois}, and remains of interest in the context of generic constructions that conflict with cubical.
+Still, representation independence in may be internalized outside the homotopical setting in some cases \cite{tgalois}, and remains of interest in the context of generic constructions that conflict with cubical type theory.
 
 \subsection{Numerical Representations}
 Rather than equating implementations after the fact, we can also ``compute'' datastructures by imposing equations. In the case of container types, one may observe similarities to number systems \cite{purelyfunctional} and call such containers numerical representations. One can then use these representations to prototype new datastructures that automatically inherit properties and equalities from their underlying number systems \cite{calcdata}.
 
-From another perspective, numerical representations run by using representability as a kind of ``strictification'' of types, suggesting that we may be able to generalize the approach of numerical representations, using that any (non-indexed) infinitary inductive-recursive type supports a lookup operation \cite{glookup}.
-
-% In the original setup \cite{calcdata}, the chains of equality reasoning over types had to be unfolded to transport a property from ``natural lookup tables'' to vectors. We expect that one might generalize the SIP to support indexed types, and use this to directly transport proofs from one side of the equality to the other.
+From another perspective, numerical representations run by using representability as a kind of ``strictification'' of types. This suggests that we may be able to generalize the approach of numerical representations, using that any (non-indexed) infinitary inductive-recursive type supports a lookup operation \cite{glookup}.
 
 \subsection{Ornamentation}
-While we can derive datastructures from number systems by going through their index types \cite{calcdata}, we may also interpret numerical representations more literally as intstructions to rewrite a number system to a container type. We can record this transformation internally using ornaments, which can then be used to derive an indexed version of the container \cite{algorn}, or can be modified further to naturally integrate other constraints, e.g., ordering, into the resulting structure \cite{progorn}. Furthermore, we can also use the forgetful functions induced by ornaments to generate specifications for functions defined on the ornamented types \cite{orntrans}.
+While we can derive datastructures from number systems by going through their index types \cite{calcdata}, we may also interpret numerical representations more literally as instructions to rewrite a number system to a container type. We can record this transformation internally using ornaments, which can then be used to derive an indexed version of the container \cite{algorn}, or can be modified further to naturally integrate other constraints, e.g., ordering, into the resulting structure \cite{progorn}. Furthermore, we can also use the forgetful functions induced by ornaments to generate specifications for functions defined on the ornamented types \cite{orntrans}.
 
 \subsection{Generic constructions}
 Being able to define a datatype and reflect its structure in the same language opens doors to many more interesting constructions \cite{practgen}; a lot of ``recipes'' we recognize, such as defining the eliminators for a given datatype, can be formalized and automated using reflection and macros. We expect that other type transformations can also be interpreted as ornaments, like the extraction of heterogeneous binary trees from level-polymorphic binary trees \cite{hetbin}. 
@@ -196,7 +201,7 @@ Being able to define a datatype and reflect its structure in the same language o
 
 
 \section{More equivalences for less effort}\label{sec:userfriendly}
-Noting that constructing equivalences directly or from isomorphisms as in \autoref{sec:leibniz} can quickly become challenging when one of the sides is complicated, we work out a different approach making use of the initial semantics of W-types instead. We claim that the functions in the isomorphism of \autoref{sec:leibniz} were partially forced, but this fact was not made use of.
+Noting that constructing equivalences directly or from isomorphisms as in \autoref{sec:leibniz} can quickly become challenging when one of the sides is complicated, we work out a different approach making use of the initial semantics of W-types instead. We claim that the functions in the isomorphism of \autoref{sec:leibniz} were partially forced, but this fact was unused there.
 
 First, we explain that if we assume that one of the two sides of the equivalence is a fixpoint or initial algebra of a polynomial functor (that is, the \AgdaDatatype{μ} of a \AgdaDatatype{Desc′}), this simplifies giving an equivalence to showing that the other side is also initial.
 
@@ -208,9 +213,9 @@ Next, we describe some theory, using which other types can be shown to be initia
 
 To characterize when this recursion is allowed, we define accessibility with respect to polynomial functors as a mutually recursive datatype as follows. This datatype is constructed using the fibers of the algebra map, defining accessibility of elements of these fibers by cases over the description of the algebra. Then we remark that this construction is an atypical instance of well-founded recursion, and define a type as well-founded for an algebra when all its elements are accessible.
 
-We interpret well-foundedness as an upper bound on the size of a type, leading us to claim that injectivity of the algebra map gives a lower bound, which is sufficient to induce the isomorphism. We sketch the proof of the theorem, relating part of this construction to similar concepts in the formalization of well-founded recursion in the Standard Library. In particular, we prove an irrelevance and an unfolding lemma, which lets us show that the map into any other algebra induced by recursion is indeed an algebra map. By showing that it is also unique, we conclude initiality, and get the isomorphism as a corrolary. 
+We interpret well-foundedness as an upper bound on the size of a type, leading us to claim that injectivity of the algebra map gives a lower bound, which is sufficient to induce the isomorphism. We sketch the proof of the theorem, relating part of this construction to similar concepts in the formalization of well-founded recursion in the Standard Library. In particular, we prove an irrelevance and an unfolding lemma, which lets us show that the map into any other algebra induced by recursion is indeed an algebra map. By showing that it is also unique, we conclude initiality, and get the isomorphism as a corollary. 
 
-The theorem is applied and demonstrated to the example of binary naturals. We remark that the construction of well-foundedness looks similar to view-patterns. After this, we conclude that this example takes more lines that the direct deriviation in \autoref{sec:leibniz}, but we argue that most of this code can likely be automated.
+The theorem is applied and demonstrated to the example of binary naturals. We remark that the construction of well-foundedness looks similar to view-patterns. After this, we conclude that this example takes more lines that the direct derivation in \autoref{sec:leibniz}, but we argue that most of this code can likely be automated.
 
 \towrite{Merge}
 

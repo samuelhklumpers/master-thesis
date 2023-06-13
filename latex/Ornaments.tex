@@ -6,7 +6,7 @@ We base the encoding of off existing encodings \cite{sijsling,practgen}, and are
 
 We use type-in-type and with-K to simplify the presentation, noting that these can be eliminated respectively by moving to Typeω and by implementing interpretations as datatypes.
 
-\subsection{The descriptions}\label{ssec:desc}
+\subsection{\added{The descriptions}}\label{ssec:desc}
 We use telescopes identical to those in \autoref{ssec:bg-desc}:
 \ExecuteMetaData[Ornament/Desc]{telescopes}
 Recall that a \AgdaDatatype{Tel} represents a sequence of types, which can depend on the external type $P$. This lets us represent a telescope succeeding another using \AgdaDatatype{ExTel}. A term of the interpretation \AgdaFunction{⟦\_⟧tel} is then a sequence of terms of all the types in the telescope.
@@ -41,7 +41,7 @@ The type of the field is given by \AgdaBoundFontStyle{S}, which may depend on th
 
 Almost analogously, we make composition of descriptions internal by a variant of \AgdaInductiveConstructor{σ}, taking a description and acting like the \AgdaInductiveConstructor{σ} of its fixpoint, only with more ceremony
 \ExecuteMetaData[Ornament/Desc]{Con-delta}
-Similar to \AgdaInductiveConstructor{ρ}, the functions \AgdaBoundFontStyle{j} and \AgdaBoundFontStyle{g} control indices and parameters, only now of the applied description. As we allow the subdescription \AgdaBoundFontStyle{R} to have a different kind of information bundle \AgdaBoundFontStyle{If′}, we must ask that we can down-cast it into \AgdaBoundFontStyle{If} via \AgdaBoundFontStyle{iff}. This constructor allows us to form descriptions by composing other descriptions, which lets us avoid multiplying the number of constructors of composite datatypes as we will see later.
+Similar to \AgdaInductiveConstructor{ρ}, the functions \AgdaBoundFontStyle{j} and \AgdaBoundFontStyle{g} control indices and parameters, only now of the applied description. As we allow the description \AgdaBoundFontStyle{R} of the field to have a different kind of information bundle \AgdaBoundFontStyle{If′}, we must ask that we can down-cast it into \AgdaBoundFontStyle{If} via \AgdaBoundFontStyle{iff}. This constructor allows us to form descriptions by composing other descriptions, which lets us avoid multiplying the number of constructors of composite datatypes as we will see later.
 
 Descriptions and constructor descriptions can then be interpreted to appropriate kind of functor, constructor descriptions also taking variables
 \ExecuteMetaData[Ornament/Desc]{interpretation}
@@ -83,22 +83,22 @@ We encode finger trees as
 \ExecuteMetaData[Ornament/Desc]{FingerD}
 In the third case, we have digits which are passed the parameters on both sides in composite fields, and a recursive field in the middle. The recursive field has a parameter transformation, turning the type parameter \AgdaBoundFontStyle{A} into a \AgdaBoundFontStyle{Node A} in the recursive child.
 
-\investigate{Variable transforms are both less essential and less troublesome than I first thought. We can move variable transforms into a new Desc-former, and it probably simplifies the definition of ornaments a lot.}
+\investigate{Variable transforms are both less essential and less troublesome than I first thought. We can move variable transforms into a new former, and it probably simplifies the definition of ornaments a lot.}
 
-\investigate{This setup does not allow nesting over recursive fields, which is necessary for structures like RoseTrees. This is actually kind of essential for enumeration. Nesting over a recursive field is problematic: we can incorporate it by adding ``this'' implicitly to a \AgdaInductiveConstructor{δ}, but then the \AgdaBoundFontStyle{R} needs to be strictly positive in its last argument, meaning we need to split \AgdaDatatype{Desc} into a strictly positive part and normal part. The strictly positive part should then only allow strictly positive parameter transforms in recursive and non-recursive fields, requiring an embedding of transforms.}
+\investigate{This setup does not allow nesting over recursive fields, which is necessary for structures like rose trees. This is actually kind of essential for enumeration. Nesting over a recursive field is problematic: we can incorporate it by adding ``this'' implicitly to a \AgdaInductiveConstructor{δ}, but then the \AgdaBoundFontStyle{R} needs to be strictly positive in its last argument, meaning we need to split \AgdaDatatype{Desc} into a strictly positive part and normal part. The strictly positive part should then only allow strictly positive parameter transforms in recursive and non-recursive fields, requiring an embedding of transforms.}
 
-\investigate{If we levitate, then informed descriptions become ornaments over desc. This gives us the best of both worlds (modulo reflecting the description into a datatype): in plain descriptions, information does not even exist, and in informed descriptions, it is explicit. For levitation, we likely need induction-recursion and mutual recursion.}
+\investigate{If we levitate, then informed descriptions become ornaments over \AgdaDatatype{Desc}. This gives us the best of both worlds (modulo reflecting the description into a datatype): in plain descriptions, information does not even exist, and in informed descriptions, it is explicit. For levitation, we likely need induction-recursion and mutual recursion.}
 
-\investigate{Making Desc coinductive would do a couple of things. First, recursion and composition become identical. Second, nesting of both types becomes easier to describe, but potentially impossible to prove strictly positive.}
+\investigate{Making \AgdaDatatype{Desc} coinductive would do a couple of things. First, recursion and composition become identical. Second, nesting of both types becomes easier to describe, but potentially impossible to prove strictly positive.}
 
 \investigate{We intentionally dodge having index telescopes (or having the index type depend on the parameters and values). Does this really change anything?}
 
 
 
-\subsection{The ornaments}
+\subsection{\added{The ornaments}}
 Now that we have descriptions, we can start relating them. We will be constructing ornaments as a binary relation on descriptions
 \ExecuteMetaData[Ornament/Orn]{Orn-type}
-which, informally, will encode a proof that ``\AgdaBoundFontStyle{E} is a more informative variant of \AgdaBoundFontStyle{D}''. This means that we can always convert the parameters and indices of \AgdaBoundFontStyle{E} into those of \AgdaBoundFontStyle{D}, as witnessed by \AgdaBoundFontStyle{f} and \AgdaBoundFontStyle{e}. Furthermore, we also have to be able to convert\footnote{I would love to require this conversion to be epi, but we can sigma a field of the empty type.} values of \AgdaBoundFontStyle{E} to \AgdaBoundFontStyle{D}
+which, informally, will encode a proof that ``\AgdaBoundFontStyle{E} is a more informative variant of \AgdaBoundFontStyle{D}''. This means that we can always convert the parameters and indices of \AgdaBoundFontStyle{E} into those of \AgdaBoundFontStyle{D}, as witnessed by \AgdaBoundFontStyle{f} and \AgdaBoundFontStyle{e}. Furthermore, we also have to be able to convert\footnote{I would love to require this conversion to be epi, but we add a field of the empty type.} values of \AgdaBoundFontStyle{E} to \AgdaBoundFontStyle{D}
 \ExecuteMetaData[Ornament/Orn]{ornForget}
 Thus, the relation should be precise enough pairs of \AgdaBoundFontStyle{E} and \AgdaBoundFontStyle{D} for which we could not define \AgdaFunction{ornForget}.
 
@@ -112,7 +112,7 @@ Copying parts from one description to another, up to parameter and index refinem
 \ExecuteMetaData[Ornament/Orn]{Orn-1}
 where the only condition is that the indices, and the parameter and index conversions, fit in a commuting square.
 
-\begin{remark}
+\begin{remark}\label{rem:orn-lift}
     Rather than having the user provide two indices and show that the square commutes, we can ask for a ``lift'' $k$
     % https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzAsMSwiXFxidWxsZXQiXSxbMSwxLCJcXGJ1bGxldCJdLFswLDEsImUiXSxbMiwzLCJmIiwyXSxbMiwwLCJqIl0sWzMsMSwiaSIsMl0sWzMsMCwiayIsMV1d
     \[\begin{tikzcd}
@@ -163,33 +163,72 @@ Instantiating \AgdaFunction{ornForget} to these ornaments, we now get the functi
 \investigate{Having a function of the same type as \AgdaFunction{ornForget} is not sufficient to deduce an ornament. An obstacle is that the usual empty type (no constructors) and the non-wellfounded empty type (only a recursive field) don't have an ornament. Also, while the leaf-preservation case spells itself out, the substitutions obviously don't give us a way to recover the equalities.}
 
 
-\subsubsection{Ornamental descriptions}
-% explain orndesc
+\subsubsection{\added{Ornamental descriptions}}
+A description can say ``this is how you make this datatype'', an ornament can say ``this is how you go between these types''. However, an ornament needs its left-hand side to be predefined before it can express the relation, while we might also interpret an ornament as a set of instructions to translate one description into another. A slight variation on ornaments can make this kind of usage possible: ornamental descriptions.
+
+An ornamental description drops the left-hand side when compared to an ornament, and interprets the remaining right-hand side as the starting point of the new datatype:
+\ExecuteMetaData[Ornament/OrnDesc]{ConOrnDesc-type}
+The definition of ornamental descriptions can be derived in a straightforward manner from ornaments, removing all mentions of the LHS and making all fields which then no longer appear in the indices explicit\footnote{One might expect to need less equalities, alas, this is difficult because of \autoref{rem:orn-lift}.}. We will show the leaf-preserving rule as an example, the others are derived analogously:
+\ExecuteMetaData[Ornament/OrnDesc]{OrnDesc-1}
+As we can see, the only change we need to make is that \AgdaBoundFontStyle{k} becomes explicit and fully annotated.
+
+Almost by construction, we have that an ornamental description can be decomposed into a description of the new datatype
+\ExecuteMetaData[Ornament/OrnDesc]{toDesc}
+and an ornament between the starting description and this new description
+\ExecuteMetaData[Ornament/OrnDesc]{toOrn}
+
+\investigate{Does ``Ornamental algebras, algebraic ornaments'' still hold for our ornaments?}
+
+As it turns out, any algebra for a description gives rise to an ornamental description on it.
+
+Remember \AgdaFunction{ornAlg}?
+
 
 \investigate{Can these be simpler? Right now, these just construct the ornament and description on the fly, rather than actually asking for less.}
 
-\investigate{Does ``Ornamental algebras, algebraic ornaments'' still hold for our ornaments?}
-% explain algorn
 
 
-\subsection{Numerical descriptions, and the Trie ornament}\label{ssec:trieo}
-We demonstrate the capabilities of our encoding by applying it to the calculation of datastructures. We first define the kind of information constituting a type of ``natural numbers''
-%\ExecuteMetaData[Ornamentation/Numerical]{} 
-the semantics of the type is given by the conversion to \bN
-%\ExecuteMetaData[Ornamentation/Numerical]{}
-defined by generalizing over the inner information bundle and folding using
-%\ExecuteMetaData[Ornamentation/Numerical]{}
-This restricts the numbers to those that are computed by linear functions, which certainly do not include all interesting number systems, but do include almost all systems that have associated containers\footnote{Notably, polynomials still calculate to datastructures, interpreting multiplication as precomposition.}. Note that an arbitrary number system of this kind is not necessarily isomorphic to \bN, as can be incomplete or redundant.
+\subsection{\added{Numerical descriptions, and the trie ornament}}\label{ssec:trieo}
+We will demonstrate how we can use ornamental descriptions to generically construct datastructures. The claim is that calculating a datastructure is actually an ornamental operation, so we might call our approach ``calculating ornaments''. 
 
-The description of \bN and \bL is straightforward
-%\ExecuteMetaData[Ornamentation/Numerical]{}
+We first define the kind of information constituting a type of ``natural numbers''
+\ExecuteMetaData[Ornament/Numerical]{Number} 
+which gets its semantics from the conversion to \bN{}
+\ExecuteMetaData[Ornament/Numerical]{toN-type}
+The conversion is defined by generalizing over the inner information bundle and folding using
+\ExecuteMetaData[Ornament/Numerical]{toN-con}
+\towrite{Explain}
+
+This restricts the numbers to the class of numbers which are interpreted by linear functions, which certainly does not include all interesting number systems, but does include almost all systems that have associated containers\footnote{Notably, polynomials still calculate datastructures, interpreting multiplication as precomposition.}. Note that an arbitrary number system of this kind is not necessarily isomorphic to \bN{}, as the system can still be incomplete (i.e., it cannot express some numbers) or redundant (it has multiple representations of some numbers).
+
+Recall the calculation of vectors from \bN{} in \autoref{ssec:numrep}. In this universe, we can encode \bN{} and its interpretation as
+\ExecuteMetaData[Ornament/Numerical]{NatND}
+capturing all information we needed in that calculation. 
+\towrite{Explain}
+
 The essence of the calculation of arrays is that given a number system, we can calculate a datastructure which still has the same shape, and has the correct number of elements. We can generalize the calculation to all number systems while proving that the shape is preserved by presenting the datastructure by an ornamental description.
 
-We could directly compute indexed array, using the index for the proof of representability, and from it the correctness of numbers of elements. However, we give the unindexed array first: we can get the indexed variant for free\cite{algorn}! We claim\todo{Currently, without proof} that 
-%\ExecuteMetaData[Ornamentation/Numerical]{}
-also is foldable in its argument, and folding with \AgdaFunction{λ x y → suc y} coincides with \AgdaFunction{ornForget}. The ornamental description is computed by generalizing over the inner information bundle, and by cases on the description
-%\ExecuteMetaData[Ornamentation/Numerical]{}
-Overall, most structure is directly preserved, only inserting fields containing vectors of the appropriate size.
+We could directly compute indexed array, using the index for the proof of representability, and from it the correctness of numbers of elements. However, we give the unindexed array first: we can get the indexed variant for free\cite{algorn}!
+
+\begin{conjecture}
+    We claim then\todo{Currently, without proof} that the description given by
+    \ExecuteMetaData[Ornament/Numerical]{TrieO-type}
+    also is foldable in its argument, and folding with \AgdaFunction{λ x y → suc y} coincides with \AgdaFunction{ornForget}.
+\end{conjecture}
+The hard work of \AgdaFunction{TrieO} is done by
+\ExecuteMetaData[Ornament/Numerical]{TrieO-con-type}
+Let us walk through the definition of \AgdaFunction{TrieO-Con}. \towrite{Explain 1}
+\ExecuteMetaData[Ornament/Numerical]{TrieO-1}
+\towrite{Explain rho}
+\ExecuteMetaData[Ornament/Numerical]{TrieO-rho}
+\towrite{Explain sigma}
+\ExecuteMetaData[Ornament/Numerical]{TrieO-sigma}
+\towrite{Explain delta}
+\ExecuteMetaData[Ornament/Numerical]{TrieO-delta}
+Applying \AgdaFunction{TrieO} to \AgdaFunction{NatND} gives us a description which corresponds directly to \AgdaFunction{ListD}, up to vectors of length 1.
+
+
+\investigate{This implementation of TrieO always computes the random-access variant of the datastructure. Can we implement a variant which computes the ``Braun tree'' variant of the datastructure?}
 
 \investigate{Index types are a simple ornament over number types: paths. This is not quite like \cite{glookup}.}
 
@@ -284,4 +323,4 @@ Q: what happens when you precompose a datatype with a function? E.g. (List . f) 
 
 Q: practgen is cool, compact, and probably necessary to have all datatypes. Note that in comparison, most other implementations (like Sijsling) do not allow functions as inductive arguments. Reasonably so.
 
-Q: I should probably update my agda and make use of the new opaque features to make things readable when refining
+Q: I should probably update my Agda and make use of the new opaque features to make things readable when refining

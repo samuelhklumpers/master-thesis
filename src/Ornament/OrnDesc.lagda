@@ -1,3 +1,4 @@
+\begin{code}
 {-# OPTIONS --type-in-type --with-K #-}
 
 
@@ -29,19 +30,51 @@ private variable
 
 
 data OrnDesc {If} (If′ : Info) Δ (f : Cxf Δ Γ) (K : Type) (e : K → J) : DescI If Γ J → Type
-data ConOrnDesc {If} (If′ : Info) {Γ} {Δ} {c : Cxf Δ Γ} {W} {V} {K} {J} (f : VxfO c W V) (e : K → J) : ConI If Γ J V → Type
+\end{code}
 
-toDesc : {f : Cxf Δ Γ} {e : K → J} {D : DescI If Γ J} → OrnDesc If′ Δ f K e D → DescI If′ Δ K
-toCon  : {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : ConI If Γ J V} → ConOrnDesc If′ f e D → ConI If′ Δ K W
-toOrn : {f : Cxf Δ Γ} {e : K → J} {D : DescI If Γ J} (OD : OrnDesc If′ Δ f K e D) → Orn f e D (toDesc OD)
-toConOrn : {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : ConI If Γ J V} (OD : ConOrnDesc If′ f e D) → ConOrn f e D (toCon OD)
+%<*ConOrnDesc-type>
+\begin{code}
+data ConOrnDesc  {If} (If′ : Info) {Γ} {Δ} {c : Cxf Δ Γ}
+                 {W} {V} {K} {J} (f : VxfO c W V) (e : K → J)
+                 : ConI If Γ J V → Type
+\end{code}
+%</ConOrnDesc-type>
+
+%<*toDesc>
+\begin{code}
+toDesc  : {f : Cxf Δ Γ} {e : K → J} {D : DescI If Γ J}
+        → OrnDesc If′ Δ f K e D → DescI If′ Δ K
+
+toCon   : {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : ConI If Γ J V}
+        → ConOrnDesc If′ f e D → ConI If′ Δ K W
+\end{code}
+%</toDesc>
+
+%<*toOrn>
+\begin{code}
+toOrn :  {f : Cxf Δ Γ} {e : K → J} {D : DescI If Γ J}
+         (OD : OrnDesc If′ Δ f K e D) → Orn f e D (toDesc OD)
+
+toConOrn :  {c : Cxf Δ Γ} {f : VxfO c W V} {e : K → J} {D : ConI If Γ J V}
+            (OD : ConOrnDesc If′ f e D) → ConOrn f e D (toCon OD)
+\end{code}
+%</toOrn>
+
+\begin{code}
 
 data ConOrnDesc {If} If′ {Γ} {Δ} {c} {W} {V} {K} {J} f e where
-  𝟙 : ∀ {j} (k : Δ & W ⊢ K)
-    → (∀ p → e (k p) ≡ j (over f p))
-    → ∀ {if} {if′ : If′ .𝟙i}
-    → ConOrnDesc If′ f e (𝟙 {if = if} j)
-    
+\end{code}
+
+%<*OrnDesc-1>
+\begin{code}
+  𝟙  : ∀ {j} (k : Δ & W ⊢ K)
+     → (∀ p → e (k p) ≡ j (over f p))
+     → ∀ {if} {if′ : If′ .𝟙i}
+     → ConOrnDesc If′ f e (𝟙 {if = if} j)
+\end{code}
+%</OrnDesc-1>
+
+\begin{code}
   ρ : ∀ {j g D} (k : Δ & W ⊢ K) (h : Cxf Δ Δ) 
     → ConOrnDesc If′ f e D
     → (∀ p → g (c p) ≡ c (h p))
@@ -140,3 +173,4 @@ toConOrn (Δδ R k m h D x) = Δδ (toConOrn D) x
 toConOrn (∇σ s D) = ∇σ s (toConOrn D)
 toConOrn (∇δ s D) = ∇δ s (toConOrn D)
 toConOrn (∙δ fΛ m D RR' h p₁ p₂ x) = ∙δ (toConOrn D) (toOrn RR') p₁ p₂ x
+\end{code}
