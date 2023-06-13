@@ -40,7 +40,7 @@ data ℕ : Type where
   zero  : ℕ
   suc   : ℕ → ℕ 
 \end{code}
-we can interpret this as the declaration ℕ ≃ ⊤ ⊎ ℕ, and formally, ℕ is indeed the least fixpoint of this equation. Intuitively, this tells us that ℕ can be formed by applying ⊤ ⊎ a countable number of times to ⊥. More generally, we see that recursive types are the fixpoints of polynomial functors
+we can interpret this as the declaration \texttt{ℕ ≃ ⊤ ⊎ ℕ,} and formally, ℕ is indeed the least fixpoint of this equation. Intuitively, this tells us that ℕ can be formed by applying ⊤ ⊎ a countable number of times to ⊥. More generally, we see that recursive types are the fixpoints of polynomial functors
 \begin{code}[hide]
 module Recursive where
 \end{code}

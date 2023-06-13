@@ -74,6 +74,7 @@
 \newfontfamily{\AgdaSerifFont}{JuliaMono Regular}[Scale=0.8]
 \newfontfamily{\AgdaSansSerifFont}{JuliaMono Regular}[Scale=0.8]
 \newfontfamily{\AgdaTypewriterFont}{JuliaMono Regular}[Scale=0.8]
+\setmonofont{JuliaMono Regular}[Scale=0.8]
 \renewcommand{\AgdaFontStyle}[1]{{\AgdaSansSerifFont{}#1}}
 \renewcommand{\AgdaKeywordFontStyle}[1]{{\AgdaSansSerifFont{}#1}}
 \renewcommand{\AgdaStringFontStyle}[1]{{\AgdaTypewriterFont{}#1}}
@@ -85,7 +86,7 @@
 
 
 % macros
-\newcommand{\investigate}[1]{\par\vspace{1\baselineskip}\textcolor{gray}{\textit{#1}}\vspace{1\baselineskip}\par}
+\newcommand{\investigate}[1]{\par\vspace{1\baselineskip}\textcolor{gray}{#1}\vspace{1\baselineskip}\par}
 
 % symbols
 \newcommand{\bN}{\AgdaDatatype{ℕ}}
