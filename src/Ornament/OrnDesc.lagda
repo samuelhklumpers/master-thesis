@@ -103,7 +103,7 @@ data ConOrnDesc {If} If′ {Γ} {Δ} {c} {W} {V} {K} {J} f e where
 
   Δσ : ∀ {W'} S {D : ConI If Γ J V}
      → (f' : VxfO c _ _) (h : Vxf Δ (W ▷ S) W')
-     → ConOrnDesc If′ f' e D
+     → ConOrnDesc If′ {W = W'} f' e D
      → (∀ {p'} (p : ⟦ W ▷ S ⟧tel p') → f (p .proj₁) ≡ f' (h p))
      → {if′ : If′ .σi S}
      → ConOrnDesc If′ f e D 
@@ -173,4 +173,18 @@ toConOrn (Δδ R k m h D x) = Δδ (toConOrn D) x
 toConOrn (∇σ s D) = ∇σ s (toConOrn D)
 toConOrn (∇δ s D) = ∇δ s (toConOrn D)
 toConOrn (∙δ fΛ m D RR' h p₁ p₂ x) = ∙δ (toConOrn D) (toOrn RR') p₁ p₂ x
+\end{code}
+
+
+\begin{code}
+algOrn : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (λ p i → K i) ⇶ (λ p i → K i) → OrnDesc Plain Γ id (Σ J K) proj₁ D
+algOrn []       ϕ = []
+algOrn (C ∷ D)  ϕ = algOrnC C {!!} ∷ algOrn D {!!}
+  where
+  algOrnC : ∀ {J} {K : J → Type} → (C : ConI If Γ J V) → ⟦ C ⟧ (λ p i → K i) ⇶ (λ p i → K i) → ConOrnDesc Plain {K = Σ J K} id proj₁ C
+  algOrnC (𝟙 j) ϕ = 𝟙 (λ pv → j pv , ϕ pv (j pv) refl) λ p → refl
+  algOrnC {K = K} (ρ j g C) ϕ = Δσ (λ pv → K (j pv)) proj₁ id (ρ (λ { (p , v , k) → j (p , v) , k } ) g {!algOrnC C!} {!!} {!!}) λ p → refl
+  algOrnC (σ S h C) ϕ = σ S h id (algOrnC C λ a b x → ϕ {!!} b {!? !}) λ p → refl
+  algOrnC (δ j g R h C) ϕ = {!!}
+
 \end{code}

@@ -195,38 +195,61 @@ We first define the kind of information constituting a type of ``natural numbers
 \ExecuteMetaData[Ornament/Numerical]{Number} 
 which gets its semantics from the conversion to \bN{}
 \ExecuteMetaData[Ornament/Numerical]{toN-type}
-The conversion is defined by generalizing over the inner information bundle and folding using
+This conversion is defined by generalizing over the inner information bundle and folding using
 \ExecuteMetaData[Ornament/Numerical]{toN-con}
-\towrite{Explain}
-
+Hence, a number can have a list of alternatives, which can be one of
+\begin{itemize}
+    \item a leaf with a fixed value $k$
+    \item a recursive field $n$ and remainder $x$, which get a value of $kn + x$ for a fixed $k$
+    \item a non-recursive field, which can add an arbitrary value to the remainder
+    \item a field containing another number $r$, and a remainder $x$, which again get a value of $kr + x$ for a fixed $k$.
+\end{itemize}
 This restricts the numbers to the class of numbers which are interpreted by linear functions, which certainly does not include all interesting number systems, but does include almost all systems that have associated containers\footnote{Notably, polynomials still calculate datastructures, interpreting multiplication as precomposition.}. Note that an arbitrary number system of this kind is not necessarily isomorphic to \bN{}, as the system can still be incomplete (i.e., it cannot express some numbers) or redundant (it has multiple representations of some numbers).
 
 Recall the calculation of vectors from \bN{} in \autoref{ssec:numrep}. In this universe, we can encode \bN{} and its interpretation as
 \ExecuteMetaData[Ornament/Numerical]{NatND}
-capturing all information we needed in that calculation. 
-\towrite{Explain}
+In such a calculation, all we really needed was a translation between the type of numbers, and a type of shapes. This encoding precisely captures all information we need to form such a type of shapes.
 
 The essence of the calculation of arrays is that given a number system, we can calculate a datastructure which still has the same shape, and has the correct number of elements. We can generalize the calculation to all number systems while proving that the shape is preserved by presenting the datastructure by an ornamental description.
 
-We could directly compute indexed array, using the index for the proof of representability, and from it the correctness of numbers of elements. However, we give the unindexed array first: we can get the indexed variant for free\cite{algorn}!
+We could directly compute indexed array, using the index for the proof of representability, and from it the correctness of numbers of elements. However, we give the unindexed array first: we can get the indexed variant for free \cite{algorn}!
 
 \begin{conjecture}
     We claim then\todo{Currently, without proof} that the description given by
     \ExecuteMetaData[Ornament/Numerical]{TrieO-type}
-    also is foldable in its argument, and folding with \AgdaFunction{λ x y → suc y} coincides with \AgdaFunction{ornForget}.
+    and the number of elements coincides with the underlying number, as given by \AgdaFunction{ornForget}.
 \end{conjecture}
 The hard work of \AgdaFunction{TrieO} is done by
 \ExecuteMetaData[Ornament/Numerical]{TrieO-con-type}
-Let us walk through the definition of \AgdaFunction{TrieO-Con}. \towrite{Explain 1}
+Let us walk through the definition of \AgdaFunction{TrieO-Con}. Suppose we encounter a leaf of value $k$
 \ExecuteMetaData[Ornament/Numerical]{TrieO-1}
-\towrite{Explain rho}
-\ExecuteMetaData[Ornament/Numerical]{TrieO-rho}
-\towrite{Explain sigma}
-\ExecuteMetaData[Ornament/Numerical]{TrieO-sigma}
-\towrite{Explain delta}
-\ExecuteMetaData[Ornament/Numerical]{TrieO-delta}
-Applying \AgdaFunction{TrieO} to \AgdaFunction{NatND} gives us a description which corresponds directly to \AgdaFunction{ListD}, up to vectors of length 1.
+then, the trie simply preserves the leaf, and adds a field with a vector of $k$ elements. Trivially the number of elements and the underlying number coincide.
 
+When we encounter a recursive field
+\ExecuteMetaData[Ornament/Numerical]{TrieO-rho}
+we first preserve this field. The formula used is almost identical to the one in the case of a leaf, but because it is in a recursive parameter, it instead acts to multiply the parameter $A$ by $k$. Using that the number of elements and the underlying number of the recursive field correspond, let this be $r$, we see that we get $r$ times $A^k$. Then, we translate the remainder. It follows that we have $kr$ elements from the recursive field, and by the correctness of the remainder, the total number of elements in \AgdaInductiveConstructor{ρ} also corresponds to the underlying number.
+
+The case for a non-recursive field is similar
+\ExecuteMetaData[Ornament/Numerical]{TrieO-sigma}
+except we preserve the field directly, and add a field containing its value number of elements. Translating the remainder, the number of elements and the underlying number of a \AgdaInductiveConstructor{σ} coincide.
+
+Consider the case of a description field\footnote{Excuse the formula of \AgdaBoundFontStyle{f''}, it needs to be there for the ornament to work, but doesn't have much to do with the numbers.}
+\ExecuteMetaData[Ornament/Numerical]{TrieO-delta}
+We essentially rerun the recipe of \AgdaInductiveConstructor{ρ}, multiplying the elements of the field by $k$, but now pass it to the description \AgdaBoundFontStyle{R}. Again, correctness of \AgdaInductiveConstructor{δ} follows directly from the correctness of \AgdaBoundFontStyle{R} and the remainder.
+
+This ``proves'' our construction correct, but let us compare it to an existing numerical representation:
+We see that applying \AgdaFunction{TrieO} to \AgdaFunction{NatND} gives us a description which corresponds almost directly to \AgdaFunction{ListD}, only replacing all fields with vectors of length 1.
+
+\towrite{Goal:
+\begin{enumerate}
+    \item[?] index type depends on parameter type (makes algOrn less bad)
+    \item algOrn
+    \item aOoA
+    \item Ix and paths 
+    \item Ix n iso aOoA n
+    \item something about the correctness of TrieO
+\end{enumerate}
+}
 
 \investigate{This implementation of TrieO always computes the random-access variant of the datastructure. Can we implement a variant which computes the ``Braun tree'' variant of the datastructure?}
 
