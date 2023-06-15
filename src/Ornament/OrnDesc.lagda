@@ -176,7 +176,6 @@ toConOrn (∙δ fΛ m D RR' h p₁ p₂ x) = ∙δ (toConOrn D) (toOrn RR') p₁
 \end{code}
 
 
-\begin{code}
 algOrn : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (λ p i → K i) ⇶ (λ p i → K i) → OrnDesc Plain Γ id (Σ J K) proj₁ D
 algOrn []       ϕ = []
 algOrn (C ∷ D)  ϕ = algOrnC C {!!} ∷ algOrn D {!!}
@@ -186,5 +185,3 @@ algOrn (C ∷ D)  ϕ = algOrnC C {!!} ∷ algOrn D {!!}
   algOrnC {K = K} (ρ j g C) ϕ = Δσ (λ pv → K (j pv)) proj₁ id (ρ (λ { (p , v , k) → j (p , v) , k } ) g {!algOrnC C!} {!!} {!!}) λ p → refl
   algOrnC (σ S h C) ϕ = σ S h id (algOrnC C λ a b x → ϕ {!!} b {!? !}) λ p → refl
   algOrnC (δ j g R h C) ϕ = {!!}
-
-\end{code}
