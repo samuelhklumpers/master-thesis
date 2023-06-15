@@ -221,14 +221,14 @@ data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
 %<*Con-rho>
 \begin{code}
   ρ  :  {if : If .ρi}
-        (j : Γ & V ⊢ J) (g : Cxf Γ Γ) (C : ConI If Γ J V)
+        (j : Γ & V ⊢ J) (g : Γ & V ⊢ ⟦ Γ ⟧tel tt) (C : ConI If Γ J V)
      →  ConI If Γ J V
 \end{code}
 %</Con-rho>
 %<*Con-sigma>
 \begin{code}
   σ  :  (S : V ⊢ Type) {if : If .σi S}
-        (h : Vxf Γ (V ▷ S) W) (C : ConI If Γ J W)
+        (C : ConI If Γ J (V ▷ S))
      →  ConI If Γ J V
 \end{code}
 %</Con-sigma>
@@ -236,38 +236,40 @@ data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
 \begin{code}
   δ  :  {if : If .δi Δ K} {iff : InfoF If′ If}
         (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If′ Δ K)
-        (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ J W)
+        (C : ConI If Γ J (V ▷ liftM2 (μ R) g j))
      →  ConI If Γ J V
 \end{code}
 %</Con-delta>
+%<*Con-v>
+\begin{code}
+  𝕧  :  (h : Vxf Γ V W) (C : ConI If Γ J W)
+     →  ConI If Γ J V
+\end{code}
+%</Con-v>
+
+
 𝟙 : ... → X p (j (p , v)) 
 ρ : ... → X (g p) (j (p , v)) → ...
 σ : ... → (s : S (p , v)) → let w = h (v , s) in ...
 δ : ... → (r : μ R (g (p , v)) (j (p , v))) → let w = h (v , r) in ...
 -- Maybe g could be Γ & V ⊢ ⟦ Γ ⟧tel tt
 
-The variable transformations (Vxf) in σ and δ let us choose which variables we retain for the remainder of the description
-using them, we define "smart" σ and δ, where the + variant retains the last variable, while the - variant drops it
+The variable transformation 𝕧 lets us choose which variables we retain for the remainder of the description
+using them, we can define a - variant which drops the last variable
 %<*sigma-pm>
 \begin{code}
-σ+ : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J (V ▷ S) → ConI If Γ J V
-σ+ S {if = if} C = σ S {if = if} id C
-
 σ- : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J V → ConI If Γ J V
-σ- S {if = if} C = σ S {if = if} proj₁ C
+σ- S {if = if} C = σ S {if = if} (𝕧 proj₁ C)
 \end{code}
 %</sigma-pm>
 
 \begin{code}
-δ+ : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ J (V ▷ liftM2 (μ D) g j) → ConI If Γ J V
-δ+ {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R id D
-
 δ- : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ J V → ConI If Γ J V
-δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R proj₁ D
+δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R (𝕧 proj₁ D)
 
 -- ordinary recursive field
 ρ0 : {if : If .ρi} {V : ExTel Γ} → V ⊢ J → ConI If Γ J V → ConI If Γ J V
-ρ0 {if = if} r D = ρ {if = if} r id D
+ρ0 {if = if} r D = ρ {if = if} r proj₁ D
 \end{code}
 
 
@@ -313,58 +315,62 @@ module _ {If : Info} where
 * Interpretation
 %<*interpretation>
 \begin{code}
-  ⟦_⟧ : {t : Tag Γ} → UnTag Γ J t → PIType Γ J → UnFun Γ J t
-  ⟦_⟧ {t = CT V}  (𝟙 j)          X pv i
+  ⟦_⟧D : DescI If Γ J → PIType Γ J → PIType Γ J
+  ⟦_⟧C : ConI If Γ J V → PIType Γ J → ⟦ Γ & V ⟧tel → J → Type
+  ⟦_⟧C (𝟙 j)          X pv i
       = i ≡ j pv
       
-  ⟦_⟧ {t = CT V}  (ρ j f D)      X pv@(p , v) i
-      = X (f p) (j pv) × ⟦ D ⟧ X pv i
+  ⟦_⟧C (ρ j f D)      X pv i
+      = X (f pv) (j pv) × ⟦ D ⟧C X pv i
       
-  ⟦_⟧ {t = CT V}  (σ S h D)      X pv@(p , v) i
-      = Σ[ s ∈ S pv ] ⟦ D ⟧ X (p , h (v , s)) i
+  ⟦_⟧C (σ S D)        X pv@(p , v) i
+      = Σ[ s ∈ S pv ] ⟦ D ⟧C X (p , v , s) i
       
-  ⟦_⟧ {t = CT V}  (δ j g R h D)  X pv@(p , v) i
-      = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧ X (p , h (v , s)) i
+  ⟦_⟧C (δ j g R D)    X pv@(p , v) i
+      = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧C X (p , v , s) i
       
-  ⟦_⟧ {t = DT}    []             X p i
+  ⟦_⟧C (𝕧 h C)        X pv@(p , v) i
+      = ⟦ C ⟧C X (p , h v) i
+      
+  ⟦_⟧D []             X p i
       = ⊥
       
-  ⟦_⟧ {t = DT}    (C ∷ D)        X p i
-      = (⟦ C ⟧ X (p , tt) i) ⊎ (⟦ D ⟧ X p i)
-      
+  ⟦_⟧D (C ∷ D)        X p i
+      = (⟦ C ⟧C X (p , tt) i) ⊎ (⟦ D ⟧D X p i)
 \end{code}
 %</interpretation>
 
 %<*fixpoint>
 \begin{code}
 data μ D p where
-  con : ∀ {i} → ⟦ D ⟧ (μ D) p i → μ D p i
+  con : ∀ {i} → ⟦ D ⟧D (μ D) p i → μ D p i
 \end{code}
 %</fixpoint>
 
 %<*fold-type>
 \begin{code}
 fold : ∀ {D : DescI If Γ J} {X}
-     → ⟦ D ⟧ X ⇶ X → μ D ⇶ X
+     → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
 \end{code}
 %</fold-type>
 
 \begin{code}     
 mapDesc : ∀ {D' : DescI If Γ J} (D : DescI If Γ J) {X}
-        → ∀ p j  → ⟦ D' ⟧ X ⇶ X → ⟦ D ⟧ (μ D') p j → ⟦ D ⟧ X p j
+        → ∀ p j  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ D') p j → ⟦ D ⟧D X p j
         
 mapCon : ∀ {D' : DescI If Γ J} {V} (C : ConI If Γ J V) {X}
-       → ∀ p j v → ⟦ D' ⟧ X ⇶ X → ⟦ C ⟧ (μ D') (p , v) j → ⟦ C ⟧ X (p , v) j
+       → ∀ p j v → ⟦ D' ⟧D X ⇶ X → ⟦ C ⟧C (μ D') (p , v) j → ⟦ C ⟧C X (p , v) j
 
-fold f p i (con x) = f p i (mapDesc _ p i f x)
+fold {D = D} f p i (con x) = f p i (mapDesc D p i f x)
 
 mapDesc (C ∷ D) p j f (inj₁ x) = inj₁ (mapCon C p j tt f x)
 mapDesc (C ∷ D) p j f (inj₂ y) = inj₂ (mapDesc D p j f y)
 
 mapCon (𝟙 k)         p j v f      x  = x
-mapCon (ρ k g C)     p j v f (r , x) = fold f (g p) (k (p , v)) r , mapCon C p j v f x
-mapCon (σ S h C)     p j v f (s , x) = s , mapCon C p j (h (v , s)) f x
-mapCon (δ k g R h C) p j v f (r , x) = r , mapCon C p j (h (v , r)) f x
+mapCon (ρ k g C)     p j v f (r , x) = fold f (g (p , v)) (k (p , v)) r , mapCon C p j v f x
+mapCon (σ S C)     p j v f (s , x) = s , mapCon C p j (v , s) f x
+mapCon (δ k g R C) p j v f (r , x) = r , mapCon C p j (v , r) f x
+mapCon (𝕧 h C) p j v f x = mapCon C p j (h v) f x
 \end{code}
 
 %<*par-shorthand>
@@ -415,7 +421,7 @@ module Descriptions where
 \begin{code}
   VecD  : Desc ListTel ℕ
   VecD  = 𝟙 (const 0)
-        ∷ σ- (par top) (σ+ (const ℕ) (ρ0 top (𝟙 (suc ∘ top))))
+        ∷ σ- (par top) (σ (const ℕ) (ρ0 top (𝟙 (suc ∘ top))))
         ∷ []
 \end{code}
 %</VecD>
@@ -464,7 +470,7 @@ module Descriptions where
   FingerD  =  𝟙 _
            ∷  σ- (par top) (𝟙 _)
            ∷  δ- _ (par ((tt ,_) ∘ top)) DigitD
-           (  ρ _ (λ { (_ , A) → (_ , Node A) })
+           (  ρ _ (λ { ((_ , A) , _) → (_ , Node A) })
            (  δ- _ (par ((tt ,_) ∘ top)) DigitD (𝟙 _)))
            ∷  []
 \end{code}
