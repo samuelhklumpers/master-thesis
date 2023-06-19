@@ -34,7 +34,8 @@ private variable
 Ornaments
 %<*Orn-type>
 \begin{code}
-data Orn {If} {If′} (f : Cxf Δ Γ) (e : K → J) : DescI If Γ J → DescI If′ Δ K → Type
+data Orn  {If} {If′} (f : Cxf Δ Γ) (e : K → J)
+          : DescI If Γ J → DescI If′ Δ K → Type
 \end{code}
 %</Orn-type>
 
@@ -85,7 +86,8 @@ Preserving
      → ∀ {if if′}
      → ConOrn f e (σ S {if = if} g D) (σ (S ∘ over f) {if = if′} h E)
     
-  δ  : ∀  {R : DescI If″ Θ L} {V'} {W'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W'}
+  δ  : ∀  {R : DescI If″ Θ L} {V'} {W'}
+          {D : ConI If Γ J V'} {E : ConI If′ Δ K W'}
           {j : Γ & V ⊢ L} {k} {g : Vxf Γ _ _} {h : Vxf Δ _ _} {f' : VxfO c _ _}
      → ConOrn f' e D E
      → (  ∀ {p'} (p : ⟦ W ▷ liftM2 (μ R) (k ∘ over f) (j ∘ over f) ⟧tel p')
@@ -155,10 +157,10 @@ Composition
       → (O : Orn c' e' R R')
       → (p₁ : ∀ q w → c' (fΛ (q , w)) ≡ fΘ (c q , f w))
       → (p₂ : ∀ q w → e' (m (q , w))  ≡ l (c q , f w))
-      → ( ∀ {p'} (p : ⟦ W ▷ liftM2 (μ R') fΛ m ⟧tel p')
-         →  f'' (h p) 
+      → ( ∀ {p'} (p : ⟦ W ▷ liftM2 (μ R') fΛ m ⟧tel p') →  f'' (h p) 
             ≡ g  (VxfO-▷-map f (liftM2 (μ R) fΘ l) (liftM2 (μ R') fΛ m)
-                 (λ q w x → subst2 (μ R) (p₁ _ _) (p₂ _ _) (ornForget O (fΛ (q , w)) x)) p))
+                 (λ q w x →  subst2 (μ R) (p₁ _ _) (p₂ _ _)
+                             (ornForget O (fΛ (q , w)) x)) p))
       → ∀ {if if′}
       → ∀ {iff iff′}
       → ConOrn f e  (δ {if = if}   {iff = iff}   l fΘ R   g D)

@@ -1151,23 +1151,25 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{=}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
-\>[4]\AgdaInductiveConstructor{∙δ}%
-\>[8]\AgdaSymbol{\{}\AgdaArgument{f''}\AgdaSpace{}%
+\>[4]\AgdaInductiveConstructor{∙δ}\<%
+\\
+\>[4][@{}l@{\AgdaIndent{0}}]%
+\>[6]\AgdaSymbol{\{}\AgdaArgument{f''}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[16]\AgdaSymbol{λ}\AgdaSpace{}%
+\>[14]\AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{w}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
-\\
-%
-\>[16]\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{h}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{h}%
+\>[31]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{w}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{ornForget}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{toOrn}\AgdaSpace{}%
+\AgdaFunction{ornForget}\<%
+\\
+%
+\>[14]\AgdaSymbol{(}\AgdaFunction{toOrn}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{TrieO-desc}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
@@ -1178,7 +1180,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{\}\}}\<%
 \\
 %
-\>[8]\AgdaSymbol{(λ}\AgdaSpace{}%
+\>[6]\AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -1236,6 +1238,28 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 -- to summarize, for every number system, there is an appropriate "list", which has an appropriate "vector"
 -- this vector is representable, the list is traversable, and everything still satisfies size ≡ shape ≡ index
 
+%<*Unit>
+\begin{code}%
+\>[0]\AgdaFunction{UnitD}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{DescI}\AgdaSpace{}%
+\AgdaFunction{Number}\AgdaSpace{}%
+\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaRecord{⊤}\<%
+\\
+\>[0]\AgdaFunction{UnitD}%
+\>[826I]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaNumber{1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\\
+\>[.][@{}l@{}]\<[826I]%
+\>[6]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaInductiveConstructor{[]}\<%
+\end{code}
+%</Unit>
 
 
 

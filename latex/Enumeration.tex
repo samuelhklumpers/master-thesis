@@ -12,7 +12,7 @@ We will describe a framework generalizing these approaches, which will support:
 
 We will follow an approach similar to the list-to-list approach \cite{uqenum}, but rather than expressing enumerations as a step-function, computing the next generation of values from a list of predecessors, we will keep track of the entire depth indexed hierarchies.
 
-\subsection{Basic strategy}
+\section{Basic strategy}
 We define a hierarchy of elements as
 \ExecuteMetaData[Enumeration/Approach1]{hierarchy}
 When applied to a number $n$, a hierarchy should then return the list of elements of exactly depth $n$. To iteratively approximate hierarchies, we define a hierarchy-builder type
@@ -53,7 +53,7 @@ However, it would be even cooler if
 \end{enumerate}
 The first is essential for sampling. The second would give the user total control over the shapes of their generated values. And the third is particularly crucial when the set of possible indices is small.
 
-\subsection{Cardinalities}
+\section{Cardinalities}
 Simplifying our earlier approach a bit, we can tinker 
 \ExecuteMetaData[Enumeration/Counting]{hierarchy}
 to track the sizes. For example, our interleaving operation becomes
@@ -64,7 +64,7 @@ Then we can count
 \ExecuteMetaData[Enumeration/Counting]{numTrees}
 and see that there are 210065930571 trees of level 6, wow! It still takes a bit of time to walk across all branches and products in the description, because there is no memoization at all, but it's a lot better than counting the trees after generating them. Also indexing will be slow, even knowing this information, because we're working with plain lists. Things would probably already get a lot better if we worked with trees that know the sizes of their children.
 
-\subsection{Indexed types}
+\section{Indexed types}
 Ideally, we get a meaningful list or enumeration of indices at the end: the non-empty ones. However, we do not (yet) require the index type to be enumerable.
 
 The index-first presentation of indexed datatypes, while efficient and succinct, does not seem suitable for this. After all, the descriptions for such a presentation live in the function space from the index to the base descriptions. We would rather want to start ``recklessly applying'' constructors and seeing what kinds of indices that leaves us with.

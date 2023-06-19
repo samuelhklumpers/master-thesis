@@ -1,25 +1,34 @@
-\subsection{Agda}
-We formalize our work in Agda \cite{agda}, a functional programming language with dependent types. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. These proofs can then be run as algorithms, or in some cases be extracted to a Haskell program\footnote{Or JavaScript, if you want.}.
+\section{Agda}
+We formalize our work in Agda \cite{agda}, a functional programming language with dependent types. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. These proofs can then be run as algorithms, or in some cases be extracted to other languages like Haskell\footnote{Or JavaScript, if you want.}.
 
 Syntactically Agda is reminiscent of Haskell. One difference is that Agda allows most characters and words in identifiers with only a small set of exceptions. For example, we can write
 \ExecuteMetaData[Tex/Background]{ternary}
-Another is that datatypes are always either given as generalized algebraic datatypes (GADTs) or record types.
-
-The type system of Agda is an extension of (intensional) Martin-Löf type theory (MLTT), a constructive type theory in which we can interpret intuitionistic logic: the Curry-Howard isomorphism states that certain formulas correspond to certain types, and proofs of a formula correspond to terms of the corresponding type. The atomic formula true can be represented as the empty record
+Another is that datatypes are always either given as generalized algebraic datatypes (GADTs) or record types. For example, the definition of booleans
+\begin{verbatim}
+    data Bool = True | False
+\end{verbatim}
+can be written in Agda as
+\ExecuteMetaData[Tex/Background]{bool}
+The unit type
+\begin{verbatim}
+    data Unit = Unit
+\end{verbatim}
+becomes\footnote{One can also write the unit type as a datatype with one constructor. However, in Agda, records (can) benefit from eta-expansion. In our case, all terms of \AgdaDatatype{⊤} are definitionally equal.}
 \ExecuteMetaData[Tex/Background]{true}
-so that \AgdaFunction{tt} proves \AgdaDatatype{⊤}. False can be represented by a datatype with no constructors
+
+The type system of Agda is an extension of (intensional) Martin-Löf type theory (MLTT), a constructive type theory in which we can interpret intuitionistic logic: the Curry-Howard isomorphism states that certain formulas correspond to certain types, and proofs of a formula correspond to terms of the corresponding type. The atomic formula true can be represented by \AgdaDatatype{⊤}, so that \AgdaFunction{tt} always proves true. False can be represented by a datatype with no constructors
 \ExecuteMetaData[Tex/Background]{false}
 since there is (hopefully) no way to make get a term of \AgdaDatatype{⊥} without inconsistent assumptions. The logical implication $A \implies B$ corresponds to the type of functions $A \to B$: a proof of $A$ can be converted to a proof of $B$. Using implication, we can define the negation $\lnot A$ of a formula $A$ as the type $A \to \bot$. Disjunction (logical or) is described by a sum type $A + B$:
 \ExecuteMetaData[Tex/Background]{either}
 if we have either $A$ or $B$, we can prove $A + B$. Conjunction (logical and) is given as a product type:
 \ExecuteMetaData[Tex/Background]{pair}
-we need both $A$ and $B$ to prove $A \times B$. Using the correspondence, we reason in propositional logic by writing functional programs. As an example, consider the proof of the tautology 
+we need both $A$ and $B$ to prove $A \times B$. Using the correspondence, we can reason in propositional logic by writing functional programs. As an example, consider the proof of the tautology 
 \ExecuteMetaData[Tex/Background]{distr}
 
 Compared to Haskell, Agda allows the type of the codomain of a function to vary with the applied value:
 given a function $P$ from $A$ into \AgdaPrimitiveType{Type}, a type family over $A$, we can form the dependent function type $(a : A) \to P\ a$. Applying a function $f: (a : A) \to P\ a$ to a value $a : A$ then will have type $f\ a : P\ a$. Similarly, the type of a field in a record type can depend on values of earlier fields, e.g.,
 \ExecuteMetaData[Tex/Background]{exists}
-The presence of these dependent types enriches the interpretation of logic into programs. To interpret first-order logic we need to describe formulas containing variables, which are called predicates. Predicates correspond to functions into \AgdaDatatype{Type}
+The presence of these dependent types enriches the interpretation of logic into programs. To interpret first-order logic we need to describe formulas containing variables, which are called predicates. Predicates correspond to functions%into \AgdaDatatype{Type}
 \ExecuteMetaData[Tex/Background]{predicate}
 Using predicates, we can interpret quantifiers as the dependent types above. Universal quantification (for all) is a dependent function type 
 \ExecuteMetaData[Tex/Background]{forall}
@@ -43,17 +52,35 @@ and prove some properties of prime numbers. But to get the same results to binar
 In ordinary Agda, we cannot directly apply these to transport along like we can for equalities, however.
 \end{comment}
 
-\subsection{Cubical Agda}
+
+\section{\changed{} Generic programming}\label{ssec:bg-desc}
+%The deriving-mechanism in Haskell can take writing functions which consist primarily of boilerplate out of the hands of the programmer by deriving default implementations. Using reflection we can write similar macros and generic programs inside the type-checking monad; with it one can quote types or values, inspect their definitions, and unquote terms them to inject them into the code as if they were written manually.
+
+%However, programming in this monad is generally not pleasant, as terms enjoy none of the safety we are used to from Agda, and type errors are only detected when applying macros as opposed to when writing them. That is not to say that effective generic programming is impossible in Agda, and quite the opposite is true \cite{practgen}\todo{And more}. We will take a closer look at constructions which we can use for datatype generic programming. 
+
+\input{Tex/Desc.Tex}
+
+
+
+\towrite{Formalizing the ``looks like relation''.}
+
+
+
+\section{Cubical Agda}
 Intuitively, one expects that like how isomorphic groups share the same group-theoretical properties, isomorphic types also share the same type-theoretical properties. Meta-theoretically, this is known as \emph{representation independence}, and is evident. Inside (ordinary) Agda this is not so practical, as this independence only holds when applied to concrete types, and is then only realized by manually substituting along the isomorphism. On the other hand, in Cubical Agda, the Structure Identity Principle internalizes a kind of representation independence \cite{iri}.
 
 Cubical Agda modifies the type theory of Agda to a kind of homotopy type theory, looking at equalities as paths between terms rather than the equivalence relation generated by reflexivity. In cubical type theories, the role played by pattern matching on \AgdaFunction{refl} or by axiom J, in MLTT and ``Book HoTT'' respectively, is instead acted out by directly manipulating cubes\footnote{Under the analogy where a term is a point, an equality between points is a line, a line between lines is a square.}. In Cubical Agda, univalence
 \[ ... \]
 is not an axiom but a theorem.
 
-\towrite{Why circles are points with K. Why circles are not points with univalence}
+\subsection{Paths}
+
+%\towrite{Why circles are points with K. Why circles are not points with univalence}
+
+\subsection{Univalence}
 
 
-\subsection{The Structure Identity Principle}\label{sec:leibniz}
+\subsection{The Structure Identity Principle}\label{ssec:leibniz}
 To give an understanding of the basics of Cubical Agda \cite{cuagda} and the Structure Identity Principle (SIP), we walk through the steps to transport proofs about addition on Peano naturals to Leibniz naturals. We give an overview of some features of Cubical Agda, such as that paths give the primitive notion of equality, until the simplified statement of univalence. We do note that Cubical Agda has two downsides relating to termination checking and universe levels, which we encounter in later sections.
 
 Starting by defining the unary Peano naturals and the binary Leibniz naturals, we prove that they are isomorphic by interpreting them into each other. We observe how the interpretations are mutual inverses by proving lemmas stating that both interpretations ``respect the constructors'' of the types. Next, we demonstrate how this isomorphism can be promoted into an equivalence or an equality, and remark that this is sufficient to transport intrinsic properties, such as having decidable equality, from one natural to the other.
@@ -67,21 +94,4 @@ Finally, we describe the use case of the SIP, how it generalizes our observation
 \towrite{Merge}
 
 \input{CubicalAndBinary}
-
-
-
-\subsection{Numerical representations}
-\towrite{Generalizing the observation that lists look like unary naturals and Braun trees look like binary naturals.}
-
-\subsection{Generic programming and ornaments}\label{ssec:bg-desc}
-The deriving-mechanism in Haskell can take writing functions which consist primarily of boilerplate out of the hands of the programmer by deriving default implementations. Using reflection we can write similar macros and generic programs inside the type-checking monad; with it one can quote types or values, inspect their definitions, and unquote terms them to inject them into the code as if they were written manually.
-
-However, programming in this monad is generally not pleasant, as terms enjoy none of the safety we are used to from Agda, and type errors are only detected when applying macros as opposed to when writing them. That is not to say that effective generic programming is impossible in Agda, and quite the opposite is true \cite{practgen}\todo{And more}. We will take a closer look at constructions which we can use for datatype generic programming. 
-
-\input{Tex/Desc.Tex}
-
-
-
-
-\towrite{Formalizing the ``looks like relation''.}
 

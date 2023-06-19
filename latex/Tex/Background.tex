@@ -8,9 +8,7 @@
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaComment{--open\ import\ Agda.Builtin.Cubical.Path}\<%
 \\
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Bool}\<%
+\>[0]\AgdaComment{--open\ import\ Data.Bool}\<%
 \\
 \>[0]\AgdaComment{--open\ import\ Function.Base\ }\<%
 \\
@@ -32,6 +30,27 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaPrimitive{Set}\<%
 \end{code}
+
+%<*bool>
+\begin{code}%
+\>[0]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{Bool}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Type}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaInductiveConstructor{false}%
+\>[11]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Bool}\<%
+\\
+%
+\>[4]\AgdaInductiveConstructor{true}%
+\>[11]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Bool}\<%
+\end{code}
+%</bool>
+
 
 %<*ternary>
 \begin{code}%
@@ -80,8 +99,8 @@
 
 %<*false>
 \begin{code}%
-\>[0]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{⊥}\AgdaSpace{}%
+\>[0]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{⊥}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Type}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
@@ -100,7 +119,7 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{⊥}\<%
+\AgdaDatatype{⊥}\<%
 \end{code}
 
 

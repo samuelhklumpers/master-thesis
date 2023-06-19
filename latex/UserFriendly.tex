@@ -1,6 +1,6 @@
-Using \autoref{sec:leibniz} we can relate functionally equivalent structures, and using \autoref{sec:numrep} we can relate structurally similar structures. However, both have downsides; the former requires us to construct isomorphisms, and the latter wraps all components behind a layer of constructors.  In this section will alleviate these problems through generics and by alternative descriptions of equivalences.
+Using \autoref{ssec:leibniz} we can relate functionally equivalent structures, and using \autoref{sec:numrep} we can relate structurally similar structures. However, both have downsides; the former requires us to construct isomorphisms, and the latter wraps all components behind a layer of constructors.  In this section will alleviate these problems through generics and by alternative descriptions of equivalences.
 
-In later sections we will construct many more equivalences between more complicated types than before, so we will dive right into the latter. Reflecting upon \autoref{sec:leibniz}, we see that when one establishes an equivalence, most of the time is spent working out a series of lemmas that prove the conversion functions are to be mutual inverses. We note that the functions themselves were, in fact, forced for a large part.  %We will reuse the machinery of Ko and Gibbons \cite{progorn} to illustrate how the definitions in \autoref{sec:leibniz} were actually forced for a large part.
+In later sections we will construct many more equivalences between more complicated types than before, so we will dive right into the latter. Reflecting upon \autoref{ssec:leibniz}, we see that when one establishes an equivalence, most of the time is spent working out a series of lemmas that prove the conversion functions are to be mutual inverses. We note that the functions themselves were, in fact, forced for a large part.  %We will reuse the machinery of Ko and Gibbons \cite{progorn} to illustrate how the definitions in \autoref{ssec:leibniz} were actually forced for a large part.
 
 First, we remark that \AgdaDatatype{μ} is internalization of the representation of simple\footnote{Of course, indexed datatypes are indexed W-types, mutually recursive datatypes are represented yet differently\dots} datatypes as W-types. Thus, we will assume that one of the sides of the equivalence is always represented as an initial algebra of a polynomial functor, and hence the \AgdaDatatype{μ} of a \AgdaDatatype{Desc′}.
 
@@ -78,7 +78,7 @@ As a consequence, we get that $X$ is isomorphic to $\mu D$ when $X$ is an initia
     The fixpoint $\mu D$ is not in general a strict initial object in the category of algebras. For a strict initial object, having a map $a \to \emptyset$ implies $a \cong \emptyset$. This is not the case here: strict initial objects satisfy $a \times \emptyset \cong \emptyset$, but for the $X \mapsto 1 + X$-algebras $\mathbb{N}$ and $2^\mathbb{N}$ clearly $2^\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$ does not hold. On the other hand, the ``obvious'' sufficient condition to let $C^F$ have strict initial objects is that $F$ is a left adjoint, but then the carrier of the initial algebra is simply $\bot$.
 \end{remark}
 
-Looking back at \autoref{sec:leibniz}, we see that \AgdaDatatype{Leibniz} is an initial $F: X \mapsto 1 + X$ algebra because for any other algebra, the image of \AgdaFunction{0b} is fixed, and by \AgdaFunction{bsuc} all other values are determined by chasing around the square. Thus, we are looking for a similar structure on $f : FX \to X$ that supports recursion.
+Looking back at \autoref{ssec:leibniz}, we see that \AgdaDatatype{Leibniz} is an initial $F: X \mapsto 1 + X$ algebra because for any other algebra, the image of \AgdaFunction{0b} is fixed, and by \AgdaFunction{bsuc} all other values are determined by chasing around the square. Thus, we are looking for a similar structure on $f : FX \to X$ that supports recursion.
 
 We will need something stronger than $FX \cong X$, as in general a functor can have many fixpoints. For this, we define what it means for an element $x$ to be accessible by $f$. This definition uses a mutually recursive datatype as follows:
 We state that an element $x$ of $X$ is accessible when there is an accessible $y$ in its fiber over $f$
@@ -109,7 +109,7 @@ Thus, we conclude that $X$ is initial. The main result is then a corollary of in
 
 
 \subsubsection{Example}
-Let us redo the proof in \autoref{sec:leibniz}, now using this result. Recall the description of naturals \AgdaFunction{NatD}. To show that \AgdaFunction{Leibniz} is isomorphic to \AgdaFunction{Nat}, we will need a \AgdaFunction{NatD}-algebra and a proof of its well-foundedness. We define the algebra
+Let us redo the proof in \autoref{ssec:leibniz}, now using this result. Recall the description of naturals \AgdaFunction{NatD}. To show that \AgdaFunction{Leibniz} is isomorphic to \AgdaFunction{Nat}, we will need a \AgdaFunction{NatD}-algebra and a proof of its well-foundedness. We define the algebra
 \ExecuteMetaData[Tex/Leibniz2]{bsuc'}
 
 For well-foundedness, we use something similar to view-patterns %[mcbride]

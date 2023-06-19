@@ -200,9 +200,8 @@ TrieO D = TrieO-desc D id-InfoF
   TrieO-con {f = f} (δ {if = if} {iff = iff} j g R h C) ϕ with ϕ .δf _ _ if    
   ... | refl , refl , k =                                                      
     ∙δ
-      {f'' =  λ { (w , x)
-              → h  (f w
-                   , ornForget (toOrn (TrieO-desc R (ϕ ∘InfoF iff))) _ x) }}
+      {f'' =  λ { (w , x) → h  (f w , ornForget
+              (toOrn (TrieO-desc R (ϕ ∘InfoF iff))) _ x) }}
       (λ { ((_ , A) , _) → _ , Vec A k }) !
     (TrieO-con C ϕ)
     (TrieO-desc R (ϕ ∘InfoF iff)) id
@@ -221,6 +220,13 @@ TrieO D = TrieO-desc D id-InfoF
 -- to summarize, for every number system, there is an appropriate "list", which has an appropriate "vector"
 -- this vector is representable, the list is traversable, and everything still satisfies size ≡ shape ≡ index
 
+%<*Unit>
+\begin{code}
+UnitD : DescI Number ∅ ⊤
+UnitD = 𝟙 {if = 1} _
+      ∷ []
+\end{code}
+%</Unit>
 
 
 

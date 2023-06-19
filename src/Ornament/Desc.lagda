@@ -206,7 +206,7 @@ A DescI If Γ J describes a PIType Γ J, augmented by the bundle If, note that a
 \begin{code}
 data DescI (If : Info) (Γ : Tel ⊤) (J : Type) : Type
 data μ (D : DescI If Γ J) (p : ⟦ Γ ⟧tel tt) : J → Type
-\end{code}
+\end{code} 
 
 %<*Con>
 \begin{code}
@@ -331,16 +331,15 @@ module _ {If : Info} where
       
   ⟦_⟧ {t = DT}    (C ∷ D)        X p i
       = (⟦ C ⟧ X (p , tt) i) ⊎ (⟦ D ⟧ X p i)
-      
 \end{code}
 %</interpretation>
 
-%<*fixpoint>
+%<*fpoint>
 \begin{code}
 data μ D p where
   con : ∀ {i} → ⟦ D ⟧ (μ D) p i → μ D p i
 \end{code}
-%</fixpoint>
+%</fpoint>
 
 %<*fold-type>
 \begin{code}

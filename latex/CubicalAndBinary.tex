@@ -48,7 +48,7 @@ The path \AgdaFunction{ℕ≡L} then allows us to transport properties from \bN{
 This can be generalized even further to transport proofs about operations from \bN{} to \bL{}.
 
 \subsubsection{Functions from specifications}\label{ssec:useas}
-As an example, we will define addition of binary numbers. We could transport \AgdaFunction{\_+\_} as a binary operation
+As an example, we will define addition of binary numbers.\todo{This doesn't really belong here.} We could transport \AgdaFunction{\_+\_} as a binary operation
 \ExecuteMetaData[Extra/Algebra]{BinOp}
 from \bN to \bL to get
 \ExecuteMetaData[Tex/CubicalAndBinary]{badplus}
@@ -64,7 +64,7 @@ With this we can define addition on \bL{} and show it agrees with addition on \b
 Now we can easily extract the definition of \AgdaFunction{plus} and its correctness with respect to \AgdaFunction{\_+\_} 
 \ExecuteMetaData[Leibniz/Properties.tex]{plus-good}
 
-We remark that \AgdaFunction{Def} is close in concept to refinement types\footnote{À la \href{https://agda.github.io/agda-stdlib/Data.Refinement.html}{Data.Refinement}.}, but extracts the value from the proof, rather than requiring it before. \footnote{Unfortunately, normalizing an application of a \AgdaFunction{defined-by} function also causes a lot of unnecessary wrapping and unwrapping, so \AgdaFunction{Def} is mostly only useful for presentation.} %for now..
+We remark that \AgdaFunction{Def} is close in concept to refinement types\footnote{À la \href{https://agda.github.io/agda-stdlib/Data.Refinement.html}{Data.Refinement}.}, but extracts the value from the proof, rather than requiring it before. \footnote{Unfortunately, normalizing an application of a \AgdaFunction{defined-by} function also causes a lot of unnecessary wrapping and unwrapping, so \AgdaFunction{Def} is mostly only useful for presentation. On the other hand, it should not be hard to write a macro to define a function rebuilding the case tree while replacing any \AgdaFunction{defined-by} by that function.}
 
 
 \subsubsection{The Structure Identity Principle}

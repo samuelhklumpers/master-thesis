@@ -3,7 +3,7 @@
 module Tex.Background where
 
 --open import Agda.Builtin.Cubical.Path
-open import Data.Bool
+--open import Data.Bool
 --open import Function.Base 
 
 private variable
@@ -13,6 +13,15 @@ private variable
 \begin{code}
 Type = Set
 \end{code}
+
+%<*bool>
+\begin{code}
+data Bool : Type where
+    false  : Bool
+    true   : Bool 
+\end{code}
+%</bool>
+
 
 %<*ternary>
 \begin{code}
@@ -32,7 +41,7 @@ record ⊤ : Type where
 
 %<*false>
 \begin{code}
-record ⊥ : Type where
+data ⊥ : Type where
 \end{code}
 %</false>
 
