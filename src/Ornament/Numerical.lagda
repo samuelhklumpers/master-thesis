@@ -15,7 +15,7 @@ open import Data.Unit
 open import Data.Empty
 open import Data.Product
 open import Data.Sum hiding (map₂)
-open import Data.Nat
+open import Data.Nat hiding (_!)
 open import Function.Base
 open import Data.Vec using (Vec)
 
@@ -209,11 +209,64 @@ TrieO D = TrieO-desc D id-InfoF
 \end{code}
 %</TrieO-delta>
 
+
+\begin{code}
+ITrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) id (μ D tt tt) ! (toDesc (TrieO D))
+ITrieO D = ITrieO′ D D id-InfoF
+  module ITrieO where
+    module _ (D' : DescI Number ∅ ⊤) where
+      ITrieO′ : (D : DescI If ∅ ⊤) (if : InfoF If Number) → OrnDesc Plain (∅ ▷ const Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D if))
+      
+      N : _
+      N = μ D' tt tt
+
+      ITrieO-desc : (D : DescI If ∅ ⊤) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → (if : InfoF If Number) → OrnDesc Plain (∅ ▷ const Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D if))
+
+      ITrieO-con  : ∀ {U V} {W : ExTel (∅ ▷ const Type)} {f : VxfO ! U V} {g : VxfO id W U}
+                 (C : ConI If ∅ ⊤ V) → (∀ a b → ⟦ C ⟧ (λ _ _ → N) (tt , f (g {p = a} b)) _ → N) → (if : InfoF If Number)
+                 → ConOrnDesc Plain {W = W} {K = μ D' tt tt} g ! (toCon {f = f} (TrieO.TrieO-con D' C if))
+
+      ITrieO-desc []      ϕ if = []
+      ITrieO-desc (C ∷ D) ϕ if = ITrieO-con C (λ a b x → ϕ tt b (inj₁ x)) if ∷ (ITrieO-desc D (ϕ ∘₃ inj₂) if)
+      
+      ITrieO-con {f = f} {g = g} (𝟙 {if = k} j) ϕ if
+        = σ _ id (g ∘ proj₁) (𝟙 (λ { (p , w , _) → ϕ p w refl }) λ p → refl) (λ p → refl)
+
+      ITrieO-con {f = f} {g = g} (ρ {if = k} j h C) ϕ if
+        = Δσ (const N) (g ∘ proj₁) id
+        ( ρ (λ (p , w , n) → n) (λ { (_ , A) → _ , Vec A (if .ρf k) })
+          (ITrieO-con C (λ { a (u , n) x → ϕ a u (n , x) }) if)
+        (λ p → refl) (λ p → refl)) (λ p → refl)
+        
+      ITrieO-con {f = f} {g = g} (σ S {if = k} h C)      ϕ if
+        = σ _ id (VxfO-▷ g (S ∘ over f))
+        ( σ _ id (VxfO-▷ (VxfO-▷ g (S ∘ over f)) (λ { ((_ , A) , _ , s) → Vec A (if .σf _ k _ s) }))
+          (ITrieO-con C (λ { a ((w , s) , _) x → ϕ a w (s , x) }) if)
+        λ p → refl) λ p → refl
+        
+      ITrieO-con {f = f} {g = g} (δ {if = k} {iff = iff} j g' R h C) ϕ if with if .δf _ _ k
+      ... | refl , refl , k
+        = Δσ (const (μ R tt tt)) (g ∘ proj₁) id
+        ( Δσ (const (μ D' tt tt)) (g ∘ proj₁ ∘ proj₁) id
+        ( ∙δ {f'' = VxfO-▷-map (g ∘ proj₁ ∘ proj₁)
+                     (liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
+                     (liftM2 (μ (toDesc (ITrieO-desc R {!!} (if ∘InfoF iff)))) (λ p → tt , Vec (id (p .proj₁) .proj₂) k) (λ x → proj₂ (proj₂ x)))
+                     {!!} }
+             (λ { ((_ , A) , ((w , r) , _)) → tt , Vec A k }) (proj₂ ∘ proj₂)
+          (ITrieO-con C {!λ { a (((w , r) , n) , _)  x → ϕ a w (r , {!!}) }!} if)
+          {!ITrieO R!} id
+        (λ _ _ → refl) (λ _ _ → refl) λ p → refl) λ p → refl) λ p → refl
+    
+      ITrieO′ D if = ITrieO-desc D {!!} if
+\end{code}
+(liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
+ITrieO-desc R (λ { a b x → ϕ {!!} {!!} {!!} }) (if ∘InfoF iff)
+
 -- to prove: size x ≡ shape x
 -- * μ D is likely to be Traversable when all σ's in it are
 -- * as every S in a DescI Number ∅ ⊤ is necessarily invariant, it is also trivially Traversable
 
--- to prove: every OrnDesc induces an ornamental algebra
+-- to prove: every OrnDesc induces an ornamental algebra -> doesn't work
 -- to prove: for some appropriate Ix : (D : DescI Number ∅ ⊤) → Desc ∅ (μ D tt tt),
 --           Ix D is also initial for the algebra of the algebraic ornament induced by the ornamental algebra (yes)
 
@@ -230,59 +283,3 @@ UnitD = 𝟙 {if = 1} _
 
 
 
-
-{- -- older, direct attempt at indexed tries
-TrieO-1  : (D : DescI If ∅ ⊤) → InfoF If Number → OrnDesc Plain (∅ ▷ const Type) ! (μ D tt _) ! D
-
-module _ {D' : DescI If ∅ ⊤} where
-  TrieO  : (D : DescI If ∅ ⊤) → InfoF If Number → (⟦ D ⟧ (μ D') tt _ → μ D' tt _) → OrnDesc Plain (∅ ▷ const Type) ! (μ D' tt _) ! D
-  TrieOC : ∀ {V} {W : ExTel (∅ ▷ const Type)} {f : VxfO ! W V} (C : ConI If ∅ ⊤ V) → InfoF If Number → (∀ {p} w → ⟦ C ⟧ (μ D') (tt , f {p = p} w) _ → μ D' tt _) → ConOrnDesc Plain {W = W} {K = μ D' tt _} f ! C
-  TrieO-forget : ∀ {If′} {iff : InfoF If′ If} (R : DescI If′ ∅ ⊤) {p' : Σ ⊤ (λ x → Type)} (ϕ : InfoF If Number) (q : μ R tt tt) {if : ℕ} s →
-                 q ≡ ornForget (toOrn (TrieO-1 R (ϕ ∘InfoF iff))) (tt , Vec (proj₂ p') if) {i = q} s
- 
-  TrieO []      f ix = []
-  TrieO (C ∷ D) f ix = TrieOC C f (λ v x → ix (inj₁ x)) ∷ TrieO D f (ix ∘ inj₂)
-
-  TrieOC {f = f} (𝟙 {if = if} j) ϕ ix =                               -- if the number is constantly if here
-    Δσ (λ { ((_ , A) , _) → Vec A (ϕ .𝟙f if)}) f proj₁                      -- add if A's here
-    (𝟙 (λ { ((_ , A) , w) → ix w refl })                            -- the index is completely determined by the context
-    (const refl)) λ p → refl  
-    
-  TrieOC {f = f} (ρ {if = if} j g C) ϕ ix =                           -- if the number is recursively if * r + n here
-    Δσ (const (μ D' tt tt)) (f ∘ proj₁) id                          -- for an index r
-    (ρ (proj₂ ∘ proj₂) (λ { (_ , A) → _ , Vec A (ϕ .ρf if) })               -- keep the recursive field at r with parameter A^k
-    (TrieOC C ϕ λ { (w , r) n → ix w (r , n) } )                      -- and compute the rest of the OD, the index is constructed from r and the context
-    (λ p → refl) λ p → refl) λ p → refl
-    
-  TrieOC {f = f} (σ S {if = if} h C) ϕ ix =
-    σ S id (h ∘ VxfO-▷ f S)
-    (Δσ (λ { ((_ , A) , _ , s) → Vec A (ϕ .σf _ if _ s) }) (h ∘ _) id
-    (TrieOC C ϕ λ { ((w , s) , x) n → ix w (s , n) })
-    λ p → refl) (λ p → refl)
-
-  TrieOC {f = f} (δ {if = if} {iff = iff} j g R h C) ϕ ix with ϕ .δf _ _ if
-  ... | refl , refl , if =
-    Δσ (const (μ R tt tt)) (f ∘ proj₁) id
-    (Δσ (const (μ D' tt tt)) (f ∘ proj₁ ∘ proj₁) id
-    (∙δ (λ { ((_ , A) , ((w , r) , n)) → _ , Vec A if }) (proj₂ ∘ proj₁ ∘ proj₂)
-    (TrieOC C ϕ λ { (w , r) x → ix w (r , x) })
-    (TrieO-1 R (ϕ ∘InfoF iff)) (proj₁ ∘ proj₁) (λ _ _ → refl) (λ _ _ → refl) λ { {p'} (((p , q) , r) , s) → cong (λ q → h (f p , q)) (TrieO-forget R ϕ q s) })
-    λ p → refl) λ p → refl
-
-  TrieO-forget R ϕ (con q) (con s) = {!!}
-
-TrieO-1 D f = TrieO {D' = D} D f con
--}
-
-{-
-Bin = μ BinND tt tt
-
-BTreeOD = TrieO-1 BinND
-BTreeD = toDesc ? BTreeOD
-
-BTree : Type → Bin → Type
-BTree A n = μ BTreeD (_ , A) n
-
-btree-5 : BTree ℕ bin-5
-btree-5 = con (inj₂ (inj₁ (bin-2 , (con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , con (inj₁ ({!0!} , refl)) , {!2 * 2!} , refl)))) , {!1!} , refl))))
--}

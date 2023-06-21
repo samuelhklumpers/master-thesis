@@ -26,8 +26,6 @@ We can implement arrays based on \AgdaDatatype{Vec} as well\footnote{Note that, 
 Now, rather than rederiving the laws for vectors, the equality allows us to transport them from \AgdaDatatype{Lookup} to \AgdaDatatype{Vec}.\footnote{Except that due to the simplicity of this case, the laws are trivial for \AgdaDatatype{Vec} as well.}
 \investigate{As you can see, taking ``use-as-definition'' too literally prevents Agda from solving a lot of metavariables.}
 
-\investigate{This computation can of course be generalized to any arity zeroless numeral system; unfortunately beyond this set of base types, this ``straightforward'' computation from numeral system to container loses its efficacy. In a sense, the n-ary natural numbers are exactly the base types for which the required steps are convenient type equivalences like $(A + B) \to C = (A \to C) \times (B \to C)$?}
-
 %\section{Relating types by structure: Ornamentation (unfinished)}\label{sec:ornament}
 \section{Numerical representations as ornaments}\label{sec:ornaments}
 Reflecting on this derivation for \bN{}, we could perform the same computation for \bL{} to get Braun trees. However, we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. This kind of ``modifying constructors'' is formalized by ornamentation \cite{progorn}, which lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped to go from one description to the other. \textit{Ornamental descriptions}, which act as one-sided ornaments, let us describe new datatypes by recording the modifications to an existing description.
@@ -71,7 +69,7 @@ In such a calculation, all we really needed was a translation between the type o
 
 The essence of the calculation of arrays is that given a number system, we can calculate a datastructure which still has the same shape, and has the correct number of elements. We can generalize the calculation to all number systems while proving that the shape is preserved by presenting the datastructure by an ornamental description.
 
-We could directly compute indexed array, using the index for the proof of representability, and from it the correctness of numbers of elements. However, we give the unindexed array first: we can get the indexed variant for free \cite{algorn}!
+We could directly compute indexed array, using the index for the proof of representability, and from it the correctness of numbers of elements. However, we give the unindexed array first: we can get the indexed variant for free \cite{algorn}\todo{no, rewrite this}!
 
 \begin{conjecture}
     We claim then\todo{Currently, without proof} that the description given by
@@ -96,8 +94,49 @@ Consider the case of a description field\footnote{Excuse the formula of \AgdaBou
 \ExecuteMetaData[Ornament/Numerical]{TrieO-delta}
 We essentially rerun the recipe of \AgdaInductiveConstructor{ρ}, multiplying the elements of the field by $k$, but now pass it to the description \AgdaBoundFontStyle{R}. Again, correctness of \AgdaInductiveConstructor{δ} follows directly from the correctness of \AgdaBoundFontStyle{R} and the remainder.
 
+
+\begin{example}
+    
+\end{example}
 This ``proves'' our construction correct, but let us compare it to an existing numerical representation:
 We see that applying \AgdaFunction{TrieO} to \AgdaFunction{NatND} gives us a description which corresponds almost directly to \AgdaFunction{ListD}, only replacing all fields with vectors of length 1.
+
+The reader of \cite{algorn} might question why we are doing the work of \AgdaFunction{TrieOIx} ourselves, rather than making use of \AgdaFunction{ornAlg}.
+\begin{remark}
+Problems
+\begin{enumerate}
+    \item an algebra for D gives no algebras for the deltas in D,
+    \item no delta means constructors explode.
+\end{enumerate}
+
+Solution 1: define other infrastructure for algebras that do have algebras for deltas
+
+Solution 2:
+\begin{enumerate}
+    \item kill deltas by an intermediate form which explodes,
+    \item give up on constructor lists and have big sigma.
+\end{enumerate}
+
+Solution 3:
+\begin{enumerate}
+    \item do deltas via mutual recursion,
+    \item mutual recursion already has good algebras.
+\end{enumerate}
+
+\end{remark} 
+
+\begin{remark}
+    Also, variables are annoying
+    \begin{itemize}
+        \item centralize variable transforms into one place in deltas
+        \item what are ornaments now
+    \end{itemize} 
+
+    \begin{itemize}
+        \item package descriptions and their thinnings
+        \item something happens
+    \end{itemize}
+\end{remark}
 
 \towrite{Some goals: 1. Ix and paths. 2. Ix n -> A iso IxTrieO n A. 3. something about the correctness of TrieO}
 

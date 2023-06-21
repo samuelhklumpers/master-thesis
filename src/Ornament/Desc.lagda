@@ -42,6 +42,11 @@ liftM2 f g h x = f (g x) (h x)
 \end{code}
 %</shorthands>
 
+\begin{code}
+_∘₃_ : ∀ {X Y Z : A → B → Type} → X ⇶ Y → (∀ {a b} → Z a b → X a b) → Z ⇶ Y
+(g ∘₃ f) a b x = g a b (f x)
+\end{code}
+
 * Telescopes
 %<*telescopes>
 \begin{code}

@@ -176,7 +176,49 @@ toConOrn (∙δ fΛ m D RR' h p₁ p₂ x) = ∙δ (toConOrn D) (toOrn RR') p₁
 \end{code}
 
 
-algOrn : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (λ p i → K i) ⇶ (λ p i → K i) → OrnDesc Plain Γ id (Σ J K) proj₁ D
+{-
+Goal: ∀ p i → (x : μ (toDesc (algOrnD D)) p i) → fold ϕ p (i .proj₁) (ornForget x) ≡ i .proj₁  
+
+Strategy:
+1. Write down just the Desc
+2. Collect information descending the Desc/Con
+3. Fix the index to ϕ in 𝟙
+
+Conclude:
+No algOrn (or Desc): an algebra ⟦ δ ... R ... ⟧ X → X merely gives rise to a function μ R → X (or something)
+not the algebra ⟦ R ⟧ X → X we need.
+-}
+
+
+algDescD : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const K) → Desc Γ (Σ J K)
+algDescC : ∀ {J K} → (C : ConI If Γ J V) → ⟦ C ⟧ (const K) ⇶ (const K) → Con Γ (Σ J K) V
+
+algDescD []      ϕ = []
+algDescD (C ∷ D) ϕ = algDescC C (λ p i x → ϕ (p .proj₁) i (inj₁ x)) ∷ (algDescD D (λ p i x → ϕ p i (inj₂ x)))
+
+algDescC         (𝟙 j)         ϕ = 𝟙 λ pv → j pv , ϕ pv (j pv) refl
+algDescC {K = K} (ρ j g C)     ϕ = σ (K ∘ j) id (ρ (λ { (p , v , k) → j (p , v) , k }) g (algDescC {!C!} λ { (p , v , k) i x → ϕ (p , v) i (k , {!x!}) }))
+algDescC         (σ S h C)     ϕ = σ S id (algDescC {!C!} (λ { (p , v , s) i x → ϕ (p , v) i (s , {!x!}) }))
+algDescC         (δ j g R h C) ϕ = δ {!!} {!!} (algDescD R {!!}) {!!} {!!}
+
+algOrnD : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const K) → OrnDesc Plain Γ id (Σ J K) proj₁ D
+algOrnC : ∀ {J K} → (C : ConI If Γ J V) → ⟦ C ⟧ (const K) ⇶ (const K) → ConOrnDesc Plain {Δ = Γ} {K = Σ J K} id proj₁ C
+
+algOrnD []      ϕ = []
+algOrnD (C ∷ D) ϕ = algOrnC C (λ p i x → ϕ (p .proj₁) i (inj₁ x)) ∷ (algOrnD D (λ p i x → ϕ p i (inj₂ x)))
+
+algOrnC (𝟙 j) ϕ = 𝟙 (λ pv → j pv , ϕ pv (j pv) refl) λ p → refl
+algOrnC {K = K} (ρ j g C) ϕ = Δσ (λ pv → K (j pv)) {!!} {!!} (ρ (λ { (p , v) → j (p , v) , {!!} }) g {!algOrnC C {!!}!} (λ p → refl) {!!}) {!!}
+algOrnC (σ S h C) ϕ = {!!}
+algOrnC (δ j g R h C) ϕ = {!!}
+
+correct : ∀ {J K} → (D : DescI If Γ J) (ϕ : ⟦ D ⟧ (const K) ⇶ (const K)) → ∀ p i → (x : μ (toDesc (algOrnD D ϕ)) p i) → fold ϕ p (i .proj₁) (ornForget (toOrn (algOrnD D ϕ)) p x) ≡ i .proj₂
+correct [] ϕ p i (con ())
+correct (C ∷ D) ϕ p i (con (inj₁ x)) = {!!}
+correct (C ∷ D) ϕ p i (con (inj₂ y)) = correct D {!!} p i {!!} 
+
+
+algOrn : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const K) → OrnDesc Plain Γ id (Σ J K) proj₁ D
 algOrn []       ϕ = []
 algOrn (C ∷ D)  ϕ = algOrnC C {!!} ∷ algOrn D {!!}
   where
