@@ -1,0 +1,26 @@
+By giving datatypes as descriptions, we can inspect and use their structure for generic programming. We can now also relate datatypes by structure using ornaments. Ornaments, as a binary relation on \AgdaDatatype{Desc}, encode (informally) the relation of being at least as informative as another type:
+\[ ... \]
+This means that if there is an ornament from \texttt{D} to \texttt{E}, we can always convert the parameters and indices of \texttt{E} into those of \texttt{D}, as witnessed by \texttt{f} and \texttt{e}. Furthermore, we also have to be able to convert values of \texttt{E} to \texttt{D}
+\[ ... \] 
+In the definition of the ornaments, we include some relations which preserve structure, like
+\[ ... \]
+\dots. This codes ``reflexivity'' for leaves into the ornaments.
+
+The relation preserving recursive fields and the like
+\[ ... \] 
+give congruence under their respective formers.
+
+If \texttt{E} has more fields, then we can always go back to \texttt{D} by dropping them, so we also encode relations for adding both kinds of fields
+\[ ... \]
+Likewise, \texttt{E} can skip a field of \texttt{D} by providing a default value
+\[ ... \]
+
+The preconditions in these relations precisely make sure that \AgdaFunction{ornForget} goes right.
+\[ ... \]
+
+\todo{Adapt this}
+\begin{verbatim}
+Now we can show that the descriptions we gave in \autoref{ssec:desc} are related. The ornament between naturals and lists is
+\ExecuteMetaData[Ornament/Orn]{NatD-ListD}
+We use \AgdaFunction{!} to convert parameters, naturals have no parameters, so we can map every parameter of lists to the empty sequence. The index conversion is \AgdaFunction{id}, since neither type has an index. All structure is preserved; we just have to note that lists have an added field using \AgdaInductiveConstructor{Δσ}, and all commutativity squares are trivial, since naturals have neither parameters nor indices.
+\end{verbatim}

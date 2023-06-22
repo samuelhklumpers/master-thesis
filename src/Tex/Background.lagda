@@ -4,7 +4,8 @@ module Tex.Background where
 
 --open import Agda.Builtin.Cubical.Path
 --open import Data.Bool
---open import Function.Base 
+--open import Function.Base
+open import Data.Nat hiding (_+_)
 
 private variable
   A B C : Set
@@ -77,6 +78,13 @@ record _×_ A B : Type where
 \end{code}
 %</distr>
 
+%<*fin>
+\begin{code}
+data Fin : ℕ → Type where
+  zero  : ∀ {n}          → Fin (suc n)
+  suc   : ∀ {n} → Fin n  → Fin (suc n)
+\end{code}
+%</fin>
 
 \begin{code}
 private variable

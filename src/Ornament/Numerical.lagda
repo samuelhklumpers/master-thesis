@@ -15,7 +15,12 @@ open import Data.Unit
 open import Data.Empty
 open import Data.Product
 open import Data.Sum hiding (map₂)
+
+open import Data.List as L using (List)
+open List
+
 open import Data.Nat hiding (_!)
+open import Data.Fin using (Fin; #_)
 open import Function.Base
 open import Data.Vec using (Vec)
 
@@ -209,8 +214,65 @@ TrieO D = TrieO-desc D id-InfoF
 \end{code}
 %</TrieO-delta>
 
+\begin{code}
+_L+_ : List (ConI If Γ J ∅) → DescI If Γ J → DescI If Γ J
+[]        L+ D = D
+(C ∷ Cs)  L+ D = C ∷ (Cs L+ D)
+
+PathD : (D : DescI Number ∅ ⊤) → Desc ∅ (μ D tt tt)
+PathD′ : (D : DescI If ∅ ⊤) (if : InfoF If Number) → Desc ∅ (μ D tt tt)
+
+PathD E = PathD′ E id-InfoF
+PathD′ E if = PathDD E if λ a b → con
+  module PathD where
+    N : _
+    N = μ E tt tt
+
+    PathDD : (D : DescI If ∅ ⊤) (if : InfoF If Number) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → Desc ∅ (μ E tt tt)
+    PathDC : (C : ConI If ∅ ⊤ V) (if : InfoF If Number) (f : Vxf ∅ W V) → (∀ b → ⟦ C ⟧ (λ _ _ → N) (tt , f b) _ → N) → List (Con ∅ (μ E tt tt) W)
+
+    PathDD []      if ϕ = []
+    PathDD (C ∷ D) if ϕ = PathDC C if id (λ _ c → ϕ _ _ (inj₁ c)) L+ PathDD D if λ p i → ϕ p i ∘ inj₂
+
+    PathDC (𝟙 {if = k} j) if f ϕ
+      = σ- (const (Fin (if .𝟙f k))) (𝟙 (λ { (_ , w) → ϕ w refl }))
+      ∷ []
+
+    -- looks scary, pretty regular to write down though
+    PathDC (ρ {if = k} j g C) if f ϕ
+      = σ- (const (Fin (if .ρf k))) (σ+ (const N) (σ+ (λ { (p , w , _) → ⟦ C ⟧ (λ _ _ → N) (p , f w) tt }) (ρ0 (proj₂ ∘ proj₁ ∘ proj₂) (𝟙 λ { (_ , (w , n) , c) → ϕ w (n , c) }))))
+      ∷ L.map (σ+ (const N)) (PathDC C if (f ∘ proj₁) (λ { (w , n) c → ϕ w (n , c) }))
+
+    PathDC (σ S {if = k} h C)     if f ϕ
+      = σ+ (λ { (p , w) → S (p , f w) }) (σ+ (λ { (p , w , s) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , s)) tt }) (σ- (λ { (p , (w , s) , c) → Fin (if .σf _ k (p , f w) s) }) (𝟙 λ { (p , (w , s) , c) → ϕ w (s , c) })))
+      ∷ L.map (σ+ λ { (p , w) → S (p , f w) }) (PathDC C if (h ∘ Vxf-▷ f S) λ { (w , s) c → ϕ w (s , c) })
+
+    PathDC (δ {If′ = If′} {if = k} {iff = iff} j g R h C) if f ϕ with if .δf _ _ k
+    ... | refl , refl , k
+      = σ- (const (Fin k)) (σ+ (const (μ R tt tt)) (σ+ (λ { (p , w , r) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , r)) tt }) (δ- (proj₂ ∘ proj₁ ∘ proj₂) ! (PathD′ R (if ∘InfoF iff)) (𝟙 λ { (p , (w , r) , c) → ϕ w (r , c) }))))
+      ∷ L.map (δ+ ! ! R) (PathDC C if (λ { (w , r) → h (f w , r) }) λ { (w , r) c → ϕ w (r , c) })
+\end{code}
 
 \begin{code}
+BinID : Desc ∅ (μ BinND tt tt)
+BinID = PathD BinND
+
+BinI : μ BinND tt tt → Type
+BinI n = μ BinID tt n
+
+-- the constructors are
+-- i0  : ⊥ → BinI 0
+-- 1b1 : 2 → BinI n → BinI (n 1b)
+-- 1b0 : 1 → BinI (n 1b)
+-- 2b1 : 2 → BinI n → BinI (n 2b)
+-- 2b0 : 2 → BinI (n 2b)
+-- (I think)
+
+-- like the 3rd index into bin-5
+bin-3/5 : BinI bin-5
+bin-3/5 = con (inj₂ (inj₁ (# 1 , _ , (refl , ((con (inj₂ (inj₂ (inj₂ (inj₂ (inj₁ (_ , (# 0 , refl)))))))) , refl)))))
+\end{code}
+
 ITrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) id (μ D tt tt) ! (toDesc (TrieO D))
 ITrieO D = ITrieO′ D D id-InfoF
   module ITrieO where
@@ -258,9 +320,10 @@ ITrieO D = ITrieO′ D D id-InfoF
         (λ _ _ → refl) (λ _ _ → refl) λ p → refl) λ p → refl) λ p → refl
     
       ITrieO′ D if = ITrieO-desc D {!!} if
-\end{code}
-(liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
-ITrieO-desc R (λ { a b x → ϕ {!!} {!!} {!!} }) (if ∘InfoF iff)
+
+
+--(liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
+--ITrieO-desc R (λ { a b x → ϕ {!!} {!!} {!!} }) (if ∘InfoF iff)
 
 -- to prove: size x ≡ shape x
 -- * μ D is likely to be Traversable when all σ's in it are

@@ -1,3 +1,15 @@
+%outline:
+%(fast) datastructures are pretty essential in general
+%fancy datastructures tend to be more complex, making it harder to show all operations on them are correct
+%this is why we're trying to make making datastructures and getting parts of correctness easier
+%our first step is describing the structure of types inside the language itself
+%this only works if the description is sophisticated enough to actually capture the datastructures of interest
+%we will be using finger trees as a benchmark, relatively simple in theory, but also using some features like nesting which most descriptions lack
+%if you can describe types, you can also describe how to make one type into another, which we encode by ornaments
+%these will come into work in the next step
+%we note that finger trees, and many interesting datastructures, fit into the framework of calculating datastructures
+%but manually performing these calculations is pretty tedious, so we demonstrate that this operation can be implemented as a generic program
+
 Program verification is an indispensible aspect of programming, whether you're coding up your own Asteroids or you're developing a linear algebra library, it would be a waste of time to hunt for bugs which could have been uncovered by random testing. When testing does not offer enough certainty or cannot handle the complexity of the input, we can instead use formal program verification: it would be embarassing if someone else suffers the consequences of a bug in your library, so you might prove your library or parts of it correct in a proof assistant like Coq or Agda. In a more extreme example, you might code directly into a proof assistant, specifying the behaviour of your program beforehand, having it checked while you're implementing it.
 
 Yet, program verification, especially of the last kind, is a double-edged sword: while it becomes easier to write code without bugs, it becomes harder to write code in the first place. A proof assistant has to enforce total and terminating programs (at least by default), as incomplete or circular steps would undermine the correctness of a proof. Non-total operations are abundant in most languages, like getting the first element of a list; such operations would require the programmer to provide evidence that the operation can not fail at each usage. In this example the evidence can be encoded by modifying a list to remember its length, and generally we can create variations on datastructures for use in correct-by-construction programs. 

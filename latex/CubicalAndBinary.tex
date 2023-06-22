@@ -1,23 +1,5 @@
-Let us quickly review some features of Cubical Agda \cite{cuagda} that we will use in this section.
-
-%Of course, this downside is more than offset by the benefits of changing our primitive notion of equality, which we will see makes it easier to show that ``equivalent'' structures behave identically. 
-In Cubical Agda, the primitive notion of equality arises not (directly) from the indexed inductive definition we are used to, but rather from the presence of the interval type \AgdaPrimitiveType{I}. This type represents a set of two points \AgdaInductiveConstructor{i0} and \AgdaInductiveConstructor{i1}, which are considered ``identified'' in the sense that they are connected by a path. To define a function out of this type, we also have to define the function on all the intermediate points, which is why we call such a function a ``path''. Terms of other types are then considered identified when there is a path between them.
-
-Paths between types are incredibly useful, as they effectively let us directly transport properties between isomorphic structures. However, they do not come without downsides, such as that the negation of axiom K complicates both some termination checking and some universe levels.\footnote{In particular, this prompts rather far-reaching (but not fundamental) changes to the code of previous work, such as to the machinery of ornaments \cite{progorn} in \autoref{sec:userfriendly}.} %Furthermore, if we use certain homotopical constructions, and we wish to eliminate from our types as if they were sets, then we will also have to prove that they are indeed sets.
-
-We will discuss how to deal with these issues in later sections, so let us not be distracted from what we \emph{can} do with paths. For example, the different perspective gives intuitive interpretations to some proofs of equality, like
-\ExecuteMetaData[Tex/CubicalAndBinary]{sym}
-where \AgdaFunction{∼\_} is the interval reversal, swapping \AgdaInductiveConstructor{i0} and \AgdaInductiveConstructor{i1}, so that \AgdaFunction{sym} simply reverses the given path.
-
-Also, because we can now interpret paths in record and function types in a new way, we get a host of ``extensionality'' for free. For example, a path in $A \to B$ is indeed a function which takes each $i$ in \AgdaPrimitiveType{I} to a function $A \to B$. Using this, function extensionality becomes tautological 
-\ExecuteMetaData[Tex/CubicalAndBinary]{funExt}
-
-Finally, equivalences, the HoTT-compatible variant of bijections, have the univalence theorem 
-\ExecuteMetaData[Tex/CubicalAndBinary]{ua}
-stating that ``equivalent types are identified'', such that equivalences like $1 \to A \simeq A$ become paths $1 \to A \equiv A$, making it so that we can transport proofs along them. We will demonstrate this by a more practical example in the next section.
-
 \subsubsection{Unary numbers are binary numbers}\label{ssec:binary}
-Let us demonstrate an application of univalence by exploiting the equivalence of the ``Peano'' naturals and the ``Leibniz'' naturals. Recall that the Peano naturals are defined as 
+Let us demonstrate an application of univalence and the SIP by exploiting the equivalence of the ``Peano'' naturals and the ``Leibniz'' naturals. Recall that the Peano naturals are defined as 
 \ExecuteMetaData[Tex/CubicalAndBinary]{Peano}
 This definition enjoys a simple induction principle and is well-covered in most libraries. However, the definition is also impractically slow, since most arithmetic operations defined on \bN{} have time complexity in the order of the value of the result.
 

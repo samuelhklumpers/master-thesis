@@ -222,6 +222,54 @@
 \end{code}
 %</shorthands>
 
+\begin{code}%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘₃\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{A}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{B}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{Z}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaBound{Y}\<%
+\\
+\>[0]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘₃}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{a}\AgdaSpace{}%
+\AgdaBound{b}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\<%
+\end{code}
+
 * Telescopes
 %<*telescopes>
 \begin{code}%
@@ -618,6 +666,46 @@ A VxfO is a variable transformation over a parameter transformation
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{Vxf-▷}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Vxf}\AgdaSpace{}%
+\AgdaGeneralizable{Γ}\AgdaSpace{}%
+\AgdaGeneralizable{V}\AgdaSpace{}%
+\AgdaGeneralizable{W}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{S}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{W}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊢}}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Vxf}\AgdaSpace{}%
+\AgdaGeneralizable{Γ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{V}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{▷}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{S}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
+\AgdaFunction{over}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{W}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{▷}}\AgdaSpace{}%
+\AgdaBound{S}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaFunction{Vxf-▷}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{S}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{v}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{VxfO-▷}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
@@ -812,8 +900,6 @@ Cxf-Exf f (p , _) = f p , _
 Vxf-Exf : Vxf Γ V W → Exf Γ Γ V W
 Vxf-Exf f (p , v) = p , f v 
 
-Vxf-▷ : (f : Vxf Γ V W) (S : W ⊢ Type) → Vxf Γ (V ▷ (S ∘ Vxf-Exf f)) (W ▷ S)
-Vxf-▷ f S (p , v) = f p , v -}
 
 {- &-drop-▷ : ∀ {S} → ⟦ Γ & V ▷ S ⟧tel → ⟦ Γ & V ⟧tel
 &-drop-▷ (p , v , s) = p , v -}
@@ -1887,7 +1973,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \\
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}%
-\>[1368I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
+\>[1444I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{CT}\AgdaSpace{}%
 \AgdaBound{V}\AgdaSymbol{\}}%
@@ -1897,7 +1983,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaBound{pv}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \\
-\>[.][@{}l@{}]\<[1368I]%
+\>[.][@{}l@{}]\<[1444I]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -1908,7 +1994,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \\
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}%
-\>[1379I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
+\>[1455I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{CT}\AgdaSpace{}%
 \AgdaBound{V}\AgdaSymbol{\}}%
@@ -1922,7 +2008,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaBound{v}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \\
-\>[.][@{}l@{}]\<[1379I]%
+\>[.][@{}l@{}]\<[1455I]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
@@ -1941,7 +2027,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \\
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}%
-\>[1402I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
+\>[1478I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{CT}\AgdaSpace{}%
 \AgdaBound{V}\AgdaSymbol{\}}%
@@ -1955,7 +2041,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaBound{v}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \\
-\>[.][@{}l@{}]\<[1402I]%
+\>[.][@{}l@{}]\<[1478I]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ[}\AgdaSpace{}%
 \AgdaBound{s}\AgdaSpace{}%
@@ -1979,7 +2065,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \\
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}%
-\>[1430I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
+\>[1506I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{CT}\AgdaSpace{}%
 \AgdaBound{V}\AgdaSymbol{\}}%
@@ -1995,7 +2081,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaBound{v}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \\
-\>[.][@{}l@{}]\<[1430I]%
+\>[.][@{}l@{}]\<[1506I]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ[}\AgdaSpace{}%
 \AgdaBound{s}\AgdaSpace{}%
@@ -2023,7 +2109,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \\
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}%
-\>[1464I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
+\>[1540I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{DT}\AgdaSymbol{\}}%
 \>[18]\AgdaInductiveConstructor{[]}%
@@ -2031,7 +2117,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \\
-\>[.][@{}l@{}]\<[1464I]%
+\>[.][@{}l@{}]\<[1540I]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{⊥}\<%
 \\
@@ -2039,7 +2125,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \\
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}%
-\>[1470I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
+\>[1546I]\AgdaSymbol{\{}\AgdaArgument{t}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{DT}\AgdaSymbol{\}}%
 \>[18]\AgdaSymbol{(}\AgdaBound{C}\AgdaSpace{}%
@@ -2049,7 +2135,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \\
-\>[.][@{}l@{}]\<[1470I]%
+\>[.][@{}l@{}]\<[1546I]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
@@ -2098,10 +2184,22 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \end{code}
 %</fpoint>
 
+{-
+data FunD (A : Type) {Γ} {J} : (D : Desc Γ J) → ⟦ Γ ⟧tel tt → J → Type
+data FunC (A : Type) {Γ} {J} {V} : (C : Con Γ J V) → ⟦ Γ & V ⟧tel → J → Type
+
+data FunD A where
+  [] : ∀ {p i} → FunD A [] p i
+  --_∷_ 
+
+data FunC A where
+  𝟙 : ∀ {j p i} → (i ≡ j p → A) → FunC A (𝟙 j) p i
+-}
+
 %<*fold-type>
 \begin{code}%
 \>[0]\AgdaFunction{fold}%
-\>[1512I]\AgdaSymbol{:}\AgdaSpace{}%
+\>[1588I]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2111,7 +2209,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaGeneralizable{J}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[1512I]%
+\>[.][@{}l@{}]\<[1588I]%
 \>[5]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
@@ -2129,7 +2227,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 
 \begin{code}     %
 \>[0]\AgdaFunction{mapDesc}%
-\>[1532I]\AgdaSymbol{:}\AgdaSpace{}%
+\>[1608I]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{D'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2145,7 +2243,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaGeneralizable{J}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[1532I]%
+\>[.][@{}l@{}]\<[1608I]%
 \>[8]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
@@ -2176,7 +2274,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \>[0]\<%
 \\
 \>[0]\AgdaFunction{mapCon}%
-\>[1571I]\AgdaSymbol{:}\AgdaSpace{}%
+\>[1647I]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{D'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2194,7 +2292,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaBound{V}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[1571I]%
+\>[.][@{}l@{}]\<[1647I]%
 \>[7]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%

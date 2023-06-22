@@ -1,3 +1,8 @@
+%outline:
+%we explained why descriptions and ornaments are crucial to achieve our goals
+%however, the descriptions we explained earlier are not powerful enough to house finger trees
+
+
 %To capture finger trees as an ornament over a number system, we will need to describe ornaments over nested datatypes. In this section we will work out descriptions and ornaments suitable for nested datatypes.
 If we are going to simplify working with complex containers %, such as finger trees,
 by instantiating generic programs to them, we should first make sure that these types fit into the descriptions.
@@ -8,7 +13,7 @@ We base the encoding of off existing encodings \cite{sijsling,practgen}. The des
 
 We use type-in-type and with-K to simplify the presentation, noting that these can be eliminated respectively by moving to Typeω and by implementing interpretations as datatypes.
 
-\section{\added{}The descriptions}\label{ssec:desc}
+\section{The descriptions}\label{ssec:desc}
 We use telescopes identical to those in \autoref{ssec:bg-desc}:
 \ExecuteMetaData[Ornament/Desc]{telescopes}
 Recall that a \AgdaDatatype{Tel} represents a sequence of types, which can depend on the external type $P$. This lets us represent a telescope succeeding another using \AgdaDatatype{ExTel}. A term of the interpretation \AgdaFunction{⟦\_⟧tel} is then a sequence of terms of all the types in the telescope.
@@ -106,10 +111,10 @@ In the third case, we have digits which are passed the parameters on both sides 
 
 
 
-\section{\added{}The ornaments}
-Now that we have descriptions, we can start relating them. We construct ornaments as a binary relation on descriptions
+\section{The ornaments}
+\towrite{Put something that isn't yet in \autoref{ssec:bg-orn} here.}
+
 \ExecuteMetaData[Ornament/Orn]{Orn-type}
-which encode proofs that ``\AgdaBoundFontStyle{E} is a more informative variant of \AgdaBoundFontStyle{D}''. This means that we can always convert the parameters and indices of \AgdaBoundFontStyle{E} into those of \AgdaBoundFontStyle{D}, as witnessed by \AgdaBoundFontStyle{f} and \AgdaBoundFontStyle{e}. Furthermore, we also have to be able to convert\footnote{I would love to require this conversion to be epi, but we add a field of the empty type.} values of \AgdaBoundFontStyle{E} to \AgdaBoundFontStyle{D}
 \ExecuteMetaData[Ornament/Orn]{ornForget-type}
 %Thus, the relation should be precise enough pairs of \AgdaBoundFontStyle{E} and \AgdaBoundFontStyle{D} for which we could not define \AgdaFunction{ornForget}.
 
@@ -152,9 +157,8 @@ we can define the algebra which forgets the added structure of the outer layer
 \ExecuteMetaData[Ornament/Orn]{ornAlg}
 Folding over this algebra gives the wanted function
 \ExecuteMetaData[Ornament/Orn]{ornForget}
-Now we can show that the descriptions we gave in \autoref{ssec:desc} are related. The ornament between naturals and lists is
-\ExecuteMetaData[Ornament/Orn]{NatD-ListD}
-We use \AgdaFunction{!} to convert parameters, naturals have no parameters, so we can map every parameter of lists to the empty sequence. The index conversion is \AgdaFunction{id}, since neither type has an index. All structure is preserved; we just have to note that lists have an added field using \AgdaInductiveConstructor{Δσ}, and all commutativity squares are trivial, since naturals have neither parameters nor indices.
+
+\todo{NatD was removed here}
 
 We can also relate lists and vectors
 \ExecuteMetaData[Ornament/Orn]{ListD-VecD}
@@ -165,7 +169,7 @@ Instantiating \AgdaFunction{ornForget} to these ornaments, we now get the functi
 %\investigate{Having a function of the same type as \AgdaFunction{ornForget} is not sufficient to deduce an ornament. An obstacle is that the usual empty type (no constructors) and the non-wellfounded empty type (only a recursive field) don't have an ornament. Also, while the leaf-preservation case spells itself out, the substitutions obviously don't give us a way to recover the equalities.}
 
 
-\section{\added{}Ornamental descriptions}
+\section{Ornamental descriptions}
 A description can say ``this is how you make this datatype'', an ornament can say ``this is how you go between these types''. However, an ornament needs its left-hand side to be predefined before it can express the relation, while we might also interpret an ornament as a set of instructions to translate one description into another. A slight variation on ornaments can make this kind of usage possible: ornamental descriptions.
 
 An ornamental description drops the left-hand side when compared to an ornament, and interprets the remaining right-hand side as the starting point of the new datatype:

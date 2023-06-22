@@ -111,6 +111,9 @@ A VxfO is a variable transformation over a parameter transformation
 over : {f : Cxf Γ Δ} → VxfO f V W → ⟦ Γ & V ⟧tel → ⟦ Δ & W ⟧tel
 over g (p , v) = _ , g v
 
+Vxf-▷ : (f : Vxf Γ V W) (S : W ⊢ Type) → Vxf Γ (V ▷ (S ∘ over f)) (W ▷ S)
+Vxf-▷ f S (p , v) = f p , v
+
 VxfO-▷ : ∀ {c : Cxf Γ Δ} (f : VxfO c V W) (S : W ⊢ Type) → VxfO c (V ▷ (S ∘ over f)) (W ▷ S)
 VxfO-▷ f S (p , v) = f p , v
 
@@ -134,8 +137,6 @@ Cxf-Exf f (p , _) = f p , _
 Vxf-Exf : Vxf Γ V W → Exf Γ Γ V W
 Vxf-Exf f (p , v) = p , f v 
 
-Vxf-▷ : (f : Vxf Γ V W) (S : W ⊢ Type) → Vxf Γ (V ▷ (S ∘ Vxf-Exf f)) (W ▷ S)
-Vxf-▷ f S (p , v) = f p , v -}
 
 {- &-drop-▷ : ∀ {S} → ⟦ Γ & V ▷ S ⟧tel → ⟦ Γ & V ⟧tel
 &-drop-▷ (p , v , s) = p , v -}
@@ -345,6 +346,18 @@ data μ D p where
   con : ∀ {i} → ⟦ D ⟧ (μ D) p i → μ D p i
 \end{code}
 %</fpoint>
+
+{-
+data FunD (A : Type) {Γ} {J} : (D : Desc Γ J) → ⟦ Γ ⟧tel tt → J → Type
+data FunC (A : Type) {Γ} {J} {V} : (C : Con Γ J V) → ⟦ Γ & V ⟧tel → J → Type
+
+data FunD A where
+  [] : ∀ {p i} → FunD A [] p i
+  --_∷_ 
+
+data FunC A where
+  𝟙 : ∀ {j p i} → (i ≡ j p → A) → FunC A (𝟙 j) p i
+-}
 
 %<*fold-type>
 \begin{code}

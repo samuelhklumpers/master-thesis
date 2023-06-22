@@ -1,3 +1,7 @@
+%outline:
+%instead of positing a datastructure and then proving it correct, constructing datastructures methodically can give some insights into their correctness
+%we can run this manually, but we can also automate this by giving it as an ornamental description
+
 Suppose that we started writing and verifying some code using a vector-based implementation of the two-sided flexible array interface, but later decide to reimplement more efficiently using trees. It would be a shame to lay aside our vector lemmas, and rebuild the correctness proofs for trees from scratch. Instead, we note that both vectors and trees can be represented by their \AgdaFunction{lookup} function. In fact, we can ask for more, and rather than defining an array-like type and then showing that it is represented by a lookup function, we can go the other way around and define types by insisting that they are equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations by Okasaki \cite{purelyfunctional}, and has some formalized examples due to Hinze and Swierstra \cite{calcdata} and Ko and Gibbons \cite{progorn}. Numerical representations are our starting point for defining more complex datastructures based on simpler ones, so we demonstrate such a calculation. 
 
 \section{From numbers to containers}\label{sec:numrep}
@@ -45,7 +49,7 @@ into trees, since trees have a very different recursive structure! Thus, we must
 We use the \AgdaFunction{power} combinator to ensure that the digit at position $n$, which has weight $2^n$ in the interpretation of a binary number, also holds its value times $2^n$ elements. This makes sure that the number of elements in the tree shaped after a given binary number also is the value of that  binary number.
 
 
-\section{\added{}Generic numerical representations}\label{sec:trieo}
+\section{Generic numerical representations}\label{sec:trieo}
 We will demonstrate how we can use ornamental descriptions to generically construct datastructures. The claim is that calculating a datastructure is actually an ornamental operation, so we might call our approach ``calculating ornaments''. 
 
 We first define the kind of information constituting a type of ``natural numbers''
@@ -136,6 +140,24 @@ Solution 3:
         \item package descriptions and their thinnings
         \item something happens
     \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Not all functions $\mu D \to X$ come from algebras $[D] X \to X$. Consider the function $\mathrm{pred} : N \to N$, sending $\mathrm{suc} n$ to $n$ and 0 to 0.
+    % https://q.uiver.app/#q=WzAsNyxbMCwwLCIxK04iXSxbMCwxLCJOIl0sWzEsMSwiTiJdLFsxLDAsIjErTiJdLFsyLDAsIk4iXSxbMywxLCJOIl0sWzMsMCwiTiJdLFswLDEsIlxcbWF0aHJte3N1Y30iLDJdLFszLDIsIj8iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMCwzLCIxK1xcbWF0aHJte3ByZWR9Il0sWzEsMiwiXFxtYXRocm17cHJlZH0iLDJdLFswLDIsIlxcbGFuZ2xlMCwgXFxtYXRocm17aWR9XFxyYW5nbGUiLDFdLFs0LDUsIlxcbWF0aHJte2lkfSIsMV0sWzQsNiwiXFxtYXRocm17cHJlZH0iXSxbNiw1LCIhISEiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkb3R0ZWQifX19XV0=
+    \[\begin{tikzcd}
+        {1+N} & {1+N} & N & N \\
+        N & N && N
+        \arrow["{\mathrm{suc}}"', from=1-1, to=2-1]
+        \arrow["{?}", dashed, from=1-2, to=2-2]
+        \arrow["{1+\mathrm{pred}}", from=1-1, to=1-2]
+        \arrow["{\mathrm{pred}}"', from=2-1, to=2-2]
+        \arrow["{\langle0, \mathrm{id}\rangle}"{description}, from=1-1, to=2-2]
+        \arrow["{\mathrm{id}}"{description}, from=1-3, to=2-4]
+        \arrow["{\mathrm{pred}}", from=1-3, to=1-4]
+        \arrow["{!!!}", dotted, from=1-4, to=2-4]
+    \end{tikzcd}\]
+    We see that $\mathrm{pred}$ cannot come from a map $1 + N \to N$, as that map would be a retraction, while $\mathrm{pred}$ is not mono.
 \end{remark}
 
 \towrite{Some goals: 1. Ix and paths. 2. Ix n -> A iso IxTrieO n A. 3. something about the correctness of TrieO}
