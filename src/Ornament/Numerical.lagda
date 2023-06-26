@@ -1,5 +1,5 @@
 \begin{code}
-{-# OPTIONS --type-in-type --with-K #-}
+{-# OPTIONS --type-in-type --with-K --cubical #-}
 
 
 module Ornament.Numerical where
@@ -9,24 +9,24 @@ open import Ornament.Orn
 open import Ornament.OrnDesc
 
 
-open Agda.Primitive renaming (Set to Type)
+open import Cubical.Data.Equality hiding (_▷_; _≃_)
 
-open import Data.Unit
-open import Data.Empty
-open import Data.Product
-open import Data.Sum hiding (map₂)
+open import Cubical.Data.Unit renaming (Unit to ⊤)
+open import Cubical.Data.Empty
+open import Cubical.Data.Sigma hiding (_≡_)
+open import Cubical.Data.Sum
+open import Cubical.Data.Nat
+
+open import Function.Base
 
 open import Data.List as L using (List)
 open List
 
-open import Data.Nat hiding (_!)
 open import Data.Fin using (Fin; #_)
 open import Function.Base
 open import Data.Vec using (Vec)
 
-
-open import Relation.Binary.PropositionalEquality using (_≡_; cong; sym; refl; subst) renaming (trans to _∙_; subst₂ to subst2)
-
+open import Cubical.Foundations.Equiv
 
 
 private variable
@@ -47,7 +47,7 @@ Number : Info
 Number .𝟙i = ℕ
 Number .ρi = ℕ
 Number .σi S = ∀ p → S p → ℕ
-Number .δi Γ J = Γ ≡ ∅ × J ≡ ⊤ × ℕ
+Number .δi Γ J = (Γ ≡ ∅) × (J ≡ ⊤) × ℕ
 \end{code}
 %</Number>
 
@@ -71,14 +71,14 @@ toℕ {D = D} = toℕ-lift D id-InfoF
     toℕ-desc : (D : DescI If Γ ⊤) → ∀ {a b} → ⟦ D ⟧ (λ _ _ → ℕ) a b → ℕ
     toℕ-con : (C : ConI If Γ ⊤ V) → ∀ {a b} → ⟦ C ⟧ (λ _ _ → ℕ) a b → ℕ
 
-    toℕ-desc (C ∷ D) (inj₁ x) = toℕ-con C x
-    toℕ-desc (C ∷ D) (inj₂ y) = toℕ-desc D y
+    toℕ-desc (C ∷ D) (inl x) = toℕ-con C x
+    toℕ-desc (C ∷ D) (inr y) = toℕ-desc D y
 
     toℕ-con  (𝟙 {if = k} j) refl                          
              = ϕ .𝟙f k
 
     toℕ-con  (ρ {if = k} j g C)                   (n , x)
-             = ϕ .ρf k * n + toℕ-con C x
+             = ϕ .ρf k · n + toℕ-con C x
 
     toℕ-con  (σ S {if = S→ℕ} h C)                 (s , x)
              = ϕ .σf _ S→ℕ _ s + toℕ-con C x
@@ -86,7 +86,7 @@ toℕ {D = D} = toℕ-lift D id-InfoF
     toℕ-con  (δ {if = if} {iff = iff} j g R h C)  (r , x)
              with ϕ .δf _ _ if
     ...      | refl , refl , k  
-             = k * toℕ-lift R (ϕ ∘InfoF iff) r + toℕ-con C x
+             = k · toℕ-lift R (ϕ ∘InfoF iff) r + toℕ-con C x
 \end{code}
 %</toN-con>
 
@@ -107,10 +107,10 @@ BinND = 𝟙 {if = 0} _
       ∷ []
 
 bin-2 : μ BinND tt tt
-bin-2 = con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , refl))))
+bin-2 = con (inr (inr (inl (con (inl refl) , refl))))
 
 bin-5 : μ BinND tt tt
-bin-5 = con (inj₂ (inj₁ (con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , refl)))) , refl)))
+bin-5 = con (inr (inl (con (inr (inr (inl (con (inl refl) , refl)))) , refl)))
 
 -- simple the number system underlying simple finger trees
 DigND : DescI Number ∅ ⊤
@@ -127,11 +127,11 @@ FingND = 𝟙 {if = 0} _
 
 -- 1 ⟨ 0 ⟩ 1
 finger-2 : μ FingND tt tt
-finger-2 = con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , con (inj₁ refl) , con (inj₁ refl) , refl))))
+finger-2 = con (inr (inr (inl (con (inl refl) , con (inl refl) , con (inl refl) , refl))))
 
 -- 1 ⟨ 2 ⟩ 2
 finger-7 : μ FingND tt tt
-finger-7 = con (inj₂ (inj₂ (inj₁ (con (inj₁ refl) , finger-2 , con (inj₂ (inj₁ refl)) , refl))))
+finger-7 = con (inr (inr (inl (con (inl refl) , finger-2 , con (inr (inl refl)) , refl))))
 
 
 \end{code}
@@ -167,7 +167,7 @@ TrieO D = TrieO-desc D id-InfoF
 %<*TrieO-1>
 \begin{code}
   TrieO-con {f = f} (𝟙 {if = k} j) ϕ =                             
-    Δσ (λ { ((_ , A) , _) → Vec A (ϕ .𝟙f k)}) f proj₁              
+    Δσ (λ { ((_ , A) , _) → Vec A (ϕ .𝟙f k)}) f fst              
     (𝟙 ! (const refl))                           
     (λ p → refl)
 \end{code}
@@ -232,7 +232,7 @@ PathD′ E if = PathDD E if λ a b → con
     PathDC : (C : ConI If ∅ ⊤ V) (if : InfoF If Number) (f : Vxf ∅ W V) → (∀ b → ⟦ C ⟧ (λ _ _ → N) (tt , f b) _ → N) → List (Con ∅ (μ E tt tt) W)
 
     PathDD []      if ϕ = []
-    PathDD (C ∷ D) if ϕ = PathDC C if id (λ _ c → ϕ _ _ (inj₁ c)) L+ PathDD D if λ p i → ϕ p i ∘ inj₂
+    PathDD (C ∷ D) if ϕ = PathDC C if id (λ _ c → ϕ _ _ (inl c)) L+ PathDD D if λ p i → ϕ p i ∘ inr
 
     PathDC (𝟙 {if = k} j) if f ϕ
       = σ- (const (Fin (if .𝟙f k))) (𝟙 (λ { (_ , w) → ϕ w refl }))
@@ -240,8 +240,8 @@ PathD′ E if = PathDD E if λ a b → con
 
     -- looks scary, pretty regular to write down though
     PathDC (ρ {if = k} j g C) if f ϕ
-      = σ- (const (Fin (if .ρf k))) (σ+ (const N) (σ+ (λ { (p , w , _) → ⟦ C ⟧ (λ _ _ → N) (p , f w) tt }) (ρ0 (proj₂ ∘ proj₁ ∘ proj₂) (𝟙 λ { (_ , (w , n) , c) → ϕ w (n , c) }))))
-      ∷ L.map (σ+ (const N)) (PathDC C if (f ∘ proj₁) (λ { (w , n) c → ϕ w (n , c) }))
+      = σ- (const (Fin (if .ρf k))) (σ+ (const N) (σ+ (λ { (p , w , _) → ⟦ C ⟧ (λ _ _ → N) (p , f w) tt }) (ρ0 (snd ∘ fst ∘ snd) (𝟙 λ { (_ , (w , n) , c) → ϕ w (n , c) }))))
+      ∷ L.map (σ+ (const N)) (PathDC C if (f ∘ fst) (λ { (w , n) c → ϕ w (n , c) }))
 
     PathDC (σ S {if = k} h C)     if f ϕ
       = σ+ (λ { (p , w) → S (p , f w) }) (σ+ (λ { (p , w , s) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , s)) tt }) (σ- (λ { (p , (w , s) , c) → Fin (if .σf _ k (p , f w) s) }) (𝟙 λ { (p , (w , s) , c) → ϕ w (s , c) })))
@@ -249,9 +249,34 @@ PathD′ E if = PathDD E if λ a b → con
 
     PathDC (δ {If′ = If′} {if = k} {iff = iff} j g R h C) if f ϕ with if .δf _ _ k
     ... | refl , refl , k
-      = σ- (const (Fin k)) (σ+ (const (μ R tt tt)) (σ+ (λ { (p , w , r) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , r)) tt }) (δ- (proj₂ ∘ proj₁ ∘ proj₂) ! (PathD′ R (if ∘InfoF iff)) (𝟙 λ { (p , (w , r) , c) → ϕ w (r , c) }))))
+      = σ- (const (Fin k)) (σ+ (const (μ R tt tt)) (σ+ (λ { (p , w , r) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , r)) tt }) (δ- (snd ∘ fst ∘ snd) ! (PathD′ R (if ∘InfoF iff)) (𝟙 λ { (p , (w , r) , c) → ϕ w (r , c) }))))
       ∷ L.map (δ+ ! ! R) (PathDC C if (λ { (w , r) → h (f w , r) }) λ { (w , r) c → ϕ w (r , c) })
 \end{code}
+
+unμ : {D : DescI If Γ J} → ∀ {p i} → μ D p i ≃ ⟦ D ⟧ (μ D) p i
+unμ .fst (con x) = x
+unμ .snd .equiv-proof y .fst = con y , λ i → y
+unμ .snd .equiv-proof y .snd (con x , p) = ΣPathP ((λ i → con (p (~ i))) , λ j i → p (~ j ∨ i))
+
+PathD-correct : ∀ D n → μ (PathD D) tt n ≃ Fin (toℕ n)
+PathD-correct D n = compEquiv unμ {!compEquiv (go D id-InfoF n) {!!}!}
+  where
+  open PathD D
+
+  go :  (E : DescI If ∅ ⊤) (if : InfoF If Number)
+        (c : ⟦ E ⟧ (λ _ _ → N id-InfoF) ⇶ (λ _ _ → N id-InfoF))
+     →  ∀ n → ⟦ PathDD id-InfoF E if c ⟧ (μ (PathD D)) tt n ≃ ⟦ PathDD id-InfoF E if c ⟧ (λ _ n → Fin (toℕ n)) tt n
+     
+  go2 : (E : ConI If ∅ ⊤ V) (if : InfoF If Number) → ∀ n v → ⟦ {!PathDC!} ⟧ (μ (PathD D)) (tt , v) n ≃ ⟦ {!!} ⟧ (λ _ n → Fin (toℕ n)) (tt , v) n
+
+  go []       _  _ _ = idEquiv ⊥
+  go (E ∷ Es) if c n = {!⟦ PathDD id-InfoF (E ∷ Es) if c ⟧ (μ (PathD D)) tt n!}
+  
+  --go []       n = {!idEquiv ⊥!}
+  --go (E ∷ Es) n = {!⊎-equiv (go2 E n tt) (go Es n)!}
+
+  go2 E n = {!!}
+
 
 \begin{code}
 BinID : Desc ∅ (μ BinND tt tt)
@@ -270,7 +295,7 @@ BinI n = μ BinID tt n
 
 -- like the 3rd index into bin-5
 bin-3/5 : BinI bin-5
-bin-3/5 = con (inj₂ (inj₁ (# 1 , _ , (refl , ((con (inj₂ (inj₂ (inj₂ (inj₂ (inj₁ (_ , (# 0 , refl)))))))) , refl)))))
+bin-3/5 = con (inr (inl (# 1 , _ , (refl , ((con (inr (inr (inr (inr (inl (_ , (# 0 , refl)))))))) , refl)))))
 \end{code}
 
 ITrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) id (μ D tt tt) ! (toDesc (TrieO D))
@@ -289,13 +314,13 @@ ITrieO D = ITrieO′ D D id-InfoF
                  → ConOrnDesc Plain {W = W} {K = μ D' tt tt} g ! (toCon {f = f} (TrieO.TrieO-con D' C if))
 
       ITrieO-desc []      ϕ if = []
-      ITrieO-desc (C ∷ D) ϕ if = ITrieO-con C (λ a b x → ϕ tt b (inj₁ x)) if ∷ (ITrieO-desc D (ϕ ∘₃ inj₂) if)
+      ITrieO-desc (C ∷ D) ϕ if = ITrieO-con C (λ a b x → ϕ tt b (inl x)) if ∷ (ITrieO-desc D (ϕ ∘₃ inr) if)
       
       ITrieO-con {f = f} {g = g} (𝟙 {if = k} j) ϕ if
-        = σ _ id (g ∘ proj₁) (𝟙 (λ { (p , w , _) → ϕ p w refl }) λ p → refl) (λ p → refl)
+        = σ _ id (g ∘ fst) (𝟙 (λ { (p , w , _) → ϕ p w refl }) λ p → refl) (λ p → refl)
 
       ITrieO-con {f = f} {g = g} (ρ {if = k} j h C) ϕ if
-        = Δσ (const N) (g ∘ proj₁) id
+        = Δσ (const N) (g ∘ fst) id
         ( ρ (λ (p , w , n) → n) (λ { (_ , A) → _ , Vec A (if .ρf k) })
           (ITrieO-con C (λ { a (u , n) x → ϕ a u (n , x) }) if)
         (λ p → refl) (λ p → refl)) (λ p → refl)
@@ -308,13 +333,13 @@ ITrieO D = ITrieO′ D D id-InfoF
         
       ITrieO-con {f = f} {g = g} (δ {if = k} {iff = iff} j g' R h C) ϕ if with if .δf _ _ k
       ... | refl , refl , k
-        = Δσ (const (μ R tt tt)) (g ∘ proj₁) id
-        ( Δσ (const (μ D' tt tt)) (g ∘ proj₁ ∘ proj₁) id
-        ( ∙δ {f'' = VxfO-▷-map (g ∘ proj₁ ∘ proj₁)
+        = Δσ (const (μ R tt tt)) (g ∘ fst) id
+        ( Δσ (const (μ D' tt tt)) (g ∘ fst ∘ fst) id
+        ( ∙δ {f'' = VxfO-▷-map (g ∘ fst ∘ fst)
                      (liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
-                     (liftM2 (μ (toDesc (ITrieO-desc R {!!} (if ∘InfoF iff)))) (λ p → tt , Vec (id (p .proj₁) .proj₂) k) (λ x → proj₂ (proj₂ x)))
+                     (liftM2 (μ (toDesc (ITrieO-desc R {!!} (if ∘InfoF iff)))) (λ p → tt , Vec (id (p .fst) .snd) k) (λ x → snd (snd x)))
                      {!!} }
-             (λ { ((_ , A) , ((w , r) , _)) → tt , Vec A k }) (proj₂ ∘ proj₂)
+             (λ { ((_ , A) , ((w , r) , _)) → tt , Vec A k }) (snd ∘ snd)
           (ITrieO-con C {!λ { a (((w , r) , n) , _)  x → ϕ a w (r , {!!}) }!} if)
           {!ITrieO R!} id
         (λ _ _ → refl) (λ _ _ → refl) λ p → refl) λ p → refl) λ p → refl

@@ -1,19 +1,17 @@
 \begin{code}
-{-# OPTIONS --type-in-type --with-K #-}
+{-# OPTIONS --type-in-type --with-K  --cubical #-}
 
 module Ornament.Desc where
 
-open Agda.Primitive renaming (Set to Type)
+open import Cubical.Data.Equality hiding (_▷_)
 
-open import Data.Unit
-open import Data.Empty
-open import Data.Product
-open import Data.Sum hiding (map₂)
-open import Data.Nat
+open import Cubical.Data.Unit renaming (Unit to ⊤)
+open import Cubical.Data.Empty
+open import Cubical.Data.Sigma hiding (_≡_)
+open import Cubical.Data.Sum
+open import Cubical.Data.Nat
+
 open import Function.Base
-
-open import Relation.Binary.PropositionalEquality using (_≡_; cong; sym; refl; subst) renaming (trans to _∙_; subst₂ to subst2)
-
 
 private variable
   J K L : Type
@@ -23,7 +21,6 @@ private variable
 
 infixr 5 _∷_
 infixr 10 _▷_
-
 \end{code}
 
 %<*shorthands>
@@ -260,7 +257,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 σ+ S {if = if} C = σ S {if = if} id C
 
 σ- : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J V → ConI If Γ J V
-σ- S {if = if} C = σ S {if = if} proj₁ C
+σ- S {if = if} C = σ S {if = if} fst C
 \end{code}
 %</sigma-pm>
 
@@ -269,7 +266,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 δ+ {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R id D
 
 δ- : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ J V → ConI If Γ J V
-δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R proj₁ D
+δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R fst D
 
 -- ordinary recursive field
 ρ0 : {if : If .ρi} {V : ExTel Γ} → V ⊢ J → ConI If Γ J V → ConI If Γ J V
@@ -375,8 +372,8 @@ mapCon : ∀ {D' : DescI If Γ J} {V} (C : ConI If Γ J V) {X}
 
 fold f p i (con x) = f p i (mapDesc _ p i f x)
 
-mapDesc (C ∷ D) p j f (inj₁ x) = inj₁ (mapCon C p j tt f x)
-mapDesc (C ∷ D) p j f (inj₂ y) = inj₂ (mapDesc D p j f y)
+mapDesc (C ∷ D) p j f (inl x) = inl (mapCon C p j tt f x)
+mapDesc (C ∷ D) p j f (inr y) = inr (mapDesc D p j f y)
 
 mapCon (𝟙 k)         p j v f      x  = x
 mapCon (ρ k g C)     p j v f (r , x) = fold f (g p) (k (p , v)) r , mapCon C p j v f x
@@ -387,10 +384,10 @@ mapCon (δ k g R h C) p j v f (r , x) = r , mapCon C p j (h (v , r)) f x
 %<*par-shorthand>
 \begin{code}
 par : Γ ⊢ A → Γ & V ⊢ A 
-par f = f ∘ (tt ,_) ∘ proj₁
+par f = f ∘ (tt ,_) ∘ fst
 
-top : ∀ {S} → (Γ ▷ S) ⊧ (S ∘ map₂ proj₁)
-top = proj₂ ∘ proj₂
+top : ∀ {S} → (Γ ▷ S) ⊧ λ v → S (v .fst , v .snd .fst)
+top = snd ∘ snd
 
 pop : ∀ {S} → Γ ⊢ A → (Γ ▷ S) ⊢ A
 pop f (t , p , s) = f (t , p)
@@ -443,15 +440,15 @@ module Descriptions where
   module Test where
     open import Data.List
 
-    toList : Vec ⇶ λ A _ → List (proj₂ A)
+    toList : Vec ⇶ λ A _ → List (snd A)
     toList = fold go
       where
-      go : ⟦ VecD ⟧ (λ z _ → List (proj₂ z)) ⇶ (λ z _ → List (proj₂ z))
-      go A i (inj₁ _)                       = []
-      go A i (inj₂ (inj₁ (x , _ , xs , _))) = x ∷ xs
+      go : ⟦ VecD ⟧ (λ z _ → List (snd z)) ⇶ (λ z _ → List (snd z))
+      go A i (inl _)                       = []
+      go A i (inr (inl (x , _ , xs , _))) = x ∷ xs
 
     vec-1 : Vec (tt , ⊤) 1
-    vec-1 = con (inj₂ (inj₁ (tt , 0 , ((con (inj₁ refl)) , refl))))
+    vec-1 = con (inr (inl (tt , 0 , ((con (inl refl)) , refl))))
 
     list-1 : List ⊤
     list-1 = toList _ _ vec-1

@@ -1,23 +1,21 @@
 \begin{code}
     
-{-# OPTIONS --type-in-type --with-K #-}
+{-# OPTIONS --type-in-type --with-K --cubical #-}
 
 
 module Ornament.Orn where
 
 open import Ornament.Desc
 
+open import Cubical.Data.Equality hiding (_▷_)
 
-open Agda.Primitive renaming (Set to Type)
+open import Cubical.Data.Unit renaming (Unit to ⊤)
+open import Cubical.Data.Empty
+open import Cubical.Data.Sigma hiding (_≡_)
+open import Cubical.Data.Sum
+open import Cubical.Data.Nat
 
-open import Data.Unit
-open import Data.Empty
-open import Data.Product
-open import Data.Sum hiding (map₂)
-open import Data.Nat
 open import Function.Base
-
-open import Relation.Binary.PropositionalEquality using (_≡_; cong; sym; refl; subst) renaming (trans to _∙_; subst₂ to subst2)
 
 
 private variable
@@ -29,6 +27,10 @@ private variable
 
 private variable
   If If′ If″ If‴ : Info
+
+
+transport2 : ∀ (C : A → B → Type) {x y : A} {z w : B} → x ≡ y → z ≡ w → C x z → C y w
+transport2 C refl refl b = b
 \end{code}
 
 Ornaments
@@ -114,14 +116,14 @@ Extending
   Δσ  : ∀ {W'} {S} {D : ConI If Γ J V} {E : ConI If′ Δ K W'}
       → (f' : VxfO c _ _) → {h : Vxf Δ _ _}
       → ConOrn f' e D E
-      → (∀ {p'} (p : ⟦ W ▷ S ⟧tel p') → f (p .proj₁) ≡ f' (h p))
+      → (∀ {p'} (p : ⟦ W ▷ S ⟧tel p') → f (p .fst) ≡ f' (h p))
       → ∀ {if′}
       → ConOrn f e D (σ S {if = if′} h E)
  
   Δδ  : ∀  {W'} {R : DescI If″ Θ L} {D : ConI If Γ J V} {E : ConI If′ Δ K W'}
            {f' : VxfO c _ _} {m} {k} {h : Vxf Δ _ _}
       → ConOrn f' e D E
-      → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R) m k ⟧tel p') → f (p .proj₁) ≡ f' (h p))
+      → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R) m k ⟧tel p') → f (p .fst) ≡ f' (h p))
       → ∀ {if′ iff′}
       → ConOrn f e D (δ {if = if′} {iff = iff′} k m R h E)
 \end{code}
@@ -148,7 +150,6 @@ Fixing
 Composition
 %<*Orn-comp>
 \begin{code}
-
   ∙δ  : ∀  {Θ Λ M L W' V'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W'}
            {R : DescI If″ Θ L} {R' : DescI If‴ Λ M} {c' : Cxf Λ Θ} {e' : M → L}
            {f'' : VxfO c W' V'} {fΘ : V ⊢ ⟦ Θ ⟧tel tt} {fΛ : W ⊢ ⟦ Λ ⟧tel tt}
@@ -159,7 +160,7 @@ Composition
       → (p₂ : ∀ q w → e' (m (q , w))  ≡ l (c q , f w))
       → ( ∀ {p'} (p : ⟦ W ▷ liftM2 (μ R') fΛ m ⟧tel p') →  f'' (h p) 
             ≡ g  (VxfO-▷-map f (liftM2 (μ R) fΘ l) (liftM2 (μ R') fΛ m)
-                 (λ q w x →  subst2 (μ R) (p₁ _ _) (p₂ _ _)
+                 (λ q w x →  transport2 (μ R) (p₁ _ _) (p₂ _ _)
                              (ornForget O (fΛ (q , w)) x)) p))
       → ∀ {if if′}
       → ∀ {iff iff′}
@@ -214,19 +215,19 @@ erase  : ∀ {D : DescI If Γ J} {E : DescI If′ Δ K} {f} {e} {X : PIType Γ J
 \begin{code}
 erase' : ∀ {V W} {X : PIType Γ J} {D' : ConI If Γ J V} {E' : ConI If′ Δ K W} {c : Cxf Δ Γ} {f : VxfO c _ _} {e} (O : ConOrn f e D' E') → ∀ p k → ⟦ E' ⟧ (pre₂ X c e) p k → ⟦ D' ⟧ X (over f p) (e k)
 
-erase (O ∷ Os) p k (inj₁ x) = inj₁ (erase' O (p , tt) k x)
-erase (O ∷ Os) p k (inj₂ y) = inj₂ (erase Os p k y)
+erase (O ∷ Os) p k (inl x) = inl (erase' O (p , tt) k x)
+erase (O ∷ Os) p k (inr y) = inr (erase Os p k y)
 
-erase' (𝟙 j) p k x = cong _ x ∙ j p
-erase' {X = X} (ρ O q r) p k (x , y) = subst2 X (sym (q _)) (r _) x , erase' O p k y
-erase' {X = X} {c = c} (σ {D = D} {h = h} f' O q) (p , v) k (s , x) = s , subst (λ z → ⟦ D ⟧ X z _) (cong (c p ,_) (sym (q _))) (erase' O (p , h (v , s)) k x)
-erase' {X = X} {c = c} (δ {D = D} O q) (p , v) k (r , x) = r , subst (λ z → ⟦ D ⟧ X z _) (cong (c p ,_) (sym (q _)) ) (erase' O _ k x)
+erase' (𝟙 j) p k x = ap _ x ∙ j p
+erase' {X = X} (ρ O q r) p k (x , y) = transport2 X (sym (q _)) (r _) x , erase' O p k y
+erase' {X = X} {c = c} (σ {D = D} {h = h} f' O q) (p , v) k (s , x) = s , transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _))) (erase' O (p , h (v , s)) k x)
+erase' {X = X} {c = c} (δ {D = D} O q) (p , v) k (r , x) = r , transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _)) ) (erase' O _ k x)
 erase' (Δρ O) (p , v) k (x , y) = erase' O _ k y
-erase' {X = X} {c = c} (Δσ {D = D} f' O q) (p , v) k (x , y) = subst (λ z → ⟦ D ⟧ X z _) (cong (c p ,_) (sym (q _))) (erase' O _ k y)
-erase' {X = X} {c = c} (Δδ {D = D} O q) (p , v) k (x , y) = subst (λ z → ⟦ D ⟧ X z _) (cong (c p ,_) (sym (q _))) (erase' O _ k y)
+erase' {X = X} {c = c} (Δσ {D = D} f' O q) (p , v) k (x , y) = transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _))) (erase' O _ k y)
+erase' {X = X} {c = c} (Δδ {D = D} O q) (p , v) k (x , y) = transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _))) (erase' O _ k y)
 erase' (∇σ s O) (p , v) k x = s _ , erase' O _ k x
 erase' (∇δ s O) (p , v) k x = s _ , erase' O _ k x
-erase' {X = X} {c = c} (∙δ {D = D} DE RR' p₁ p₂ p₃) (p , v) k (x , y) = subst2 (μ _) (p₁ _ _) (p₂ _ _) (ornForget RR' _ x) , subst (λ z → ⟦ D ⟧ X z _) (cong (c p ,_) (p₃ _)) (erase' DE _ _ y)
+erase' {X = X} {c = c} (∙δ {D = D} DE RR' p₁ p₂ p₃) (p , v) k (x , y) = transport2 (μ _) (p₁ _ _) (p₂ _ _) (ornForget RR' _ x) , transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (p₃ _)) (erase' DE _ _ y)
 \end{code}
 
 %<*ornAlg>

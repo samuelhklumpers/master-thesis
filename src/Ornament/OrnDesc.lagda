@@ -1,5 +1,5 @@
 \begin{code}
-{-# OPTIONS --type-in-type --with-K #-}
+{-# OPTIONS --type-in-type --with-K --cubical #-}
 
 
 module Ornament.OrnDesc where
@@ -7,17 +7,15 @@ module Ornament.OrnDesc where
 open import Ornament.Desc
 open import Ornament.Orn
 
+open import Cubical.Data.Equality hiding (_▷_)
 
-open Agda.Primitive renaming (Set to Type)
+open import Cubical.Data.Unit renaming (Unit to ⊤)
+open import Cubical.Data.Empty
+open import Cubical.Data.Sigma hiding (_≡_)
+open import Cubical.Data.Sum
+open import Cubical.Data.Nat
 
-open import Data.Unit
-open import Data.Empty
-open import Data.Product
-open import Data.Sum hiding (map₂)
-open import Data.Nat
 open import Function.Base
-
-open import Relation.Binary.PropositionalEquality using (_≡_; cong; sym; refl; subst) renaming (trans to _∙_; subst₂ to subst2)
 
 
 private variable
@@ -104,13 +102,13 @@ data ConOrnDesc {If} If′ {Γ} {Δ} {c} {W} {V} {K} {J} f e where
   Δσ : ∀ {W'} S {D : ConI If Γ J V}
      → (f' : VxfO c _ _) (h : Vxf Δ (W ▷ S) W')
      → ConOrnDesc If′ {W = W'} f' e D
-     → (∀ {p'} (p : ⟦ W ▷ S ⟧tel p') → f (p .proj₁) ≡ f' (h p))
+     → (∀ {p'} (p : ⟦ W ▷ S ⟧tel p') → f (p .fst) ≡ f' (h p))
      → {if′ : If′ .σi S}
      → ConOrnDesc If′ f e D 
 
   Δδ : ∀ {W'} (R : DescI If″ Θ L) {D : ConI If Γ J V} {f' : VxfO c _ _} (k : W ⊢ L) (m : W ⊢ ⟦ Θ ⟧tel tt) (h : Vxf Δ (W ▷ liftM2 (μ R) m k) W')
      → ConOrnDesc If′ f' e D
-     → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R) m k ⟧tel p') → f (p .proj₁) ≡ f' (h p))
+     → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ R) m k ⟧tel p') → f (p .fst) ≡ f' (h p))
      → {if′ : If′ .δi Θ L} {iff′ : InfoF If″ If′}
      → ConOrnDesc If′ f e D 
 
@@ -136,7 +134,7 @@ data ConOrnDesc {If} If′ {Γ} {Δ} {c} {W} {V} {K} {J} f e where
      → {g : Vxf _ (V ▷ _) V'} (h : Vxf _ (W ▷ _) W')
      → (p₁ : ∀ q w → c' (fΛ (q , w)) ≡ fΘ (c q , f w))
      → (p₂ : ∀ q w → e' (m (q , w))  ≡ l (c q , f w))
-     → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ (toDesc RR')) fΛ m ⟧tel p') → f'' (h p) ≡ g (VxfO-▷-map f (liftM2 (μ R) fΘ l) (liftM2 (μ (toDesc RR')) fΛ m) (λ q w x → subst2 (μ R) (p₁ _ _) (p₂ _ _) (ornForget (toOrn RR') (fΛ (q , w)) x)) p))
+     → (∀ {p'} (p : ⟦ W ▷ liftM2 (μ (toDesc RR')) fΛ m ⟧tel p') → f'' (h p) ≡ g (VxfO-▷-map f (liftM2 (μ R) fΘ l) (liftM2 (μ (toDesc RR')) fΛ m) (λ q w x → transport2 (μ R) (p₁ _ _) (p₂ _ _) (ornForget (toOrn RR') (fΛ (q , w)) x)) p))
      → ∀ {if} {iff} {if′ : If′ .δi Λ M} {iff′ : InfoF If‴ If′}
      → ConOrnDesc If′ f e (δ {if = if} {iff = iff} l fΘ R g D)
 
@@ -177,7 +175,7 @@ toConOrn (∙δ fΛ m D RR' h p₁ p₂ x) = ∙δ (toConOrn D) (toOrn RR') p₁
 
 
 {-
-Goal: ∀ p i → (x : μ (toDesc (algOrnD D)) p i) → fold ϕ p (i .proj₁) (ornForget x) ≡ i .proj₁  
+Goal: ∀ p i → (x : μ (toDesc (algOrnD D)) p i) → fold ϕ p (i .fst) (ornForget x) ≡ i .fst  
 
 Strategy:
 1. Write down just the Desc
@@ -194,36 +192,36 @@ algDescD : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const 
 algDescC : ∀ {J K} → (C : ConI If Γ J V) → ⟦ C ⟧ (const K) ⇶ (const K) → Con Γ (Σ J K) V
 
 algDescD []      ϕ = []
-algDescD (C ∷ D) ϕ = algDescC C (λ p i x → ϕ (p .proj₁) i (inj₁ x)) ∷ (algDescD D (λ p i x → ϕ p i (inj₂ x)))
+algDescD (C ∷ D) ϕ = algDescC C (λ p i x → ϕ (p .fst) i (inl x)) ∷ (algDescD D (λ p i x → ϕ p i (inr x)))
 
 algDescC         (𝟙 j)         ϕ = 𝟙 λ pv → j pv , ϕ pv (j pv) refl
 algDescC {K = K} (ρ j g C)     ϕ = σ (K ∘ j) id (ρ (λ { (p , v , k) → j (p , v) , k }) g (algDescC {!C!} λ { (p , v , k) i x → ϕ (p , v) i (k , {!x!}) }))
 algDescC         (σ S h C)     ϕ = σ S id (algDescC {!C!} (λ { (p , v , s) i x → ϕ (p , v) i (s , {!x!}) }))
 algDescC         (δ j g R h C) ϕ = δ {!!} {!!} (algDescD R {!!}) {!!} {!!}
 
-algOrnD : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const K) → OrnDesc Plain Γ id (Σ J K) proj₁ D
-algOrnC : ∀ {J K} → (C : ConI If Γ J V) → ⟦ C ⟧ (const K) ⇶ (const K) → ConOrnDesc Plain {Δ = Γ} {K = Σ J K} id proj₁ C
+algOrnD : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const K) → OrnDesc Plain Γ id (Σ J K) fst D
+algOrnC : ∀ {J K} → (C : ConI If Γ J V) → ⟦ C ⟧ (const K) ⇶ (const K) → ConOrnDesc Plain {Δ = Γ} {K = Σ J K} id fst C
 
 algOrnD []      ϕ = []
-algOrnD (C ∷ D) ϕ = algOrnC C (λ p i x → ϕ (p .proj₁) i (inj₁ x)) ∷ (algOrnD D (λ p i x → ϕ p i (inj₂ x)))
+algOrnD (C ∷ D) ϕ = algOrnC C (λ p i x → ϕ (p .fst) i (inl x)) ∷ (algOrnD D (λ p i x → ϕ p i (inr x)))
 
 algOrnC (𝟙 j) ϕ = 𝟙 (λ pv → j pv , ϕ pv (j pv) refl) λ p → refl
 algOrnC {K = K} (ρ j g C) ϕ = Δσ (λ pv → K (j pv)) {!!} {!!} (ρ (λ { (p , v) → j (p , v) , {!!} }) g {!algOrnC C {!!}!} (λ p → refl) {!!}) {!!}
 algOrnC (σ S h C) ϕ = {!!}
 algOrnC (δ j g R h C) ϕ = {!!}
 
-correct : ∀ {J K} → (D : DescI If Γ J) (ϕ : ⟦ D ⟧ (const K) ⇶ (const K)) → ∀ p i → (x : μ (toDesc (algOrnD D ϕ)) p i) → fold ϕ p (i .proj₁) (ornForget (toOrn (algOrnD D ϕ)) p x) ≡ i .proj₂
+correct : ∀ {J K} → (D : DescI If Γ J) (ϕ : ⟦ D ⟧ (const K) ⇶ (const K)) → ∀ p i → (x : μ (toDesc (algOrnD D ϕ)) p i) → fold ϕ p (i .fst) (ornForget (toOrn (algOrnD D ϕ)) p x) ≡ i .snd
 correct [] ϕ p i (con ())
-correct (C ∷ D) ϕ p i (con (inj₁ x)) = {!!}
-correct (C ∷ D) ϕ p i (con (inj₂ y)) = correct D {!!} p i {!!} 
+correct (C ∷ D) ϕ p i (con (inl x)) = {!!}
+correct (C ∷ D) ϕ p i (con (inr y)) = correct D {!!} p i {!!} 
 
 
-algOrn : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const K) → OrnDesc Plain Γ id (Σ J K) proj₁ D
+algOrn : ∀ {J K} → (D : DescI If Γ J) → ⟦ D ⟧ (const K) ⇶ (const K) → OrnDesc Plain Γ id (Σ J K) fst D
 algOrn []       ϕ = []
 algOrn (C ∷ D)  ϕ = algOrnC C {!!} ∷ algOrn D {!!}
   where
-  algOrnC : ∀ {J} {K : J → Type} → (C : ConI If Γ J V) → ⟦ C ⟧ (λ p i → K i) ⇶ (λ p i → K i) → ConOrnDesc Plain {K = Σ J K} id proj₁ C
+  algOrnC : ∀ {J} {K : J → Type} → (C : ConI If Γ J V) → ⟦ C ⟧ (λ p i → K i) ⇶ (λ p i → K i) → ConOrnDesc Plain {K = Σ J K} id fst C
   algOrnC (𝟙 j) ϕ = 𝟙 (λ pv → j pv , ϕ pv (j pv) refl) λ p → refl
-  algOrnC {K = K} (ρ j g C) ϕ = Δσ (λ pv → K (j pv)) proj₁ id (ρ (λ { (p , v , k) → j (p , v) , k } ) g {!algOrnC C!} {!!} {!!}) λ p → refl
+  algOrnC {K = K} (ρ j g C) ϕ = Δσ (λ pv → K (j pv)) fst id (ρ (λ { (p , v , k) → j (p , v) , k } ) g {!algOrnC C!} {!!} {!!}) λ p → refl
   algOrnC (σ S h C) ϕ = σ S h id (algOrnC C λ a b x → ϕ {!!} b {!? !}) λ p → refl
   algOrnC (δ j g R h C) ϕ = {!!}
