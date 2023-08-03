@@ -154,16 +154,16 @@ Along the way, we also:
 \input{Background}
 
 
-\part{Descriptions and ornaments}
+\part{Descriptions and ornaments}\label{part:ornament}
 \input{Ornaments}
 
 
-\part{Numerical representations}
+\part{Numerical representations}\label{part:numrep}
 %\section{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
 \input{TypeGeneration}
 
 
-\part{Enumeration}
+\part{Enumeration}\label{part:enum}
 \input{Enumeration}
 
 
@@ -283,6 +283,53 @@ Still, representation independence in may be internalized outside the homotopica
 Rather than equating implementations after the fact, we can also ``compute'' datastructures by imposing equations. In the case of container types, one may observe similarities to number systems \cite{purelyfunctional} and call such containers numerical representations. One can then use these representations to prototype new datastructures that automatically inherit properties and equalities from their underlying number systems \cite{calcdata}.
 
 From another perspective, numerical representations run by using representability as a kind of ``strictification'' of types. %This suggests that we may be able to generalize the approach of numerical representations, using that any (non-indexed) infinitary inductive-recursive type supports a lookup operation \cite{glookup}.
+
+\part{Discussion}
+
+\section{Temporary: future work (\autoref{part:ornament})}
+\begin{remark}
+    Note that this allows us to express datatypes like finger trees, but not rose trees. Such datatypes would need a way to place a functor ``around the \AgdaInductiveConstructor{ρ}'', which then also requires a description of strictly positive functors. In our setup, this could only be encoded by separating general descriptions from strictly positive descriptions. The non-recursive fields of these strictly positive descriptions then need to be restricted to only allow compositions of strictly positive context functions. 
+\end{remark} % \investigate{This setup does not allow nesting over recursive fields, which is necessary for structures like rose trees. This is actually kind of essential for enumeration. Nesting over a recursive field is problematic: we can incorporate it by adding ``this'' implicitly to a \AgdaInductiveConstructor{δ}, but then the \AgdaBoundFontStyle{R} needs to be strictly positive in its last argument, meaning we need to split \AgdaDatatype{Desc} into a strictly positive part and normal part. The strictly positive part should then only allow strictly positive parameter transforms in recursive and non-recursive fields, requiring an embedding of transforms.}
+
+\begin{remark}
+    Variable transforms are not essential in these descriptions, but there are a couple of reasons for keeping them. In particular, they make it possible to reuse a description in multiple contexts, and save us from writing complex expressions in the indices of our ornaments. On the other hand, the transforms still make defining ornaments harder (the majority of the commuting squares are from variables). Isolating them into a single constructor of \AgdaDatatype{Desc}, call it \AgdaInductiveConstructor{v}, seems like a good middle ground, but raises some odd questions, like ``why is there no ornament between \AgdaBoundFontStyle{v (g ∘ f) C} and \AgdaBoundFontStyle{v g (v f C)}''. (Furthermore, this also does not simplify the indices of ornaments).
+\end{remark} %\investigate{Variable transforms are both less essential and less troublesome than I first thought. We can move variable transforms into a new former, and it probably simplifies the definition of ornaments a lot.}
+
+\begin{remark}
+    Rather, ornaments themselves could act as information bundles. If there was a description for \AgdaDatatype{Desc}, that is. Such a scheme of levitation would make it easier to switch between being able to actively manipulate information, and not having to interact with it at all. However, the complexity of our descriptions makes this a non-trivial task; since our \AgdaDatatype{Desc} is given by mutual recursion and induction-recursion, the descriptions, and the ornaments, would have to be amended to encode both forms of recursion as well.
+\end{remark} % \investigate{If we levitate, then informed descriptions become ornaments over \AgdaDatatype{Desc}. This gives us the best of both worlds (modulo reflecting the description into a datatype): in plain descriptions, information does not even exist, and in informed descriptions, it is explicit. For levitation, we likely need induction-recursion and mutual recursion.}
+
+\begin{remark}\label{rem:orn-lift}
+    Rather than having the user provide two indices and show that the square commutes, we can ask for a ``lift'' $k$
+    % https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzAsMSwiXFxidWxsZXQiXSxbMSwxLCJcXGJ1bGxldCJdLFswLDEsImUiXSxbMiwzLCJmIiwyXSxbMiwwLCJqIl0sWzMsMSwiaSIsMl0sWzMsMCwiayIsMV1d
+    \[\begin{tikzcd}
+        \bullet & \bullet \\
+        \bullet & \bullet
+        \arrow["e", from=1-1, to=1-2]
+        \arrow["f"', from=2-1, to=2-2]
+        \arrow["j", from=2-1, to=1-1]
+        \arrow["i"', from=2-2, to=1-2]
+        \arrow["k"{description}, from=2-2, to=1-1]
+    \end{tikzcd}\]
+    and derive the indices as $i = ek, j = kf$. However, this is more restrictive, unless $f$ is a split epi, as only then pairs $i,j$ and arrows $k$ are in bijection. In addition, this makes ornaments harder to work with, because we have to hit the indices definitionally, whereas asking for the square to commute gives us some leeway (i.e., the lift would require the user to transport the ornament). 
+\end{remark}
+
+\begin{remark}
+    Comparing SOP and computational sigmas. In particular, \texttt{s N (\ n -> v (replicate n tt))} is not in SOP without full nesting. SOP is good for generics in both directions (the conversion in both ways keeps the datatype like it is supposed to). On the other hand, computational sigmas make writing and proving about \texttt{Path} a lot easier.
+\end{remark}
+
+
+\section{Temporary: future work (\autoref{part:numrep})}
+
+\investigate{This implementation of TrieO always computes the random-access variant of the datastructure. Can we implement a variant which computes the ``Braun tree'' variant of the datastructure?}
+
+\investigate{Index types are a simple ornament over number types: paths. This is not quite like \cite{glookup}.}
+
+\investigate{Is Ix x -> A initial for the algebra of the algebraic ornament induced by TrieO? (This is \cite{calcdata}).}
+
+\investigate{While evidently Ix x != Fin (toN x) for arbitrary number systems, does the expected iso Ix x -> A = Trie A x yield Traversable, for free?}
+
+
 
 \printbibliography
 

@@ -54,16 +54,13 @@
 \AgdaModule{Function.Base}\<%
 \end{code}
 
-To be able to reason about datatypes themselves, we first have to represent datatypes by another datatype.
-%To inspect a datatype and manipulate its values safely, we have to represent the datatype internally.
-This can be done by defining a datatype of codes instructing how datatypes can be formed, together with a function assigning the meaning to this encoding, henceforth description and interpretation respectively. We will start from an encoding which captures only a small set of types, and work towards an encoding of parametrized indexed types.
 \begin{code}[hide]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{Finite}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \end{code}
 
-We can describe the universe of finite types with the following description:
+%<*fin-desc>
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -88,7 +85,9 @@ We can describe the universe of finite types with the following description:
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Desc}\<%
 \end{code}
-Each of the constructors of this description represents a type-former. In this case, the universe only contains sums and products of the 0 and 1; the meaning of the type-formers comes from the interpretation:
+%</fin-desc>
+
+%<*fin-mu>
 \begin{code}%
 %
 \>[2]\AgdaFunction{μ}\AgdaSpace{}%
@@ -133,7 +132,9 @@ Each of the constructors of this description represents a type-former. In this c
 \AgdaFunction{μ}\AgdaSpace{}%
 \AgdaBound{E}\<%
 \end{code}
-Booleans live in this universe as
+%</fin-mu>
+
+%<*BoolD>
 \begin{code}%
 %
 \>[2]\AgdaFunction{BoolD}\AgdaSpace{}%
@@ -147,7 +148,9 @@ Booleans live in this universe as
 \AgdaOperator{\AgdaInductiveConstructor{⊕}}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\<%
 \end{code}
-but to encode a type like \bN{} we need a different setup. Consider the definition
+%</BoolD>
+
+%<*Nat>
 \begin{code}%
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{ℕ}\AgdaSpace{}%
@@ -167,7 +170,8 @@ but to encode a type like \bN{} we need a different setup. Consider the definiti
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{ℕ}\<%
 \end{code}
-we can interpret this as the declaration \texttt{ℕ ≃ ⊤ ⊎ ℕ}, and formally \AgdaDatatype{ℕ} is indeed the least fixpoint of this equation. In category theoretic terms we would say that \AgdaDatatype{ℕ} is the initial algebra of its base functor \texttt{(⊤ ⊎\_)}.
+%</Nat>
+
 \begin{code}[hide]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{Recursive}\AgdaSpace{}%
@@ -178,8 +182,9 @@ we can interpret this as the declaration \texttt{ℕ ≃ ⊤ ⊎ ℕ}, and forma
 \AgdaDatatype{Desc}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Type}\<%
-\end{code} 
-Letting
+\end{code}
+
+%<*rec-intp-type>
 \begin{code}%
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
@@ -190,7 +195,9 @@ Letting
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPrimitive{Type}\<%
 \end{code}
-assign base functors to descriptions, we can take the fixpoint as
+%</rec-intp-type>
+
+%<*rec-mu>
 \begin{code}%
 %
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -214,9 +221,9 @@ assign base functors to descriptions, we can take the fixpoint as
 \AgdaDatatype{μ}\AgdaSpace{}%
 \AgdaBound{D}\<%
 \end{code}
-We see that if \texttt{⟦ ND ⟧} is \texttt{(⊤ ⊎\_)}, then \texttt{μ ND} satisfies the equation for \AgdaDatatype{ℕ}.
+%</rec-mu>
 
-We change the codes to
+%<*rec-desc>
 \begin{code}%
 %
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -239,7 +246,9 @@ We change the codes to
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Desc}\<%
 \end{code}
-and describe the base functors:
+%</rec-desc>
+
+%<*rec-intp>
 \begin{code}%
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -293,8 +302,9 @@ and describe the base functors:
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{)}\<%
 \end{code}
-Now, \AgdaInductiveConstructor{𝟙} encodes the leaves of a datatype, and \AgdaInductiveConstructor{ρ} encodes a recursive node. The operators \AgdaInductiveConstructor{⊕} and \AgdaInductiveConstructor{⊗} are changed to act pointwise. %(Conspicuously, 0 is missing, but you can see that \AgdaDatatype{⊥} is still represented in the universe. After all, \texttt{μ ρ} has no values).
-In this universe, we can define \AgdaDatatype{ℕ} by
+%</rec-intp>
+
+%<*NatD>
 \begin{code}%
 %
 \>[2]\AgdaFunction{ℕD}%
@@ -308,12 +318,15 @@ In this universe, we can define \AgdaDatatype{ℕ} by
 \AgdaOperator{\AgdaInductiveConstructor{⊕}}\AgdaSpace{}%
 \AgdaInductiveConstructor{ρ}\<%
 \end{code}
-To describe complex types more practically, we can merge \AgdaInductiveConstructor{ρ} and \AgdaInductiveConstructor{⊗}, and add a variant \AgdaInductiveConstructor{σ} of \AgdaInductiveConstructor{⊗}, which then represent adding a recursive and a non-recursive field respectively
+%</NatD>
+
 \begin{code}[hide]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{NearSOP}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \end{code}
+
+%<*field-desc>
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -356,10 +369,9 @@ To describe complex types more practically, we can merge \AgdaInductiveConstruct
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Desc}\<%
 \end{code}
-In \AgdaInductiveConstructor{σ}, we ask for a function \texttt{S → Desc} rather than just a \AgdaDatatype{Desc}, modelling a \AgdaDatatype{Desc} with a bound variable of type \texttt{S}. The interpretation is similar, interpreting \AgdaInductiveConstructor{ρ} and \AgdaInductiveConstructor{σ} as a product and dependent product respectively.
-%\texttt{ρ D} as \texttt{X × ⟦ D ⟧ X} and \texttt{σ S D} as \texttt{Σ[ s ∈ S ] ⟦ D s ⟧ X}.
+%</field-desc>
 
-In this universe we can describe types in which the fields be either \texttt{X}, the type itself, or another type \texttt{S}. For example, we can describe \AgdaDatatype{List} as
+%<*ListD>
 \begin{code}%
 %
 \>[2]\AgdaFunction{ListD}\AgdaSpace{}%
@@ -382,9 +394,8 @@ In this universe we can describe types in which the fields be either \texttt{X},
 \AgdaInductiveConstructor{ρ}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSymbol{)}\<%
 \end{code}
-using a type parameter from outside the description. We will soon see how we can internalize parameters, but since internalizing indices is easier, we will tackle indices first.
+%</ListD>
 
-We should note that there are two strategies we can use to describe an indexed type. First, we can define a description of a type indexed by \texttt{I} to simply be a function \texttt{I → Desc}, yielding a universe of index-first types. Second, we can pull the index completely into \AgdaDatatype{Desc}, and let \AgdaInductiveConstructor{𝟙} declare the index at the leaf of a constructor, more closely resembling Agda's datatypes. Both have their advantages and disadvantages, mainly, index-first datatypes are more space efficient. We opt however for the second option, because as we will see later, this allows us to keep descriptions ``relatively small'' (i.e., something like foldable) and more flexible in their levels.
 \begin{code}[hide]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{Indexed}\AgdaSpace{}%
@@ -399,6 +410,8 @@ We should note that there are two strategies we can use to describe an indexed t
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Type}\<%
 \end{code}
+
+%<*idesc>
 \begin{code}%
 %
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -456,7 +469,9 @@ We should note that there are two strategies we can use to describe an indexed t
 \AgdaDatatype{Desc}\AgdaSpace{}%
 \AgdaBound{I}\<%
 \end{code}
-Now \texttt{𝟙 j} says that this branch constructs a term of \texttt{X j}, while \texttt{ρ i} asks for a recursive field \texttt{X i}. As \texttt{Desc I} describes a type indexed by \texttt{I}, which is a function \texttt{I → Type}, we also have to interpret \texttt{Desc I} as an indexed functor 
+%</idesc>
+
+%<*iintp>
 \begin{code}%
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
@@ -544,9 +559,9 @@ Now \texttt{𝟙 j} says that this branch constructs a term of \texttt{X j}, whi
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \end{code}
-Applying an interpretation to an index asks for the constructors at that index. We see that by interpreting \texttt{𝟙 j} as an equality, we ensure that asking for an index indeed gives that index.
+%</iintp>
 
-In this universe we can describe vectors
+%<*VecD>
 \begin{code}%
 %
 \>[2]\AgdaFunction{VecD}\AgdaSpace{}%
@@ -579,16 +594,15 @@ In this universe we can describe vectors
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)))}\<%
 \end{code}
-making use of the variable binding in \AgdaInductiveConstructor{σ} to state that if we get a vector of length \texttt{n}, then we can construct a vector of length \texttt{suc n}.
+%</VecD>
 
-The observant reader might have noticed that we claim \texttt{I → Desc} does not give small descriptions, but still allow for \texttt{S → Desc}. We can fix this issue at the same time we implement parameters, keeping a form of variable binding. Implementing types with a single parameter can be done by interpreting to ``endofunctors'' \texttt{Type → I → Type}, adding another type-former accessing the parameter. To handle types with more parameters, which may depend on each other, we abstract descriptions over lists of parameters.
-
-We will first need some structure expressing the kinds of parameters that we can have. We could try using List Type, but this rules out types like \texttt{Σ (A : Type) (B : A → Type)}. Instead, we use a telescope, a list of types which explicitly captures the dependencies. We define telescopes and their meaning by induction-recursion:
 \begin{code}[hide]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{Tele}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \end{code}
+
+%<*Tel-simple>
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -631,9 +645,8 @@ We will first need some structure expressing the kinds of parameters that we can
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Tel}\<%
 \end{code}
-A telescope can either be empty, or be formed from a telescope and a type in the context of that telescope.
+%</Tel-simple>
 
-Contexts are interpreted as
 \begin{code}[hide]%
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -655,7 +668,7 @@ Contexts are interpreted as
 \AgdaOperator{\AgdaFunction{⟧tel}}\AgdaSpace{}%
 \AgdaBound{S}\<%
 \end{code}
-To deal with variables, we will also need to be able to describe variable telescopes. This means that while the parameter telescope in a description stays constant, the variable telescope grows independently when we add more \AgdaInductiveConstructor{σ}'s. We can represent this by parametrizing telescopes over a type
+
 \begin{code}[hide]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{Parameter}\AgdaSpace{}%
@@ -675,6 +688,8 @@ To deal with variables, we will also need to be able to describe variable telesc
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Type}\<%
 \end{code}
+
+%<*Tel>
 \begin{code}%
 %
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -750,7 +765,9 @@ To deal with variables, we will also need to be able to describe variable telesc
 \AgdaDatatype{Tel}\AgdaSpace{}%
 \AgdaBound{P}\<%
 \end{code}
-We define a shorthand \texttt{Γ ⊢ A} for the type of \texttt{S}, representing a value of \texttt{A} in context \texttt{Γ}. By changing \texttt{⟦\_⟧tel} to depend on a value of \texttt{P} as
+%</Tel>
+
+%<*Tel-intp>
 \begin{code}%
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -781,7 +798,9 @@ We define a shorthand \texttt{Γ ⊢ A} for the type of \texttt{S}, representing
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
-a telescope of the form
+%</Tel-intp>
+
+%<*ExTel>
 \begin{code}%
 %
 \>[2]\AgdaFunction{ExTel}\AgdaSpace{}%
@@ -801,6 +820,8 @@ a telescope of the form
 \AgdaOperator{\AgdaFunction{⟧tel}}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSymbol{)}\<%
 \end{code}
+%</ExTel>
+
 \begin{code}[hide]%
 %
 \>[2]\AgdaKeyword{private}\AgdaSpace{}%
@@ -825,7 +846,8 @@ a telescope of the form
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Type}\<%
 \end{code}
-can access all values of \texttt{Γ}, and can be treated as an extension of \texttt{Γ}. To interpret them, we define
+
+%<*Extel-intp>
 \begin{code}%
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}\&\AgdaUnderscore{}⟧tel}}\AgdaSpace{}%
@@ -857,7 +879,9 @@ can access all values of \texttt{Γ}, and can be treated as an extension of \tex
 \AgdaBound{V}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧tel}}\<%
 \end{code}
-To make use of this we also split \AgdaInductiveConstructor{⊕} and \AgdaDatatype{Desc}, making \AgdaDatatype{Desc} a list of constructors, in line with actual Agda datatypes
+%</Extel-intp>
+
+%<*sop-desc>
 \begin{code}%
 %
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -913,7 +937,9 @@ To make use of this we also split \AgdaInductiveConstructor{⊕} and \AgdaDataty
 \AgdaBound{Γ}\AgdaSpace{}%
 \AgdaBound{I}\<%
 \end{code}
-A constructor then starts off with the empty variable context, which grows as fields are added
+%</sop-desc>
+
+%<*sop-con>
 \begin{code}%
 %
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -973,7 +999,9 @@ A constructor then starts off with the empty variable context, which grows as fi
 \AgdaBound{V}\AgdaSpace{}%
 \AgdaBound{I}\<%
 \end{code}
-replacing \texttt{I} by \texttt{V ⊢ I} in \AgdaInductiveConstructor{𝟙} and \AgdaInductiveConstructor{ρ} allows the index of a constructor or argument to depend on the preceding fields, of which the values are made accessible by appending them to the context as \texttt{V ▷ S} in \AgdaInductiveConstructor{σ}. Finally, we interpret this as
+%</sop-con>
+
+%<*sop-intp>
 \begin{code}%
 %
 \>[2]\AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧C}}\AgdaSpace{}%
@@ -1136,7 +1164,9 @@ replacing \texttt{I} by \texttt{V ⊢ I} in \AgdaInductiveConstructor{𝟙} and 
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \end{code}
-with the fixpoint
+%</sop-intp>
+
+%<*sop-mu>
 \begin{code}%
 %
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
@@ -1175,3 +1205,4 @@ with the fixpoint
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{i}\<%
 \end{code}
+%</sop-mu>

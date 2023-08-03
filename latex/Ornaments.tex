@@ -182,35 +182,3 @@ Almost by construction, we have that an ornamental description can be decomposed
 \ExecuteMetaData[Ornament/OrnDesc]{toDesc}
 and an ornament between the starting description and this new description
 \ExecuteMetaData[Ornament/OrnDesc]{toOrn}
-
-
-\section{Temporary: future work}
-\begin{remark}
-    Note that this allows us to express datatypes like finger trees, but not rose trees. Such datatypes would need a way to place a functor ``around the \AgdaInductiveConstructor{ρ}'', which then also requires a description of strictly positive functors. In our setup, this could only be encoded by separating general descriptions from strictly positive descriptions. The non-recursive fields of these strictly positive descriptions then need to be restricted to only allow compositions of strictly positive context functions. 
-\end{remark} % \investigate{This setup does not allow nesting over recursive fields, which is necessary for structures like rose trees. This is actually kind of essential for enumeration. Nesting over a recursive field is problematic: we can incorporate it by adding ``this'' implicitly to a \AgdaInductiveConstructor{δ}, but then the \AgdaBoundFontStyle{R} needs to be strictly positive in its last argument, meaning we need to split \AgdaDatatype{Desc} into a strictly positive part and normal part. The strictly positive part should then only allow strictly positive parameter transforms in recursive and non-recursive fields, requiring an embedding of transforms.}
-
-\begin{remark}
-    Variable transforms are not essential in these descriptions, but there are a couple of reasons for keeping them. In particular, they make it possible to reuse a description in multiple contexts, and save us from writing complex expressions in the indices of our ornaments. On the other hand, the transforms still make defining ornaments harder (the majority of the commuting squares are from variables). Isolating them into a single constructor of \AgdaDatatype{Desc}, call it \AgdaInductiveConstructor{v}, seems like a good middle ground, but raises some odd questions, like ``why is there no ornament between \AgdaBoundFontStyle{v (g ∘ f) C} and \AgdaBoundFontStyle{v g (v f C)}''. (Furthermore, this also does not simplify the indices of ornaments).
-\end{remark} %\investigate{Variable transforms are both less essential and less troublesome than I first thought. We can move variable transforms into a new former, and it probably simplifies the definition of ornaments a lot.}
-
-\begin{remark}
-    Rather, ornaments themselves could act as information bundles. If there was a description for \AgdaDatatype{Desc}, that is. Such a scheme of levitation would make it easier to switch between being able to actively manipulate information, and not having to interact with it at all. However, the complexity of our descriptions makes this a non-trivial task; since our \AgdaDatatype{Desc} is given by mutual recursion and induction-recursion, the descriptions, and the ornaments, would have to be amended to encode both forms of recursion as well.
-\end{remark} % \investigate{If we levitate, then informed descriptions become ornaments over \AgdaDatatype{Desc}. This gives us the best of both worlds (modulo reflecting the description into a datatype): in plain descriptions, information does not even exist, and in informed descriptions, it is explicit. For levitation, we likely need induction-recursion and mutual recursion.}
-
-\begin{remark}\label{rem:orn-lift}
-    Rather than having the user provide two indices and show that the square commutes, we can ask for a ``lift'' $k$
-    % https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzAsMSwiXFxidWxsZXQiXSxbMSwxLCJcXGJ1bGxldCJdLFswLDEsImUiXSxbMiwzLCJmIiwyXSxbMiwwLCJqIl0sWzMsMSwiaSIsMl0sWzMsMCwiayIsMV1d
-    \[\begin{tikzcd}
-        \bullet & \bullet \\
-        \bullet & \bullet
-        \arrow["e", from=1-1, to=1-2]
-        \arrow["f"', from=2-1, to=2-2]
-        \arrow["j", from=2-1, to=1-1]
-        \arrow["i"', from=2-2, to=1-2]
-        \arrow["k"{description}, from=2-2, to=1-1]
-    \end{tikzcd}\]
-    and derive the indices as $i = ek, j = kf$. However, this is more restrictive, unless $f$ is a split epi, as only then pairs $i,j$ and arrows $k$ are in bijection. In addition, this makes ornaments harder to work with, because we have to hit the indices definitionally, whereas asking for the square to commute gives us some leeway (i.e., the lift would require the user to transport the ornament). 
-\end{remark}
-
-
-%\investigate{Can these be simpler? Right now, these just construct the ornament and description on the fly, rather than actually asking for less.}

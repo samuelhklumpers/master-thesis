@@ -1,11 +1,17 @@
-By giving datatypes as descriptions, we can inspect and use their structure for generic programming. We can also relate datatypes by structure using ornaments. Ornaments, as a binary relation on \AgdaDatatype{Desc}, encode (informally) the relation of being at least as informative as another type:
-\[ ... \]
-This means that if there is an ornament from \texttt{D} to \texttt{E}, we can always convert the parameters and indices of \texttt{E} into those of \texttt{D}, as witnessed by \texttt{f} and \texttt{e}. Furthermore, we also have to be able to convert values of \texttt{E} to \texttt{D}
-\[ ... \] 
-In the definition of the ornaments, we include some relations which preserve structure, like
-\[ ... \]
-\dots. This codes ``reflexivity'' for leaves into the ornaments.
+By giving datatypes as descriptions, we can inspect and use their structure for generic programming. We can also relate datatypes by structure using ornaments. Ornaments, as a binary relation on \AgdaDatatype{Desc}, encode (informally) the relation of being at least as informative as another type.
 
+We encode the bulk of this relation at the level of constructors, lifting it to \AgdaDatatype{Desc} by taking lists.
+\ExecuteMetaData[Tex/Desc.tex]{orn-type}
+If \texttt{E} is more informative than \texttt{D}, we must be able to convert the parameters and indices of \texttt{E} to those of \texttt{D}, and also values of \texttt{E} to \texttt{D}. We ask for \texttt{g} and \texttt{i} to witness the former, while the latter forces us to keep the ornaments sufficiently small. This means that we have to be able to implement
+\ExecuteMetaData[Tex/Desc.tex]{orn-forget-type}
+We will do this by folding over the values using the algebra
+\ExecuteMetaData[Tex/Desc.tex]{eraseCon-type}
+which executes a single step of \AgdaFunction{ornForget}.
+
+We can encode ``reflexivity'' for leaves into the ornaments
+\ExecuteMetaData[Tex/Desc.tex]{pres-1}
+stating we can preserve a leaf from \texttt{D} in \texttt{E}; provided the equality, which expresses that the indices in both leaves agree up to \texttt{g} and \texttt{i}, holds. This equality allows us to erase leaves
+\ExecuteMetaData[Tex/Desc.tex]{erase-pres-1}
 The relation preserving recursive fields and the like
 \[ ... \] 
 give congruence under their respective formers.
