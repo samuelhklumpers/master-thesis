@@ -1,41 +1,62 @@
-%outline:
-%instead of positing a datastructure and then proving it correct, constructing datastructures methodically can give some insights into their correctness
-%we can run this manually, but we can also automate this by giving it as an ornamental description
+\begin{semicomment}
+outline:
+instead of positing a datastructure and then proving it correct, constructing datastructures methodically can give some insights into their correctness
+we can run this manually, but we can also automate this by giving it as an ornamental description}
 
 Suppose that we started writing and verifying some code using a vector-based implementation of the two-sided flexible array interface, but later decide to reimplement more efficiently using trees. It would be a shame to lay aside our vector lemmas, and rebuild the correctness proofs for trees from scratch. Instead, we note that both vectors and trees can be represented by their \AgdaFunction{lookup} function. In fact, we can ask for more, and rather than defining an array-like type and then showing that it is represented by a lookup function, we can go the other way around and define types by insisting that they are equivalent to such a function. This approach, in particular the case in which one calculates a container with the same shape as a numeral system, was dubbed numerical representations by Okasaki \cite{purelyfunctional}, and has some formalized examples due to Hinze and Swierstra \cite{calcdata} and Ko and Gibbons \cite{progorn}. Numerical representations are our starting point for defining more complex datastructures based on simpler ones, so we demonstrate such a calculation. 
+\end{semicomment}
+
+
+\begin{outline}
+3 Calculating datastructures using Ornaments
+
+In this part we return to the matter numerical representations. With 2.3 in mind, we can rephrase part our original question to ask
+
+> Can numerical representations be described as ornaments on their number systems?
+
+Let us look at a numerical representation presented as ornament in action.
+
+[ actually much like calculating datastructures in concept, but very different in practice ]: #
+\end{outline}
 
 \section{From numbers to containers}\label{sec:numrep}
-We can compute the type of vectors starting from \bN{}.\todo[inline]{Is there a simple twist or other interesting example that we can run through instead, or would anything else be too abrupt without starting from this simple case?}\footnote{This is adapted (and fairly abridged) from Calculating Datastructures \cite{calcdata}} For simplicity, we define them as a type computing function via the ``use-as-definition`` notation from before. We expect vectors to be represented by 
-\ExecuteMetaData[Tex/NumRep]{Lookup}
-where we use the finite type \AgdaDatatype{Fin} as an index into vector. Using this representation as a specification, we can compute both \AgdaDatatype{Fin} and a type of vectors. The finite type can be computed from the evident definition
-\ExecuteMetaData[Tex/NumRep]{Fin-def}
-using
-\ExecuteMetaData[Tex/NumRep]{leq-split}
-Likewise, vectors can be computed by applying a sequence of type isomorphisms
-\ExecuteMetaData[Tex/NumRep]{Vec}
-\investigate{SIP doesn't mesh very well with indexed stuff, does HSIP help?}
+\begin{outline}
+Let us put the calculation from 2.2 in the framework of ornaments. Recall the Peano naturals \bN and their description
 
-We can implement the following interface using \AgdaDatatype{Vec}
-\ExecuteMetaData[Tex/NumRep]{Array}
-and show that this satisfies some usual laws like
-\ExecuteMetaData[Tex/NumRep]{Laws}
-Since we defined \AgdaDatatype{Vec} such that it agrees with \AgdaDatatype{Lookup}, we can relate their implementations as well.
+:memo: NatD
 
-The implementation of arrays as functions is straightforward
-\ExecuteMetaData[Tex/NumRep]{FunArray}
-and clearly satisfies our interface
-\ExecuteMetaData[Tex/NumRep]{FunLaw}
-We can implement arrays based on \AgdaDatatype{Vec} as well\footnote{Note that, like any other type computing representation, we pay the price by not being able to pattern match directly on our type.}
-\ExecuteMetaData[Tex/NumRep]{VecArray}
-Now, rather than rederiving the laws for vectors, the equality allows us to transport them from \AgdaDatatype{Lookup} to \AgdaDatatype{Vec}.\footnote{Except that due to the simplicity of this case, the laws are trivial for \AgdaDatatype{Vec} as well.}
-\investigate{As you can see, taking ``use-as-definition'' too literally prevents Agda from solving a lot of metavariables.}
+which we will use as reference number system. The associated container then has constructors
 
-%\section{Relating types by structure: Ornamentation (unfinished)}\label{sec:ornament}
+:memo: ListD
+
+:warning: calculate
+
+But before we can answer the question in full generality, we need ask ourselves what kind of ornaments and number systems this question applies to. Construction similar to the one in this section (e.g., the construction from binary numbers \to binary trees \to indexed binary trees) will generally fit in any setup of descriptions and ornaments supporting (recursive) fields and indices. However, there are also other less regular datatypes which we can still recognize as numerical in nature.
+\end{outline}
+
+
+\section{Finger trees}
+\begin{outline}
+:warning: finger trees are pretty cool for a lot of reasons, but for us it is sufficient to remark that they are also the simplest way to get fast cons on both sides
+
+:warning: what are they though
+
+:warning: they do not fit at all
+
+:warning: so we need more stuff
+
+:warning: nested datatypes
+
+:warning: composites
+
+:warning: number systems
+\end{outline}
+
 \section{Numerical representations as ornaments}\label{sec:ornaments}
 Reflecting on this derivation for \bN{}, we could perform the same computation for \bL{} to get Braun trees. However, we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. This kind of ``modifying constructors'' is formalized by ornamentation \cite{progorn}, which lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped to go from one description to the other. \textit{Ornamental descriptions}, which act as one-sided ornaments, let us describe new datatypes by recording the modifications to an existing description.
 \todo[inline]{Put some minimal definitions here.}
 
-Looking back at \AgdaDatatype{Vec}, ornaments let us show that express that \AgdaDatatype{Vec} can be formed by introducing indices and adding a fields holding an elements to \bN{}.%\footnote{These and similar examples are also documented in \cite{progorn}} 
+Looking back at \AgdaDatatype{Vec}, ornaments let us show that express that \AgdaDatatype{Vec} can be formed by introducing indices and adding a fields holding an elements to \bN{}.
 However, deriving \AgdaDatatype{List} from \bN{} generalizes to \bL{} with less notational overhead, so we tackle that case first. We use the following description of \bN{}
 \ExecuteMetaData[Tex/NumRepOrn]{NatD}
 Here, \AgdaInductiveConstructor{σ} adds a field to the description, upon which the rest of the description can vary, and \AgdaInductiveConstructor{ṿ} lists the recursive fields and their indices (which can only be \AgdaInductiveConstructor{tt}).

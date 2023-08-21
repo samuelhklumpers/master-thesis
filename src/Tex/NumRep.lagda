@@ -15,14 +15,17 @@ open import Prelude.UseAs
 open import Extra.TypeIsos
 \end{code}
 
-%<*leq-split>
-\AgdaTarget{<-split}
+%<*Fin-lemmas>
 \begin{code}
-<-split : ∀ n → (Σ[ m ∈ ℕ ] m < suc n) ≃ (⊤ ⊎ (Σ[ m ∈ ℕ ] m < n))
+⊥-strict  : (A → ⊥) → A ≡ ⊥
+<-split   : ∀ n → (Σ[ m ∈ ℕ ] m < suc n) ≡ (⊤ ⊎ (Σ[ m ∈ ℕ ] m < n))
 \end{code}
-%</leq-split>
+%</Fin-lemmas>
+
 \begin{code}
-<-split n = isoToEquiv (iso to from sec ret)
+⊥-strict f = ua (uninhabEquiv f λ ())
+
+<-split n = isoToPath (iso to from sec ret)
   where
   to : (Σ[ m ∈ ℕ ] m < suc n) → (⊤ ⊎ (Σ[ m ∈ ℕ ] m < n))
   to (zero  , _)     = inl tt
@@ -43,7 +46,7 @@ open import Extra.TypeIsos
 
 %<*Fin-def>
 \AgdaTarget{Fin-def}
-\AgdaTarget{Fin}
+%\AgdaTarget{Fin}
 \begin{code}
 Fin-def : ∀ n → Def (Σ[ m ∈ ℕ ] m < n)
 Fin-def zero    =
@@ -52,7 +55,7 @@ Fin-def zero    =
      ⊥ ∎ use-as-def
 Fin-def (suc n) =
      (Σ[ m ∈ ℕ ] m < suc n)
-  ≡⟨ ua (<-split n) ⟩
+  ≡⟨ <-split n ⟩
      ⊤ ⊎ (Σ[ m ∈ ℕ ] m < n)
   ≡⟨ cong (⊤ ⊎_) (by-definition (Fin-def n)) ⟩
      ⊤ ⊎ defined-by (Fin-def n) ∎ use-as-def
@@ -62,30 +65,42 @@ Fin n = defined-by (Fin-def n)
 \end{code}
 %</Fin-def>
 
-
 %<*Lookup>
-\AgdaTarget{Lookup}
+%\AgdaTarget{Lookup}
 \begin{code}
 Lookup : Type → ℕ → Type
 Lookup A n = Fin n → A
 \end{code}
 %</Lookup>
 
+%<*Vec-lemmas>
+\begin{code}
+⊥→A≡⊤ : (⊥ → A) ≡ ⊤
+⊤→A≡A : (⊤ → A) ≡ A
+Π⊎≡⊎Π : (A ⊎ B → C) ≡ (A → C) × (B → C)
+\end{code}
+%</Vec-lemmas>
+\begin{code}
+⊥→A≡⊤ = isContr→≡Unit isContr⊥→A
+Π⊎≡⊎Π = ua Π⊎≃
+⊤→A≡A {A = A} = UnitToTypePath A
+\end{code}
+
 %<*Vec>
 \AgdaTarget{Vec-def}
-\AgdaTarget{Vec}
+%\AgdaTarget{Vec}
 \begin{code}
 Vec-def : ∀ A n → Def (Lookup A n) 
 Vec-def A zero    =
      (⊥ → A)
-  ≡⟨ isContr→≡Unit isContr⊥→A ⟩
+  ≡⟨ ⊥→A≡⊤ ⟩
      ⊤ ∎ use-as-def
 Vec-def A (suc n) = 
      ((⊤ ⊎ Fin n) → A)
-  ≡⟨ ua Π⊎≃ ⟩
+  ≡⟨ Π⊎≡⊎Π ⟩
      (⊤ → A) × (Fin n → A)
   ≡⟨ cong₂ _×_
-      (UnitToTypePath A)
+      ⊤→A≡A
       (by-definition (Vec-def A n)) ⟩
      A × (defined-by (Vec-def A n)) ∎ use-as-def
 

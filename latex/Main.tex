@@ -11,21 +11,17 @@
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 
-%\hypersetup{
-%    colorlinks=true,
-%    linkcolor=cyan
-%    }
 
 \usepackage{catchfilebetweentags}
 \usepackage{quiver} 
 \usepackage{tabularx}
-\usepackage{adjustbox}
-\usepackage{longtable}
+%\usepackage{adjustbox}
+%\usepackage{longtable}
 \usepackage{amsthm}
 \usepackage{amsmath}
+\usepackage{listings}
 
-
-\theoremstyle{plain}% default
+\theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{prop}[theorem]{Proposition}
@@ -38,29 +34,26 @@
 \newtheorem{claim}{Claim}[section]
 \newtheorem{example}{Example}[section]
 
-\renewcommand{\partautorefname}{Part}%
-\renewcommand{\sectionautorefname}{Section}%
-\renewcommand{\subsectionautorefname}{Subsection}%
+\renewcommand{\partautorefname}{Part}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Subsection}
 
-\providecommand{\theoremautorefname}{Theorem}%
-\providecommand{\lemmaautorefname}{Lemma}%
-\providecommand{\propautorefname}{Proposition}%
-\providecommand{\conjectureautorefname}{Conjecture}%
-\providecommand{\corautorefname}{Corollary}%
-
-\providecommand{\defnautorefname}{Definition}%
-\providecommand{\remarkautorefname}{Remark}%
-\providecommand{\exampleautorefname}{Example}%
-\providecommand{\claimautorefname}{Claim}%
+\providecommand{\theoremautorefname}{Theorem}
+\providecommand{\lemmaautorefname}{Lemma}
+\providecommand{\propautorefname}{Proposition}
+\providecommand{\conjectureautorefname}{Conjecture}
+\providecommand{\corautorefname}{Corollary}
+\providecommand{\defnautorefname}{Definition}
+\providecommand{\remarkautorefname}{Remark}
+\providecommand{\exampleautorefname}{Example}
+\providecommand{\claimautorefname}{Claim}
 
 
 \usepackage[links]{agda}
 %\AtBeginEnvironment{code}{\fontsize{8}{10}}
 \AgdaNoSpaceAroundCode{}
 
-% from: https://agda.readthedocs.io/en/v2.6.3/_downloads/59877ce886494c991a213f09e29b712c/article-luaxelatex-different-fonts.lagda.tex
 \usepackage{fontspec}
-
 \usepackage{luaotfload}
 
 \directlua{luaotfload.add_fallback
@@ -85,19 +78,27 @@
 \renewcommand{\AgdaCommentFontStyle}[1]{{\AgdaTypewriterFont{}#1}}
 \renewcommand{\AgdaBoundFontStyle}[1]{\textit{\AgdaSerifFont{}#1}}
 
+\newcommand{\AF}[1]{\AgdaFunction{#1}}
+\newcommand{\AD}[1]{\AgdaDatatype{#1}}
+\newcommand{\AV}[1]{\AgdaBoundFontStyle{#1}}
+\newcommand{\AIC}[1]{\AgdaInductiveConstructor{#1}}
+\newcommand{\ACC}[1]{\AgdaCoinductiveConstructor{#1}}
+
 \definecolor{git-green}{HTML}{13A10E}
 \definecolor{git-orange}{HTML}{C69026}
+\definecolor{nondescriptyellow}{HTML}{D6B656}
 
 \newcommand{\added}[1]{\textcolor{git-green}{+#1}}
 \newcommand{\changed}[1]{\textcolor{git-orange}{$\bullet$#1}}
 \newcommand{\towrite}[1]{\todo[color=cyan]{#1}}
 \newcommand{\toremove}[1]{\textcolor{red}{This is going to be (re)moved: ``#1''}}
 
+  
+\lstnewenvironment{semicomment}{\color{gray}\lstset{breaklines=true}}{}
+\lstnewenvironment{outline}{\color{nondescriptyellow}\lstset{breaklines=true}}{}
 
-% macros
 \newcommand{\investigate}[1]{\par\vspace{1\baselineskip}\textcolor{gray}{#1}\vspace{1\baselineskip}\par}
 
-% symbols
 \newcommand{\bN}{\AgdaDatatype{ℕ}}
 \newcommand{\bL}{\AgdaDatatype{Leibniz}}
 
@@ -109,65 +110,37 @@
 \begin{document}
 \maketitle
 
-%\begin{abstract}
-%This thesis explains the concepts of the structure identity principle, numerical representations, and ornaments, and aims to combine these to simplify the presentation and verification of finger trees, demonstrating the generalizability and improved compactness and security of the resulting code. Consequently, we also investigate to which extent ornaments, and other generic programs relying on axiom K, remain applicable in the cubical setting required for the structure identity principle.
-%\end{abstract}
+\begin{abstract}
+\begin{semicomment}
+This thesis explains the concepts numerical representations and ornaments, and aims to combine these to simplify the presentation and verification of finger trees. We demonstrate the generalizability and easier verification of the resulting code. Further, we also investigate to which extent descriptions and ornaments, and generic programs built on top of these, remain effective in a setting without axiom K.
+\end{semicomment}
+\end{abstract}
+    
 
 \tableofcontents
 
 \listoftodos
 
-\section{Introduction}\label{sec:intro}
+\section{Introduction}\label{sec:introduction}
 \input{Introduction}
-
-\subsection{The Problem}
-The main question of this project is: \textit{can we describe finger trees \cite{fingertrees} in the frameworks of numerical representations and ornamentation \cite{progorn}, simplifying the verification of their properties as flexible two-sided arrays?}\todo{Revisit this when further} This question generates a number of interesting subproblems, such as that the number system corresponding to finger trees has many representations for the same number, which we expect to describe using quotients \cite{cuagda} and reason about using representation independence \cite{iri}. %If this is accomplished or deemed infeasible at an early stage, we can generalize the results we have to other related problems; for example, we may view the problem of generating arbitrary values for testing as an instance of an enumeration problem.
-
-
-\subsection{Contributions}
-In this paper, we:\todo{Revisit this when further}
-\begin{itemize}
-    \item[x] Adapt ornaments to nested types.
-    \item[x] Allow ornaments to refer to sub-ornaments.
-    \item[x] Define a small universe of typical number systems.
-    \item[x] Give a generic derivation of numerical representations as ornaments from these number systems.
-%    \item Instantiate a Structure Identity Principle for these representations.
-\end{itemize}
-We follow this up by enumerating these, and more structures. We:
-\begin{itemize}
-    \item[x] Define hierarchies to enumerate terms by levels.
-    \item[x] Track the cardinalities of each level.
-    \item Include parametrized datatypes into this setup.
-    \item Modify this to include nested types.
-    \item[?] Adapt this approach to index-first datatypes.
-    \item Iterate the accessible indices per level.
-\end{itemize}
-Along the way, we also:
-\begin{itemize}
-    \item[x] Characterize identities of W-types.
-    \item[x] Express heterogeneous variants of datastructures as ornaments.
-\end{itemize}
 
 
 \part*{Background}\label{part:background}
 \addcontentsline{toc}{part}{\nameref{part:background}}
+We extend upon and make heavy use of existing work for generic programming and ornaments, so let us take a closer look at the nuts and bolts to see what all the concepts are about.
+
 \input{Background}
 
 
 \part{Descriptions and ornaments}\label{part:ornament}
+\changed{Somewhat final version above, draft/notes/rough comments/outline below.}
+\changed{Redo (or check) the Agda snippets below here.}
 \input{Ornaments}
 
 
 \part{Numerical representations}\label{part:numrep}
-%\section{Types from Specifications: Ornamentation and Calculation}\label{sec:numrep}
 \input{TypeGeneration}
 
-
-\part{Enumeration}\label{part:enum}
-\input{Enumeration}
-
-
-%\part{Temporary}
 
 \part{Related work}\label{part:related}
 \section{Descriptions and ornaments}
@@ -204,6 +177,8 @@ We compare our implementation to a selection of previous work, considering the f
     Ignore   & no              & ?                  & ?               & transform &         \\
     Set      & no              & no                 & no              & no        & yes     \\
 \end{tabular}
+
+
 
 
 
@@ -285,6 +260,18 @@ Rather than equating implementations after the fact, we can also ``compute'' dat
 From another perspective, numerical representations run by using representability as a kind of ``strictification'' of types. %This suggests that we may be able to generalize the approach of numerical representations, using that any (non-indexed) infinitary inductive-recursive type supports a lookup operation \cite{glookup}.
 
 \part{Discussion}
+\begin{outline}
+:warning: the trie ornament is hard to prove about
+
+:warning: nesting rather than branching
+
+:warning: folds don't give folds over parts
+
+:warning: composites complicate the indexed variant
+
+:warning: the index type becomes more awkward than with big sigmas
+\end{outline}
+
 
 \section{Temporary: future work (\autoref{part:ornament})}
 \begin{remark}
@@ -314,6 +301,9 @@ From another perspective, numerical representations run by using representabilit
     and derive the indices as $i = ek, j = kf$. However, this is more restrictive, unless $f$ is a split epi, as only then pairs $i,j$ and arrows $k$ are in bijection. In addition, this makes ornaments harder to work with, because we have to hit the indices definitionally, whereas asking for the square to commute gives us some leeway (i.e., the lift would require the user to transport the ornament). 
 \end{remark}
 
+
+
+
 \begin{remark}
     Comparing SOP and computational sigmas. In particular, \texttt{s N (\ n -> v (replicate n tt))} is not in SOP without full nesting. SOP is good for generics in both directions (the conversion in both ways keeps the datatype like it is supposed to). On the other hand, computational sigmas make writing and proving about \texttt{Path} a lot easier.
 \end{remark}
@@ -334,13 +324,17 @@ From another perspective, numerical representations run by using representabilit
 \printbibliography
 
 \part{Appendix}
+\begin{outline}
+    :warning: The other way of parameters-indices
+\end{outline}
+
 \appendix
 
 \section{Finger trees}
-\input{Fingertrees}
+%\input{Fingertrees}
 
 \section{Heterogenization}
-\input{Heterogenization.tex}
+%\input{Heterogenization.tex}
 
 
 \section{More equivalences for less effort}\label{sec:userfriendly}
@@ -362,6 +356,8 @@ The theorem is applied and demonstrated to the example of binary naturals. We re
 
 \towrite{Merge}
 
-\input{UserFriendly}
+%\input{UserFriendly}
+
+
 
 \end{document}

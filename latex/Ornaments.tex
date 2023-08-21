@@ -14,6 +14,17 @@ We base the encoding of off existing encodings \cite{sijsling,practgen}. The des
 We use type-in-type and with-K to simplify the presentation, noting that these can be eliminated respectively by moving to Typeω and by implementing interpretations as datatypes.
 
 \section{The descriptions}\label{ssec:desc}
+\begin{outline}
+:warning: let's blast out the descriptions
+
+:warning: recap: what do we want? (leaf, field, recursive, composite)
+
+:warning: how do we cram number systems in? bundles
+
+:warning: go (list everything)
+\end{outline}
+
+
 We use telescopes identical to those in \autoref{ssec:bg-desc}:
 \ExecuteMetaData[Ornament/Desc]{telescopes}
 Recall that a \AgdaDatatype{Tel} represents a sequence of types, which can depend on the external type $P$. This lets us represent a telescope succeeding another using \AgdaDatatype{ExTel}. A term of the interpretation \AgdaFunction{⟦\_⟧tel} is then a sequence of terms of all the types in the telescope.
@@ -105,18 +116,20 @@ We encode finger trees as
 \ExecuteMetaData[Ornament/Desc]{FingerD}
 In the third case, we have digits which are passed the parameters on both sides in composite fields, and a recursive field in the middle. The recursive field has a parameter transformation, turning the type parameter \AgdaBoundFontStyle{A} into a \AgdaBoundFontStyle{Node A} in the recursive child.
 
-%\investigate{Making \AgdaDatatype{Desc} coinductive would do a couple of things. First, recursion and composition become identical. Second, nesting of both types becomes easier to describe, but potentially impossible to prove strictly positive.}
-
-%\investigate{We intentionally dodge having index telescopes (or having the index type depend on the parameters and values). Does this really change anything?}
-
 
 
 \section{The ornaments}
+\begin{outline}    
+we could ditch removal of fields: we don't use it. downside: ornament over ornament is the same as field removal for deltas
+
+:warning: match everything, add/remove field, add/remove recursive field, add/remove description field, ornament over ornament
+\end{outline}
+    
+
 \towrite{Put something that isn't yet in \autoref{ssec:bg-orn} here.}
 
 \ExecuteMetaData[Ornament/Orn]{Orn-type}
 \ExecuteMetaData[Ornament/Orn]{ornForget-type}
-%Thus, the relation should be precise enough pairs of \AgdaBoundFontStyle{E} and \AgdaBoundFontStyle{D} for which we could not define \AgdaFunction{ornForget}.
 
 We will walk through the constructor ornaments
 \ExecuteMetaData[Ornament/Orn]{ConOrn-type}
