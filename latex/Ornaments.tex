@@ -7,22 +7,36 @@
 If we are going to simplify working with complex containers %, such as finger trees,
 by instantiating generic programs to them, we should first make sure that these types fit into the descriptions.
 
-We construct descriptions for nested datatypes by extending the encoding of parametric and indexed datatypes from \autoref{ssec:bg-desc} with three features: information bundles, parameter transformation, and description composition. Also, to make sharing constructors easier, we introduce variable transformations. Transforming variables before they are passed to child descriptions allows both aggressively hiding variables and introducing values as if by let-constructs.
+We construct descriptions for nested datatypes by extending the encoding of parametric and indexed datatypes from \autoref{ssec:background-ix} with three features: information bundles, parameter transformation, and description composition. Also, to make sharing constructors easier, we introduce variable transformations. Transforming variables before they are passed to child descriptions allows both aggressively hiding variables and introducing values as if by let-constructs.
 
-We base the encoding of off existing encodings \cite{sijsling,practgen}. The descriptions take shape as sums of products, enforce indices at leaf nodes, and have explicit parameter and variable telescopes. Unlike some encodings \cite{effectfully, practgen}, we do not allow higher-order inductive arguments. 
+We base the encoding of off existing encodings \cite{sijsling,practgen}. The descriptions take shape as sums of products, enforce indices at leaf nodes, and have explicit parameter and variable telescopes. Unlike some other encodings \cite{effectfully, practgen}, we do not allow higher-order inductive arguments. 
 
-We use type-in-type and with-K to simplify the presentation, noting that these can be eliminated respectively by moving to Typeω and by implementing interpretations as datatypes.
+We use \texttt{--type-in-type} and \texttt{--with-K} to simplify the presentation, noting that these can be eliminated respectively by moving to \AD{Typeω} and by implementing interpretations as datatypes, as described in \autoref{app:withoutk}.
+
+
 
 \section{The descriptions}\label{ssec:desc}
-\begin{outline}
-:warning: let's blast out the descriptions
+To describe a numerical representation, we must of course first describe a number. We will focus on number systems as trees (that is, arbitrary unindexed types with no parameters) which evaluate nodes by addition and potentially multiplication by a constant (more about these in \autoref{part:numrep}). To avoid duplication, we will generalize our universe over bundles of information, rather than defining a new type of descriptions of number systems. Given a certain kind of information, a description will additionally provide a piece of that kind of information at each code. %for now we leave them out, we give them under descriptions.
 
-:warning: recap: what do we want? (leaf, field, recursive, composite)
+We also need to take care that the resulting numerical representation indeed fits in our universe. The final universe \AD{U-ix} in \autoref{sec:background}, while already quite general, still leaves out many interesting datastructures. In particular, the encoding of parameters forces the recursive type occurrences to have the same applied parameters, ruling out nested datatypes such as (binary) random-access lists \cite{calcdata,purelyfunctional}:
+\changed{Redo (or check) the Agda snippets below here.}
+\[ code \]
+and finger trees \cite{ralf}:
+\[ code \]
+Moreover, finger trees also reveal another set of quirks in \AD{U-ix}. Because adding non-recursive fields changes the variable telescope, it becomes hard to reuse parts of a description in different places. Apart from that, the number of constructors needed to describe finger trees and similar types also grows quickly when adding fields like \AD{Digit}. To resolve these issues and fit finger trees into the universe, we make three big changes.
 
-:warning: how do we cram number systems in? bundles
+First, by allowing parameters to be transformed before passing to recursive fields, we directly include nested types. Second, by allowing variables to be transformed before passing to subsequent fields, we make sharing constructors possible. Finally, by adding a variant of \AIC{σ} specialized to descriptions, we can describe composite datatypes more succinctly.
 
-:warning: go (list everything)
-\end{outline}
+To present the descriptions, we will use telescopes identical to those in \autoref{ssec:bg-desc}.
+% we explain by example.
+\changed{Somewhat final version above, draft/notes/rough comments/outline below.}
+\changed{Note to self: add more citations and then double check them below here}
+The descriptions are, again, given in two stages where the outer is analogous
+\[ desci \]
+The constructor descriptions are then:
+\[ coni \]
+
+
 
 
 We use telescopes identical to those in \autoref{ssec:bg-desc}:

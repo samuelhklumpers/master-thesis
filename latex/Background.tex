@@ -1,9 +1,8 @@
 \section{Agda}\label{sec:background-agda}
-\changed{Note to self: add more citations and then double check them below here}
-\changed{Also, type in type: we know that nothing breaks with universe polymorphism \cite{practgen}, but it does not make things easier to read.}
 We formalize all of our work in the programming language Agda \cite{agda}. While we will only occasionally reference Haskell, those more familiar with Haskell may look at Agda as an extension of Haskell (in a rough approximation). Agda is a total functional programming language with dependent types, where totality means that functions of a given type always terminate in a value of that type, ruling out non-terminating (and not obviously terminating) programs. Using the dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. 
 
 In this section, we will explain and highlight some parts of Agda which will be necessary to discuss the work in later sections.
+%Note that we use \texttt{--type-in-type} and \texttt{--with-K} to keep this development more readable. Even though the former makes Agda inconsistent, and the latter is not strictly necessary, we know that our work can be ported to a setting with neither option \autoref{app:withoutK}.
 
 
 \section{Data in Agda}\label{sec:background-data}
@@ -70,7 +69,7 @@ and respectively
 Interpreting logical implication as the function type, we also get negation in terms of implication and false
 \ExecuteMetaData[Tex/Background]{not}
 
-Quantifiers require dependent types to implement. In
+Quantifiers require dependent types to implement. In the existential quantifier
 \ExecuteMetaData[Tex/Background]{exists}
 if \AV{P} is a formula containing a variable of type \AV{A}, the existential quantifier represents that there is an element \AV{fst} of \AV{A} for which \AV{P}\ \AV{a} is true. The universal quantifier
 \ExecuteMetaData[Tex/Background]{forall}
@@ -105,7 +104,7 @@ we derive the type of vectors:
 \section{Descriptions}\label{sec:background-descriptions}
 In the previous sections we completed a quadruple of types (\bN{}, \AD{List}, \AD{Vec}, \AD{Fin}), even computing the latter two from \bN{}. These types also have nice interactions (\AF{length}, \AF{toList}, \AF{lookup}). This construction works because \bN{}, \AD{List}, \AD{Vec}, and \AD{Fin} all have the same shape, and one can expect it to work for similar quadruples. However, shape is not (yet) defined inside our language, so in this section, we will set out to explain the groundwork making this expectation sensible.
 
-Before we can describe the shape of a datatype, we must describe what a datatype is. To this end, we define a type of descriptions. Comparing this to the terminology of Martin-L{\"{o}}f type theory, in which a type of types like \AD{Type} is known as a universe, we can think of a type of descriptions as an internal universe. Each description, or code, should then represent a type via an interpretation $U \to \mathrm{Type}$. 
+Before we can describe the shape of a datatype, we must describe what a datatype is. To this end, we define a type of descriptions. Comparing this to the terminology of Martin-L{\"{o}}f type theory\cite{mltt,levitation}, in which a type of types like \AD{Type} is known as a universe, we think of a type of descriptions as an internal universe. Each description, or code, should then represent a type via an interpretation $U \to \mathrm{Type}$. 
 
 Let us walk through some concrete universe constructions. We will start from a rather simple universe, building our way up to more general types, until we reach a universe in which we can describe the (\bN{}, \AD{List}, \AD{Vec}, \AD{Fin}) quadruple, which, as a bonus, gives some insight into the meaning of datatypes.
 
@@ -144,7 +143,7 @@ In this universe, we can define the type of lists as a description quantified ov
 Using this universe requires us to split functions on descriptions into multiple parts, but makes interconversion between representations and concrete types straightforward.
 
 \subsection{Parametrized types}\label{ssec:background-par}
-The encoding of fields in \AD{U-sop} makes the descriptions large. In contrast to the universes before, this makes \AD{U-sop} not foldable. By introducing parameters in the right way\footnote{The right way for us, that is. If a foldable universe means nothing to you, there are simpler encodings for parameters and indices, which are recorded in the appendix\footnote{(ref)}.}, we can restore the foldability of the universe as a bonus.
+The encoding of fields in \AD{U-sop} makes the descriptions large. In contrast to the universes before, this makes \AD{U-sop} not foldable. By introducing parameters in the right way\footnote{The right way for us, that is. If a foldable universe means nothing to you, there are simpler encodings for parameters and indices, which are recorded in \autoref{app:large-sigma}.}, we can restore the foldability of the universe as a bonus.
 
 In the last section, we saw that we could define the parametrized type \AD{List} by quantifying over a type. However, in some cases, we will want to be able to inspect or modify the parameters belonging to a type\footnote{For example, deriving Traversable for parametrized types as functions would not be possible (without macros), as one could not decide whether the signature of a type in a field is compatible.}. To represent the parameters of a type, we will need a new gadget. The parameters could, of course, be represented like \AD{List}\ \AD{Type}, but this excludes types like the existential quantifier \AD{Σ\_}. In a general parametrized type, parameters can refer to bound values of preceding parameters. The parameters of a type are thus a sequence of types depending on each other, which we call telescopes. We define telescopes using induction-recursion:
 \ExecuteMetaData[Tex/Background]{Tel-simple}
@@ -185,9 +184,8 @@ and
 \ExecuteMetaData[Tex/Background]{VecD}
 We can now compare the structures in the quadruple (\bN{}, \AD{List}, \AD{Fin}, \AD{Vec}) by looking at their descriptions.
 
-As a bonus, we can also use \AD{U-ix} for generic programming. For example, by a long construction which can be found in the appendix\footnote{the appendix}, we can define the generic fold operation:
+As a bonus, we can also use \AD{U-ix} for generic programming. For example, by a long construction which can be found in \autoref{app:gfold}, we can define the generic fold operation:
 \ExecuteMetaData[Tex/Background]{fold-type}
-\todo{maybe explain why this does not give you foldr or sum for lists}
 
 %\input{Background/Desc.tex}
 
@@ -196,7 +194,7 @@ In this section we will introduce the concept of an ornament, used to compare de
 \ExecuteMetaData[Tex/Background]{new-Nat-List}
 Purely looking at their descriptions, \bN{} and \AD{List} are rather similar, except that \AD{List} has a parameter and an extra field \bN{} does not have. We could say that we can form the type of lists by starting from \bN{} and adding this parameter and field, while keeping everything else the same. In the other direction, we see that each list corresponds to a natural by stripping this information. Likewise, the type of vectors is almost identical to \AD{List}, can be formed from it by adding indices, and each vector corresponds to a list by dropping the indices.
 
-These and similar observations can be generalized using ornaments \cite{algorn}, which define a language or binary relation, describing which datatypes can be formed by decorating others. Conceptually, an ornament from a type \AV{A} to a type \AV{B} represents that \AV{B} can be formed from \AV{A} by adding information or making the indices more specific. Consequently, for each ornament from \AV{A} to \AV{B}, we expect to get a function from \AV{B} to \AV{A} erasing this information and reverting to less specific indices.
+These and similar observations can be generalized using ornaments \cite{algorn, progorn, sijsling}, which define a language or binary relation, describing which datatypes can be formed by decorating others. Conceptually, an ornament from a type \AV{A} to a type \AV{B} represents that \AV{B} can be formed from \AV{A} by adding information or making the indices more specific. Consequently, for each ornament from \AV{A} to \AV{B}, we expect to get a function from \AV{B} to \AV{A} erasing this information and reverting to less specific indices.
 
 If the indices \AV{J} (analogously, parameters \AV{Δ}) of \AV{B} are more specific than the indices \AV{I} (and parameters \AV{Γ}) of \AV{A}, we require functions from \AV{J} to \AV{I} and from \AV{Δ} to \AV{Γ}. Our ornaments
 \ExecuteMetaData[Tex/Background]{Orn-type}
@@ -208,7 +206,7 @@ Since we are working with sums of products descriptions, we can decide that orna
 \ExecuteMetaData[Tex/Background]{ConOrn-type}
 and we define ornaments as lists of ornaments for all constructors:
 \ExecuteMetaData[Tex/Background]{Orn}
-(Similarly, we use \AF{Cxf′} as the type of functions between variables, respecting \AV{g}.)
+(Similarly to \AF{Cxf}, we use \AF{Cxf′} as the type of functions between variables, respecting \AV{g}.)
 
 To (readably) write down \AD{ConOrn}, we use a couple of helpers to manipulate telescopes:
 \ExecuteMetaData[Tex/Background]{ConOrn-helpers}
@@ -232,7 +230,7 @@ Now the commuting square for the indices is equally trivial, but while the squar
 
 We deferred the definition of \AF{ornForget}, so let us give it now. The process is split into two steps: first, we define a function to strip off a single layer of ornamentation:
 \ExecuteMetaData[Tex/Background]{ornErase-type}
-which uses the commutativity squares we required earlier to revert some values (and parameters, indices, and variables) to the unornamented type. For example, in the case of the \AIC{𝟙} preserving ornament\footnote{The rest, appendix.}:
+which uses the commutativity squares we required earlier to revert some values (and parameters, indices, and variables) to the unornamented type. For example, in the case of the \AIC{𝟙} preserving ornament\footnote{The other cases can be found in \autoref{app:ornforget}.}:
 \ExecuteMetaData[Tex/Background]{ornErase}
 This function defines an algebra for the functor associated to a description \AV{E}:
 \ExecuteMetaData[Tex/Background]{ornAlg}
