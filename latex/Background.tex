@@ -1,140 +1,137 @@
 \section{Agda}\label{sec:background-agda}
-We formalize all of our work in the programming language Agda \cite{agda}. While we will only occasionally reference Haskell, those more familiar with Haskell may look at Agda as an extension of Haskell (in a rough approximation). Agda is a total functional programming language with dependent types, where totality means that functions of a given type always terminate in a value of that type, ruling out non-terminating (and not obviously terminating) programs. Using the dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. 
+\changed{Add more citations and then double check them below here}
+We formalize our work in the programming language Agda \cite{agda}. While we will only occasionally reference Haskell, those more familiar with Haskell may look at Agda (in rough approximation) as an extension\todo{extension? reasonable agda is haskell, so agda kind of embeds into haskell} of Haskell\cite{?}. Agda is a total functional programming language with dependent types. Here, totality means that functions of a given type always terminate in a value of that type, ruling out non-terminating (and not obviously terminating) programs. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. 
 
-In this section, we will explain and highlight some parts of Agda which will be necessary to discuss the work in later sections.
-%Note that we use \texttt{--type-in-type} and \texttt{--with-K} to keep this development more readable. Even though the former makes Agda inconsistent, and the latter is not strictly necessary, we know that our work can be ported to a setting with neither option \autoref{app:withoutK}.
+In this section, we will explain and highlight some parts of Agda which we use in the later sections. 
+Many of the types we use in this section are also described and explained in most Agda tutorials (\cite{ulftutorial}, \cite{plfa}, etc.), and can be imported from the standard library \cite{agdastdlib}.
+
+We use \texttt{--type-in-type} %and \texttt{--with-K}
+to keep the explanations more readable. % Even though the former makes Agda inconsistent, and the latter is not strictly necessary, we know that our work can be ported to a setting with neither option \autoref{app:withoutK}.
 
 
 \section{Data in Agda}\label{sec:background-data}
-At the level of ordinary (i.e., generalized algebraic) datatypes, Agda is close to Haskell. In both languages, one can define objects using data declarations, and interact with them using function declarations. For example,
+At the level of generalized algebraic datatypes, Agda is close to Haskell. In both languages, one can define objects using data declarations, and interact with them using function declarations. For example, we can define the type of \emph{booleans}:
 \ExecuteMetaData[Tex/Background]{Bool}
-The constructors of this type tell us we can make values of \AD{Bool} in exactly two ways, \AIC{false} and \AIC{true}. We can then define (non-trivial) functions on \AD{Bool} by pattern matching. As an example, we can define the conditional operator as
+The constructors of this type state that we can make values of \AD{Bool} in exactly two ways: \AIC{false} and \AIC{true}. We can then define functions on \AD{Bool} by pattern matching. As an example, we can define the conditional operator as
 \ExecuteMetaData[Tex/Background]{conditional}
-When pattern matching, we must provide definitions for each possible case of the pattern matched type\footnote{This is enforced by the coverage checker.}. 
-%Take note that each line reads as an equality by definition, which agda also uses to discharge obvious equalities we will see later when proving equalities
+When \emph{pattern matching}, the coverage checker ensures we define the function on all cases of the type matched on, and thus the function is completely defined. % mark: shuffle
 
-We can also define a type representing numbers as a datatype
+We can also define a type representing the natural numbers
 \ExecuteMetaData[Tex/Background]{Nat}
-such that \bN{} always has a \AF{zero} element, and for each element $n$ the constructor \AIC{suc} expresses that there is also an element representing $n + 1$. In conclusion, \bN{} represents the positive integers, henceforth naturals. Similarly, we can pattern match on \bN{} to define the comparison operator
+Here, \bN{} always has a \AF{zero} element, and for each element $n$ the constructor \AIC{suc} expresses that there is also an element representing $n + 1$. Hence, \bN{} represents the \textit{naturals} by encoding the existential axioms of the Peano axioms. By pattern matching and recursion on \bN{}, we define the less-than operator:
 \ExecuteMetaData[Tex/Background]{lt}
-Now one of the cases contains a recursive instance of \bN{}, the coverage checker and termination checker ensure that we still define $n < m$ for all possible combinations of $n$ and $m$. Essentially, these checks make sure that any valid definition by pattern matching corresponds to a valid proof by cases and induction\footnote{Also note that in this case we actually have a simultaneous induction on two arguments. This is tolerated when the arguments decrease lexicographically. In other words, a simultaneous induction is valid iff the clauses can be permuted to become a nested sequence of valid inductions.}.
+One of the cases contains a recursive instance of \bN{}, so termination checker also verifies that this recursion indeed terminates, ensuring that we still define \AV{n}\ \AF{<?} \AV{m} for all possible combinations of \AV{n} and \AV{m}. %Essentially, the coverage and termination checker make sure that any valid definition by pattern matching corresponds to a valid proof by cases and induction.
+In this case the recursion is valid, since both arguments decrease before the recursive call, meaning that at some point \AV{n} or \AV{m} hits \AIC{zero} and the recursion terminates.
 
-We could now directly define lists of natural numbers, but then we would have to also repeat this for lists of booleans, and all other types. Using parameters, we can define lists as a family of types instead:
-\ExecuteMetaData[Tex/Background]{List}
-defining a type of lists for each type. Introducing a parameter in a datatype corresponds to abstracting the body of the type over a free variable, by applying this abstraction one gets a type for each value of the parameter.
-We can work with lists by inserting some elements, and extracting them later:
+Like in Haskell, we can \emph{parametrize} a datatype over other types to make \emph{polymorphic} type, which we can use to define lists of values for all types:
+\ExecuteMetaData[Tex/Background]{List} 
+A list of \AV{A} can either be empty \AIC{[]}, or contain an element of \AV{A} and another list via \AIC{\_∷\_}. In other words, \AD{List} is a type of \emph{finite sequences} in \AV{A} (in the sense of sequences as an abstract type \cite{purelyfunctional}).
+
+Using polymorphic functions, we can manipulate and inspect lists by inserting or extracting elements. For example, we can define a function to look up the value at some position \AV{n} in a list
 \ExecuteMetaData[Tex/Background]{lookup-list}
-However, the type of this function is a bit weaker than we might like, as we are relying on the type
+However, this function \emph{partial}, as we are relying on the type
 \ExecuteMetaData[Tex/Background]{Maybe}
-to handle the case where the index falls outside the list, and we cannot return an element. Note that checking whether
+to handle the case where the position falls outside the list and we cannot return an element. 
+If we know the length of the list \AV{xs}, then we also know for which positions \AF{lookup} will succeed, and for which it will not. We define 
 \ExecuteMetaData[Tex/Background]{length}
-satisfies \AV{n}\ \AF{<}\ \AF{length}\ \AV{xs} beforehand amounts to the same, and only gives us \AIC{false} when we would otherwise get \AIC{nothing}.
+so that we can test whether the position \AV{n} lies inside the list by checking \AV{n}\ \AF{<?}\ \AF{length}\ \AV{xs}. If we declare \AF{lookup} as a dependent function consuming a proof of \AV{n}\ \AF{<?}\ \AF{length}\ \AV{xs}, then \AF{lookup} always succeeds. However, this actually only moves the burden of checking whether the output was \AIC{nothing} afterwards to proving that \AV{n}\ \AF{<?}\ \AF{length}\ \AV{xs} beforehand.
 
-If we know the length of the list, then we also know for which indices \AF{lookup} will succeed, and for which it will not. To encode and use this information we will need indexed types. Like parameters, indices add a variable to the context of a datatype, but unlike parameters, indices can influence the availability of constructors. This difference can be used to constrain the possible values of a variable from the type level. As an example, we can index \AD{Bool} over itself:
-\ExecuteMetaData[Tex/Background]{HBool}
-This defines a singleton type, in which knowing the type of a variable of uniquely fixes its value: \AD{HBool}\ \AIC{true} can only be \AIC{htrue}, while \AD{HBool}\ \AIC{false} can only be \AIC{hfalse}.
+We can avoid both by defining an \emph{indexed type} representing numbers below an upper bound
+\ExecuteMetaData[Tex/Background]{Fin}
+Like parameters, indices add a variable to the context of a datatype, but unlike parameters, indices can influence the availability of constructors. The type \AD{Fin} is defined such that a variable of type \AD{Fin}\ \AV{n} represents a number less than \AV{n}.
+% \footnote{We can also see this in another way: an argument of type \AD{Fin}\ \AV{n} corresponds to a pair of an argument \AV{m} and an argument \AV{m}\ \AF{<?}\ \AV{n}.}
+Since both constructors \AIC{zero} and \AIC{suc} dictate that the index is the \AIC{suc} of some natural \AV{n}, we see that \AD{Fin}\ \AIC{zero} has no values. On the other hand, \AIC{suc} gives a value of \AD{Fin}\ (\AIC{suc}\ \AV{n}) for each value of \AD{Fin}\ \AV{n}, and \AIC{zero} gives exactly one additional value of \AD{Fin}\ (\AIC{suc}\ \AV{n}) for each \AV{n}. By induction (externally), we find that \AD{Fin}\ \AV{n} has exactly \AV{n} closed terms, each representing a number less than \AV{n}.
 
-Applying this idea to naturals and lists, we create the following pair of types:
-\ExecuteMetaData[Tex/Background]{Fin-Vec}
-Here, \AD{Fin}\ \AIC{zero} contains no elements, and the only vector in \AD{Vec}\ \AIC{zero} is the empty vector \AIC{[]}, containing no elements. Likewise, \AD{Fin}\ (\AIC{suc}\ \AV{n}) contains one more element than \AD{Fin}\ \AV{n}, and a vector of type \AD{Vec}\ (\AIC{suc}\ \AV{n}) is necessarily a vector \AD{Vec}\ \AV{n} with one more element. From this we conclude that \AD{Fin}\ \AV{n} is exactly the type of suitable indices into a \AD{Vec}\ \AV{n}. Note that we can still interconvert between lists and vectors, in one direction dropping the index
-\ExecuteMetaData[Tex/Background]{toList}
-Dependent functions let us bind variables in type signatures, and use them in later types. With them, we can convert in the other direction, recomputing the index:
-\ExecuteMetaData[Tex/Background]{toVec}
-We can also define
+To complement \AD{Fin}, we define another indexed type representing lists of a known length, also known as vectors:
+\ExecuteMetaData[Tex/Background]{Vec}
+The \AIC{[]} constructor of this type produces the only term of type \AD{Vec}\ \AV{A}\ \AIC{zero}. The \AIC{\_∷\_} constructor ensures that a \AD{Vec}\ \AV{A}\ (\AIC{suc}\ \AV{n}) always consists of an element of \AV{A} and a \AD{Vec}\ \AV{A}\ \AV{n}. By induction, we find that a \AD{Vec}\ \AV{A}\ \AV{n} contains exactly \AV{n} elements of \AV{A}. Thus, we conclude that \AD{Fin}\ \AV{n} is exactly the type of positions in a \AD{Vec}\ \AV{A}\ \AV{n}. In comparison to \AD{List}, we can say that \AD{Vec} is a type of arrays (in the sense of arrays as the abstract type of sequences of a fixed length). Furthermore, knowing the index of a term \AV{xs} of type \AV{Vec}\ \AV{A}\ \AV{n} uniquely determines the the constructor it was formed by. Namely, if \AV{n} is \AIC{zero}, then \AV{xs} is \AIC{[]}, and if \AV{n} is \AIC{suc} of \AV{m}, then \AV{xs} is formed by \AIC{\_∷\_}. 
+
+Using this, we define a variant of \AF{lookup} for \AD{Fin} and \AD{Vec}, taking a vector of length \AV{n} and a position below \AV{n}:
 \ExecuteMetaData[Tex/Background]{lookup}
-as a dependent function by letting the size of the index type vary with the length of the vector. The case in which we would return \AIC{nothing} for lists, is now actually impossible and can be discarded. Lookup always succeeds for vectors, demonstrating that vectors are correct-by-construction. However, this does not yet prove that \AF{lookup} always returns the right element. We will need some more logic to verify this.
+The case in which we would return \AIC{nothing} for lists, which is when \AV{xs} is \AIC{[]}, is omitted. This happens because \AV{x} of type \AD{Fin}\ \AV{n} is either \AIC{zero} or \AIC{suc}\ \AV{i}, and both cases imply that \AV{n} is \AIC{suc}\ \AV{m} for some \AV{m}. As we saw above, a \AD{Vec}\ \AV{A}\ (\AIC{suc} \AV{m}) is always formed by \AIC{\_∷\_}, making the case in which \AV{xs} is \AIC{[]} impossible. Consequently, lookup always succeeds for vectors,
+% demonstrating that vectors are correct-by-construction. 
+however, this does not yet prove that \AF{lookup} necessarily returns the right element, we will need some more logic to verify this.
 
 \section{Proving in Agda}\label{sec:background-proving}
-When defining vectors, we saw how knowing the index of a variable constrains the values it can assume. We can use this to define a datatype in which the index actually determines whether there is any value, or none at all:
+To describe equality of terms we define a new type
 \ExecuteMetaData[Tex/Background]{equiv}
-Here, we have \AIC{refl} of type \AD{Eq}\ \AV{a}\ \AV{b} if and only if \AV{a} is \AV{b}, whence the \AD{\_≡\_} symbol. We can use this type to describe the behaviour of functions like \AF{lookup}: If we can insert elements into a vector
+If we have a value \AV{x} of \AV{a}\ \AD{≡}\ \AV{b}, then, as the only constructor of \AD{\_≡\_} is \AIC{refl}, we must have that \AV{a} is equal to \AV{b}. We can use this type to describe the behaviour of functions like \AF{lookup}: If we insert elements into a vector with
 \ExecuteMetaData[Tex/Background]{insert}
 we can express the correctness of \AF{lookup} as
 \ExecuteMetaData[Tex/Background]{lookup-insert-type}
-To prove this, we proceed as when defining any other function, by pattern matching as the equivalent of induction. %For example, by induction on \AD{\_equiv\_} we can prove:
-%:memo: trans
-%This proof uses that pattern matching on \AIC{refl} unifies \AV{a} and \AV{b}, such that the type of \AV{q} unifies with the goal \AV{a}\ \AD{\_equiv\_}\ \AV{c}.
-By simultaneous induction on the index and vector of \AF{lookup-insert-type} we get
+stating that we expect to find an element where we insert it.
+
+% When we use pattern matching in a function, the coverage and termination checker ensure that the resulting function is total and defined by well-founded recursion\cite{?}. If we are proving some statement by constructing a function as a proof, this means that we can interpret a function definition by (dependent) pattern matching and well-founded recursion as a proof by well-founded induction\cite{?}.
+
+%So, to 
+To prove the statement, we proceed as when defining any other function. 
+By simultaneous induction on the position and vector, we prove
 \ExecuteMetaData[Tex/Background]{lookup-insert}
-Other than \AD{\_≡\_}, we can encode many more logical operations into datatypes. For example, we can encode disjunctions (the logical or operation) as
+In the first two cases, where we \AF{lookup} the first position, \AF{insert}\ \AV{xs}\ \AIC{zero}\ \AV{y} simplifies to \AV{y}\ \AF{∷}\ \AF{xs}, so the lookup immediately returns \AV{y} as wanted. In the last case, we have to prove that \AF{lookup} is correct for \AV{x}\ \AF{∷}\ \AF{xs}, so we use that the \AF{lookup} ignores the term \AV{x} and we appeal to the correctness of \AF{lookup} on the smaller list \AV{xs} to complete the proof.
+
+Like \AD{\_≡\_}, we can encode many other logical operations into datatypes, which establishes a correspondence between types and formulas, known as the Curry-Howard isomorphism. For example, we can encode disjunctions (the logical `or' operation) as
 \ExecuteMetaData[Tex/Background]{uplus}
-While we generally do not directly use these explicit encodings, we will appeal to the logical content of some types in later sections. The disjunction, together with some other types form a correspondence between types and logic, known as the Curry-Howard isomorphism.
 
-The other components of this isomorphism are as follows. Conjunction (logical and) can be interpreted by\footnote{A (inductive) record type is almost equivalent to a datatype with one constructor. One advantage of records is that, e.g., $(a, b) = (c , d) \iff a = c \land b = d$ holds automatically.}
+The other components of the isomorphism are as follows. Conjunction (logical `and') can be represented by\footnote{We use a record here, rather than a datatype with a constructor \AV{A → B →}\ \AV{A}\ \AD{×}\ \AV{B}. The advantage of using a record is that this directly gives us projections like \ARF{fst}\ \AV{:}\ \AV{A}\ \AD{×}\ \AV{B}\ \AV{→ A}, and lets us use eta equality, making $(a, b) = (c , d) \iff a = c \land b = d$ holds automatically.}
 \ExecuteMetaData[Tex/Background]{product}
-True and false are represented by
+True and false are respectively represented by
 \ExecuteMetaData[Tex/Background]{true}
-and respectively
+so that always \AIC{tt}\ \AV{:}\ \AD{⊤}, and 
 \ExecuteMetaData[Tex/Background]{false}
-Interpreting logical implication as the function type, we also get negation in terms of implication and false
+The body of \AD{⊥} is not accidentally left out: because \AD{⊥} has no constructors, there is no proof of false\footnote{If we did not use \AV{--type-in-type}, and even in that case I can only hope.}.
+
+Because we identify function types with logical implications, we can also define the negation of a formula \AV{A} as ``\AV{A} implies false'':
 \ExecuteMetaData[Tex/Background]{not}
-
-Quantifiers require dependent types to implement. In the existential quantifier
+The logical quantifiers $\forall$ and $\exists$ act on formulas with a free variable in a specific domain of discourse.
+%\footnote{Whether this variable is actually used does not matter: every day the sun shines, $1 = 1$.}
+We represent closed formulas by types, so we can represent a formula with a free variable of type \AV{A} by a function values of \AV{A} to types \AV{A}\ \AV{→}\ \AD{Type}, also known as a predicate. The universal quantifier $\forall a P(a)$ is true when for all $a$ the formula $P(a)$ is true, so we represent the universal quantification of a predicate \AV{P} as a dependent function type \AV{(a : A) → P a}, producing for each \AV{a} of type \AV{A} a proof of \AV{P}\ \AV{a}. The existential quantifier $\exists a P(a)$ is true when there is some $a$ such that $P(a)$ is true, so we represent the existential quantification as
 \ExecuteMetaData[Tex/Background]{exists}
-if \AV{P} is a formula containing a variable of type \AV{A}, the existential quantifier represents that there is an element \AV{fst} of \AV{A} for which \AV{P}\ \AV{a} is true. The universal quantifier
-\ExecuteMetaData[Tex/Background]{forall}
-represents that for each \AV{a} of type \AV{A} the formula \AV{P}\ \AV{a} is true.
-
-More generally, we can read function types as chains of implications and universal quantifications. Furthermore, datatypes can be read as conjunctions of their constructors, each of which can be seen as a combination of conjunctions (unbound fields) and existentials (bound fields). 
-
-
-\section{Numerical representations}\label{sec:background-numerical}
-In the previous section, we saw that \AD{Vec} equipped with \AF{lookup} and \AF{insert} satisfies a useful container law. In fact, the definitions of \AF{lookup} and \AF{insert}, as well as the proof of \AF{lookup-insert} are almost trivial. From this, we might deduce that \AD{Vec} is quite a natural container for \bN{}, which we can make formal by comparing \AD{Vec} to the most natural, and trivial, container.
-
-This trivial container, also known as representable, is obtained by reading \AF{lookup} as a prescript:
-\ExecuteMetaData[Tex/Background]{Lookup}
-One can see that for \AD{Lookup}, we can define \AF{lookup} as the identity. If a container law is consistent, then \AD{Lookup} will also satisfy it, which we can use to simplify the verification of the same laws for \AD{Vec}, or other containers: if a container is equivalent to \AD{Lookup}, then it automatically is correct as a container.
-
-To describe such equivalences, we import the notion of isomorphisms into types:
-\ExecuteMetaData[Tex/Background]{Iso}
-which expresses that \AV{A} and \AV{B} are isomorphic if we can go back and forth between them, and doing so brings you back where you started\footnote{Which is equivalent to the other notion of equivalence: one has a conversion $f : A \to B$, and for each \AV{b} in \AV{B} there is exactly one \AV{a} in \AV{A} for which $f(a) = b$.}.
-
-Rather than defining \AD{Vec} ``out of the blue'' and proving that it is correct or isomorphic to \AD{Lookup}, we can also turn the isomorphism on its head. Instead, we can start from the equation that \AD{Vec} is equivalent to \AD{Lookup}, and then calculate \AD{Vec} as if solving that equation \cite{calcdata}. We can also derive \AD{Fin}: the finite type \AD{Fin}\ \AV{n} should actually contain \AV{n} elements, and thus be isomorphic to \AV{Σ[ m ∈ ℕ ] m < n}.
-
-For the equational reasoning, we will use the ``use-as-definition''\footnote{Appendix} and equality reasoning notation\footnote{Agda Cubical, but I think this is readable.}. As a bonus, this allows us to break up the construction of harder isomorphisms into multiple small and easy-to-read steps. The equalities we will need are 
-\ExecuteMetaData[Tex/NumRep]{Fin-lemmas}
-We then put these together, constructing \AD{Fin}:
-\ExecuteMetaData[Tex/NumRep]{Fin-def}
-This definition of \AD{Fin} can then be used to define \AD{Lookup}. Using\footnote{Compare these to the algebra laws: $A^0 = 1$, $A^1 = A$ and $C^{A + B} = C^A C^B$.}
-\ExecuteMetaData[Tex/NumRep]{Vec-lemmas}
-we derive the type of vectors:
-\ExecuteMetaData[Tex/NumRep]{Vec}
-
+so that we have \AD{Σ}\ \AV{A}\ \AV{P} iff we have an element \AV{fst} of \AV{A} and a proof \AV{snd} of \AV{P}\ \AV{a}. To avoid the need for lambda abstractions in existentials, we define the syntax
+\ExecuteMetaData[Tex/Background]{sigma-syntax}
+letting us write \AD{Σ[}\ \AV{a}\ \AD{∈}\ \AV{A}\ \AD{]}\ \AV{P a} for $\exists a P(a)$.
 
 \section{Descriptions}\label{sec:background-descriptions}
-In the previous sections we completed a quadruple of types (\bN{}, \AD{List}, \AD{Vec}, \AD{Fin}), even computing the latter two from \bN{}. These types also have nice interactions (\AF{length}, \AF{toList}, \AF{lookup}). This construction works because \bN{}, \AD{List}, \AD{Vec}, and \AD{Fin} all have the same shape, and one can expect it to work for similar quadruples. However, shape is not (yet) defined inside our language, so in this section, we will set out to explain the groundwork making this expectation sensible.
+In the previous sections we completed a quadruple of types (\bN{}, \AD{List}, \AD{Vec}, \AD{Fin}), 
+%, even computing the latter two from \bN{}.
+which have nice interactions (\AF{length}, \AF{lookup}). Similar to the type of \AF{length}\ \AV{:}\ \AD{List}\ \AV{A}\ \AV{→}\ \bN{}, we can define
+\ExecuteMetaData[Tex/Background]{toList}
+converting vectors back to lists. In the other direction, we can also promote a list to a vector by recomputing its index:
+\ExecuteMetaData[Tex/Background]{toVec}
+We claim that is not a coincidence, but rather happens because \bN{}, \AD{List}, and \AD{Vec} have the same ``shape''.
 
-Before we can describe the shape of a datatype, we must describe what a datatype is. To this end, we define a type of descriptions. Comparing this to the terminology of Martin-L{\"{o}}f type theory\cite{mltt,levitation}, in which a type of types like \AD{Type} is known as a universe, we think of a type of descriptions as an internal universe. Each description, or code, should then represent a type via an interpretation $U \to \mathrm{Type}$. 
+But what is the shape of a datatype? In this section, we will explain a framework of datatype descriptions and ornaments, allowing us to describe the shapes of datatypes and use these for generic programming \cite{ulftutorial, mcbride, others}. Recall that while polymorphism allows us to write one program for many types at once, those programs act parametrically \cite{reynolds, forfree}: polymorphic functions must work for all types, thus they cannot inspect values of their type argument. Generic programs, in contrast, can use the structure of a datatype, allowing for more complex functions that do inspect values.
 
-Let us walk through some concrete universe constructions. We will start from a rather simple universe, building our way up to more general types, until we reach a universe in which we can describe the (\bN{}, \AD{List}, \AD{Vec}, \AD{Fin}) quadruple, which, as a bonus, gives some insight into the meaning of datatypes.
+Using datatype descriptions we can then relate \bN{}, \AD{List} and \AD{Vec}, explaining how \AF{length} and \AF{toList} are instances of a generic construction. Let us walk through some ways of defining descriptions. We will start from simpler descriptions, building our way up to more general types, until we reach a framework in which we can describe \bN{}, \AD{List}, \AD{Vec} and \AD{Fin}. 
+%, which, as a bonus, gives some insight into the meaning of datatypes.
+
 
 \subsection{Finite types}\label{ssec:background-fin}
-As a start, we define a basic universe with two codes 0 and 1, respectively representing the types \AD{⊥} and \AD{⊤}, and the requirement that the universe is closed under sums and products:
+A datatype description, which are datatypes of which each value again represents a datatype, consist of two components. Namely, a type of descriptions \AV{U}, also referred to as codes, and an interpretation \AV{U}\ \AV{→}\ \AD{Type}, decoding descriptions to the represented types. In the terminology of Martin-L{\"{o}}f type theory\cite{levitation} \todo{No citation for MLTT? Agda is a rather loose extension, none of the original papers really match.}, where types of types like \AD{Type} are called universes, we can think of a type of descriptions as an internal universe.
+
+As a start, we define a basic universe with two codes \AIC{𝟘} and \AIC{𝟙}, respectively representing the types \AD{⊥} and \AD{⊤}, and the requirement that the universe is closed under sums and products:
 \ExecuteMetaData[Tex/Background]{U-fin}
-which we interpret as:
+The meaning of the codes in this universe is then assigned by the interpretation
 \ExecuteMetaData[Tex/Background]{int-fin}
+which indeed sends \AIC{𝟘} to \AD{⊥}, \AIC{𝟙} to \AD{⊤}, sums to sums and products to products\footnote{One might recognize that \AF{⟦\_⟧fin} is a morphism between the rings (\AD{U-fin}, \AIC{⊕}, \AIC{⊗}) and (\AD{Type}, \AD{⊎}, \AD{×}). Similarly, \AD{Fin} also gives a ring morphism from \bN{} with \AF{+} and \AF{×} to \AD{Type}, and in fact \AF{⟦\_⟧fin} factors through \AD{Fin} via the map sending the expressions in \AD{U-fin} to their value in \bN{}.}.
+
 In this universe, we can encode the type of booleans simply as 
 \ExecuteMetaData[Tex/Background]{BoolD}
 The types \AIC{𝟘} and \AIC{𝟙} are finite, and sums and products of finite types are also finite, which is why we call \AD{U-fin} the universe of finite types. Consequently, the type of naturals \bN{} cannot fit in \AD{U-fin}.
 
-\subsection{Polynomial functors}\label{ssec:background-rec}
+\subsection{Recursive types}\label{ssec:background-rec}
 To accommodate \bN{}, we need to be able to express recursive types. By adding a code \AIC{ρ} to \AD{U-fin} representing recursive type occurrences, we can express those types: 
 \ExecuteMetaData[Tex/Background]{U-rec}
-However, the interpretation cannot be defined like in the previous example: when interpreting (\AIC{𝟙}\ \AIC{⊕}\ \AIC{ρ}), we need to know that the whole type was \AIC{𝟙}\ \AIC{⊕}\ \AIC{ρ} while processing \AIC{ρ}. Thus, we split the interpretation into types in two phases. First, we interpret the descriptions into polynomial functors
+However, the interpretation cannot be defined like in the previous example: when interpreting \AIC{𝟙}\ \AIC{⊕}\ \AIC{ρ}, we need to know that the whole type was \AIC{𝟙}\ \AIC{⊕}\ \AIC{ρ} while processing \AIC{ρ}. As a consequence, we have to split the interpretation in two phases. First, we interpret the descriptions into polynomial functors
 \ExecuteMetaData[Tex/Background]{int-rec}
-By viewing such a functor as a type with a free type variable, the functor can model a recursive type by setting the variable to the type itself:
+Then, by viewing such a functor as a type with a free type variable, the functor can model a recursive type by setting the variable to the type itself:
 \ExecuteMetaData[Tex/Background]{mu-rec}
 Recall the definition of \bN{}, which can be read as the declaration that \AD{ℕ} is a fixpoint: \AD{ℕ}\ \AD{≡}\ \AV{F}\ \AD{ℕ} for \AV{F X = ⊤ ⊎ X}. This makes representing \bN{} as simple as:
 \ExecuteMetaData[Tex/Background]{NatD}
 
-%[ :warning: mu is actually pretty fundamental (the mathematical way of viewing it) ]: #
-
 \subsection{Sums of products}\label{ssec:background-sop}
 A downside of \AD{U-rho} is that the definitions of types do not mirror their equivalent definitions in user-written Agda. We can define a similar universe using that polynomials can always be canonically written as sums of products. For this, we split the descriptions into a stage in which we can form sums, on top of a stage where we can form products.
 \ExecuteMetaData[Tex/Background]{U-sop}
-%need a bit more here
 When doing this, we can also let the left-hand side of a product be any type, allowing us to represent ordinary fields:
-%(footnote:warning: yes this is a problem and yes we fix this when parameters).
 \ExecuteMetaData[Tex/Background]{Con-sop}
 The interpretation of this universe, while analogous to the one in the previous section, is also split into two parts:
 \ExecuteMetaData[Tex/Background]{int-sop}
@@ -143,9 +140,17 @@ In this universe, we can define the type of lists as a description quantified ov
 Using this universe requires us to split functions on descriptions into multiple parts, but makes interconversion between representations and concrete types straightforward.
 
 \subsection{Parametrized types}\label{ssec:background-par}
-The encoding of fields in \AD{U-sop} makes the descriptions large. In contrast to the universes before, this makes \AD{U-sop} not foldable. By introducing parameters in the right way\footnote{The right way for us, that is. If a foldable universe means nothing to you, there are simpler encodings for parameters and indices, which are recorded in \autoref{app:large-sigma}.}, we can restore the foldability of the universe as a bonus.
+The encoding of fields in \AD{U-sop} makes the descriptions large in the following sense: by letting \AV{S} in \AIC{σ} be an infinite type, we can get a description referencing infinitely many other descriptions. As a consequence, we cannot inspect an arbitrary description in its entirety. We will introduce parameters in such a way that we recover the finiteness of descriptions as a bonus.
 
-In the last section, we saw that we could define the parametrized type \AD{List} by quantifying over a type. However, in some cases, we will want to be able to inspect or modify the parameters belonging to a type\footnote{For example, deriving Traversable for parametrized types as functions would not be possible (without macros), as one could not decide whether the signature of a type in a field is compatible.}. To represent the parameters of a type, we will need a new gadget. The parameters could, of course, be represented like \AD{List}\ \AD{Type}, but this excludes types like the existential quantifier \AD{Σ\_}. In a general parametrized type, parameters can refer to bound values of preceding parameters. The parameters of a type are thus a sequence of types depending on each other, which we call telescopes. We define telescopes using induction-recursion:
+% move to discussion \footnote{If a foldable universe means nothing to you, there are simpler encodings for parameters and indices, which are recorded in \autoref{app:large-sigma}.}
+
+In the last section, we saw that we could define the parametrized type \AD{List} by quantifying over a type. However, in some cases, we will want to be able to inspect or modify the parameters belonging to a type\footnote{For example, deriving Traversable for parametrized types as functions would not be possible (without macros), as one could not decide whether the signature of a type in a field is compatible.}. To represent the parameters of a type, we will need a new gadget.
+
+In a naive attempt, we can represent the parameters of a type as \AD{List}\ \AD{Type}. However, this cannot represent many useful types, of which the parameters depend on each other. For example, in the existential quantifier \AD{Σ\_}, the type \AV{A}\ \AV{→}\ \AD{Type} of second parameter \AV{B} references back to the first parameter \AV{A}.
+
+%\todo{Bij 6.4 list types - rules out existential -- waarom? (Ik weet het antwoord wel, maar misschien is het goed om er expliciet bij stil te staan)}.
+
+In a general parametrized type, parameters can refer to the values of all preceding parameters. The parameters of a type are thus a sequence of types depending on each other, which we call telescopes \cite{practgen, sijsling, telescopes} (also known as contexts in \todo{MLTT}). We define telescopes using induction-recursion:
 \ExecuteMetaData[Tex/Background]{Tel-simple}
 A telescope can either be empty, or be formed from a telescope and a type in the context of that telescope. Here, we used the meaning of a telescope \AF{⟦\_⟧tel} to define types in the context of a telescope. This meaning represents the valid assignment of values to parameters:
 \ExecuteMetaData[Tex/Background]{int-simple}
@@ -159,44 +164,68 @@ A \AD{Tel}\ \AV{P} then represents a telescope for each value of \AV{P}, which w
 \ExecuteMetaData[Tex/Background]{entails}
 so we can define telescopes and their interpretations as:
 \ExecuteMetaData[Tex/Background]{Tel-def}
-Of course, by setting \AV{P}\ =\ \AD{⊤}, we recover the previous definition of parameter-telescopes. We can then define an extension of a telescope as a telescope in the context of a parameter telescope:
+By setting \AV{P}\ =\ \AD{⊤}, we recover the previous definition of parameter-telescopes. We can then define an extension of a telescope as a telescope in the context of a parameter telescope:
 \ExecuteMetaData[Tex/Background]{ExTel}
-An \AD{ExTel}\ \AV{Γ} represents a telescope of variables over the fixed parameter-telescope \AV{Γ}, and can be extended independently of the parameters. Extensions can be interpreted as follows:
+representing a telescope of variables over the fixed parameter-telescope \AV{Γ}, which can be extended independently of \AV{Γ}. Extensions can be interpreted by interpreting the variable part given the interpretation of the parameter part:
 \ExecuteMetaData[Tex/Background]{int-ExTel}
-where we interpret the parameter part first, and then interpret the variables for the given interpretation of the parameters.
-We modify the codes of \AD{U-sop} to make use of the new telescopes
+In the descriptions directly relay the parameter telescope to the constructors, resetting the variable telescope to \AIC{∅} for each constructor:
 \ExecuteMetaData[Tex/Background]{U-par}
-The function \AV{S →}\ \AD{U-sop} is now replaced by \AD{U-par}\ (\AV{V}\ \AIC{▷}\ \AV{S}), preserving the dependence in the variable-telescope, while avoiding the higher order argument. The interpretation is then given as:
+Of the constructors we only modify the \AIC{σ} to request a type \AV{S} in the context of \AV{V}, and to extend the context for the subsequent fields by \AV{S}:
+\ExecuteMetaData[Tex/Background]{Con-par}
+Replacing the function \AV{S →}\ \AD{U-sop} by \AD{Con-par}\ (\AV{V}\ \AIC{▷}\ \AV{S}) allows us to bind the value of \AV{S} while avoiding the higher order argument. 
+We define a helper
+\ExecuteMetaData[Tex/Background]{tele-helpers}
+and interpret this universe as follows:
 \ExecuteMetaData[Tex/Background]{int-par}
-We can describe lists using a one-type telescope:
+In particular, provide \AV{X} the parameters and variables in the \AIC{σ} case, and extend context by \AV{s} before passing to the rest of the interpretation.
+
+In this universe, we can describe lists using a one-type telescope:
 \ExecuteMetaData[Tex/Background]{ListD}
+This description declares that \AD{List} has two constructors, one with no fields, corresponding to \AIC{[]}, and the second with one field and a recursive field, representing \AIC{\_∷\_}. In the second constructor, we used pattern lambdas to deconstruct the telescope and extract the type \AV{A}\footnote{Due to a quirk in the interpretation of telescopes, the \AIC{∅} part always contributes a value \ARF{tt} we explicitly ignore, which also explicitly needs to be provided when passing parameters and variables.}.
 Using the variable bound in \AIC{σ}, we can also define the existential quantifier:
 \ExecuteMetaData[Tex/Background]{SigmaD}
+having one constructor with two fields. Here, the first field of type \AV{A} adds a value \AV{a} to the variable telescope, which we recover in the second field by pattern matching, before passing it to \AV{B}.
+
 
 \subsection{Indexed types}\label{ssec:background-ix}
-Lastly, we can integrate indexed types into the universe by abstracting over indices. Recall that in native Agda datatypes, a choice of constructor can fix the indices of the recursive fields and the resultant type, so we encode\footnote{We could also use a telescope for indices, but we do not.}:
+Lastly, we can integrate indexed types into the universe by abstracting over indices\todo{We could also use a telescope for indices, but we do not.}
 \ExecuteMetaData[Tex/Background]{U-ix}
-The in most cases, the index is simply threaded through the interpretation, allowing for a choice in the relevant codes. If we are constructing a term of some indexed type, then the previous choices of constructors and arguments build up the actual index of this term. This actual index must then match the index we expected in the declaration of this term. This means that in the case of a leaf, we have to replace the unit type with the necessary equality between the expected and actual indices:
+Recall that in native Agda datatypes, a choice of constructor can fix the indices of the recursive fields and the resultant type, so we encode:
+\ExecuteMetaData[Tex/Background]{Con-ix}
+%In most cases, the index is simply threaded through the interpretation, allowing for a choice in the relevant codes.
+If we are constructing a term of some indexed type, then the previous choices of constructors and arguments build up the actual index of this term. This actual index must then match the index we expected in the declaration of this term. This means that in the case of a leaf, we have to replace the unit type with the necessary equality between the expected and actual indices:
 \ExecuteMetaData[Tex/Background]{int-ix}
+In a recursive field, the expected index can be chosen based on parameters and variables. % mark: wording
+
 In this universe, we can define finite types and vectors as:
 \ExecuteMetaData[Tex/Background]{FinD}
 and
 \ExecuteMetaData[Tex/Background]{VecD}
+These are equivalent, but since we do not model implicit fields, they are slightly different in use compared to \AD{Fin} and \AD{Vec}. In the first constructor of \AF{VecD} we report an actual index of \AIC{zero}. In the second, we have a field \bN{} to bring the index \AV{n} into scope, which is used to request a recursive field with index \AV{n}, and report the actual index of \AIC{suc}\ \AV{n}.
+
 We can now compare the structures in the quadruple (\bN{}, \AD{List}, \AD{Fin}, \AD{Vec}) by looking at their descriptions.
 
-As a bonus, we can also use \AD{U-ix} for generic programming. For example, by a long construction which can be found in \autoref{app:gfold}, we can define the generic fold operation:
+As a bonus, we can also use \AD{U-ix} for generic programming. For example, by a long construction which can be found in \autoref{app:gfold}, we can define the generic \AF{fold} operation\footnote{Do note that this version takes a polymorphic function as an argument, as opposed to the usual fold which has the quantifiers on the outside. The usual fold can be recovered by giving \AV{X} an argument to assert that the type variable is actually equal to some concrete type.}:
 \ExecuteMetaData[Tex/Background]{fold-type}
+Intuitively, \AF{fold} operation works as follows: Suppose the information of one constructor application of \AV{D}, where the recursive positions are valued in \AV{X}, can be collapsed to a value of \AV{X} again. Then, by recursively collapsing the constructors from the bottom up, we can collapse all values of \AD{μ-ix}\ \AV{D} to values of \AV{X}.
 
-%\input{Background/Desc.tex}
+As a more concrete example, instantiating \AF{fold} to \AF{ListD}, we get (up to some type equivalences):
+\ExecuteMetaData[Tex/Background]{foldr-type}
+which, much like the familiar foldr operation lets us consume a list to a value \AV{X A}, provided a value \AV{X A} in the empty case, and a means to convert a pair of \AV{A} and \AV{X A} to \AV{X A}.
+
+% deriving sum is still technical
 
 \section{Ornaments}\label{sec:background-ornaments}
+\todo{We also skip over field deletion and such because we don't need them, exercise to the reader.}
+\todo{recheck}
 In this section we will introduce the concept of an ornament, used to compare descriptions, and give a simplified definition. Since we settled on \AD{U-ix} as our universe (for now), we redefine and rename a couple of things for readability and reusability:
 \ExecuteMetaData[Tex/Background]{new-Nat-List}
 Purely looking at their descriptions, \bN{} and \AD{List} are rather similar, except that \AD{List} has a parameter and an extra field \bN{} does not have. We could say that we can form the type of lists by starting from \bN{} and adding this parameter and field, while keeping everything else the same. In the other direction, we see that each list corresponds to a natural by stripping this information. Likewise, the type of vectors is almost identical to \AD{List}, can be formed from it by adding indices, and each vector corresponds to a list by dropping the indices.
 
 These and similar observations can be generalized using ornaments \cite{algorn, progorn, sijsling}, which define a language or binary relation, describing which datatypes can be formed by decorating others. Conceptually, an ornament from a type \AV{A} to a type \AV{B} represents that \AV{B} can be formed from \AV{A} by adding information or making the indices more specific. Consequently, for each ornament from \AV{A} to \AV{B}, we expect to get a function from \AV{B} to \AV{A} erasing this information and reverting to less specific indices.
 
-If the indices \AV{J} (analogously, parameters \AV{Δ}) of \AV{B} are more specific than the indices \AV{I} (and parameters \AV{Γ}) of \AV{A}, we require functions from \AV{J} to \AV{I} and from \AV{Δ} to \AV{Γ}. Our ornaments
+If the indices \AV{J} and parameters \AV{Δ} of \AV{B} are more specific than the indices \AV{I} and parameters \AV{Γ} of \AV{A}, we require functions from \AV{J} to \AV{I} and from \AV{Δ} to \AV{Γ}. % mark: does not parse 
+Our ornaments
 \ExecuteMetaData[Tex/Background]{Orn-type}
 should then come equipped with a function:
 \ExecuteMetaData[Tex/Background]{ornForget-type}
@@ -217,7 +246,8 @@ Now we can define \AD{ConOrn}. Of course, we expect that adding nothing gives th
 \ExecuteMetaData[Tex/Background]{ConOrn}
 However, since the parameters, indices, and variables need not be identical on both sides (in particular, the variables can diverge even more depending on the preceding ornament), we have to ask that for \AIC{𝟙} and \AIC{ρ}, these are related by a structure respecting conversion, or more graphically, a commuting square\footnote{While for \AIC{σ}, we bake the relatedness of the fields in by letting the resulting descriptions only differ by the conversion \AV{v}.}. In fact, we will soon see that these pieces of information are exactly what we need to complete \AF{ornForget}.
 
-The other two constructors, \AIC{∆} and \AIC{∇}, state that we can add fields, and remove fields if we provide a default value, respectively. Again, the constructor \AIC{∆} which adds a field depending on the variables requires some manner of commuting square.
+%The other two constructors, \AIC{∆} and \AIC{∇}, state that we can add fields, and remove fields if we provide a default value, respectively. Again, the constructor \AIC{∆} which adds a field depending on the variables requires some manner of commuting square.
+The other constructors \AIC{∆} states that we can add fields.
 
 We can now formulate the formation of \AD{List} from \bN{} as an ornament:
 \ExecuteMetaData[Tex/Background]{NatD-ListD}
@@ -234,7 +264,7 @@ which uses the commutativity squares we required earlier to revert some values (
 \ExecuteMetaData[Tex/Background]{ornErase}
 This function defines an algebra for the functor associated to a description \AV{E}:
 \ExecuteMetaData[Tex/Background]{ornAlg}
-We can now make good use of the generic fold we defined in \autoref{ssec:background-ix}!
+We can now make good use of the generic \AF{fold} we defined for \AD{U-ix}!
 \ExecuteMetaData[Tex/Background]{ornForget}
 The function \AF{ornForget} also makes it easy to generalize relations of functions between similar types. For example, if we instantiate \AF{ornForget} for \AF{ℕD-ListD}, then the statement that list concatenation preserves length can equivalently be expressed as the commutation of concatenation and \AF{ornForget}.
 
@@ -242,3 +272,21 @@ The function \AF{ornForget} also makes it easy to generalize relations of functi
 %[ remark, ornForget is never epi because of \sigma 0 ]: #
 
 %\input{Background/Ornaments.tex}
+
+\section{Ornamental Descriptions}
+\todo{And why we skip ornaments in the next part}
+
+\begin{outline}
+A description can say ``this is how you make this datatype'', an ornament can say ``this is how you go between these types''. However, an ornament needs its left-hand side to be predefined before it can express the relation, while we might also interpret an ornament as a set of instructions to translate one description into another. A slight variation on ornaments can make this kind of usage possible: ornamental descriptions.
+    
+An ornamental description drops the left-hand side when compared to an ornament, and interprets the remaining right-hand side as the starting point of the new datatype:
+\ExecuteMetaData[Ornament/OrnDesc]{ConOrnDesc-type}
+The definition of ornamental descriptions can be derived in a straightforward manner from ornaments, removing all mentions of the LHS and making all fields which then no longer appear in the indices explicit\footnote{One might expect to need less equalities, alas, this is difficult because of \autoref{rem:orn-lift}.}. We will show the leaf-preserving rule as an example, the others are derived analogously:
+\ExecuteMetaData[Ornament/OrnDesc]{OrnDesc-1}
+As we can see, the only change we need to make is that \AgdaBoundFontStyle{k} becomes explicit and fully annotated.
+
+Almost by construction, we have that an ornamental description can be decomposed into a description of the new datatype
+\ExecuteMetaData[Ornament/OrnDesc]{toDesc}
+and an ornament between the starting description and this new description
+\ExecuteMetaData[Ornament/OrnDesc]{toOrn}
+\end{outline}

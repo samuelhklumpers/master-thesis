@@ -5,7 +5,7 @@
 
 \usepackage{comment}
 
-\setlength{\marginparwidth}{2cm} % remove when done
+\setlength{\marginparwidth}{2cm} % this makes \todo{}s explode less, remove when done
 
 \usepackage{todonotes}
 \usepackage{xcolor}
@@ -15,8 +15,8 @@
 \usepackage{catchfilebetweentags}
 \usepackage{quiver} 
 \usepackage{tabularx}
-%\usepackage{adjustbox}
-%\usepackage{longtable}
+% \usepackage{adjustbox}
+% \usepackage{longtable}
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{listings}
@@ -50,7 +50,7 @@
 
 
 \usepackage[links]{agda}
-%\AtBeginEnvironment{code}{\fontsize{8}{10}}
+% \AtBeginEnvironment{code}{\fontsize{8}{10}}
 \AgdaNoSpaceAroundCode{}
 
 \usepackage{fontspec}
@@ -80,9 +80,10 @@
 
 \newcommand{\AF}[1]{\AgdaFunction{#1}}
 \newcommand{\AD}[1]{\AgdaDatatype{#1}}
+\newcommand{\AR}[1]{\AgdaRecord{#1}}
 \newcommand{\AV}[1]{\AgdaBoundFontStyle{#1}}
 \newcommand{\AIC}[1]{\AgdaInductiveConstructor{#1}}
-\newcommand{\ACC}[1]{\AgdaCoinductiveConstructor{#1}}
+\newcommand{\ARF}[1]{\AgdaField{#1}}
 
 \definecolor{git-green}{HTML}{13A10E}
 \definecolor{git-orange}{HTML}{C69026}
@@ -111,7 +112,7 @@
 \maketitle
 
 \begin{abstract}
-The dependently typed functional programming language Agda encourages defining custom datatypes to write correct-by-construction programs with. In some cases, even those datatypes can be made correct-by-construction, by manually distilling them from a mixture of requirements, as opposed to pulling them out of thin air. This is in particular the case for numerical representations, a class of datastructures inspired by number systems, containing structures such as linked lists and binary trees. However, constructing datatypes in this manner, and establishing the necessary relations between them can quickly become tedious and duplicative.
+The dependently typed functional programming language Agda encourages defining custom datatypes to write correct-by-construction programs with\todo{long}. In some cases, even those datatypes can be made correct-by-construction, by manually distilling them from a mixture of requirements, as opposed to pulling them out of thin air\todo{distracted}. This is in particular the case for numerical representations, a class of datastructures inspired by number systems, containing structures such as linked lists and binary trees. However, constructing datatypes in this manner, and establishing the necessary relations between them can quickly become tedious and duplicative.
 
 In the general case, employing datatype-generic programming can curtail code-duplication by allowing the definition of constructions that can be instantiated to a class of types. Furthermore, ornaments make it possible to succinctly describe relations between structurally similar types.
 
@@ -135,20 +136,39 @@ This thesis explains the concepts numerical representations and ornaments, and a
 
 \part*{Background}\label{part:background}
 \addcontentsline{toc}{part}{\nameref{part:background}}
-We extend upon and make heavy use of existing work for generic programming and ornaments, so let us take a closer look at the nuts and bolts to see what all the concepts are about.
+\todo{go emph pass}
+\todo{go cite pass}
+We extend upon existing work in the domain of generic programming and ornaments, so let us take a closer look at the nuts and bolts to see what all the concepts are about.
 
+We will describe some common datatypes and how they can be used for programming, exploring how dependent types also let us use datatypes to prove properties of programs, or write programs that are correct-by-construction, leading us to discuss descriptions of datatypes and ornaments.
+    
 \input{Background}
 
 
-\part{Descriptions and ornaments}\label{part:ornament}
+\part{Descriptions}\label{part:ornament}
+%outline:
+%we explained why descriptions and ornaments are crucial to achieve our goals
+%however, the descriptions we explained earlier are not powerful enough to house finger trees
+
+
+%To capture finger trees as an ornament over a number system, we will need to describe ornaments over nested datatypes. In this section we will work out descriptions and ornaments suitable for nested datatypes.
+If we are going to simplify working with complex sequence types %, such as finger trees,
+by instantiating generic programs to them, we should first make sure that these types fit into the descriptions. We construct descriptions for nested datatypes by extending the encoding of parametric and indexed datatypes from \autoref{ssec:background-ix} with three features: information bundles, parameter transformation, and description composition. Also, to make sharing constructors easier, we introduce variable transformations. Transforming variables before they are passed to child descriptions allows both aggressively hiding variables and introducing values as if by let-constructs.
+
+We base the encoding of off existing encodings \cite{sijsling,practgen}. The descriptions take shape as sums of products, enforce indices at leaf nodes, and have explicit parameter and variable telescopes. Unlike some other encodings \cite{effectfully, practgen}, we do not allow higher-order inductive arguments. We use \texttt{--type-in-type} and \texttt{--with-K} to simplify the presentation, noting that these can be eliminated respectively by moving to \AD{Typeω} and by implementing interpretations as datatypes, as described in \autoref{app:withoutk}.
+
+\input{Descriptions}
+
+
+\part{Ornaments}\label{part:ornament2_rename_the_other}
 \input{Ornaments}
 
 
 \part{Numerical representations}\label{part:numrep}
-\input{TypeGeneration}
-
+\input{GNumrep}
 
 \part{Related work}\label{part:related}
+\begin{comment}
 \section{Descriptions and ornaments}
 We compare our implementation to a selection of previous work, considering the following features
 
@@ -219,7 +239,7 @@ We take away some interesting points from this:
 
 
 \subsubsection{Ornamentation}
-While we can derive datastructures from number systems by going through their index types \cite{calcdata}, we may also interpret numerical representations more literally as instructions to rewrite a number system to a container type. We can record this transformation internally using ornaments, which can then be used to derive an indexed version of the container \cite{algorn}, or can be modified further to naturally integrate other constraints, e.g., ordering, into the resulting structure \cite{progorn}. Furthermore, we can also use the forgetful functions induced by ornaments to generate specifications for functions defined on the ornamented types \cite{orntrans}.
+While we can derive datastructures from number systems by going through their index types \cite{calcdata}, we may also interpret numerical representations more literally as instructions to rewrite a number system to a sequence type. We can record this transformation internally using ornaments, which can then be used to derive the associated type of arrays\cite{algorn}, or can be modified further to naturally integrate other constraints, e.g., ordering, into the resulting structure \cite{progorn}. Furthermore, we can also use the forgetful functions induced by ornaments to generate specifications for functions defined on the ornamented types \cite{orntrans}.
 
 \subsubsection{Generic constructions}
 Being able to define a datatype and reflect its structure in the same language opens doors to many more interesting constructions \cite{practgen}; a lot of ``recipes'' we recognize, such as defining the eliminators for a given datatype, can be formalized and automated using reflection and macros. We expect that other type transformations can also be interpreted as ornaments, like the extraction of heterogeneous binary trees from level-polymorphic binary trees \cite{hetbin}. 
@@ -265,7 +285,72 @@ Rather than equating implementations after the fact, we can also ``compute'' dat
 
 From another perspective, numerical representations run by using representability as a kind of ``strictification'' of types. %This suggests that we may be able to generalize the approach of numerical representations, using that any (non-indexed) infinitary inductive-recursive type supports a lookup operation \cite{glookup}.
 
+\end{comment}
+
 \part{Discussion}
+\begin{comment}
+\begin{example}    
+    This ``proves'' our construction correct, but let us compare it to an existing numerical representation:
+    We see that applying \AgdaFunction{TrieO} to \AgdaFunction{NatND} gives us a description which corresponds almost directly to \AgdaFunction{ListD}, only replacing all fields with vectors of length 1.
+\end{example}
+
+The reader of \cite{algorn} might question why we are doing the work of \AgdaFunction{TrieOIx} ourselves, rather than making use of \AgdaFunction{ornAlg}.
+\begin{remark}
+Problems
+\begin{enumerate}
+    \item an algebra for D gives no algebras for the deltas in D,
+    \item no delta means constructors explode.
+\end{enumerate}
+
+Solution 1: define other infrastructure for algebras that do have algebras for deltas
+
+Solution 2:
+\begin{enumerate}
+    \item kill deltas by an intermediate form which explodes,
+    \item give up on constructor lists and have big sigma.
+\end{enumerate}
+
+Solution 3:
+\begin{enumerate}
+    \item do deltas via mutual recursion,
+    \item mutual recursion already has good algebras.
+\end{enumerate}
+
+\end{remark} 
+
+\begin{remark}
+    Also, variables are annoying
+    \begin{itemize}
+        \item centralize variable transforms into one place in deltas
+        \item what are ornaments now
+    \end{itemize} 
+
+    \begin{itemize}
+        \item package descriptions and their thinnings
+        \item something happens
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Not all functions $\mu D \to X$ come from algebras $[D] X \to X$. Consider the function $\mathrm{pred} : N \to N$, sending $\mathrm{suc} n$ to $n$ and 0 to 0.
+    % https://q.uiver.app/#q=WzAsNyxbMCwwLCIxK04iXSxbMCwxLCJOIl0sWzEsMSwiTiJdLFsxLDAsIjErTiJdLFsyLDAsIk4iXSxbMywxLCJOIl0sWzMsMCwiTiJdLFswLDEsIlxcbWF0aHJte3N1Y30iLDJdLFszLDIsIj8iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMCwzLCIxK1xcbWF0aHJte3ByZWR9Il0sWzEsMiwiXFxtYXRocm17cHJlZH0iLDJdLFswLDIsIlxcbGFuZ2xlMCwgXFxtYXRocm17aWR9XFxyYW5nbGUiLDFdLFs0LDUsIlxcbWF0aHJte2lkfSIsMV0sWzQsNiwiXFxtYXRocm17cHJlZH0iXSxbNiw1LCIhISEiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkb3R0ZWQifX19XV0=
+    \[\begin{tikzcd}
+        {1+N} & {1+N} & N & N \\
+        N & N && N
+        \arrow["{\mathrm{suc}}"', from=1-1, to=2-1]
+        \arrow["{?}", dashed, from=1-2, to=2-2]
+        \arrow["{1+\mathrm{pred}}", from=1-1, to=1-2]
+        \arrow["{\mathrm{pred}}"', from=2-1, to=2-2]
+        \arrow["{\langle0, \mathrm{id}\rangle}"{description}, from=1-1, to=2-2]
+        \arrow["{\mathrm{id}}"{description}, from=1-3, to=2-4]
+        \arrow["{\mathrm{pred}}", from=1-3, to=1-4]
+        \arrow["{!!!}", dotted, from=1-4, to=2-4]
+    \end{tikzcd}\]
+    We see that $\mathrm{pred}$ cannot come from a map $1 + N \to N$, as that map would be a retraction, while $\mathrm{pred}$ is not mono.
+\end{remark}
+
+\towrite{Some goals: 1. Ix and paths. 2. Ix n -> A iso IxTrieO n A. 3. something about the correctness of TrieO}
+
 \begin{outline}
 :warning: the trie ornament is hard to prove about
 
@@ -324,7 +409,7 @@ From another perspective, numerical representations run by using representabilit
 \investigate{Is Ix x -> A initial for the algebra of the algebraic ornament induced by TrieO? (This is \cite{calcdata}).}
 
 \investigate{While evidently Ix x != Fin (toN x) for arbitrary number systems, does the expected iso Ix x -> A = Trie A x yield Traversable, for free?}
-
+\end{comment}
 
 
 \printbibliography

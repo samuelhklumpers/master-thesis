@@ -56,14 +56,18 @@ data ℕ : Type where
 \begin{code}
 private variable
   n m : ℕ
+
+_+_ : (n m : ℕ) → ℕ
+zero  + m = m
+suc n + m = suc (n + m)
 \end{code}
 
 %<*lt>
 \begin{code}
-_<_ : (n m : ℕ) → Bool
-n      < zero   = false
-zero   < suc m  = true
-suc n  < suc m  = n < m
+_<?_ : (n m : ℕ) → Bool
+n      <? zero   = false
+zero   <? suc m  = true
+suc n  <? suc m  = n <? m
 \end{code}
 %</lt>
 
@@ -113,19 +117,23 @@ data HBool : Bool → Type where
 \end{code}
 %</HBool>
 
-%<*Fin-Vec>
+%<*Fin>
 \AgdaTarget{Fin}
-\AgdaTarget{Vec}
 \begin{code}
 data Fin : ℕ → Type where
   zero  :          Fin (suc n)
   suc   : Fin n  → Fin (suc n)
+\end{code}
+%</Fin>
 
+%<*Vec>
+\AgdaTarget{Vec}
+\begin{code}
 data Vec (A : Type) : ℕ → Type where
   []   :                Vec A zero
   _∷_  : A → Vec A n →  Vec A (suc n)
 \end{code}
-%</Fin-Vec>
+%</Vec>
 
 %<*toList>
 \AgdaTarget{toList}
@@ -161,6 +169,21 @@ data _≡_ (a : A) : A → Type where
   refl : a ≡ a
 \end{code}
 %</equiv>
+
+%<*ltF>
+\AgdaTarget{\_<\_, <}
+\begin{code}
+data _<_ : (n m : ℕ) → Type where
+  z<s : zero < suc m
+  s<s : n < m → suc n < suc m
+\end{code}
+%</ltF>
+
+\begin{code}
+infix 5 _<_
+
+{-# BUILTIN EQUALITY _≡_ #-}
+\end{code}
 
 %<*insert>
 \AgdaTarget{insert}
@@ -219,6 +242,7 @@ data _⊎_ A B : Type where
 
 \begin{code}
 infixr 5 _,_
+infix 10 _⊎_
 \end{code}
 
 %<*product>
@@ -234,6 +258,12 @@ record _×_ A B : Type where
     snd : B
 \end{code}
 %</product>
+
+\begin{code}
+open _×_ public
+
+infixl 5 _×_
+\end{code}
 
 %<*true>
 \AgdaTarget{⊤}
@@ -273,11 +303,17 @@ record Σ A (P : A → Type) : Type where
 \begin{code}
 open Σ
 
-Σ-syntax : ∀ {ℓ ℓ'} (A : Type ℓ) (B : A → Type ℓ') → Type (ℓ-max ℓ ℓ')
+Σ-syntax : ∀ {ℓ ℓ'} (A : Type ℓ) (P : A → Type ℓ') → Type (ℓ-max ℓ ℓ')
 Σ-syntax = Σ
 
-syntax Σ-syntax A (λ x → B) = Σ[ x ∈ A ] B
+infix 4 Σ-syntax
 \end{code}
+
+%<*sigma-syntax>
+\begin{code}
+syntax Σ-syntax A (λ x → P) = Σ[ x ∈ A ] P
+\end{code}
+%</sigma-syntax>
 
 %<*forall>
 \begin{code}
@@ -285,29 +321,6 @@ data ∀′ A (P : A → Type) : Type where
   all : (∀ a → P a) → ∀′ A P
 \end{code}
 %</forall>
-
-%<*Lookup>
-\AgdaTarget{Lookup}
-\begin{code}
-Lookup : ℕ → Type → Type
-Lookup n A = Fin n → A
-\end{code}
-%</Lookup>
-
-%<*Iso>
-\AgdaTarget{Iso}
-\AgdaTarget{rightInv}
-\AgdaTarget{leftInv}
-\begin{code}
-record Iso A B : Type where
-  constructor iso
-  field
-    fun  : A → B
-    inv  : B → A
-    rightInv  : ∀ b → fun (inv b) ≡ b 
-    leftInv   : ∀ a → inv (fun a) ≡ a
-\end{code}
-%</Iso>
 
 %<*U-fin>
 \AgdaTarget{U-fin}
@@ -501,13 +514,22 @@ private variable
   I : Type
 \end{code}
 
-%<*int-Extel>
+%<*int-ExTel>
 \AgdaTarget{⟦\_\&\_⟧tel}
 \begin{code}
 ⟦_&_⟧tel : (Γ : Tel ⊤) (V : ExTel Γ) → Type
 ⟦ Γ & V ⟧tel = Σ (⟦ Γ ⟧tel tt) ⟦ V ⟧tel
 \end{code}
-%</int-Extel>
+%</int-ExTel>
+
+%<*tele-helpers>
+\begin{code}
+map₂ : ∀ {A B C} → (∀ {a} → B a → C a) → Σ A B → Σ A C
+map₂ f (a , b) = (a , f b)
+
+map-var = map₂
+\end{code}
+%</tele-helpers>
 
 %<*U-par>
 \AgdaTarget{Con-par}
@@ -535,10 +557,10 @@ data Con-par Γ V where
 ⟦ []     ⟧U-par X p  = ⊥
 ⟦ C ∷ D  ⟧U-par X p  = ⟦ C ⟧C-par (X ∘ fst) (p , tt) × ⟦ D ⟧U-par X p
 
-⟦ 𝟙      ⟧C-par X p  = ⊤
-⟦ ρ C    ⟧C-par X p  = X p × ⟦ C ⟧C-par X p
+⟦ 𝟙      ⟧C-par X pv          = ⊤
+⟦ ρ C    ⟧C-par X pv          = X pv × ⟦ C ⟧C-par X pv
 ⟦ σ S C  ⟧C-par X pv@(p , v)
-  = Σ[ s ∈ S pv ] ⟦ C ⟧C-par (λ { (p , v , _) → X (p , v) }) (p , v , s)
+  = Σ[ s ∈ S pv ] ⟦ C ⟧C-par (X ∘ map-var fst) (p , v , s)
 \end{code}
 %</int-par>
 
@@ -549,19 +571,21 @@ module ListD-bad where
 \begin{code}
   ListD : U-par (∅ ▷ const Type)
   ListD = 𝟙
-        ∷ σ (snd ∘ fst) (ρ 𝟙)
+        ∷ σ (λ ((_ , A) , _) → A) (ρ 𝟙)
         ∷ []
 \end{code}
 %</ListD>
 
 %<*SigmaD>
 \begin{code}
-SigmaD : U-par (∅ ▷ const Type ▷ (λ A → A → Type) ∘ snd ∘ snd)
-SigmaD =  σ (snd ∘ fst ∘ fst)
-       (  σ (λ { ((p , B) , _ , a) → B a }) 𝟙)
+SigmaD : U-par (∅ ▷ const Type ▷ λ { (_ , _ , A) → A → Type })
+SigmaD =  σ (λ (((_ , A) , _) ,  _)       → A    )
+       (  σ (λ ((_       , B) , (_ , a))  → B a  )
+          𝟙)
        ∷  []
 \end{code}
 %</SigmaD>
+
 
 %<*U-ix>
 \AgdaTarget{Con-ix}
@@ -609,8 +633,11 @@ data μ-ix (D : U-ix Γ I) (p : ⟦ Γ ⟧tel tt) (i : I) : Type where
 %<*FinD>
 \begin{code}
 FinD : U-ix ∅ ℕ
-FinD = σ (const ℕ) (𝟙 (suc ∘ snd ∘ snd))
-     ∷ σ (const ℕ) (ρ (snd ∘ snd) (𝟙 (suc ∘ snd ∘ snd)))
+FinD = σ (const ℕ)
+     ( 𝟙 (λ (_ , (_ , n)) → suc n))
+     ∷ σ (const ℕ)
+     ( ρ (λ (_ , (_ , n)) → n)
+     ( 𝟙 (λ (_ , (_ , n)) → suc n)))
      ∷ []
 \end{code}
 %</FinD>
@@ -620,9 +647,9 @@ FinD = σ (const ℕ) (𝟙 (suc ∘ snd ∘ snd))
 VecD : U-ix (∅ ▷ const Type) ℕ
 VecD = 𝟙 (const zero)
      ∷  σ (const ℕ)
-     (  σ (snd ∘ fst)
-     (  ρ (snd ∘ fst ∘ snd)
-     (  𝟙 (suc ∘ snd ∘ fst ∘ snd))))
+     (  σ (λ ((_ , A) , _) → A )
+     (  ρ (λ (_ , ((_ , n) , _)) → n)
+     (  𝟙 (λ (_ , ((_ , n) , _)) → suc n))))
      ∷ []
 \end{code}
 %</VecD>
@@ -678,10 +705,42 @@ Con   = Con-ix
 
 ListD  : Desc (∅ ▷ const Type) ⊤
 ListD  = 𝟙 !
-       ∷ σ (snd ∘ fst) (ρ ! (𝟙 !))
+       ∷ σ (λ ((_ , A) , _) → A) (ρ ! (𝟙 !))
        ∷ []
 \end{code}
 %</new-Nat-List>
+
+
+\begin{code}
+postulate
+\end{code}
+
+
+%<*foldr-type>
+\begin{code}
+  foldr  : {X : Type → Type}
+         → (∀ A → ⊤ ⊎ (A × X A) → X A)
+         → ∀ B → List B → X B
+\end{code}
+%</foldr-type>
+
+\begin{code}
+foldr′ : ∀ {X} → ⟦ ListD ⟧D X ⇶ X → μ-ix ListD ⇶ X
+foldr′ = fold {D = ListD}
+
+sum′ : μ-ix ListD ⇶ λ (_ , A) _ → (A → ℕ) → ℕ
+sum′ = foldr′ go
+  where
+  go : ⟦ ListD ⟧D (λ z _ → (z .snd → ℕ) → ℕ) ⇶ (λ z _ → (z .snd → ℕ) → ℕ)
+  go p _ (inj₁ x) = const zero
+  go p _ (inj₂ (inj₁ (x , f , _))) y = y x + f y
+
+sum : {A : Type} → (A → ℕ) → μ-ix ListD (_ , A) _ → ℕ
+sum {A = A} f x = sum′ (tt , A) tt x f 
+
+list-123 : μ-ix ListD (_ , ℕ) _
+list-123 = con (inj₂ (inj₁ (suc zero , con (inj₂ (inj₁ (suc (suc zero) , con (inj₂ (inj₁ (suc (suc (suc zero)) , con (inj₁ refl) , refl))) , refl))) , refl)))
+\end{code}
 
 %<*Orn-type>
 \begin{code}
@@ -738,31 +797,42 @@ V ⊧ S = ∀ p → S p
 
 ⊧-▷ : ∀ {S} → V ⊧ S → ∀ {p} → ⟦ V ⟧tel p → ⟦ V ▷ S ⟧tel p
 ⊧-▷ s v = v , s (_ , v)
+
+_∼_ : {B : A → Type} → (f g : ∀ a → B a) → Type
+f ∼ g = ∀ a → f a ≡ g a
 \end{code}
 %</ConOrn-helpers>
+
+\begin{code}
+infix 0 _∼_
+\end{code}
 
 %<*ConOrn>
 \begin{code}
 data ConOrn {W = W} {V = V} g v i where
-  𝟙  : ∀ {i′ j′} → (∀ w → i (j′ w) ≡ i′ (over v w))
+  𝟙  : ∀ {i′ j′}
+     → i ∘ j′ ∼ i′ ∘ over v
      → ConOrn g v i (𝟙 i′) (𝟙 j′)
 
-  ρ  : ∀ {i′ j′ CD CE} → ConOrn g v i CD CE
-     → (∀ w → i (j′ w) ≡ i′ (over v w))
+  ρ  : ∀ {i′ j′ CD CE}
+     → ConOrn g v i CD CE
+     → i ∘ j′ ∼ i′ ∘ over v
      → ConOrn g v i (ρ i′ CD) (ρ j′ CE)
 
-  σ  : ∀ {S} {CD CE} → ConOrn g (Cxf′-▷ v S) i CD CE
+  σ  : ∀ {S} {CD CE}
+     → ConOrn g (Cxf′-▷ v S) i CD CE
      → ConOrn g v i (σ S CD) (σ (S ∘ over v) CE)
 
-  Δσ  : ∀ {S} {CD CE} → ConOrn g (v ∘ fst) i CD CE
+  Δσ  : ∀ {S} {CD CE}
+      → ConOrn g (v ∘ fst) i CD CE
       → ConOrn g v i CD (σ S CE)
+\end{code}
+%</ConOrn>
 
   ∇σ  : ∀ {S} {CD CE}
       → (s : V ⊧ S)
       → ConOrn g (⊧-▷ s ∘ v) i CD CE
       → ConOrn g v i (σ S CD) CE
-\end{code}
-%</ConOrn>
 
 %<*NatD-ListD>
 \begin{code}
@@ -809,8 +879,9 @@ conOrnErase {i = i} (𝟙 sq) p j x = trans (cong i x) (sq p)
 conOrnErase {g = g} {X = X} (ρ CD sq) (p , v) j (x , y) = subst (X (g p)) (sq (p , v)) x , conOrnErase CD (p , v) j y
 conOrnErase (σ CD) (p , w) j (s , x) = s , conOrnErase CD (p , w , s) j x
 conOrnErase (Δσ CD) (p , w) j (s , x) = conOrnErase CD (p , w , s) j x
-conOrnErase {v = v} (∇σ s CD) p j x = s (over v p) , conOrnErase CD p j x
 \end{code}
+conOrnErase {v = v} (∇σ s CD) p j x = s (over v p) , conOrnErase CD p j x
+
 
 %<*ornAlg>
 \begin{code}

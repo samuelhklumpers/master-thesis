@@ -1,144 +1,65 @@
-%outline:
-%we explained why descriptions and ornaments are crucial to achieve our goals
-%however, the descriptions we explained earlier are not powerful enough to house finger trees
+In the framework of \AD{DescI} in the last section, we can write down a number system and its meaning as the starting point of the construction of a numerical representation. To write down the generic construction of those numerical representations, we will need a language in which we can describe modifications on the number systems.
 
-
-%To capture finger trees as an ornament over a number system, we will need to describe ornaments over nested datatypes. In this section we will work out descriptions and ornaments suitable for nested datatypes.
-If we are going to simplify working with complex containers %, such as finger trees,
-by instantiating generic programs to them, we should first make sure that these types fit into the descriptions.
-
-We construct descriptions for nested datatypes by extending the encoding of parametric and indexed datatypes from \autoref{ssec:background-ix} with three features: information bundles, parameter transformation, and description composition. Also, to make sharing constructors easier, we introduce variable transformations. Transforming variables before they are passed to child descriptions allows both aggressively hiding variables and introducing values as if by let-constructs.
-
-We base the encoding of off existing encodings \cite{sijsling,practgen}. The descriptions take shape as sums of products, enforce indices at leaf nodes, and have explicit parameter and variable telescopes. Unlike some other encodings \cite{effectfully, practgen}, we do not allow higher-order inductive arguments. 
-
-We use \texttt{--type-in-type} and \texttt{--with-K} to simplify the presentation, noting that these can be eliminated respectively by moving to \AD{Typeω} and by implementing interpretations as datatypes, as described in \autoref{app:withoutk}.
-
-
-
-\section{The descriptions}\label{ssec:desc}
-To describe a numerical representation, we must of course first describe a number. We will focus on number systems as trees (that is, arbitrary unindexed types with no parameters) which evaluate nodes by addition and potentially multiplication by a constant (more about these in \autoref{part:numrep}). To avoid duplication, we will generalize our universe over bundles of information, rather than defining a new type of descriptions of number systems. Given a certain kind of information, a description will additionally provide a piece of that kind of information at each code. %for now we leave them out, we give them under descriptions.
-
-We also need to take care that the resulting numerical representation indeed fits in our universe. The final universe \AD{U-ix} in \autoref{sec:background}, while already quite general, still leaves out many interesting datastructures. In particular, the encoding of parameters forces the recursive type occurrences to have the same applied parameters, ruling out nested datatypes such as (binary) random-access lists \cite{calcdata,purelyfunctional}:
-\changed{Redo (or check) the Agda snippets below here.}
-\[ code \]
-and finger trees \cite{ralf}:
-\[ code \]
-Moreover, finger trees also reveal another set of quirks in \AD{U-ix}. Because adding non-recursive fields changes the variable telescope, it becomes hard to reuse parts of a description in different places. Apart from that, the number of constructors needed to describe finger trees and similar types also grows quickly when adding fields like \AD{Digit}. To resolve these issues and fit finger trees into the universe, we make three big changes.
-
-First, by allowing parameters to be transformed before passing to recursive fields, we directly include nested types. Second, by allowing variables to be transformed before passing to subsequent fields, we make sharing constructors possible. Finally, by adding a variant of \AIC{σ} specialized to descriptions, we can describe composite datatypes more succinctly.
-
-To present the descriptions, we will use telescopes identical to those in \autoref{ssec:bg-desc}.
-% we explain by example.
 \changed{Somewhat final version above, draft/notes/rough comments/outline below.}
-\changed{Note to self: add more citations and then double check them below here}
-The descriptions are, again, given in two stages where the outer is analogous
-\[ desci \]
-The constructor descriptions are then:
-\[ coni \]
+In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of (plenty of examples). We omit the definition of the ornaments, since we will only construct new datatypes, rather than relate pre-existing types\footnote{Maybe, I will throw the ornaments into the appendix along with the conversion from ornamental description to ornament}.
+
+% (Be alarmed, the implicits get out of hand pretty quickly.)
+\todo{do we need to remark more?}
 
 
+\section{Ornamental descriptions}
+These ornamental descriptions take the same shape as those in \autoref{sec:background-ornamental-descriptions}, generalized to handle nested types, variable transformations, and composite types. Like the interpretation of a \AD{DescI}, ornaments also completely ignore the \AD{Info} of a \AD{DescI}.
+
+Recall that a \AD{OrnDesc}\ \AV{If′ Δ c J i D} represents the ornament building on top of \AV{D}, which yields a description with information \AV{If′}, parameters \AV{Δ}, and indices \AV{J}. We use \AF{∼} to write down pointwise equality of functions, which in this case are all commutativity squares. Since \AD{ConI} allows the transformation of variable telescopes, we have to dedicate a lot of lines to writing down commutativity squares for variables, which along with the generally high number of arguments and implicits\footnote{Of which even more are hidden!} makes the definition rather dry and long.
+
+One tip is to  ignore all squares involving a \AD{Vxf}, these are trivial when using the \AV{+-} variants of the \AIC{σ} and \AIC{δ} formers anyway! Due to the last constructor \AIC{δ•}, \AD{OrnDesc}, \AD{ConOrnDesc}, and \AF{toDesc}\footnote{We left out the variable square for \AIC{δ•}, because it is honestly just too long. If this was included, then we also would involve \AF{ornForget}.} become tightly connected, so the definition is given in one large mutual block:
+\ExecuteMetaData[Ornament/OrnDesc]{OrnDesc}
+Here the implicit \AV{If′} contains the information necessary to recover the \AD{DescI} from an \AD{OrnDesc}:\todo{line length}
+\ExecuteMetaData[Ornament/OrnDesc]{toDesc}
+The commutativity squares again ensure the existence of functions like \AF{ornForget}, and that these ornamental descriptions indeed induce ornaments.
+
+Compared to the previous ornaments, we have the new constructors \AIC{δ}, \AIC{Δδ} and \AIC{δ•}, where the first two are analogues of \AIC{σ} and \AIC{Δσ}. The \AIC{δ•} constructor states that an ornamental description from a description \AV{R} and a (constructor) ornamental description from \AV{CD} can be composed to form an ornamental description from the composition (in the sense of the \AV{δ} type-former) of \AV{CD} with \AV{R}.
+
+Let us make the uses of \AD{OrnDesc} more clear by means of examples, where we make use of the simpler variants: \todo{Oδ•+- needs ornForget to run}
+\ExecuteMetaData[Ornament/OrnDesc]{O-sigma-pm}
+With these we can give the now familiar ornamental description of \AD{Vec} from \AD{List}:
+\ExecuteMetaData[Ornament/OrnDesc]{VecOD}
+Using the new flexibility in \AIC{ρ}, we can now start from a description of binary numbers:
+\ExecuteMetaData[Ornament/OrnDesc]{LeibnizD}
+and give the random access lists from before as an ornamental description as well.
+\ExecuteMetaData[Ornament/OrnDesc]{RandomOD}
+Likewise, we can use \AIC{δ•} to start from the ``fingertree numbers'':
+\todo{finger tree skeleton}
+and compose this with the ornamental description of \AD{Digit}
+\todo{DigitOD}
+to obtain the ornamental description of finger trees:
+\todo{FingerTreeOD}
+
+%Again, ornForget, fold blabla.
+
+\todo{Now we can compute everything generically.}
 
 
-We use telescopes identical to those in \autoref{ssec:bg-desc}:
-\ExecuteMetaData[Ornament/Desc]{telescopes}
-Recall that a \AgdaDatatype{Tel} represents a sequence of types, which can depend on the external type $P$. This lets us represent a telescope succeeding another using \AgdaDatatype{ExTel}. A term of the interpretation \AgdaFunction{⟦\_⟧tel} is then a sequence of terms of all the types in the telescope.
+\begin{outline}
+\ExecuteMetaData[Ornament/OrnDesc]{ConOrnDesc-type}
+The definition of ornamental descriptions can be derived in a straightforward manner from ornaments, removing all mentions of the LHS and making all fields which then no longer appear in the indices explicit\footnote{One might expect to need less equalities, alas, this is difficult because of \autoref{rem:orn-lift}.}. We will show the leaf-preserving rule as an example, the others are derived analogously:
+\ExecuteMetaData[Ornament/OrnDesc]{OrnDesc-1}
+As we can see, the only change we need to make is that \AgdaBoundFontStyle{k} becomes explicit and fully annotated.
 
-We use some shorthands
-\ExecuteMetaData[Ornament/Desc]{tele-shorthands}
-\ExecuteMetaData[Ornament/Desc]{shorthands}
-
-As we will see in \autoref{sec:trieo}, some generics require descriptions augmented with more information. For example, a number system needs to describe both a datatype and its interpretation into naturals. This can be incorporated into a description by allowing description formers to query specific pieces of information. We will control where and when which pieces get queried by parametrizing descriptions over information bundles  
-\ExecuteMetaData[Ornament/Desc]{Info}
-Here a bundle declares for example that \AgdaField{𝟙i} is the type of information has to be provided at a \AgdaInductiveConstructor{𝟙} former. Remark that in \AgdaField{σi}, the bundle can ask for something depending on the type of the field. In \AgdaField{δi}, the bundle can ask something regarding the parameters and indices (e.g., it can force only unindexed subdescriptions.).
-
-\begin{example}
-    For example, we can encode a class of number systems using the information 
-    \ExecuteMetaData[Ornament/Numerical]{Number}
-    (refer to \autoref{sec:trieo}). If we then define the unit type, when viewed as a \AgdaFunction{Number}
-    \ExecuteMetaData{Ornament/Numerical}{Unit}
-    we have to provide the information that the only value of the unit type evaluates to 1.
-\end{example}
-
-We can recover the conventional descriptions by providing the plain bundle:
-\ExecuteMetaData[Ornament/Desc]{Plain}
-We define the ``down-casting'' of information as
-\ExecuteMetaData[Ornament/Desc]{InfoF}
-allowing us to reuse more specific descriptions in less specific ones, so that e.g., a number system can be used in a plain datatype.
-
-We can now define the descriptions, which should represent a mapping between parametrized indexed functors
-\ExecuteMetaData[Ornament/Desc]{PIType}
-Recall that a description 
-\ExecuteMetaData[Ornament/Desc]{DescI}
-is simply a list of constructor descriptions
-\ExecuteMetaData[Ornament/Desc]{Con}
-The interpretations \hyperlink{desc-desc-interpretation}{\AgdaFunction{⟦\_⟧}} of the formers can be found below.
-
-Leaves are formed by
-\ExecuteMetaData[Ornament/Desc]{Con-1}
-Here \AgdaBoundFontStyle{if} queries information according to \texttt{If}, and \AgdaBoundFontStyle{j} computes the index of the leaf from the parameters and variables.
-
-A recursive field is formed by
-\ExecuteMetaData[Ornament/Desc]{Con-rho}
-where \AgdaBoundFontStyle{j} now determines the index of the recursive field. The function \AgdaBoundFontStyle{g} represents a parameter transform: the parameters of the recursive field can now changed at each recursive level, allowing us to describe nested datatypes. The remainder of the fields are described by \AgdaBoundFontStyle{C}. Note that a recursive field is intentionally not brought into scope: making use of it requires induction-recursion anyway!
-
-A non-recursive field is formed similarly to a recursive field
-\ExecuteMetaData[Ornament/Desc]{Con-sigma}
-The type of the field is given by \AgdaBoundFontStyle{S}, which may depend on the values of the preceding fields. We bring the field into scope, so we continue the description in an extended context. However, we allow the remainder of the description to provide a conversion from \texttt{V ▷ S} into \texttt{W} to select a new context. This makes it possible to hide fields which are unused in the remainder.
-
-Almost analogously, we make composition of descriptions internal by a variant of \AgdaInductiveConstructor{σ}
-\ExecuteMetaData[Ornament/Desc]{Con-delta}
-This takes a description \texttt{R}, and acts like the \AgdaInductiveConstructor{σ} of \texttt{μ R}, only with more ceremony. This will allow us to form descriptions by composing other descriptions, avoiding multiplying the number of constructors of composite datatypes.
-
-Similar to \AgdaInductiveConstructor{ρ}, the functions \AgdaBoundFontStyle{j} and \AgdaBoundFontStyle{g} control indices and parameters, only now of the applied description. As we allow the description \AgdaBoundFontStyle{R} of the field to have a different kind of information bundle \AgdaBoundFontStyle{If′}, we must ask that we can down-cast it into \AgdaBoundFontStyle{If} via \AgdaBoundFontStyle{iff}. 
-
-Descriptions and constructor descriptions can then be interpreted to appropriate kind of functor, constructor descriptions also taking variables
-\hypertarget{desc-desc-interpretation}{}
-\ExecuteMetaData[Ornament/Desc]{interpretation}
-We see that a leaf becomes a constraint between expected index and the actual index. A recursive field passes down a transformation of the current parameters and the expected index computed from the variables, before interpreting the remainder of the description. Likewise, a non-recursive field adds a field with type depending on variables, but also adds this field to the variables, which are then transformed and passed on to the remainder. The composite field is analogous, only adding a field from a description rather than a type. Finally, the list of constructor descriptions are interpreted as alternatives.
-
-The fixpoint can then be taken over the interpretation of a description
-\ExecuteMetaData[Ornament/Desc]{fpoint}
-giving the datatype represented by the description.
-
-We can then give a generic fold for the represented datatypes
-\ExecuteMetaData[Ornament/Desc]{fold}
-which descends the description, mapping itself over all recursive fields before applying the folding function.
-\begin{remark}
-    The situation of \AgdaFunction{fold} is very common when dealing with different kinds of recursive interpretations: functions from the fixpoint are generally defined from functions out of the interpretation, generalizing over the inner description while pattern matching on the outer description. 
-\end{remark}
-Note that the fold requires a rather general function, limiting its usefulness: because of the parameter transformations, we cannot instantiate the fold to a single parameter. Defining, e.g., the vector sum, would require us to inspect the description, and ask that a vector of naturals can be converted into a vector of naturals, which is trivial in this case.
-
-\todo{Sigma plus/minus}
-
-Let's look at some examples. We can encode the naturals as a type parametrized by \AgdaInductiveConstructor{∅} and indexed by \AgdaDatatype{⊤}
-\ExecuteMetaData[Ornament/Desc]{NatD}
-Lists can be encoded similarly, but this time using the telescope
-\ExecuteMetaData[Ornament/Desc]{ListTel}
-declaring that lists have a single type parameter. Compared to the naturals, the description now also asks for a field in the second case
-\ExecuteMetaData[Ornament/Desc]{ListD}
-Since the type parameter is at the top of the parameter telescope, the type of the field is given as \AgdaBoundFontStyle{par top}.
-
-Vectors are described using the same structure, but have indices in \bN{}.
-\ExecuteMetaData[Ornament/Desc]{VecD}
-In the first case, the index is fixed at 0. The second case declares that to construct a vector of length \AgdaBoundFontStyle{suc ∘ top}, the recursive field must have length \AgdaFunction{top}. Note that unlike index-first types, we cannot know the expected index from inside the description, so much like native indexed types, we must add a field choosing an index.
-
-Recall the type of finger trees. Using parameter transformations and composition, we can give a description of full-fledges finger trees! First, we describe the digits
-\ExecuteMetaData[Ornament/Desc]{DigitD}
-and define the nodes\footnote{We could give the nodes as a description, but in this case we only use them in the recursive fields, so we would take the fixpoint without looking at their description anyway.}
-\ExecuteMetaData[Ornament/Desc]{Node}
-We encode finger trees as
-\ExecuteMetaData[Ornament/Desc]{FingerD}
-In the third case, we have digits which are passed the parameters on both sides in composite fields, and a recursive field in the middle. The recursive field has a parameter transformation, turning the type parameter \AgdaBoundFontStyle{A} into a \AgdaBoundFontStyle{Node A} in the recursive child.
+Almost by construction, we have that an ornamental description can be decomposed into a description of the new datatype
+\ExecuteMetaData[Ornament/OrnDesc]{toDesc}
+and an ornament between the starting description and this new description
+\ExecuteMetaData[Ornament/OrnDesc]{toOrn}
+\end{outline}
 
 
-
-\section{The ornaments}
 \begin{outline}    
+\section{The ornaments}
 we could ditch removal of fields: we don't use it. downside: ornament over ornament is the same as field removal for deltas
 
 :warning: match everything, add/remove field, add/remove recursive field, add/remove description field, ornament over ornament
-\end{outline}
-    
+
+\todo{Nuke ornaments, keep ornamental descriptions}
 
 \towrite{Put something that isn't yet in \autoref{ssec:bg-orn} here.}
 
@@ -194,18 +115,5 @@ Now the parameter conversion is the identity, since both have a single type para
 Instantiating \AgdaFunction{ornForget} to these ornaments, we now get the functions \AgdaFunction{length} and \AgdaFunction{toList} for free!
 
 %\investigate{Having a function of the same type as \AgdaFunction{ornForget} is not sufficient to deduce an ornament. An obstacle is that the usual empty type (no constructors) and the non-wellfounded empty type (only a recursive field) don't have an ornament. Also, while the leaf-preservation case spells itself out, the substitutions obviously don't give us a way to recover the equalities.}
-
-
-\section{Ornamental descriptions}
-A description can say ``this is how you make this datatype'', an ornament can say ``this is how you go between these types''. However, an ornament needs its left-hand side to be predefined before it can express the relation, while we might also interpret an ornament as a set of instructions to translate one description into another. A slight variation on ornaments can make this kind of usage possible: ornamental descriptions.
-
-An ornamental description drops the left-hand side when compared to an ornament, and interprets the remaining right-hand side as the starting point of the new datatype:
-\ExecuteMetaData[Ornament/OrnDesc]{ConOrnDesc-type}
-The definition of ornamental descriptions can be derived in a straightforward manner from ornaments, removing all mentions of the LHS and making all fields which then no longer appear in the indices explicit\footnote{One might expect to need less equalities, alas, this is difficult because of \autoref{rem:orn-lift}.}. We will show the leaf-preserving rule as an example, the others are derived analogously:
-\ExecuteMetaData[Ornament/OrnDesc]{OrnDesc-1}
-As we can see, the only change we need to make is that \AgdaBoundFontStyle{k} becomes explicit and fully annotated.
-
-Almost by construction, we have that an ornamental description can be decomposed into a description of the new datatype
-\ExecuteMetaData[Ornament/OrnDesc]{toDesc}
-and an ornament between the starting description and this new description
-\ExecuteMetaData[Ornament/OrnDesc]{toOrn}
+\end{outline}
+    

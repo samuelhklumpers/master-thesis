@@ -1,0 +1,79 @@
+\begin{outline}
+3 Calculating datastructures using Ornaments
+
+In this part we return to the matter numerical representations. With 2.3 in mind, we can rephrase part our original question to ask
+
+> Can numerical representations be described as ornaments on their number systems?
+
+Let us look at a numerical representation presented as ornament in action.
+\end{outline}
+
+\section{Numerical representations as ornaments}\label{sec:ornaments}
+Reflecting on this derivation for \bN{}, we could perform the same computation for \bL{} to get Braun trees. However, we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. This kind of ``modifying constructors'' is formalized by ornamentation \cite{progorn}, which lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped to go from one description to the other. \textit{Ornamental descriptions}, which act as one-sided ornaments, let us describe new datatypes by recording the modifications to an existing description.
+\todo[inline]{Put some minimal definitions here.}
+
+Looking back at \AgdaDatatype{Vec}, ornaments let us show that express that \AgdaDatatype{Vec} can be formed by introducing indices and adding a fields holding an elements to \bN{}.
+However, deriving \AgdaDatatype{List} from \bN{} generalizes to \bL{} with less notational overhead, so we tackle that case first. We use the following description of \bN{}
+\ExecuteMetaData[Tex/NumRepOrn]{NatD}
+Here, \AgdaInductiveConstructor{σ} adds a field to the description, upon which the rest of the description can vary, and \AgdaInductiveConstructor{ṿ} lists the recursive fields and their indices (which can only be \AgdaInductiveConstructor{tt}).
+We can now write down the ornament which adds fields to the \AgdaFunction{suc} constructor
+\ExecuteMetaData[Tex/NumRepOrn]{ListO}
+Here, the \AgdaInductiveConstructor{σ} and \AgdaInductiveConstructor{ṿ} are forced to match those of \AgdaDatatype{NatD},
+but the \AgdaInductiveConstructor{Δ} adds a new field. Using the least fixpoint and description extraction, we can then define \AgdaDatatype{List} from this ornamental description. Note that we cannot hope to give an unindexed ornament from \bL{}
+\ExecuteMetaData[Tex/NumRepOrn]{LeibnizD}
+into trees, since trees have a very different recursive structure! Thus, we must keep track at what level we are in the tree so that we can ask for adequately many elements:
+\ExecuteMetaData[Tex/NumRepOrn]{TreeO}
+We use the \AgdaFunction{power} combinator to ensure that the digit at position $n$, which has weight $2^n$ in the interpretation of a binary number, also holds its value times $2^n$ elements. This makes sure that the number of elements in the tree shaped after a given binary number also is the value of that  binary number.
+
+
+\section{Generic numerical representations}\label{sec:trieo}
+We will demonstrate how we can use ornamental descriptions to generically construct datastructures. The claim is that calculating a datastructure is actually an ornamental operation, so we might call our approach ``calculating ornaments''. 
+
+We first define the kind of information constituting a type of ``natural numbers''
+\ExecuteMetaData[Ornament/Numerical]{Number} 
+which gets its semantics from the conversion to \bN{}
+\ExecuteMetaData[Ornament/Numerical]{toN-type}
+This conversion is defined by generalizing over the inner information bundle and folding using
+\ExecuteMetaData[Ornament/Numerical]{toN-con}
+Hence, a number can have a list of alternatives, which can be one of
+\begin{itemize}
+    \item a leaf with a fixed value $k$
+    \item a recursive field $n$ and remainder $x$, which get a value of $kn + x$ for a fixed $k$
+    \item a non-recursive field, which can add an arbitrary value to the remainder
+    \item a field containing another number $r$, and a remainder $x$, which again get a value of $kr + x$ for a fixed $k$.
+\end{itemize}
+This restricts the numbers to the class of numbers which are interpreted by linear functions, which certainly does not include all interesting number systems, but does include almost all systems that have associated containers\footnote{Notably, polynomials still calculate datastructures, interpreting multiplication as precomposition.}. Note that an arbitrary number system of this kind is not necessarily isomorphic to \bN{}, as the system can still be incomplete (i.e., it cannot express some numbers) or redundant (it has multiple representations of some numbers).
+
+Recall the calculation of vectors from \bN{} in \autoref{sec:numrep}. In this universe, we can encode \bN{} and its interpretation as
+\ExecuteMetaData[Ornament/Numerical]{NatND}
+In such a calculation, all we really needed was a translation between the type of numbers, and a type of shapes. This encoding precisely captures all information we need to form such a type of shapes.
+
+The essence of the calculation of arrays is that given a number system, we can calculate a datastructure which still has the same shape, and has the correct number of elements. We can generalize the calculation to all number systems while proving that the shape is preserved by presenting the datastructure by an ornamental description.
+
+We could directly compute indexed array, using the index for the proof of representability, and from it the correctness of numbers of elements. However, we give the unindexed array first: we can get the indexed variant for free \cite{algorn}\todo{no, rewrite this}!
+
+\begin{conjecture}
+    We claim then\todo{Currently, without proof} that the description given by
+    \ExecuteMetaData[Ornament/Numerical]{TrieO-type}
+    and the number of elements coincides with the underlying number, as given by \AgdaFunction{ornForget}.
+\end{conjecture}
+The hard work of \AgdaFunction{TrieO} is done by
+\ExecuteMetaData[Ornament/Numerical]{TrieO-con-type}
+Let us walk through the definition of \AgdaFunction{TrieO-Con}. Suppose we encounter a leaf of value $k$
+\ExecuteMetaData[Ornament/Numerical]{TrieO-1}
+then, the trie simply preserves the leaf, and adds a field with a vector of $k$ elements. Trivially the number of elements and the underlying number coincide.
+
+When we encounter a recursive field
+\ExecuteMetaData[Ornament/Numerical]{TrieO-rho}
+we first preserve this field. The formula used is almost identical to the one in the case of a leaf, but because it is in a recursive parameter, it instead acts to multiply the parameter $A$ by $k$. Using that the number of elements and the underlying number of the recursive field correspond, let this be $r$, we see that we get $r$ times $A^k$. Then, we translate the remainder. It follows that we have $kr$ elements from the recursive field, and by the correctness of the remainder, the total number of elements in \AgdaInductiveConstructor{ρ} also corresponds to the underlying number.
+
+The case for a non-recursive field is similar
+\ExecuteMetaData[Ornament/Numerical]{TrieO-sigma}
+except we preserve the field directly, and add a field containing its value number of elements. Translating the remainder, the number of elements and the underlying number of a \AgdaInductiveConstructor{σ} coincide.
+
+Consider the case of a description field\footnote{Excuse the formula of \AgdaBoundFontStyle{f''}, it needs to be there for the ornament to work, but doesn't have much to do with the numbers.}
+\ExecuteMetaData[Ornament/Numerical]{TrieO-delta}
+We essentially rerun the recipe of \AgdaInductiveConstructor{ρ}, multiplying the elements of the field by $k$, but now pass it to the description \AgdaBoundFontStyle{R}. Again, correctness of \AgdaInductiveConstructor{δ} follows directly from the correctness of \AgdaBoundFontStyle{R} and the remainder.
+
+
+

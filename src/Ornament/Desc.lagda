@@ -1,15 +1,25 @@
 \begin{code}
-{-# OPTIONS --type-in-type --with-K  --cubical #-}
+{-# OPTIONS --type-in-type --with-K #-}
 
 module Ornament.Desc where
 
-open import Cubical.Data.Equality hiding (_▷_)
+open import Agda.Primitive
+  using    ( Level
+           ; SSet )
+  renaming ( lzero to ℓ-zero
+           ; lsuc  to ℓ-suc
+           ; _⊔_   to ℓ-max
+           ; Set   to Type
+           ; Setω  to Typeω )
 
-open import Cubical.Data.Unit renaming (Unit to ⊤)
-open import Cubical.Data.Empty
-open import Cubical.Data.Sigma hiding (_≡_)
-open import Cubical.Data.Sum
-open import Cubical.Data.Nat
+open import Relation.Binary.PropositionalEquality hiding (J)
+
+open import Data.Unit
+open import Data.Empty
+open import Data.Product renaming (proj₁ to fst; proj₂ to snd)
+open import Data.Sum
+open import Data.Nat
+
 
 open import Function.Base
 
@@ -21,6 +31,7 @@ private variable
 
 infixr 5 _∷_
 infixr 10 _▷_
+infixr 0 _⇶_
 \end{code}
 
 %<*shorthands>
@@ -198,6 +209,14 @@ Plain .δi _ _ = ⊤
 \end{code}
 %</Plain>
 
+%<*Countable>
+Countable : Info
+Countable .𝟙i = ⊤
+Countable .ρi = ⊤
+Countable .σi S = ∀ pv → ℕ ↠ S pv
+Countable .δi _ _ = ⊤
+%</Countable>
+
 No extra information at all! The magic of eta-expansion makes sure that a DescI Plain never gets into someone's way
 \begin{code}
 private variable
@@ -206,43 +225,37 @@ private variable
 
 
 A DescI If Γ J describes a PIType Γ J, augmented by the bundle If, note that an If has no effect the fixpoint!
+%<*Desc>
 \begin{code}
 data DescI (If : Info) (Γ : Tel ⊤) (J : Type) : Type
+data ConI (If : Info) (Γ : Tel ⊤) (V : ExTel Γ) (J : Type) : Type 
 data μ (D : DescI If Γ J) (p : ⟦ Γ ⟧tel tt) : J → Type
+
+data DescI If Γ J where
+  []   : DescI If Γ J
+  _∷_  : ConI If Γ ∅ J → DescI If Γ J → DescI If Γ J
 \end{code} 
+%</Desc>
 
 %<*Con>
 \begin{code}
-data ConI (If : Info) (Γ : Tel ⊤) (J : Type) (V : ExTel Γ) : Type where
-\end{code}
-%</Con>
-%<*Con-1>
-\begin{code}
-  𝟙 : {if : If .𝟙i} (j : Γ & V ⊢ J) → ConI If Γ J V
-\end{code}
-%</Con-1>
-%<*Con-rho>
-\begin{code}
+data ConI If Γ V J where
+  𝟙 : {if : If .𝟙i} (j : Γ & V ⊢ J) → ConI If Γ V J
+  
   ρ  :  {if : If .ρi}
-        (j : Γ & V ⊢ J) (g : Cxf Γ Γ) (C : ConI If Γ J V)
-     →  ConI If Γ J V
-\end{code}
-%</Con-rho>
-%<*Con-sigma>
-\begin{code}
+        (j : Γ & V ⊢ J) (g : Cxf Γ Γ) (C : ConI If Γ V J)
+     →  ConI If Γ V J
+     
   σ  :  (S : V ⊢ Type) {if : If .σi S}
-        (h : Vxf Γ (V ▷ S) W) (C : ConI If Γ J W)
-     →  ConI If Γ J V
-\end{code}
-%</Con-sigma>
-%<*Con-delta>
-\begin{code}
+        (h : Vxf Γ (V ▷ S) W) (C : ConI If Γ W J)
+     →  ConI If Γ V J
+     
   δ  :  {if : If .δi Δ K} {iff : InfoF If′ If}
         (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If′ Δ K)
-        (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ J W)
-     →  ConI If Γ J V
+        (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ W J)
+     →  ConI If Γ V J
 \end{code}
-%</Con-delta>
+%</Con>
 𝟙 : ... → X p (j (p , v)) 
 ρ : ... → X (g p) (j (p , v)) → ...
 σ : ... → (s : S (p , v)) → let w = h (v , s) in ...
@@ -253,127 +266,84 @@ The variable transformations (Vxf) in σ and δ let us choose which variables we
 using them, we define "smart" σ and δ, where the + variant retains the last variable, while the - variant drops it
 %<*sigma-pm>
 \begin{code}
-σ+ : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J (V ▷ S) → ConI If Γ J V
-σ+ S {if = if} C = σ S {if = if} id C
+σ+ : (S : Γ & V ⊢ Type) → {If .σi S} → ConI If Γ (V ▷ S) J → ConI If Γ V J
+σ+ S {if} C = σ S {if = if} id C
 
-σ- : (S : Γ & V ⊢ Type) → {if : If .σi S} → ConI If Γ J V → ConI If Γ J V
-σ- S {if = if} C = σ S {if = if} fst C
+σ- : (S : Γ & V ⊢ Type) → {If .σi S} → ConI If Γ V J → ConI If Γ V J
+σ- S {if} C = σ S {if = if} fst C
 \end{code}
 %</sigma-pm>
 
 \begin{code}
-δ+ : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ J (V ▷ liftM2 (μ D) g j) → ConI If Γ J V
+δ+ : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ (V ▷ liftM2 (μ D) g j) J → ConI If Γ V J
 δ+ {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R id D
 
-δ- : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ J V → ConI If Γ J V
+δ- : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ V J → ConI If Γ V J
 δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R fst D
+\end{code}
 
 -- ordinary recursive field
-ρ0 : {if : If .ρi} {V : ExTel Γ} → V ⊢ J → ConI If Γ J V → ConI If Γ J V
+%<*rho-zero>
+\begin{code}
+ρ0 : {if : If .ρi} {V : ExTel Γ} → V ⊢ J → ConI If Γ V J → ConI If Γ V J
 ρ0 {if = if} r D = ρ {if = if} r id D
 \end{code}
+%</rho-zero>
 
-
-
-%<*DescI>
-\begin{code}
-data DescI If Γ J where
-  []   : DescI If Γ J
-  _∷_  : ConI If Γ J ∅ → DescI If Γ J → DescI If Γ J
-\end{code}
-%</DescI>
-\end{code}
-
+%<*Plain-synonyms>
 \begin{code}
 Con  = ConI Plain
 Desc = DescI Plain
-
-data Tag Γ : Type where
-  CT : ExTel Γ → Tag Γ
-  DT : Tag Γ
-
--- PIType Γ J reads as "type with parameters Γ and index J", the universe of types we will take the fixpoint over
 \end{code}
-
-%<*PIType>
-\begin{code}
-PIType : Tel ⊤ → Type → Type
-PIType Γ J = ⟦ Γ ⟧tel tt → J → Type
-\end{code}
-%</PIType>
-
-\begin{code}
-module _ {If : Info} where
-  UnTag : (Γ : Tel ⊤) (J : Type) → Tag Γ → Type
-  UnTag Γ J (CT V) = ConI If Γ J V
-  UnTag Γ J DT     = DescI If Γ J
-
-  UnFun : (Γ : Tel ⊤) (J : Type) → Tag Γ → Type
-  UnFun Γ J (CT V) = ⟦ Γ & V ⟧tel → J → Type
-  UnFun Γ J DT     = PIType Γ J
-\end{code}
+%</Plain-synonyms>
 
 * Interpretation
+\begin{code}
+infix 10 ⟦_⟧C ⟦_⟧D
+\end{code}
+
 %<*interpretation>
 \begin{code}
-  ⟦_⟧ : {t : Tag Γ} → UnTag Γ J t → PIType Γ J → UnFun Γ J t
-  ⟦_⟧ {t = CT V}  (𝟙 j)          X pv i
-      = i ≡ j pv
-      
-  ⟦_⟧ {t = CT V}  (ρ j f D)      X pv@(p , v) i
-      = X (f p) (j pv) × ⟦ D ⟧ X pv i
-      
-  ⟦_⟧ {t = CT V}  (σ S h D)      X pv@(p , v) i
-      = Σ[ s ∈ S pv ] ⟦ D ⟧ X (p , h (v , s)) i
-      
-  ⟦_⟧ {t = CT V}  (δ j g R h D)  X pv@(p , v) i
-      = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧ X (p , h (v , s)) i
-      
-  ⟦_⟧ {t = DT}    []             X p i
-      = ⊥
-      
-  ⟦_⟧ {t = DT}    (C ∷ D)        X p i
-      = (⟦ C ⟧ X (p , tt) i) ⊎ (⟦ D ⟧ X p i)
+⟦_⟧C : ConI If Γ V J  → ( ⟦ Γ ⟧tel tt   → J → Type)
+                      →   ⟦ Γ & V ⟧tel  → J → Type
+⟦ 𝟙 j          ⟧C X pv          i = i ≡ j pv
+⟦ ρ j f D      ⟧C X pv@(p , v)  i = X (f p) (j pv) × ⟦ D ⟧C X pv i
+⟦ σ S h D      ⟧C X pv@(p , v)  i = Σ[ s ∈ S pv ] ⟦ D ⟧C X (p , h (v , s)) i
+⟦ δ j g R h D  ⟧C X pv@(p , v)  i
+  = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧C X (p , h (v , s)) i
+
+⟦_⟧D : DescI If Γ J  → ( ⟦ Γ ⟧tel tt   → J → Type)
+                     →   ⟦ Γ ⟧tel tt   → J → Type
+⟦ []     ⟧D X p i = ⊥
+⟦ C ∷ D  ⟧D X p i = (⟦ C ⟧C X (p , tt) i) ⊎ (⟦ D ⟧D X p i)
 \end{code}
 %</interpretation>
 
 %<*fpoint>
 \begin{code}
 data μ D p where
-  con : ∀ {i} → ⟦ D ⟧ (μ D) p i → μ D p i
+  con : ∀ {i} → ⟦ D ⟧D (μ D) p i → μ D p i
 \end{code}
 %</fpoint>
-
-{-
-data FunD (A : Type) {Γ} {J} : (D : Desc Γ J) → ⟦ Γ ⟧tel tt → J → Type
-data FunC (A : Type) {Γ} {J} {V} : (C : Con Γ J V) → ⟦ Γ & V ⟧tel → J → Type
-
-data FunD A where
-  [] : ∀ {p i} → FunD A [] p i
-  --_∷_ 
-
-data FunC A where
-  𝟙 : ∀ {j p i} → (i ≡ j p → A) → FunC A (𝟙 j) p i
--}
 
 %<*fold-type>
 \begin{code}
 fold : ∀ {D : DescI If Γ J} {X}
-     → ⟦ D ⟧ X ⇶ X → μ D ⇶ X
+     → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
 \end{code}
 %</fold-type>
 
 \begin{code}     
 mapDesc : ∀ {D' : DescI If Γ J} (D : DescI If Γ J) {X}
-        → ∀ p j  → ⟦ D' ⟧ X ⇶ X → ⟦ D ⟧ (μ D') p j → ⟦ D ⟧ X p j
+        → ∀ p j  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ D') p j → ⟦ D ⟧D X p j
         
-mapCon : ∀ {D' : DescI If Γ J} {V} (C : ConI If Γ J V) {X}
-       → ∀ p j v → ⟦ D' ⟧ X ⇶ X → ⟦ C ⟧ (μ D') (p , v) j → ⟦ C ⟧ X (p , v) j
+mapCon : ∀ {D' : DescI If Γ J} {V} (C : ConI If Γ V J) {X}
+       → ∀ p j v → ⟦ D' ⟧D X ⇶ X → ⟦ C ⟧C (μ D') (p , v) j → ⟦ C ⟧C X (p , v) j
 
 fold f p i (con x) = f p i (mapDesc _ p i f x)
 
-mapDesc (C ∷ D) p j f (inl x) = inl (mapCon C p j tt f x)
-mapDesc (C ∷ D) p j f (inr y) = inr (mapDesc D p j f y)
+mapDesc (C ∷ D) p j f (inj₁ x) = inj₁ (mapCon C p j tt f x)
+mapDesc (C ∷ D) p j f (inj₂ y) = inj₂ (mapDesc D p j f y)
 
 mapCon (𝟙 k)         p j v f      x  = x
 mapCon (ρ k g C)     p j v f (r , x) = fold f (g p) (k (p , v)) r , mapCon C p j v f x
@@ -381,22 +351,9 @@ mapCon (σ S h C)     p j v f (s , x) = s , mapCon C p j (h (v , s)) f x
 mapCon (δ k g R h C) p j v f (r , x) = r , mapCon C p j (h (v , r)) f x
 \end{code}
 
-%<*par-shorthand>
-\begin{code}
-par : Γ ⊢ A → Γ & V ⊢ A 
-par f = f ∘ (tt ,_) ∘ fst
-
-top : ∀ {S} → (Γ ▷ S) ⊧ λ v → S (v .fst , v .snd .fst)
-top = snd ∘ snd
-
-pop : ∀ {S} → Γ ⊢ A → (Γ ▷ S) ⊢ A
-pop f (t , p , s) = f (t , p)
-\end{code}
-%</par-shorthand>
-
 * Examples
 \begin{code}
-module Descriptions where
+module _ where
 \end{code}
 
 %<*NatD>
@@ -408,59 +365,63 @@ module Descriptions where
 \end{code}
 %</NatD>
 
-
-%<*ListTel>
-\begin{code}
-  ListTel  : Tel ⊤
-  ListTel  = ∅ ▷ const Type
-\end{code}
-%</ListTel>
-
 %<*ListD>
 \begin{code}
-  ListD : Desc ListTel ⊤
+  ListD : Desc (∅ ▷ const Type) ⊤
   ListD = 𝟙 _
-       ∷ σ- (par top) (ρ0 _ (𝟙 _))
-       ∷ []
+       ∷  σ- (λ ((_ , A) , _) → A)
+       (  ρ0 _ (𝟙 _))
+       ∷  []
 \end{code}
 %</ListD>
 
 %<*VecD>
 \begin{code}
-  VecD  : Desc ListTel ℕ
-  VecD  = 𝟙 (const 0)
-        ∷ σ- (par top) (σ+ (const ℕ) (ρ0 top (𝟙 (suc ∘ top))))
-        ∷ []
+  VecD  : Desc (∅ ▷ const Type) ℕ
+  VecD  =  𝟙 (const 0)
+        ∷  σ-  (λ ((_ , A) , _) → A)
+        (  σ+  (const ℕ)
+        (  ρ0  (λ (_ , (_ , n)) → n)
+        (  𝟙   (λ (_ , (_ , n)) → suc n))))
+        ∷  []
 \end{code}
 %</VecD>
 
-{-
-  Vec = μ VecD
+%<*Pair>
+\begin{code}
+  Pair : Type → Type
+  Pair A = A × A
+\end{code}
+%</Pair>
 
-  module Test where
-    open import Data.List
-
-    toList : Vec ⇶ λ A _ → List (snd A)
-    toList = fold go
-      where
-      go : ⟦ VecD ⟧ (λ z _ → List (snd z)) ⇶ (λ z _ → List (snd z))
-      go A i (inl _)                       = []
-      go A i (inr (inl (x , _ , xs , _))) = x ∷ xs
-
-    vec-1 : Vec (tt , ⊤) 1
-    vec-1 = con (inr (inl (tt , 0 , ((con (inl refl)) , refl))))
-
-    list-1 : List ⊤
-    list-1 = toList _ _ vec-1
--}
+%<*RandomD>
+\begin{code}
+  RandomD  : Desc (∅ ▷ const Type) ⊤
+  RandomD  =  𝟙 _
+           ∷  σ-   (λ ((_ , A) , _) → A)
+           (  ρ _  (λ (_ , A) → (_ , Pair A))
+           (  𝟙 _))
+           ∷  σ-   (λ ((_ , A) , _) → A)
+           (  σ-   (λ ((_ , A) , _) → A)
+           (  ρ _  (λ (_ , A) → (_ , Pair A))
+           (  𝟙 _)))
+           ∷  []
+\end{code}
+%</RandomD>
 
 %<*DigitD>
 \begin{code}
   DigitD  : Desc (∅ ▷ const Type) ⊤
-  DigitD  = σ- (par top) (𝟙 _)
-          ∷ σ- (par top) (σ- (par top) (𝟙 _))
-          ∷ σ- (par top) (σ- (par top) (σ- (par top) (𝟙 _)))
-          ∷ []
+  DigitD  =  σ-  (λ ((_ , A) , _) → A)
+          (  𝟙 _)
+          ∷  σ-  (λ ((_ , A) , _) → A)
+          (  σ-  (λ ((_ , A) , _) → A)
+          (  𝟙 _))
+          ∷  σ-  (λ ((_ , A) , _) → A)
+          (  σ-  (λ ((_ , A) , _) → A)
+          (  σ-  (λ ((_ , A) , _) → A)
+          (  𝟙 _)))
+          ∷  []
 \end{code}
 %</DigitD>
 
@@ -476,10 +437,12 @@ module Descriptions where
 \begin{code}
   FingerD : Desc (∅ ▷ const Type) ⊤
   FingerD  =  𝟙 _
-           ∷  σ- (par top) (𝟙 _)
-           ∷  δ- _ (par ((tt ,_) ∘ top)) DigitD
-           (  ρ _ (λ { (_ , A) → (_ , Node A) })
-           (  δ- _ (par ((tt ,_) ∘ top)) DigitD (𝟙 _)))
+           ∷  σ-    (λ ((_ , A) , _) → A)
+           (  𝟙 _)
+           ∷  δ- _  (λ (p , _) → p) DigitD
+           (  ρ _   (λ (_ , A) → (_ , Node A))
+           (  δ- _  (λ (p , _) → p) DigitD
+           (  𝟙 _)))
            ∷  []
 \end{code}
 %</FingerD>

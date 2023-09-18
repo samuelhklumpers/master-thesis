@@ -7,6 +7,25 @@ module Ornament.Orn where
 
 open import Ornament.Desc
 
+
+open import Agda.Primitive
+  using    ( Level
+           ; SSet )
+  renaming ( lzero to ℓ-zero
+           ; lsuc  to ℓ-suc
+           ; _⊔_   to ℓ-max
+           ; Set   to Type
+           ; Setω  to Typeω )
+
+open import Relation.Binary.PropositionalEquality hiding (J)
+
+open import Data.Unit
+open import Data.Empty
+open import Data.Product renaming (proj₁ to fst; proj₂ to snd)
+open import Data.Sum
+open import Data.Nat
+
+{-
 open import Cubical.Data.Equality hiding (_▷_)
 
 open import Cubical.Data.Unit renaming (Unit to ⊤)
@@ -14,6 +33,7 @@ open import Cubical.Data.Empty
 open import Cubical.Data.Sigma hiding (_≡_)
 open import Cubical.Data.Sum
 open import Cubical.Data.Nat
+-}
 
 open import Function.Base
 
@@ -42,10 +62,8 @@ data Orn  {If} {If′} (f : Cxf Δ Γ) (e : K → J)
 %</Orn-type>
 
 %<*ornForget-type>
-\begin{code}
 ornForget : {f : Cxf Δ Γ} {e : K → J} {D : DescI If Γ J} {E : DescI If′ Δ K}
           → Orn f e D E → ∀ p {i} → μ E p i → μ D (f p) (e i)
-\end{code}
 %</ornForget-type>
 
 All significant squares have diagrams below
@@ -149,7 +167,6 @@ Fixing
 
 Composition
 %<*Orn-comp>
-\begin{code}
   ∙δ  : ∀  {Θ Λ M L W' V'} {D : ConI If Γ J V'} {E : ConI If′ Δ K W'}
            {R : DescI If″ Θ L} {R' : DescI If‴ Λ M} {c' : Cxf Λ Θ} {e' : M → L}
            {f'' : VxfO c W' V'} {fΘ : V ⊢ ⟦ Θ ⟧tel tt} {fΛ : W ⊢ ⟦ Λ ⟧tel tt}
@@ -166,7 +183,6 @@ Composition
       → ∀ {iff iff′}
       → ConOrn f e  (δ {if = if}   {iff = iff}   l fΘ R   g D)
                     (δ {if = if′}  {iff = iff′}  m fΛ R'  h E) 
-\end{code}
 %</Orn-comp>
 
 -- (*) https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzAsMSwiXFxidWxsZXQiXSxbMSwxLCJcXGJ1bGxldCJdLFswLDEsImUiXSxbMiwzLCJmIiwyXSxbMiwwLCJqIl0sWzMsMSwiaSIsMl0sWzMsMCwiayIsMV1d
@@ -203,46 +219,38 @@ data Orn f e where
 
 
 %<*erase-type>
-\begin{code}
 pre₂ : (A → B → C) → (X → A) → (Y → B) → X → Y → C
 pre₂ f a b x y = f (a x) (b y)
 
-erase  : ∀ {D : DescI If Γ J} {E : DescI If′ Δ K} {f} {e} {X : PIType Γ J}
-       → Orn f e D E → ∀ p k → ⟦ E ⟧ (pre₂ X f e) p k → ⟦ D ⟧ X (f p) (e k)
-\end{code}
+erase  : ∀ {D : DescI If Γ J} {E : DescI If′ Δ K} {f} {e} {X : ⟦ Γ ⟧tel tt → J → Type}
+       → Orn f e D E → ∀ p k → ⟦ E ⟧D (pre₂ X f e) p k → ⟦ D ⟧D X (f p) (e k)
 %</erase-type>
 
-\begin{code}
-erase' : ∀ {V W} {X : PIType Γ J} {D' : ConI If Γ J V} {E' : ConI If′ Δ K W} {c : Cxf Δ Γ} {f : VxfO c _ _} {e} (O : ConOrn f e D' E') → ∀ p k → ⟦ E' ⟧ (pre₂ X c e) p k → ⟦ D' ⟧ X (over f p) (e k)
+erase' : ∀ {V W} {X : ⟦ Γ ⟧tel tt → J → Type} {D' : ConI If Γ J V} {E' : ConI If′ Δ K W} {c : Cxf Δ Γ} {f : VxfO c _ _} {e} (O : ConOrn f e D' E') → ∀ p k → ⟦ E' ⟧C (pre₂ X c e) p k → ⟦ D' ⟧C X (over f p) (e k)
 
-erase (O ∷ Os) p k (inl x) = inl (erase' O (p , tt) k x)
-erase (O ∷ Os) p k (inr y) = inr (erase Os p k y)
+erase (O ∷ Os) p k (inj₁ x) = inj₁ (erase' O (p , tt) k x)
+erase (O ∷ Os) p k (inj₂ y) = inj₂ (erase Os p k y)
 
 erase' (𝟙 j) p k x = ap _ x ∙ j p
 erase' {X = X} (ρ O q r) p k (x , y) = transport2 X (sym (q _)) (r _) x , erase' O p k y
-erase' {X = X} {c = c} (σ {D = D} {h = h} f' O q) (p , v) k (s , x) = s , transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _))) (erase' O (p , h (v , s)) k x)
-erase' {X = X} {c = c} (δ {D = D} O q) (p , v) k (r , x) = r , transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _)) ) (erase' O _ k x)
+erase' {X = X} {c = c} (σ {D = D} {h = h} f' O q) (p , v) k (s , x) = s , transport (λ z → ⟦ D ⟧C X z _) (ap (c p ,_) (sym (q _))) (erase' O (p , h (v , s)) k x)
+erase' {X = X} {c = c} (δ {D = D} O q) (p , v) k (r , x) = r , transport (λ z → ⟦ D ⟧C X z _) (ap (c p ,_) (sym (q _)) ) (erase' O _ k x)
 erase' (Δρ O) (p , v) k (x , y) = erase' O _ k y
-erase' {X = X} {c = c} (Δσ {D = D} f' O q) (p , v) k (x , y) = transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _))) (erase' O _ k y)
-erase' {X = X} {c = c} (Δδ {D = D} O q) (p , v) k (x , y) = transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (sym (q _))) (erase' O _ k y)
+erase' {X = X} {c = c} (Δσ {D = D} f' O q) (p , v) k (x , y) = transport (λ z → ⟦ D ⟧C X z _) (ap (c p ,_) (sym (q _))) (erase' O _ k y)
+erase' {X = X} {c = c} (Δδ {D = D} O q) (p , v) k (x , y) = transport (λ z → ⟦ D ⟧C X z _) (ap (c p ,_) (sym (q _))) (erase' O _ k y)
 erase' (∇σ s O) (p , v) k x = s _ , erase' O _ k x
 erase' (∇δ s O) (p , v) k x = s _ , erase' O _ k x
-erase' {X = X} {c = c} (∙δ {D = D} DE RR' p₁ p₂ p₃) (p , v) k (x , y) = transport2 (μ _) (p₁ _ _) (p₂ _ _) (ornForget RR' _ x) , transport (λ z → ⟦ D ⟧ X z _) (ap (c p ,_) (p₃ _)) (erase' DE _ _ y)
-\end{code}
+erase' {X = X} {c = c} (∙δ {D = D} DE RR' p₁ p₂ p₃) (p , v) k (x , y) = transport2 (μ _) (p₁ _ _) (p₂ _ _) (ornForget RR' _ x) , transport (λ z → ⟦ D ⟧C X z _) (ap (c p ,_) (p₃ _)) (erase' DE _ _ y)
 
 %<*ornAlg>
-\begin{code}
 ornAlg  : ∀ {D : DescI If Γ J} {E : DescI If′ Δ K} {f} {e}
         → Orn f e D E
-        → ⟦ E ⟧ (λ p k → μ D (f p) (e k)) ⇶ λ p k → μ D (f p) (e k)
+        → ⟦ E ⟧D (λ p k → μ D (f p) (e k)) ⇶ λ p k → μ D (f p) (e k)
 ornAlg O p k x = con (erase O p k x)
-\end{code}
 %</ornAlg>
 
 %<*ornForget>
-\begin{code}
 ornForget O p = fold (ornAlg O) p _
-\end{code}
 %</ornForget>
 
 Examples
@@ -274,8 +282,3 @@ module Ornaments where
               ∷ []
 \end{code}
 %</ListD-VecD>
-
-\begin{code}
-data Tag′ : Type where
-  CT DT : Tag′
-\end{code}

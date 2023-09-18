@@ -1,18 +1,43 @@
+\todo{'Programming is hard' - citation needed? Misschien beter om de
+nadruk te leggen op iets als 'statically typed programming languages
+can rule out certain errors before a program is executed'? Of
+misschien: the development of complex programs hits the limits of
+what humans can understand? Zoiets?}
+\begin{outline}
 Programming is hard, but using the right tools can make it easier. Logically, much time and effort goes into creating such tools. Because it hard to memorize the documentation of a library, we have code suggestion; to read code more easily, we have code highlighting; to write tidy code, we have linters and formatters; to make sure code does what we hope it does, we use testing; to easily access the right tool for each of the above, we have IDEs. 
 
 In this thesis, we look at how we can make written code more easy to verify and to reuse, or even to generate from scratch. We hope that this lets us spend more time on writing code rather than tests, spend less time repeating similar work, and save time by writing more powerful code.
 
-We use the language Agda \cite{agda}, of which the dependent types form the logic we use to specify and verify the code we write. In our approach, we describe a part of the language inside the language itself. This allows us to reason about the structure of other code using code itself. Such descriptions of code can then be interpreted to generate usable code. Using constructions known as ornaments \cite{algorn, sijsling}, we can also discuss how we can transform one piece of code into another by comparing the descriptions of the two pieces.
+We use the language Agda \cite{agda}, of which the dependent types form the logic we use to specify and verify the code we write.
+\end{outline}
+\todo{Maar misschien is het nog beter om een iets andere opening gambit te
+kiezen. Er is een 'folklore' relatie tussen getalsystemen en
+datastructuren -- maar wat bedoel je hier precies mee? Kunnen we
+niet ornaments (en dependent types) gebruiken om deze relatie
+precies te maken? En wat levert dit inzicht ons op?}
 
-We will describe and then generate a class of container types (which are types that contain elements of other types) from number systems. The idea is that some container types ``look like'' a number system by squinting a bit. Consequently, types of that class of containers are known as numerical representations \cite{purelyfunctional}. This leads us to our research question:
+\begin{outline}
+In our approach, we describe a part of the language inside the language itself. This allows us to reason about the structure of other code using code itself. Such descriptions of code can then be interpreted to generate usable code. Using constructions known as ornaments \cite{algorn, sijsling}, we can also discuss how we can transform one piece of code into another by comparing the descriptions of the two pieces.
+\end{outline}
+\todo{Ik zou proberen om weg te blijven van 'we describe a part of the
+language inside the language itself' - deze alinea is zonder
+voorbeelden nogal vaag. Beter is om concrete voorbeelden van
+datastructuren te geven - die duidelijk overeenkomen met
+getalsystemen.}
+
+We will describe and then generate a class of container\todo{container} types (which are types that contain elements of other types) from number systems. The idea is that some container types ``look like'' a number system by squinting a bit. Consequently, types of that class of containers are known as numerical representations \cite{purelyfunctional}. This leads us to our research question:
+\todo{Dan kun je de onderzoeksvraag duidelijk maken: dit is geen toeval, maar wat is de relatie dan wel? Ik denk dat een uitgewerkt voorbeeld, ook al is die 'bekend' zoals random-access lijsten oid hier heel nuttig zou kunnen zijn.}
 
 \textit{Can numerical representations be described as ornaments on number systems, and how does this make generating them and verifying their properties easier?}
 
 Generating numerical representations is closely related to calculating datastructures \cite{calcdata}. As an example, one can calculate the definition of a random-access list by applying a chain of type isomorphisms to the representable container, which is defined by the lookup function from (Leibniz or bijective base-2) binary numbers. Likewise, ornaments and their applications to numerical representations have been studied before, describing binomial heaps as an ornament on (ordinary) binary numbers \cite{progorn}. The underlying descriptions in this approach correspond roughly to the indexed polynomial endofunctors on the type of types. We also know that we can use the algebraic structure arising from ornaments to construct different, algebraic, ornaments \cite{algorn}. In an example this is used to obtain a description of vectors with an ornament from lists.
 
-We seek to expand upon these developments by generating the numerical representation from a number system, collecting the instances of calculated datastructures under one generic calculation. However, we cannot formulate this as an ornamental operation in most existing frameworks, which are based on indexed polynomial endofunctors. Namely, nested datatypes, such as the random-access list mentioned above, cannot be directly represented by such functors\footnote{Maybe refer to the appendix, to which extent you can squash datatypes.}. Furthermore, these calculations target indexed containers, while the algebras arising from ornaments suggest that we only have to make an ornament to the unindexed containers, which yields the indexed containers by the algebraic ornament construction.
+We seek to expand upon these developments by generating the numerical representation from a number system, collecting the instances of calculated datastructures under one generic calculation. However, we cannot formulate this as an ornamental operation in most existing frameworks, which are based on indexed polynomial endofunctors. Namely, nested datatypes, such as the random-access list mentioned above, cannot be directly represented by such functors. Furthermore, these calculations target indexed containers, while the algebras arising from ornaments suggest that we only have to make an ornament to the unindexed containers, which yields the indexed containers by the algebraic ornament construction.
 
 Our contribution will be to rework part of the existing theory and techniques of descriptions and ornaments to comfortably fit a class of number systems and numerical representations into this theory, which then also encompasses nested datatypes. We will then use this to formalize the construction of numerical representations from their number systems as an ornament.
 
 To make the research question formal, we first need to properly define the concepts of descriptions and ornaments.
 
+% \footnote{Maybe refer to the appendix, to which extent you can squash datatypes.}
+
+\todo{In 6 - misschien wel goed om hier references toe te voegen? Denk aan true sums of products, de tutorial over generic programming met dependent types van Morris, Altenkirch \& McBride, ... In de inleiding ook goed om te noemen dat deze universe constructies de manier zijn om (datatype) generic programming in Agda te doen.}
