@@ -429,14 +429,18 @@ data Con-sop where
 \end{code}
 %</int-sop>
 
+\begin{code}
+module ListD′ where
+\end{code}
 %<*ListD-bad>
 \begin{code}
-ListD′ : Type → U-sop
-ListD′ A = 𝟙
-        ∷ (σ A λ _ → ρ 𝟙)
-        ∷ []
+  ListD : Type → U-sop
+  ListD A = 𝟙
+          ∷ (σ A λ _ → ρ 𝟙)
+          ∷ []
 \end{code}
 %</ListD-bad>
+
 
 \begin{code}
 infixl 5 _▷_
@@ -724,22 +728,47 @@ postulate
 \end{code}
 %</foldr-type>
 
+%<*usual-fold>
 \begin{code}
-foldr′ : ∀ {X} → ⟦ ListD ⟧D X ⇶ X → μ-ix ListD ⇶ X
-foldr′ = fold {D = ListD}
+  foldr′ : ∀ A B → (⊤ ⊎ (A × B) → B) → List A → B
+\end{code}
+%</usual-fold>
 
-sum′ : μ-ix ListD ⇶ λ (_ , A) _ → (A → ℕ) → ℕ
-sum′ = foldr′ go
-  where
-  go : ⟦ ListD ⟧D (λ z _ → (z .snd → ℕ) → ℕ) ⇶ (λ z _ → (z .snd → ℕ) → ℕ)
-  go p _ (inj₁ x) = const zero
-  go p _ (inj₂ (inj₁ (x , f , _))) y = y x + f y
+\begin{code}
+module foldr-fake where
+\end{code}
+%<*foldr-sum>
+\begin{code}
+  sum′ : ∀ A → List A → (A → ℕ) → ℕ
+  sum′ = foldr {X = λ A → (A → ℕ) → ℕ} go
+    where
+    go : ∀ A → ⊤ ⊎ (A × ((A → ℕ) → ℕ)) → (A → ℕ) → ℕ
+    go A (inj₁ tt)        f = zero
+    go A (inj₂ (x , xs))  f = f x + xs f
 
-sum : {A : Type} → (A → ℕ) → μ-ix ListD (_ , A) _ → ℕ
-sum {A = A} f x = sum′ (tt , A) tt x f 
+  sum : List ℕ → ℕ
+  sum xs = sum′ ℕ xs id 
+\end{code}
+%</foldr-sum>
 
-list-123 : μ-ix ListD (_ , ℕ) _
-list-123 = con (inj₂ (inj₁ (suc zero , con (inj₂ (inj₁ (suc (suc zero) , con (inj₂ (inj₁ (suc (suc (suc zero)) , con (inj₁ refl) , refl))) , refl))) , refl)))
+
+\begin{code}
+module foldr′ where
+  foldr' : ∀ {X} → ⟦ ListD ⟧D X ⇶ X → μ-ix ListD ⇶ X
+  foldr' = fold {D = ListD}
+
+  sum′ : μ-ix ListD ⇶ λ (_ , A) _ → (A → ℕ) → ℕ
+  sum′ = foldr' go
+    where
+    go : ⟦ ListD ⟧D (λ z _ → (z .snd → ℕ) → ℕ) ⇶ (λ z _ → (z .snd → ℕ) → ℕ)
+    go p _ (inj₁ x) = const zero
+    go p _ (inj₂ (inj₁ (x , f , _))) y = y x + f y
+
+  sum : {A : Type} → (A → ℕ) → μ-ix ListD (_ , A) _ → ℕ
+  sum {A = A} f x = sum′ (tt , A) tt x f 
+
+  list-123 : μ-ix ListD (_ , ℕ) _
+  list-123 = con (inj₂ (inj₁ (suc zero , con (inj₂ (inj₁ (suc (suc zero) , con (inj₂ (inj₁ (suc (suc (suc zero)) , con (inj₁ refl) , refl))) , refl))) , refl)))
 \end{code}
 
 %<*Orn-type>

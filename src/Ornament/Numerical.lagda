@@ -1,44 +1,46 @@
 \begin{code}
-{-# OPTIONS --type-in-type --with-K --cubical #-}
+{-# OPTIONS --type-in-type --with-K --allow-unsolved-metas #-}
 
 
 module Ornament.Numerical where
 
+open import Agda.Primitive
+  using    ( Level
+           ; SSet )
+  renaming ( lzero to ℓ-zero
+           ; lsuc  to ℓ-suc
+           ; _⊔_   to ℓ-max
+           ; Set   to Type
+           ; Setω  to Typeω )
+
+open import Relation.Binary.PropositionalEquality hiding (J)
+
+open import Data.Unit
+open import Data.Empty
+open import Data.Vec
+open import Data.Product renaming (proj₁ to fst; proj₂ to snd)
+open import Data.Sum hiding (map₂)
+open import Data.Nat
+
+open import Function.Base
+
 open import Ornament.Desc
-open import Ornament.Orn
+--open import Ornament.Orn
 open import Ornament.OrnDesc
 
 
-open import Cubical.Data.Equality hiding (_▷_; _≃_)
-
-open import Cubical.Data.Unit renaming (Unit to ⊤)
-open import Cubical.Data.Empty
-open import Cubical.Data.Sigma hiding (_≡_)
-open import Cubical.Data.Sum
-open import Cubical.Data.Nat
-
-open import Function.Base
-
-open import Data.List as L using (List)
-open List
-
-open import Data.Fin using (Fin; #_)
-open import Function.Base
-open import Data.Vec using (Vec)
-
-open import Cubical.Foundations.Equiv
-
-
 private variable
-  J K L : Type
+  If If′ If″ If‴ : Info
+  I J K M : Type
   A B C X Y Z : Type
   P P′ : Type
-  Γ Δ Θ : Tel P
+  Γ Δ Θ Λ : Tel P
+  D E : DescI If Γ I
   U V W   : ExTel Γ
-  If : Info
+  CD CE : ConI If Γ V I
+  V′ W′ : ExTel Δ
 
 open Info
-
 \end{code}
 
 %<*Number>
@@ -53,40 +55,40 @@ Number .δi Γ J = (Γ ≡ ∅) × (J ≡ ⊤) × ℕ
 
 %<*toN-type>
 \begin{code}
-toℕ : {D : DescI Number Γ ⊤} → ∀ {p} → μ D p tt → ℕ
+value : {D : DescI Number Γ ⊤} → ∀ {p} → μ D p tt → ℕ
 \end{code}
 %</toN-type>
 
 \begin{code}
-toℕ {D = D} = toℕ-lift D id-InfoF
+value {D = D} = value-lift D id-InfoF
   where
-  toℕ-lift : (D : DescI If Γ ⊤) → InfoF If Number → ∀ {p} → μ D p tt → ℕ
+  value-lift : (D : DescI If Γ ⊤) → InfoF If Number → ∀ {p} → μ D p tt → ℕ
   
-  toℕ-lift {If = If} D ϕ = fold (λ _ _ → toℕ-desc D) _ tt
+  value-lift {If = If} D ϕ = fold (λ _ _ → value-desc D) _ tt
     where
 \end{code}
 
 %<*toN-con>
 \begin{code}
-    toℕ-desc : (D : DescI If Γ ⊤) → ∀ {a b} → ⟦ D ⟧ (λ _ _ → ℕ) a b → ℕ
-    toℕ-con : (C : ConI If Γ ⊤ V) → ∀ {a b} → ⟦ C ⟧ (λ _ _ → ℕ) a b → ℕ
+    value-desc : (D : DescI If Γ ⊤) → ∀ {a b} → ⟦ D ⟧D (λ _ _ → ℕ) a b → ℕ
+    value-con : (C : ConI If Γ V ⊤) → ∀ {a b} → ⟦ C ⟧C (λ _ _ → ℕ) a b → ℕ
 
-    toℕ-desc (C ∷ D) (inl x) = toℕ-con C x
-    toℕ-desc (C ∷ D) (inr y) = toℕ-desc D y
+    value-desc (C ∷ D) (inj₁ x) = value-con C x
+    value-desc (C ∷ D) (inj₂ y) = value-desc D y
 
-    toℕ-con  (𝟙 {if = k} j) refl                          
+    value-con  (𝟙 {if = k} j) refl                          
              = ϕ .𝟙f k
 
-    toℕ-con  (ρ {if = k} j g C)                   (n , x)
-             = ϕ .ρf k · n + toℕ-con C x
+    value-con  (ρ {if = k} j g C)                   (n , x)
+             = ϕ .ρf k * n + value-con C x
 
-    toℕ-con  (σ S {if = S→ℕ} h C)                 (s , x)
-             = ϕ .σf _ S→ℕ _ s + toℕ-con C x
+    value-con  (σ S {if = S→ℕ} h C)                 (s , x)
+             = ϕ .σf _ S→ℕ _ s + value-con C x
 
-    toℕ-con  (δ {if = if} {iff = iff} j g R h C)  (r , x)
+    value-con  (δ {if = if} {iff = iff} j g R h C)  (r , x)
              with ϕ .δf _ _ if
     ...      | refl , refl , k  
-             = k · toℕ-lift R (ϕ ∘InfoF iff) r + toℕ-con C x
+             = k * value-lift R (ϕ ∘InfoF iff) r + value-con C x
 \end{code}
 %</toN-con>
 
@@ -105,6 +107,7 @@ BinND = 𝟙 {if = 0} _
       ∷ ρ0 {if = 2} _ (𝟙 {if = 1} _)
       ∷ ρ0 {if = 2} _ (𝟙 {if = 2} _)
       ∷ []
+\end{code}
 
 bin-2 : μ BinND tt tt
 bin-2 = con (inr (inr (inl (con (inl refl) , refl))))
@@ -134,87 +137,101 @@ finger-7 : μ FingND tt tt
 finger-7 = con (inr (inr (inl (con (inl refl) , finger-2 , con (inr (inl refl)) , refl))))
 
 
-\end{code}
-
 Theorem: given a number system D, there is a "good container" D', which also satisfies (x : μ D' A tt) → size x ≡ shape x
-%<*TrieO-type>
+%<*trieifyOD>
 \begin{code}
-TrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) ! ⊤ ! D
-\end{code}
-%</TrieO-type>
+trieifyOD : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) ! ⊤ ! D
+trieifyOD D = trie-desc D id-InfoF
+  module trieifyOD where
+  trie-desc : (D : DescI If ∅ ⊤) → InfoF If Number
+             → OrnDesc Plain (∅ ▷ const Type) ! ⊤ ! D
+             
+  trie-con  : {f : VxfO ! W V} (C : ConI If ∅ V ⊤) → InfoF If Number
+             → ConOrnDesc {Δ = ∅ ▷ const Type} {W = W} {J = ⊤} Plain f ! C
 
-\begin{code}
-TrieO D = TrieO-desc D id-InfoF
-  module TrieO where
-  TrieO-desc : (D : DescI If ∅ ⊤) → InfoF If Number → OrnDesc Plain (∅ ▷ const Type) ! ⊤ ! D
-\end{code}
+  trie-desc []      ϕ = []
+  trie-desc (C ∷ D) ϕ = trie-con C ϕ ∷ trie-desc D ϕ
 
-%<*TrieO-con-type>
-\begin{code}
-  TrieO-con  : ∀ {V} {W : ExTel (∅ ▷ const Type)} {f : VxfO ! W V}
-             (C : ConI If ∅ ⊤ V) → InfoF If Number
-             → ConOrnDesc Plain {W = W} {K = ⊤} f ! C
-\end{code}
-%</TrieO-con-type>
-
-\begin{code}
-  TrieO-desc []      f = []
-  TrieO-desc (C ∷ D) f = TrieO-con C f ∷ TrieO-desc D f
-\end{code}
+  trie-con (𝟙 {if = k} j) ϕ
+    = OΔσ- (λ ((_ , A) , _) → Vec A (ϕ .𝟙f k))
+    ( 𝟙 _ (const refl))
   
--- trie (λ X tt → ⊤) {toℕ tt → k} 
--- ⇒ (λ X A → A^k)
-%<*TrieO-1>
-\begin{code}
-  TrieO-con {f = f} (𝟙 {if = k} j) ϕ =                             
-    Δσ (λ { ((_ , A) , _) → Vec A (ϕ .𝟙f k)}) f fst              
-    (𝟙 ! (const refl))                           
-    (λ p → refl)
+  trie-con (ρ {if = k} j g C) ϕ
+    = ρ _ (λ (_ , A) → (_ , Vec A (ϕ .ρf k))) (const refl) (const refl)
+    ( trie-con C ϕ)
+
+  trie-con (σ S {if = if} h C) ϕ
+    = Oσ+ S
+    ( OΔσ- (λ ((_ , A) , _ , s) → Vec A (ϕ .σf _ if _ s))
+    ( trie-con C ϕ))
+
+  trie-con {f = f} (δ {if = if} {iff = iff} j g R h C) ϕ
+    with ϕ .δf _ _ if    
+  ... | refl , refl , k
+    = O∙δ+  ! (λ ((_ , A) , _) → (_ , Vec A k))
+            (trie-desc R (ϕ ∘InfoF iff))
+            (λ _ _ → refl) (λ _ _ → refl)
+    ( trie-con C ϕ)
 \end{code}
-%</TrieO-1>
+%</trieifyOD>
 
-   
--- trie (λ X tt → X tt × F X tt) {toℕ (x , y) → k * toℕ x + toℕ y}
--- ⇒ (λ X A → X (A ^ k) × trie F X A)
-%<*TrieO-rho>
+
 \begin{code}
-  TrieO-con {f = f} (ρ {if = k} j g C) ϕ =                         
-    ρ ! (λ { (_ , A) → _ , Vec A (ϕ .ρf k) })                      
-    (TrieO-con C ϕ)                                           
-    (λ p → refl) λ p → refl
+module PhalanxND where
 \end{code}
-%</TrieO-rho>
-
--- trie (λ X tt → S × F X tt) {toℕ (s , y) → if s + toℕ y}
--- ⇒ (λ X A → Σ[ s ∈ S ] A^(if s) × trie F X A)
-%<*TrieO-sigma>
+%<*PhalanxND>
 \begin{code}
-  TrieO-con {f = f} (σ S {if = if} h C) ϕ =                              
-    σ S id (h ∘ VxfO-▷ f S)                                              
-    (Δσ (λ { ((_ , A) , _ , s) → Vec A (ϕ .σf _ if _ s) }) (h ∘ _) id
-    (TrieO-con C ϕ)
-    λ p → refl) (λ p → refl)
+  ThreeND : DescI Number ∅ ⊤
+  ThreeND  = 𝟙 {if = 1} _
+           ∷ 𝟙 {if = 2} _
+           ∷ 𝟙 {if = 3} _
+           ∷ []
+
+  PhalanxND : DescI Number ∅ ⊤
+  PhalanxND  = 𝟙 {if = 0} _
+             ∷ 𝟙 {if = 1} _
+             ∷ δ- {if = refl , refl , 1} {iff = id-InfoF} _ _ ThreeND
+             ( ρ0 {if = 2} _
+             ( δ- {if = refl , refl , 1} {iff = id-InfoF} _ _ ThreeND
+             ( 𝟙 {if = 0} _))) 
+           ∷ []
 \end{code}
-%</TrieO-sigma>
+%</PhalanxND>
 
-
--- trie (λ X tt → G tt × F X tt) {toℕ (r , y) → k * toℕ r + toℕ y}
--- ⇒ (λ X A → trie G (μ (trie G)) A × trie F X A)
-%<*TrieO-delta>
+%<*DigitOD-2>
 \begin{code}
-  TrieO-con {f = f} (δ {if = if} {iff = iff} j g R h C) ϕ with ϕ .δf _ _ if    
-  ... | refl , refl , k =                                                      
-    ∙δ
-      {f'' =  λ { (w , x) → h  (f w , ornForget
-              (toOrn (TrieO-desc R (ϕ ∘InfoF iff))) _ x) }}
-      (λ { ((_ , A) , _) → _ , Vec A k }) !
-    (TrieO-con C ϕ)
-    (TrieO-desc R (ϕ ∘InfoF iff)) id
-    (λ _ _ → refl) (λ _ _ → refl) λ p → refl
+  DigitOD′ : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id ThreeND
+  DigitOD′  = OΔσ- (λ ((_ , A) , _) → Vec A 1)
+            ( 𝟙 _ (const refl))
+            ∷ OΔσ- (λ ((_ , A) , _) → Vec A 2)
+            ( 𝟙 _ (const refl))
+            ∷ OΔσ- (λ ((_ , A) , _) → Vec A 3)
+            ( 𝟙 _ (const refl))
+            ∷ []
 \end{code}
-%</TrieO-delta>
+%</DigitOD-2>
 
+%<*FingerOD-2>
 \begin{code}
+  FingerOD′  : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id PhalanxND
+  FingerOD′  = OΔσ- (λ ((_ , A) , _) → Vec A 0)
+             ( 𝟙 _ (const refl))
+             ∷ OΔσ- (λ ((_ , A) , _) → Vec A 1)
+             ( 𝟙 _ (const refl))
+             ∷ O∙δ+ ! (λ ((_ , p) , _) → (_ , Vec p 1)) DigitOD′ (λ _ _ → refl) (λ _ _ → refl)
+             ( ρ _ (λ (_ , A) → _ , Vec A 2) (const refl) (const refl)
+             ( O∙δ+ ! (λ ((_ , p) , _) → (_ , Vec p 1)) DigitOD′ (λ _ _ → refl) (λ _ _ → refl)
+             ( OΔσ- (λ ((_ , A) , _) → Vec A 0)
+             ( 𝟙 _ (const refl)) )))
+             ∷ []
+\end{code}
+%<*FingerOD-2>
+
+
+
+
+
+
 _L+_ : List (ConI If Γ J ∅) → DescI If Γ J → DescI If Γ J
 []        L+ D = D
 (C ∷ Cs)  L+ D = C ∷ (Cs L+ D)
@@ -251,23 +268,22 @@ PathD′ E if = PathDD E if λ a b → con
     ... | refl , refl , k
       = σ- (const (Fin k)) (σ+ (const (μ R tt tt)) (σ+ (λ { (p , w , r) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , r)) tt }) (δ- (snd ∘ fst ∘ snd) ! (PathD′ R (if ∘InfoF iff)) (𝟙 λ { (p , (w , r) , c) → ϕ w (r , c) }))))
       ∷ L.map (δ+ ! ! R) (PathDC C if (λ { (w , r) → h (f w , r) }) λ { (w , r) c → ϕ w (r , c) })
-\end{code}
 
 unμ : {D : DescI If Γ J} → ∀ {p i} → μ D p i ≃ ⟦ D ⟧ (μ D) p i
 unμ .fst (con x) = x
 unμ .snd .equiv-proof y .fst = con y , λ i → y
 unμ .snd .equiv-proof y .snd (con x , p) = ΣPathP ((λ i → con (p (~ i))) , λ j i → p (~ j ∨ i))
 
-PathD-correct : ∀ D n → μ (PathD D) tt n ≃ Fin (toℕ n)
+PathD-correct : ∀ D n → μ (PathD D) tt n ≃ Fin (value n)
 PathD-correct D n = compEquiv unμ {!compEquiv (go D id-InfoF n) {!!}!}
   where
   open PathD D
 
   go :  (E : DescI If ∅ ⊤) (if : InfoF If Number)
         (c : ⟦ E ⟧ (λ _ _ → N id-InfoF) ⇶ (λ _ _ → N id-InfoF))
-     →  ∀ n → ⟦ PathDD id-InfoF E if c ⟧ (μ (PathD D)) tt n ≃ ⟦ PathDD id-InfoF E if c ⟧ (λ _ n → Fin (toℕ n)) tt n
+     →  ∀ n → ⟦ PathDD id-InfoF E if c ⟧ (μ (PathD D)) tt n ≃ ⟦ PathDD id-InfoF E if c ⟧ (λ _ n → Fin (value n)) tt n
      
-  go2 : (E : ConI If ∅ ⊤ V) (if : InfoF If Number) → ∀ n v → ⟦ {!PathDC!} ⟧ (μ (PathD D)) (tt , v) n ≃ ⟦ {!!} ⟧ (λ _ n → Fin (toℕ n)) (tt , v) n
+  go2 : (E : ConI If ∅ ⊤ V) (if : InfoF If Number) → ∀ n v → ⟦ {!PathDC!} ⟧ (μ (PathD D)) (tt , v) n ≃ ⟦ {!!} ⟧ (λ _ n → Fin (value n)) (tt , v) n
 
   go []       _  _ _ = idEquiv ⊥
   go (E ∷ Es) if c n = {!⟦ PathDD id-InfoF (E ∷ Es) if c ⟧ (μ (PathD D)) tt n!}
@@ -278,7 +294,6 @@ PathD-correct D n = compEquiv unμ {!compEquiv (go D id-InfoF n) {!!}!}
   go2 E n = {!!}
 
 
-\begin{code}
 BinID : Desc ∅ (μ BinND tt tt)
 BinID = PathD BinND
 
@@ -296,7 +311,6 @@ BinI n = μ BinID tt n
 -- like the 3rd index into bin-5
 bin-3/5 : BinI bin-5
 bin-3/5 = con (inr (inl (# 1 , _ , (refl , ((con (inr (inr (inr (inr (inl (_ , (# 0 , refl)))))))) , refl)))))
-\end{code}
 
 ITrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) id (μ D tt tt) ! (toDesc (TrieO D))
 ITrieO D = ITrieO′ D D id-InfoF
@@ -361,13 +375,8 @@ ITrieO D = ITrieO′ D D id-InfoF
 -- to summarize, for every number system, there is an appropriate "list", which has an appropriate "vector"
 -- this vector is representable, the list is traversable, and everything still satisfies size ≡ shape ≡ index
 
-%<*Unit>
-\begin{code}
 UnitD : DescI Number ∅ ⊤
 UnitD = 𝟙 {if = 1} _
       ∷ []
-\end{code}
-%</Unit>
-
 
 

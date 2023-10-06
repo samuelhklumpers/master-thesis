@@ -1,4 +1,4 @@
-\section{Numerical Representations}\label{sec:background-numerical}
+\section{Numerical Representations}\label{sec:desc-numrep}
 Before we dive into descriptions, let us revisit the situation of \bN{}, \AD{List} and \AD{Vec}. If it was not coincidence that gave us ornaments from \bN{} to \AD{List} and from \AD{List} to \AD{Vec}, then we can expect to find ornaments beforehand, instead of as a consequence of the definitions of \AD{List} and \AD{Vec}.
 
 Rather than finding the properties of \AD{Vec} that were already there, let us view \AD{Vec} as a consequence of the definition of \bN{} and \AF{lookup}. From \bN{}, we obtain a trivial type of arrays by reading \AF{lookup} as a prescript:
@@ -6,9 +6,9 @@ Rather than finding the properties of \AD{Vec} that were already there, let us v
 For this definition, the lookup function is simply the identity function on \AD{Lookup}. As this is the prototypical array corresponding to natural numbers, any other array type we define should satisfy all the same properties and laws \AD{Lookup} does, and should in fact be equivalent.
 
 
-We remark that without further assumptions, we cannot use the equality type from \autoref{sec:background-proving} for this notion of sameness of types: repeating the definition of a type gives two distinct types with no equality between them. Instead, we import another notion of sameness, known as isomorphisms:
+We remark that without further assumptions, we cannot use the equality type \AD{≡} for this notion of sameness of types: repeating the definition of a type gives two distinct types with no equality between them. Instead, we import another notion of sameness, known as isomorphisms:
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Iso}
-An \AD{Iso} from \AV{A} to \AV{B} is a map from \AV{A} to \AV{B} with a (two-sided) inverse\footnote{Which is equivalent to the other notion of equivalence: there is a map $f : A \to B$, and for each \AV{b} in \AV{B} there is exactly one \AV{a} in \AV{A} for which $f(a) = b$.}. In terms of elements, this that elements of \AV{A} and \AV{B} are in one-to-one correspondence.
+An \AD{Iso} from \AV{A} to \AV{B} is a map from \AV{A} to \AV{B} with a (two-sided) inverse\footnote{This is equivalent to the other notion of equivalence: there is a map $f : A \to B$, and for each \AV{b} in \AV{B} there is exactly one \AV{a} in \AV{A} for which $f(a) = b$.}. In terms of elements, this means that elements of \AV{A} and \AV{B} are in one-to-one correspondence.
 
 Now, rather than defining \AD{Vec} ``out of the blue'' and proving that it is correct or isomorphic to \AD{Lookup}, we can also turn the \AD{Iso} on its head: Starting from the equation that \AD{Vec} is equivalent to \AD{Lookup}, we derive a definition of \AD{Vec} as if solving that equation \cite{calcdata}. As a warm-up, we can also derive \AD{Fin} from the fact that \AD{Fin}\ \AV{n} should contain \AV{n} elements, and thus be isomorphic to \AV{Σ[ m ∈ ℕ ] m < n}.
 
@@ -18,11 +18,11 @@ using
 \ExecuteMetaData[Tex/Descriptions/Numrep]{isigma}
 The type \AD{Def}\ \AV{A} is deceptively simple, after all, there is (up to isomorphism) only one unique term in it! However, when using \AD{Def}initions, the implicit \AD{Σ'} extracts the right-hand side of a proof of an isomorphism, allowing us to reinterpret a proof as a definition.
 
-To keep the resulting \AD{Iso}s readable, we construct them as chains of smaller \AD{Iso}s using a variant of ``equational reasoning'' \cite{agdastdlib, plfa}, which lets us compose \AD{Iso}s while displaying the intermediate steps. In the calculation of \AD{Fin}, we will use the following lemmas\footnote{Note! \AF{ua}.}
+To keep the resulting \AD{Iso}s readable, we construct them as chains of smaller \AD{Iso}s using a variant of ``equational reasoning'' \cite{agdastdlib, plfa}, which lets us compose \AD{Iso}s while displaying the intermediate steps. In the calculation of \AD{Fin}, we will use the following lemmas
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-lemmas}
 In the terminology of \autoref{sec:background-proving}, \AF{⊥-strict} states that ``if A is false, then A \emph{is} false'', if we allow reading isomorphisms as ``\emph{is}'', while \AF{<-split} states that the set of numbers below $n+1$ is 1 greater than the set of numbers below $n$.
 
-Using these, we can calculate
+Using these, we can calculate\footnote{Here we make non-essential use of \AF{cong}, later we do need function extensionality, which has to be postulated or brought in via Cubical Agda.}
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-def}
 This gives a different (but equivalent) definition of \AD{Fin} compared to \AF{FinD}: the description \AF{FinD} describes \AD{Fin} as an inductive family, whereas \AF{Fin-def} gives the same definition as a type-computing function \cite{progorn}.
 
@@ -46,11 +46,11 @@ By requiring that nodes are interpreted as linear combinations of subnodes, we c
 
 For there to be an ornament between a number system and its numerical representation, the descriptions of both need to live in the same universe. Hence, we will generalize the type of descriptions over information such as multipliers later, rather than defining a new universe of number systems here. The information needed to describe a number system can be separated between the type-formers. Namely, a leaf \AIC{𝟙} requires a constant in \bN{}, a recursive field \AIC{ρ} requires a multiplier in \bN{}, while a field \AIC{σ} will need a function to convert values to \bN{}.
 
-To facilitate marking type-formers with specific bits of information, we define 
+To facilitate marking type-formers with specific bits of information, we define \todo{Compare this with the usual metadata in generics like in Haskell, but then a bit more wild. Also think of annotations on fingertrees.}
 \ExecuteMetaData[Ornament/Desc]{Info}
 to record the type of information corresponding to each type-former. We can summarize the information which makes a description into a number system as the following \AD{Info}:
 \ExecuteMetaData[Ornament/Numerical]{Number} 
-which will then ensure that each \AIC{𝟙} and \AIC{ρ} both are assigned a number \bN{}, and each \AIC{σ} is assigned a function that converts values of the type of its field to \bN{}\footnote{More about \AIC{δ} later.}.
+which will then ensure that each \AIC{𝟙} and \AIC{ρ} both are assigned a number \bN{}, and each \AIC{σ} is assigned a function that converts values of the type of its field to \bN{}.
 
 On the other hand, we can also declare that a description needs no further information by:
 \ExecuteMetaData[Ornament/Desc]{Plain}
@@ -67,13 +67,12 @@ which makes it possible to downcast (or upcast) between different types of infor
 
 \section{The Universe}\label{ssec:desc}
 We also need to take care that the numerical representations we will construct indeed fit in our universe. The final universe \AD{U-ix} of \autoref{ssec:background-ix}, while already quite general, still excludes many interesting datastructures. In particular, the encoding of parameters forces recursive type occurrences to have the same applied parameters, ruling out nested datatypes such as (binary) random-access lists \cite{calcdata,purelyfunctional}:
-\changed{Redo (or check) the Agda snippets below here.}
 \ExecuteMetaData[Tex/DescOrn]{random-access}
 and finger trees \cite{fingertrees}:
 \ExecuteMetaData[Tex/DescOrn]{finger-tree}
 Even if we could represent nested types in \AD{U-ix} we would find it still struggles with finger trees: Because adding non-recursive fields modifies the variable telescope, it becomes hard to reuse parts of a description in different places. Apart from that, the number of constructors needed to describe finger trees and similar types also grows quickly when adding fields like \AD{Digit}.
 
-We will resolve these issues as follows. We can describe nested types by allowing parameters to be transformed before they are passed to recursive fields \cite{?}. By transforming variables before they are passed to subsequent fields, it becomes possible to share constructor descriptions\footnote{Downsides upsides.}. Finally, by adding a variant of \AIC{σ} specialized to descriptions, we can describe composite datatypes more succinctly.
+We will resolve these issues as follows. We can describe nested types by allowing parameters to be transformed before they are passed to recursive fields \cite{initenough}. By transforming variables before they are passed to subsequent fields, it becomes possible to hide fields that are not referenced later and to share or reuse constructor descriptions. Finally, by adding a variant of \AIC{σ} specialized to descriptions, we can describe composite datatypes more succinctly\todo{Compare this to Haskell, in which representations are type classes, which directly refer to other types (even to the type itself in a recursive instance). (But that's also just there because in Haskell the type always already exists and they do not care about positivity and termination).}.
 
 Combining these changes, we define the following universe:
 \ExecuteMetaData[Ornament/Desc]{Desc}
@@ -86,9 +85,8 @@ Let us explain this universe by discussing some of the old and new datatypes we 
 \ExecuteMetaData[Ornament/Desc]{sigma-pm}
 (and the analogues for \AIC{δ}) we emulate unbound and bound fields respectively, and with 
 \ExecuteMetaData[Ornament/Desc]{rho-zero}
-we emulate an ordinary (as opposed to nested) recursive field. We can then describe \bN{} 
+we emulate an ordinary (as opposed to nested) recursive field. We can then describe \bN{} and \AD{List} as before
 \ExecuteMetaData[Ornament/Desc]{NatD}
-and \AD{List} as before
 \ExecuteMetaData[Ornament/Desc]{ListD}
 by replacing \AIC{σ} with \AF{σ-} and \AIC{ρ} with \AIC{ρ0}.
 
@@ -98,18 +96,18 @@ With the nested recursive field \AIC{ρ}, we can define the type of binary rando
 \ExecuteMetaData[Ornament/Desc]{Pair}
 Passing \AF{Pair} to \AIC{rho} we can define random access lists:  
 \ExecuteMetaData[Ornament/Desc]{RandomD}
-To represent finger trees, we first represent the type of digits \AD{Digit}:
+To represent finger trees, we first represent the type of digits \AD{Digit}: \todo{reminder to cite this here if I end up not referencing finger trees earlier.}
 \ExecuteMetaData[Ornament/Desc]{DigitD}
 We can then define finger trees as a composite type from \AD{Digit}:
 \ExecuteMetaData[Ornament/Desc]{FingerD}
 Here, the fact that the first \AIC{δ-} drops its field from the telescope makes it possible to reuse of \AD{Digit} in the second \AIC{δ-}.
 
-These descriptions can be instantiated as before by taking the fixpoint
+These descriptions can be instantiated as before by taking the fixpoint\footnote{Note that these (obviously?) ignore the \AD{Info} of a description.}
 \ExecuteMetaData[Ornament/Desc]{fpoint}
-of their interpretations as functors\todo{Also note that this (obviously?) completely ignores the Info of a description.}
+of their interpretations as functors
 \ExecuteMetaData[Ornament/Desc]{interpretation}
 In this universe, we also need to insert the transformations of parameters \AV{f} in \AIC{ρ} and the transformations of variables \AV{h} in \AIC{σ} and \AIC{δ}.
 
-Like for \AD{U-ix}, we can give the generic \AF{fold} for \AD{DescI}
-\ExecuteMetaData[Ornament/Desc]{fold}
+%Like for \AD{U-ix}, we can give the generic \AF{fold} for \AD{DescI}\todo{But why}
+%\ExecuteMetaData[Ornament/Desc]{fold-type}
 

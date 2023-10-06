@@ -328,8 +328,7 @@ data μ D p where
 
 %<*fold-type>
 \begin{code}
-fold : ∀ {D : DescI If Γ J} {X}
-     → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
+fold : ∀ {D : DescI If Γ J} {X} → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
 \end{code}
 %</fold-type>
 

@@ -18,14 +18,12 @@ open import Relation.Binary.PropositionalEquality hiding (J)
 open import Data.Unit
 open import Data.Empty
 open import Data.Product renaming (proj₁ to fst; proj₂ to snd)
-open import Data.Sum
+open import Data.Sum hiding (map₂)
 open import Data.Nat
 
 open import Function.Base
 
 open import Ornament.Desc
--- open import Ornament.Orn
-
 
 
 private variable
@@ -67,7 +65,11 @@ mutual
     _∷_  : ConOrnDesc If′ {c = c} id i {If = If} CD
          → OrnDesc If′ Δ c J i D
          → OrnDesc If′ Δ c J i (CD ∷ D)
+\end{code}
+%</OrnDesc>
 
+%<*ConOrn-preserve>
+\begin{code}
   data ConOrnDesc  (If′ : Info) {c : Cxf Δ Γ}
                    (v : VxfO c W V) (i : J → I)
                    : ConI If Γ V I → Type  where
@@ -100,7 +102,11 @@ mutual
         {if′ : If′ .δi Θ J} {iff′ : InfoF If″ If′}
       → ConOrnDesc If′ v′ i CD
       → ConOrnDesc If′ v i (δ {If} {if = if} {iff = iff} j t R g CD)
+\end{code}
+%</ConOrn-preserve>
 
+%<*ConOrn-extend>
+\begin{code}
     Δσ : (S : Δ & W ⊢ Type) (h : Vxf Δ (W ▷ S) W′)
          (v′ : VxfO c W′ V)
        → (∀ {p} → v ∘ fst ∼ v′ {p = p} ∘ h)
@@ -115,7 +121,11 @@ mutual
        → {if′ : If′ .δi Θ J} {iff′ : InfoF If″ If′}
        → ConOrnDesc If′ v′ i CD
        → ConOrnDesc If′ v i CD 
+\end{code}
+%</ConOrn-extend>
 
+%<*ConOrn-compose>
+\begin{code}
     ∙δ : {R : DescI If″ Θ K} {c′ : Cxf Λ Θ} {k′ : M → K} {k : V ⊢ K}
          {fΘ : V ⊢ ⟦ Θ ⟧tel tt} {g : Vxf _ (V ▷ liftM2 (μ R) fΘ k) V′}  
          (m : W ⊢ M) (fΛ : W ⊢ ⟦ Λ ⟧tel tt)
@@ -128,7 +138,7 @@ mutual
        → (DE : ConOrnDesc If′ v′ i CD)
        → ConOrnDesc If′ v i (δ {If} {if = if} {iff = iff} k fΘ R g CD)
 \end{code}
-%</OrnDesc>
+%</ConOrn-compose>
 
 omitted:
 ∙δ
@@ -178,16 +188,41 @@ omitted:
 
   toCon   : {c : Cxf Δ Γ} {v : VxfO c W V} {i : J → I} {D : ConI If Γ V I}
           → ConOrnDesc If′ v i D → ConI If′ Δ W J
-  toCon (𝟙 j′ x {if′ = if}) = 𝟙 {if = if} j′
-  toCon (ρ j′ h x x₁ {if′ = if} CO) = ρ {if = if} j′ h (toCon CO)
-  toCon {v = v} (σ S h v′ x {if′ = if} CO) = σ (S ∘ over v) {if = if} h (toCon CO)
-  toCon {v = v} (δ R j t h x {if′ = if} {iff′ = iff} CO) = δ {if = if} {iff = iff} (j ∘ over v) (t ∘ over v) R h (toCon CO)
-  toCon (Δσ S h v′ x {if′ = if} CO) = σ S {if = if} h (toCon CO)
-  toCon (Δδ R j t h x {if′ = if} {iff′ = iff} CO) = δ {if = if} {iff = iff} j t R h (toCon CO)
-  toCon (∙δ m fΛ RR′ h p₁ p₂ {if′ = if} {iff′ = iff} CO) = δ {if = if} {iff = iff} m fΛ (toDesc RR′) h (toCon CO)
+  toCon (𝟙 j′ x {if′ = if})
+    = 𝟙 {if = if} j′
+
+  toCon (ρ j′ h x x₁ {if′ = if} CO)
+    = ρ {if = if} j′ h (toCon CO)
+
+  toCon {v = v} (σ S h v′ x {if′ = if} CO)
+    = σ (S ∘ over v) {if = if} h (toCon CO)
+
+  toCon {v = v} (δ R j t h x {if′ = if} {iff′ = iff} CO)
+    = δ {if = if} {iff = iff} (j ∘ over v) (t ∘ over v) R h (toCon CO)
+
+  toCon (Δσ S h v′ x {if′ = if} CO)
+    = σ S {if = if} h (toCon CO)
+  
+  toCon (Δδ R j t h x {if′ = if} {iff′ = iff} CO)
+    = δ {if = if} {iff = iff} j t R h (toCon CO)
+  
+  toCon (∙δ m fΛ RR′ h p₁ p₂ {if′ = if} {iff′ = iff} CO)
+    = δ {if = if} {iff = iff} m fΛ (toDesc RR′) h (toCon CO)
 \end{code}
 %</toDesc>
 
+
+\begin{code}
+postulate
+\end{code}
+
+%<*ornForget-type>
+\begin{code}
+  ornForget : {v : Cxf Δ Γ} {i : J → I} {D : DescI If Γ I}
+            → (OD : OrnDesc If′ Δ v J i D)
+            → μ (toDesc OD) ⇶ λ d j → μ D (v d) (i j)
+\end{code}
+%</ornForget-type>
 
 -- this is pretty awful, maybe not very in line with the whole "let's make stuff compact" idea
 -- makes you think
@@ -203,11 +238,12 @@ module _ {If′ : Info} {c : Cxf Δ Γ} {v : VxfO c W V} {i : J → I} {If : Inf
 
 %<*O-sigma-pm>
 \begin{code}
-  Oσ+ : (S : Γ & V ⊢ Type) {CD : ConI If Γ (V ▷ S) I}
+  Oσ+ : (S : Γ & V ⊢ Type) {CD : ConI If Γ V′ I} {h : Vxf _ _ _}
     → {if : If .σi S} {if′ : If′ .σi (S ∘ over v)}
-    → ConOrnDesc If′ (VxfO-▷ v S) i CD
-    → ConOrnDesc If′ v i (σ {If} S {if = if} id CD)
-  Oσ+ S {if′ = if′} CO = σ S id (VxfO-▷ v S) (λ _ → refl) {if′ = if′} CO
+    → ConOrnDesc If′ (h ∘ VxfO-▷ v S) i CD
+    → ConOrnDesc If′ v i (σ {If} S {if = if} h CD)
+  Oσ+ S {h = h} {if′ = if′} CO
+    = σ S id (h ∘ VxfO-▷ v S) (λ _ → refl) {if′ = if′} CO
 
   Oσ- : (S : Γ & V ⊢ Type) {CD : ConI If Γ V I}
     → {if : If .σi S} {if′ : If′ .σi (S ∘ over v)}
@@ -258,32 +294,29 @@ module _ {If′ : Info} {c : Cxf Δ Γ} {v : VxfO c W V} {i : J → I} {If : Inf
      → ConOrnDesc If′ v i CD
   OΔδ- R j t {if′ = if′} {iff′ = iff′} CO = Δδ R j t fst (λ _ → refl) {if′ = if′} {iff′ = iff′} CO
 
-  {-
-  -- these need ornForget to run x)
   O∙δ+ : {R : DescI If″ Θ K} {c′ : Cxf Λ Θ} {k′ : M → K} {k : V ⊢ K}
-       {fΘ : V ⊢ ⟦ Θ ⟧tel tt} (m : W ⊢ M) (fΛ : W ⊢ ⟦ Λ ⟧tel tt)
-       {CD : ConI If Γ (V ▷ liftM2 (μ R) fΘ k) I}
-     → (RR′ : OrnDesc If‴ Λ c′ M k′ R)
-     → (p₁ : ∀ q w → c′ (fΛ (q , w)) ≡ fΘ (c q , v w))
-     → (p₂ : ∀ q w → k′ (m (q , w))  ≡ k (c q , v w))
-     → ∀ {if} {iff} {if′ : If′ .δi Λ M} {iff′ : InfoF If‴ If′}
-     → (DE : ConOrnDesc If′ (VxfO-▷ v (liftM2 (μ R) fΘ k)) i CD)
-     → ConOrnDesc If′ v i (δ {If} {if = if} {iff = iff} k fΘ R id CD)
-  O∙δ+ m fΛ RR′ p₁ p₂ {if′ = if′} {iff′ = iff′} CO = ∙δ m fΛ RR′ id {v′ = {!VxfO-▷ ? (liftM2 (μ (toDesc RR′)) fΛ m)!}} p₁ p₂ {if′ = if′} {iff′ = iff′} {!CO!}
-
-  O∙δ- : {R : DescI If″ Θ K} {c′ : Cxf Λ Θ} {k′ : M → K} {k : V ⊢ K}
        {fΘ : V ⊢ ⟦ Θ ⟧tel tt} {g : Vxf _ (V ▷ liftM2 (μ R) fΘ k) V′}  
        (m : W ⊢ M) (fΛ : W ⊢ ⟦ Λ ⟧tel tt)
      → (RR′ : OrnDesc If‴ Λ c′ M k′ R)
-       (h : Vxf _ (W ▷ liftM2 (μ (toDesc RR′)) fΛ m) W′)
-       {v′ : VxfO c W′ V′}   
      → (p₁ : ∀ q w → c′ (fΛ (q , w)) ≡ fΘ (c q , v w))
      → (p₂ : ∀ q w → k′ (m (q , w))  ≡ k (c q , v w))
      → ∀ {if} {iff} {if′ : If′ .δi Λ M} {iff′ : InfoF If‴ If′}
-     → (DE : ConOrnDesc If′ v′ i CD)
+     → (DE : ConOrnDesc If′ (g ∘ VxfO-▷ v (liftM2 (μ R) fΘ k) ∘ map₂ λ {x} y → subst₂ (μ R) (p₁ _ _) (p₂ _ _) (ornForget RR′ (fΛ (_ , x)) (m (_ , x)) y)) i CD)
      → ConOrnDesc If′ v i (δ {If} {if = if} {iff = iff} k fΘ R g CD)
-  O∙δ- = {!!}
-  -}
+  O∙δ+ m fΛ RR′ p₁ p₂ {if′ = if′} {iff′ = iff′} CO = ∙δ m fΛ RR′ id p₁ p₂ {if′ = if′} {iff′ = iff′} CO
+
+
+  O∙δ- : {R : DescI If″ Θ K} {c′ : Cxf Λ Θ} {k′ : M → K} {k : V ⊢ K}
+         {fΘ : V ⊢ ⟦ Θ ⟧tel tt} {g : Vxf _ (V ▷ liftM2 (μ R) fΘ k) V′}  
+         (m : W ⊢ M) (fΛ : W ⊢ ⟦ Λ ⟧tel tt)
+       → (RR′ : OrnDesc If‴ Λ c′ M k′ R)
+         {v′ : VxfO c W V′}   
+       → (p₁ : ∀ q w → c′ (fΛ (q , w)) ≡ fΘ (c q , v w))
+       → (p₂ : ∀ q w → k′ (m (q , w))  ≡ k (c q , v w))
+       → ∀ {if} {iff} {if′ : If′ .δi Λ M} {iff′ : InfoF If‴ If′}
+       → (DE : ConOrnDesc If′ v′ i CD)
+       → ConOrnDesc If′ v i (δ {If} {if = if} {iff = iff} k fΘ R g CD)
+  O∙δ- m fΛ RR′ p₁ p₂ {if′ = if′} {iff′ = iff′} CO = ∙δ m fΛ RR′ fst p₁ p₂ {if′ = if′} {iff′ = iff′} CO
 \end{code}
 
 %<*VecOD>
@@ -322,6 +355,52 @@ RandomOD  = 𝟙 _ (const refl)
           ∷ []
 \end{code}
 %</RandomOD>
+
+%<*PhalanxD>
+\begin{code}
+ThreeD : Desc ∅ ⊤
+ThreeD = 𝟙 _ ∷ 𝟙 _ ∷ 𝟙 _ ∷ []
+
+PhalanxD : Desc ∅ ⊤
+PhalanxD = 𝟙 _
+         ∷ 𝟙 _
+         ∷ δ- _ _ ThreeD
+         ( ρ0 _
+         ( δ- _ _ ThreeD
+         ( 𝟙 _))) 
+         ∷ []
+\end{code}
+%</PhalanxD>
+
+%<*DigitOD>
+\begin{code}
+DigitOD : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id ThreeD
+DigitOD = OΔσ- (λ ((_ , A) , _) → A)
+        ( 𝟙 _ (const refl))
+        ∷ OΔσ- (λ ((_ , A) , _) → A)
+        ( OΔσ- (λ ((_ , A) , _) → A)
+        ( 𝟙 _ (const refl)))
+        ∷ OΔσ- (λ ((_ , A) , _) → A)
+        ( OΔσ- (λ ((_ , A) , _) → A)
+        ( OΔσ- (λ ((_ , A) , _) → A)
+        ( 𝟙 _ (const refl))))
+        ∷ []
+\end{code}
+%</DigitOD>
+
+%<*FingerOD>
+\begin{code}
+FingerOD : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id PhalanxD
+FingerOD = 𝟙 _ (const refl)
+         ∷ OΔσ- (λ ((_ , A) , _) → A)
+         ( 𝟙 _ (const refl))
+         ∷ O∙δ- _ (λ (p , _) → p) DigitOD (λ _ _ → refl) (λ _ _ → refl)
+         ( ρ _ (λ (_ , A) → (_ , Pair A)) (const refl) (const refl)
+         ( O∙δ- _ (λ (p , _) → p) DigitOD (λ _ _ → refl) (λ _ _ → refl)
+         ( 𝟙 _ (const refl))))
+         ∷ []
+\end{code}
+%</FingerOD>
 
 
   toCon (Δρ j h {if′ = if} CO) = ρ {if = if} j h (toCon CO)

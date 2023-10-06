@@ -1,0 +1,56 @@
+\begin{comment}
+3 Calculating datastructures using Ornaments
+
+In this part we return to the matter numerical representations. With 2.3 in mind, we can rephrase part our original question to ask
+
+> Can numerical representations be described as ornaments on their number systems?
+
+Let us look at a numerical representation presented as ornament in action.
+
+\section{Numerical representations as ornaments}\label{sec:ornaments}
+Reflecting on this derivation for \bN{}, we could perform the same computation for \bL{} to get Braun trees. However, we note that these computations proceed with roughly the same pattern: each constructor of the numeral system gets assigned a value, and is amended with a field holding a number of elements and subnodes using this value as a ``weight''. This kind of ``modifying constructors'' is formalized by ornamentation \cite{progorn}, which lets us formulate what it means for two types to have a ``similar'' recursive structure. This is achieved by interpreting (indexed inductive) datatypes from descriptions, between which an ornament is seen as a certificate of similarity, describing which fields or indices need to be introduced or dropped to go from one description to the other. \textit{Ornamental descriptions}, which act as one-sided ornaments, let us describe new datatypes by recording the modifications to an existing description.
+\todo[inline]{Put some minimal definitions here.}
+
+Looking back at \AgdaDatatype{Vec}, ornaments let us show that express that \AgdaDatatype{Vec} can be formed by introducing indices and adding a fields holding an elements to \bN{}.
+However, deriving \AgdaDatatype{List} from \bN{} generalizes to \bL{} with less notational overhead, so we tackle that case first. We use the following description of \bN{}
+\ExecuteMetaData[Tex/NumRepOrn]{NatD}
+Here, \AgdaInductiveConstructor{σ} adds a field to the description, upon which the rest of the description can vary, and \AgdaInductiveConstructor{ṿ} lists the recursive fields and their indices (which can only be \AgdaInductiveConstructor{tt}).
+We can now write down the ornament which adds fields to the \AgdaFunction{suc} constructor
+\ExecuteMetaData[Tex/NumRepOrn]{ListO}
+Here, the \AgdaInductiveConstructor{σ} and \AgdaInductiveConstructor{ṿ} are forced to match those of \AgdaDatatype{NatD},
+but the \AgdaInductiveConstructor{Δ} adds a new field. Using the least fixpoint and description extraction, we can then define \AgdaDatatype{List} from this ornamental description. Note that we cannot hope to give an unindexed ornament from \bL{}
+\ExecuteMetaData[Tex/NumRepOrn]{LeibnizD}
+into trees, since trees have a very different recursive structure! Thus, we must keep track at what level we are in the tree so that we can ask for adequately many elements:
+\ExecuteMetaData[Tex/NumRepOrn]{TreeO}
+We use the \AgdaFunction{power} combinator to ensure that the digit at position $n$, which has weight $2^n$ in the interpretation of a binary number, also holds its value times $2^n$ elements. This makes sure that the number of elements in the tree shaped after a given binary number also is the value of that  binary number.
+\end{comment}
+
+
+\section{Generic numerical representations}\label{sec:trieo}
+In this section, we will demonstrate how we can use ornamental descriptions to generically compute unindexed numerical representations. \todo{Explain why not indexed}
+%The claim is that calculating a datastructure is actually an ornamental operation, so we might call our approach ``calculating ornaments''. 
+% mark: more
+The reasoning here proceeds differently from that in the calculation of \AD{Vec} from \bN{}. Indeed, we first construct a datatype and only prove it is the correct type after, as opposed to calculating the type by isomorphism reasoning. Nevertheless, the choices of fields depending on the analysis of a number system follow the same strategy.
+
+Recall the ``natural numbers''-information \AF{Number}, which gets its semantics from the conversion to \bN{}:
+\ExecuteMetaData[Ornament/Numerical]{toN-type}
+which is defined by generalizing over the inner information bundle and folding using
+\ExecuteMetaData[Ornament/Numerical]{toN-con}
+The choice of interpretation restricts the numbers to the class of numbers which are evaluated as linear combinations of ``digits''\footnote{An arbitrary \AF{Number} system is not necessarily isomorphic to \bN{}, as the system can still be incomplete (i.e., it cannot express some numbers) or redundant (it has multiple representations of some numbers).}. This class certainly does not include all interesting number systems, but does include many systems that have associated arrays\footnote{Notably, arbitrary polynomials also have numerical representations, interpreting multiplication as precomposition.}. 
+
+We let this interpretation into \bN{} guide the computation of the associated numerical representation, which will be a (nested) type of finite sequences. In each case, we follow the computation in \AF{value} by inserting vectors of sizes corresponding to the weights of the number system:
+\ExecuteMetaData[Ornament/Numerical]{trieifyOD}
+In the case of a leaf \AIC{𝟙} of weight \AV{k}, we insert a vector of size \AV{k}. Similarly, in a field \AIC{σ}, where the weight is determined by a value \AV{s} of \AV{S}, we insert a vector of the weight corresponding to the value of \AV{s}. Note that the actual value/number of elements a leaf or field contributes depends on the preceding multipliers of recursive fields: a recursive field of a number can have a weight \AV{k}, so we multiply the number of elements in a recursive sequence by wrapping the parameter in a vector of size \AV{k}. By roughly the same reasoning we pass the trieification of a subdescription \AV{R} the parameter wrapped in a vector, which we compose into the current numerical description by using the ornament \AIC{∙δ}. Since \AV{R} can have a different \AD{Info}, we generalized the whole construction over \AV{ϕ}\ \AV{:} \AD{InfoF}\ \AV{If}\ \AF{Number}.
+
+As an example, let us define \AF{PhalanxD} as a number system and walk through the computation of its \AF{trieifyOD}. We define
+\ExecuteMetaData[Ornament/Numerical]{PhalanxND}
+Now, we see that applying \AF{trieifyOD} sends leaves with a value of \AV{k} to \AD{Vec}\ \AV{A}\ \AV{k}, so applying it to \AF{DigitND} yields
+\ExecuteMetaData[Ornament/Numerical]{DigitOD-2}
+which is equivalent to the \AF{DigitOD} from before, up to expanding a vector of \AV{k} elements into \AV{k} fields. The same happens for the first two constructors of \AF{PhalanxND}, replacing them with an empty vector and a vector of one element respectively. The \AF{ThreeND} in the last constructor gets trieified to \AF{DigitOD′} and composed by \AF{O∙δ+}, and the recursive field gets replaced by a recursive field nesting over vectors of length. Again, this is equivalent to \AF{FingerOD}, up to wrapping values in length one vectors, replacing \AD{Pair} with a length two vector, and inserting empty vectors.
+
+% proving the size is correct is a bit difficult because of the vectors in the nesting.
+
+\begin{outline}
+This concludes a bunch of things, including this thesis.
+\end{outline}
+

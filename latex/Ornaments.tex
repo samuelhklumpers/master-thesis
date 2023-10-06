@@ -1,119 +1,43 @@
-In the framework of \AD{DescI} in the last section, we can write down a number system and its meaning as the starting point of the construction of a numerical representation. To write down the generic construction of those numerical representations, we will need a language in which we can describe modifications on the number systems.
-
-\changed{Somewhat final version above, draft/notes/rough comments/outline below.}
-In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of (plenty of examples). We omit the definition of the ornaments, since we will only construct new datatypes, rather than relate pre-existing types\footnote{Maybe, I will throw the ornaments into the appendix along with the conversion from ornamental description to ornament}.
-
-% (Be alarmed, the implicits get out of hand pretty quickly.)
-\todo{do we need to remark more?}
-
-
 \section{Ornamental descriptions}
-These ornamental descriptions take the same shape as those in \autoref{sec:background-ornamental-descriptions}, generalized to handle nested types, variable transformations, and composite types. Like the interpretation of a \AD{DescI}, ornaments also completely ignore the \AD{Info} of a \AD{DescI}.
+These ornamental descriptions take the same shape as those in \autoref{sec:background-ornamental-descriptions}, generalized to handle nested types, variable transformations, and composite types. Like the interpretation of a description \AD{DescI}, ornaments also completely ignore the \AD{Info} of a \AD{DescI}.
 
-Recall that a \AD{OrnDesc}\ \AV{If′ Δ c J i D} represents the ornament building on top of \AV{D}, which yields a description with information \AV{If′}, parameters \AV{Δ}, and indices \AV{J}. We use \AF{∼} to write down pointwise equality of functions, which in this case are all commutativity squares. Since \AD{ConI} allows the transformation of variable telescopes, we have to dedicate a lot of lines to writing down commutativity squares for variables, which along with the generally high number of arguments and implicits\footnote{Of which even more are hidden!} makes the definition rather dry and long.
-
-One tip is to  ignore all squares involving a \AD{Vxf}, these are trivial when using the \AV{+-} variants of the \AIC{σ} and \AIC{δ} formers anyway! Due to the last constructor \AIC{δ•}, \AD{OrnDesc}, \AD{ConOrnDesc}, and \AF{toDesc}\footnote{We left out the variable square for \AIC{δ•}, because it is honestly just too long. If this was included, then we also would involve \AF{ornForget}.} become tightly connected, so the definition is given in one large mutual block:
+We will define \AD{OrnDesc}\ \AV{If′ Δ c J i D} to represent the ornaments building on top of a base description \AV{D}, yielding descriptions with information \AV{If′}, parameters \AV{Δ}, and indices \AV{J}:
 \ExecuteMetaData[Ornament/OrnDesc]{OrnDesc}
-Here the implicit \AV{If′} contains the information necessary to recover the \AD{DescI} from an \AD{OrnDesc}:\todo{line length}
+We use \AF{∼} to write down pointwise equality of functions, which in this case all are commutativity squares. Since \AD{ConI} allows the transformation of variable telescopes, we have to dedicate a lot of lines to writing down commutativity squares for variables, which along with the generally high number of arguments and implicits\footnote{Of which even more are hidden!} makes the definition rather dry and long. However, these squares involving \AD{Vxf} can generally ignored, as witnessed by the \AF{Oσ+} and \AF{Oσ-} variants of the constructors, which automatically fill those squares in the common cases of binding or ignoring fields.
+
+Due to the \AIC{δ•} constructor \AD{OrnDesc}, \AD{ConOrnDesc}, and \AF{toDesc} become tightly connected\footnote{We left out the variable square for \AIC{δ•}, because it is honestly just too long. If this was included, then the mutual block would also include \AF{ornForget} and its friend \AF{ornErase}.}, so we give the definition as one large mutual block.
+
+The ornaments acting on the constructors now consist of three groups: ornaments that preserve structure, ornaments that extend structure, and ornaments that compose structures. The structure-preserving ornaments are
+\ExecuteMetaData[Ornament/OrnDesc]{ConOrn-preserve}
+These represent the ornaments in which the base description and the target description share the same field, up to conversions of parameters, variables, and indices.
+
+The ornaments extending structure are
+\ExecuteMetaData[Ornament/OrnDesc]{ConOrn-extend}
+representing the insertion of fields in the target which are not present in the base description.
+
+Finally, the ornament
+\ExecuteMetaData[Ornament/OrnDesc]{ConOrn-compose}
+makes it possible compose an ornament onto a \AIC{δ} in the base description.
+
+Compared to the previous ornaments, we have the new constructors \AIC{δ}, \AIC{Δδ} and \AIC{δ•}, where the first two are analogues of \AIC{σ} and \AIC{Δσ}. The \AIC{δ•} constructor states that an ornamental description from a description \AV{R} and a (constructor) ornamental description from \AV{CD} can be composed to form an ornamental description from the composition (in the sense of the \AV{δ} type-former) of \AV{CD} with \AV{R}. The new commutativity squares in all the constructors both ensure the existence of functions such as 
+\ExecuteMetaData[Ornament/OrnDesc]{ornForget-type}
+like for the simpler ornaments, and that these ornamental descriptions indeed still induce ornaments.
+
+The precise meaning of ornamental descriptions as descriptions is given by the conversion:
 \ExecuteMetaData[Ornament/OrnDesc]{toDesc}
-The commutativity squares again ensure the existence of functions like \AF{ornForget}, and that these ornamental descriptions indeed induce ornaments.
+which makes use of the implicit \AV{If′} fields in the constructor ornaments to reconstruct the information on the target description.
 
-Compared to the previous ornaments, we have the new constructors \AIC{δ}, \AIC{Δδ} and \AIC{δ•}, where the first two are analogues of \AIC{σ} and \AIC{Δσ}. The \AIC{δ•} constructor states that an ornamental description from a description \AV{R} and a (constructor) ornamental description from \AV{CD} can be composed to form an ornamental description from the composition (in the sense of the \AV{δ} type-former) of \AV{CD} with \AV{R}.
-
-Let us make the uses of \AD{OrnDesc} more clear by means of examples, where we make use of the simpler variants: \todo{Oδ•+- needs ornForget to run}
+But let us make the uses of \AD{OrnDesc} more clear by means of examples, where we make use of the variants of some ornaments specialized to binding or ignoring fields\footnote{With analogues for \AIC{Δσ}, (\AIC{Δ})\AIC{δ}, \AIC{δ•}, and like before the non-nested recursive field.}:
 \ExecuteMetaData[Ornament/OrnDesc]{O-sigma-pm}
-With these we can give the now familiar ornamental description of \AD{Vec} from \AD{List}:
+With these we can give the familiar ornamental description from \AD{List} to \AD{Vec}:
 \ExecuteMetaData[Ornament/OrnDesc]{VecOD}
 Using the new flexibility in \AIC{ρ}, we can now start from a description of binary numbers:
 \ExecuteMetaData[Ornament/OrnDesc]{LeibnizD}
-and give the random access lists from before as an ornamental description as well.
+and describe random access lists as an ornament from binary numbers:
 \ExecuteMetaData[Ornament/OrnDesc]{RandomOD}
-Likewise, we can use \AIC{δ•} to start from the ``fingertree numbers'':
-\todo{finger tree skeleton}
-and compose this with the ornamental description of \AD{Digit}
-\todo{DigitOD}
-to obtain the ornamental description of finger trees:
-\todo{FingerTreeOD}
-
-%Again, ornForget, fold blabla.
-
-\todo{Now we can compute everything generically.}
-
-
-\begin{outline}
-\ExecuteMetaData[Ornament/OrnDesc]{ConOrnDesc-type}
-The definition of ornamental descriptions can be derived in a straightforward manner from ornaments, removing all mentions of the LHS and making all fields which then no longer appear in the indices explicit\footnote{One might expect to need less equalities, alas, this is difficult because of \autoref{rem:orn-lift}.}. We will show the leaf-preserving rule as an example, the others are derived analogously:
-\ExecuteMetaData[Ornament/OrnDesc]{OrnDesc-1}
-As we can see, the only change we need to make is that \AgdaBoundFontStyle{k} becomes explicit and fully annotated.
-
-Almost by construction, we have that an ornamental description can be decomposed into a description of the new datatype
-\ExecuteMetaData[Ornament/OrnDesc]{toDesc}
-and an ornament between the starting description and this new description
-\ExecuteMetaData[Ornament/OrnDesc]{toOrn}
-\end{outline}
-
-
-\begin{outline}    
-\section{The ornaments}
-we could ditch removal of fields: we don't use it. downside: ornament over ornament is the same as field removal for deltas
-
-:warning: match everything, add/remove field, add/remove recursive field, add/remove description field, ornament over ornament
-
-\todo{Nuke ornaments, keep ornamental descriptions}
-
-\towrite{Put something that isn't yet in \autoref{ssec:bg-orn} here.}
-
-\ExecuteMetaData[Ornament/Orn]{Orn-type}
-\ExecuteMetaData[Ornament/Orn]{ornForget-type}
-
-We will walk through the constructor ornaments
-\ExecuteMetaData[Ornament/Orn]{ConOrn-type}
-again, an ornament between datatypes is just a list of ornaments between their constructors
-\ExecuteMetaData[Ornament/Orn]{Orn}
-Note that all ornaments completely ignore information bundles! They cannot affect the existence of \AgdaFunction{ornForget} after all.
-
-Copying parts from one description to another, up to parameter and index refinement, corresponds to reflexivity. Preservation of leaves follows the rule
-\ExecuteMetaData[Ornament/Orn]{Orn-1}
-We can see that this commuting square (\texttt{e (k p) ≡ j (over f p)}) is necessary: take a value of \texttt{E} at \texttt{p, i}, where \texttt{i} is given as \texttt{k p}. Then \AgdaFunction{ornForget} has to convert this to a value of \texttt{D} at \texttt{f p , e i}, but since \texttt{e i} must match \texttt{j (f p)}, this is only possible if \texttt{e (k p) = j (f p)}.
-
-Preserving a recursive field similarly requires a square of indices and conversions to commute
-\ExecuteMetaData[Ornament/Orn]{Orn-rho}
-additionally requiring the recursive parameters to commute with the conversion. \todo{Does adding the derivations for the squares everywhere make this section clearler?}
-
-Preservation of non-recursive fields and description fields is analogous
-\ExecuteMetaData[Ornament/Orn]{Orn-sigma-delta}
-differing only in that non-recursive fields appears transformed on the right hand, while description fields have their conversions modified instead. For this rule, we need that the variable transformations fit into a commuting square with the parameter conversions. The condition on indices for descriptions, which is a commuting triangle, is encoded in the return type\footnote{Should this become a problem like with \AgdaInductiveConstructor{ρ}, modifying the rule to require a triangle is trivial.}.
-
-Ornaments would not be very interesting if they only related identical structures. The left-hand side can also have more fields than the right-hand side, in which case \AgdaFunction{ornForget} will simply drop the fields which have no counterpart on the right-hand side. As a consequence, the description extending rules have fewer conditions than the description preserving rules: 
-\ExecuteMetaData[Ornament/Orn]{Orn-+-rho}
-Note that this extension\footnote{Kind of breaking the ``ornaments relate types with similar recursive structure'' interpretation.} with a recursive field has no conditions.
-
-Extending by a non-recursive field or a description field again only requires the variable transform to interact well with the parameter conversion
-\ExecuteMetaData[Ornament/Orn]{Orn-+-sigma-delta}
-
-In the other direction, the left-hand side can also omit a field which appears on the right-hand side, provided we can produce a default value
-\ExecuteMetaData[Ornament/Orn]{Orn---sigma-delta}
-These rules let us describe the basic set of ornaments between datatypes.
-
-Intuitively we also expect a conversion to exist when two constructors have description fields which are not equal, but are only related by an ornament. Such a composition of ornaments takes two ornaments, one between the field, and one between the outer descriptions. This composition rule reads:\todo{The implicits kind of get out of control here, but the rule is also unreadable without them. I might hide the rule altogether and only run an example with it.}
-\ExecuteMetaData[Ornament/Orn]{Orn-comp}
-We first require two commuting squares, one relating the parameters of the fields to the inner and outer parameter conversions, and one relating the indices of the fields to the inner index conversion and the outer parameter conversion. Then, the last square has a rather complicated equation, which merely states that the variable transforms for the remainder respect the outer parameter conversion.
-
-We will construct \AgdaFunction{ornForget} as a \AgdaFunction{fold}. Using
-\ExecuteMetaData[Ornament/Orn]{erase-type}
-we can define the algebra which forgets the added structure of the outer layer
-\ExecuteMetaData[Ornament/Orn]{ornAlg}
-Folding over this algebra gives the wanted function
-\ExecuteMetaData[Ornament/Orn]{ornForget}
-
-\todo{NatD was removed here}
-
-We can also relate lists and vectors
-\ExecuteMetaData[Ornament/Orn]{ListD-VecD}
-Now the parameter conversion is the identity, since both have a single type parameter. The index conversion is \AgdaFunction{!}, since lists have no indices. Again, most structure is preserved, we only note that vectors have an added field carrying the length.
-
-Instantiating \AgdaFunction{ornForget} to these ornaments, we now get the functions \AgdaFunction{length} and \AgdaFunction{toList} for free!
-
-%\investigate{Having a function of the same type as \AgdaFunction{ornForget} is not sufficient to deduce an ornament. An obstacle is that the usual empty type (no constructors) and the non-wellfounded empty type (only a recursive field) don't have an ornament. Also, while the leaf-preservation case spells itself out, the substitutions obviously don't give us a way to recover the equalities.}
-\end{outline}
-    
+Likewise, we can define phalanges as
+\ExecuteMetaData[Ornament/OrnDesc]{PhalanxD}
+By giving an ornament turning \AD{Three} into \AD{Digits}
+\ExecuteMetaData[Ornament/OrnDesc]{DigitOD}
+we can then use \AIC{δ•} to compose \AD{Digits} into phalanges, making binary fingertrees
+\ExecuteMetaData[Ornament/OrnDesc]{FingerOD}

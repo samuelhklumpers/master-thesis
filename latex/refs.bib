@@ -428,3 +428,76 @@ url = {https://github.com/agda/agda-stdlib},
 version = {1.7.2},
 year = {2023}
 }
+
+
+@inbook{genericsamm,
+author = {Altenkirch, Thorsten and McBride, Conor and Morris, Peter},
+year = {2007},
+month = {11},
+pages = {209-257},
+title = {Generic Programming with Dependent Types},
+isbn = {978-3-540-76785-5},
+doi = {10.1007/978-3-540-76786-2_4}
+}
+
+@inproceedings{reynolds1983types,
+  title={Types, abstraction and parametric polymorphism},
+  author={Reynolds, John C},
+  booktitle={Information Processing 83, Proceedings of the IFIP 9th World Computer Congres},
+  pages={513--523},
+  year={1983}
+}
+
+@inproceedings{wadlerfree,
+author = {Wadler, Philip},
+title = {Theorems for Free!},
+year = {1989},
+isbn = {0897913280},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/99370.99404},
+doi = {10.1145/99370.99404},
+booktitle = {Proceedings of the Fourth International Conference on Functional Programming Languages and Computer Architecture},
+pages = {347–359},
+numpages = {13},
+location = {Imperial College, London, United Kingdom},
+series = {FPCA '89}
+}
+
+@article{haskellderiving,
+author = {Magalh\~{a}es, Jos\'{e} Pedro and Dijkstra, Atze and Jeuring, Johan and L\"{o}h, Andres},
+title = {A Generic Deriving Mechanism for Haskell},
+year = {2010},
+issue_date = {November 2010},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {45},
+number = {11},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/2088456.1863529},
+doi = {10.1145/2088456.1863529},
+abstract = {Haskell's deriving mechanism supports the automatic generation of instances for a number of functions. The Haskell 98 Report only specifies how to generate instances for the Eq, Ord, Enum, Bounded, Show, and Read classes. The description of how to generate instances is largely informal. The generation of instances imposes restrictions on the shape of datatypes, depending on the particular class to derive. As a consequence, the portability of instances across different compilers is not guaranteed.We propose a new approach to Haskell's deriving mechanism, which allows users to specify how to derive arbitrary class instances using standard datatype-generic programming techniques. Generic functions, including the methods from six standard Haskell 98 derivable classes, can be specified entirely within Haskell 98 plus multi-parameter type classes, making them lightweight and portable. We can also express Functor, Typeable, and many other derivable classes with our technique. We implemented our deriving mechanism together with many new derivable classes in the Utrecht Haskell Compiler.},
+journal = {SIGPLAN Not.},
+month = {9},
+pages = {37–48},
+numpages = {12},
+keywords = {type classes, datatype-generic programming, haskell}
+}
+
+@inproceedings{truesop,
+author = {de Vries, Edsko and L\"{o}h, Andres},
+title = {True Sums of Products},
+year = {2014},
+isbn = {9781450330428},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2633628.2633634},
+doi = {10.1145/2633628.2633634},
+abstract = {We introduce the sum-of-products (SOP) view for datatype-generic programming (in Haskell). While many of the libraries that are commonly in use today represent datatypes as arbitrary combinations of binary sums and products, SOP reflects the structure of datatypes more faithfully: each datatype is a single n-ary sum, where each component of the sum is a single n-ary product. This representation turns out to be expressible accurately in GHC with today's extensions. The resulting list-like structure of datatypes allows for the definition of powerful high-level traversal combinators, which in turn encourage the definition of generic functions in a compositional and concise style. A major plus of the SOP view is that it allows to separate function-specific metadata from the main structural representation and recombining this information later.},
+booktitle = {Proceedings of the 10th ACM SIGPLAN Workshop on Generic Programming},
+pages = {83–94},
+numpages = {12},
+keywords = {json, metadata, datatype-generic programming, generic views, lenses, sums of products, universes},
+location = {Gothenburg, Sweden},
+series = {WGP '14}
+}
