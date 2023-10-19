@@ -1,29 +1,31 @@
-% is fold and map really valid and terminating? -> the whole --cubical --safe not being safe really undermines this
-% Q: are index-first descriptions even complete? -> everything has to be suffixed with (excluding cramming everything into the index)
+\section{δ is conservative}\label{sec:redundant-delta}
+We define our universe \AD{DescI} with \AIC{δ} as a former of fields with known descriptions, because this makes it easier to write down \AF{trieifyOD}, even though \AIC{δ} is redundant. If more concise universes and ornaments are preferable, we can actually get all the features of \AIC{δ} and ornaments like \AIC{∙δ} by describing them using \AIC{σ}, annotations, and other ornaments.
 
-
-\section{δ is conservative over Desc and Orn}
-The numerical representation presented in \autoref{sec:trieo} relies on \AIC{δ} to provide the interpretation of the components making up a composite number system such as \AF{PhalanxD}. However, this is not necessary in the presence of \AD{Info}, since we can also request information to turn a \AIC{σ} into a \AIC{δ} when applicable:
+Indeed, rather than using \AIC{δ} to add a field from a description \AV{R}, we can simply use \AIC{σ} to add \AV{S}\ \AV{=}\ \AD{μ}\ \AV{R}, and remember that \AV{S} came from \AV{R} in the information
 \ExecuteMetaData[Tex/Discussion]{Delta-Info}
-If we include the ornament \AIC{∇σ} dropping a field by giving a default value \AV{V}\ \AF{⊧}\ \AV{S} in place of a \AIC{σ}:
-\ExecuteMetaData[Tex/Discussion]{nabla-sigma}
-then we can also represent \AIC{∙δ} without further modifying \AD{ConOrnDesc}. Namely
-\ExecuteMetaData[Tex/Discussion]{comp-delta-nabla-sigma}
-This emulates the \AIC{∙δ} over an ornament \AV{RR′}, by first adding a field of \AD{μ}\ (\AF{toDesc}\ \AV{RR′}) and then fixing a default value for \AD{μ}\ \AV{R} by using \AF{ornForget}.
+We can then define \AIC{δ} as a pattern synonym matching on the \AIC{just} case, and \AIC{σ} matching on the \AIC{nothing} case.
 
-This makes the presentation of the descriptions and ornaments, and the interpretations of both simpler. However, this has the downside of needing a transport (or, with-abstraction) for each pattern match on a value which would otherwise be a \AIC{δ}.
+Recall that the ornament \AIC{∙δ} lets us compose an ornament from \AV{D} to \AV{D'} with an ornament from \AV{R} to \AV{R'}, yielding an ornament from \AIC{δ}\ \AV{D}\ \AV{R} to \AIC{δ}\ \AV{D'}\ \AV{R'}. This ornament can be modelled by first adding a new field \AD{μ}\ \AV{R'}, and then deleting the original \AD{μ}\ \AV{R} field. The ornament \AIC{∇} \cite{kophd} allows one to provide a default value for a field, deleting it from the description. Hence, we can model \AIC{∙δ} by binding a value \AV{r'} of \AD{μ}\ \AV{R'} with \AF{OΔσ+} and deleting the field \AD{μ}\ \AV{R} using a default value computed by \AF{ornForget}.
 
 
-\section{Σ-descriptions are more natural for expressing finite types}
-One reason we did not present indexed numerical representations is that representing finite types of arbitrary number systems in \AD{DescI} quickly becomes hard. Consider the binary numbers from before
+\section{Indices do not depend on parameters}\label{sec:no-dep-ix}
+In \AD{DescI}, we represent the indices of a description as a single constant type, as opposed to an extension of the parameter telescope \cite{practgen}. This simplification keeps the treatment of ornaments and numerical representations more to the point, but rules out types like the identity type \AD{≡}. Another consequence of not allowing indices to depend on parameters is that algebraic ornaments \cite{algorn} can not be formulated in \AD{OrnDesc} in their fully general form.
+
+By replacing index computing functions \AV{Γ}\ \AF{\&}\ \AV{V}\ \AF{⊢}\ \AV{I} with dependent functions
+\ExecuteMetaData[Tex/Discussion]{index-interpretation}
+we can allow indices to depend on parameters in our framework. As a consequence, we have to modify nested recursive fields to ask for the index type \AF{⟦}\ \AV{I}\ \AF{⟧tel} precomposed with \AV{g :}\ \AF{Cxf}\ \AV{Γ Γ}, and we have to replace the square like \AV{i}\ \AF{∘}\ \AV{j′}\ \AF{∼}\ \AV{i′}\ \AF{∘}\ \AF{over}\ \AV{v} in the definition of ornaments with heterogeneous squares.
+
+
+\section{Σ-descriptions are more natural for expressing finite types}\label{sec:closed-universe}
+Due to our representation of types as sums of products, representing the finite types of arbitrary number systems quickly becomes hard. Consider the binary numbers from before
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{Leibniz}
 for which the finite type
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{FinB}
-has more constructors than the numbers themselves, obstructing an ornament from numbers to their finite types. Furthermore, the number of constructors of the finite type depends both on the multipliers and constants in all fields and leaves of the number system, which prevents us from constructing the finite type on-the-fly like for \AF{trieifyOD} (that is, without passing around lists of constructors instead).
+has more constructors than the numbers themselves. In general, the number of constructors of a finite type depends both on the multipliers and constants in all fields and leaves of the number system, which prevents us from constructing the finite type by simple recursion on \AD{DescI} (that is, without passing around lists of constructors instead). Furthermore, since our definition of ornaments insists a type and an ornament on it have the same number of constructors, there can also not be a generic ornament from numbers to their finite types. 
 
-This mismatch of the relation between a number and its finite type, and our definition of descriptions and ornaments, stems from our treatment of the field-former \AIC{σ}. Some treatments of descriptions \cite{effectfully,progorn,algorn} encode a dependent field \AV{(s : S)} by asking for a function \AV{C} assigning values \AV{s} to descriptions, while we merely ask for a description in a context extended by \AV{S}. This keeps out some more exotic descriptions \cite{?}, but also prevents us from introducing branches inside a constructor.
+The apparent mismatch of number systems and their finite types stems from the treatment of the field-former \AIC{σ} in \AD{DescI}. In such a sums-of-products universe \cite{practgen,sijsling}, a \AIC{σ}\ \AV{S}\ \AV{C} represents a field of type \AV{S}, where the subsequent fields described by \AV{C} have their context extended by \AV{S}. In contrast, a Σ-descriptions universe \cite{effectfully,progorn,algorn} (in the terminology of \cite{sijsling}) encodes a dependent field \AV{(s : S)} by asking for a function \AV{C} assigning values \AV{s} to descriptions.
 
-\todo{Comparing SOP and computational sigmas. In particular, sigma bN (n -> v (replicate n tt)) is not in SOP without full nesting. SOP is good for generics in both directions (the conversion in both ways keeps the datatype like it is supposed to).}
+In comparison, a sums-of-products universe keeps out some more exotic descriptions\footnote{Consider the constructor \AIC{σ}\ \bN{}\ \AV{λ}\ \AV{n}\ \AV{→}\ \AF{power}\ \AIC{ρ}\ \AV{n}\ \AIC{𝟙} which takes a number \AV{n} and asks for \AV{n} recursive fields (where \AF{power}\ \AV{f}\ \AV{n}\ \AV{x} applies \AV{f} \AV{n} times to \AV{x}). This description, resembling a rose tree, does not (trivially) lie in a sums-of-products universe.} which do not have an obvious associated Agda datatype. As a consequence, this also prevents us from introducing new branches inside a constructor.
 
 If we instead started from Σ-descriptions, taking functions into \AD{DescI} to encode dependent fields, we could compute a ``type of paths'' in a number system by adding and deleting the appropriate fields. Consider the universe
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{Sigma-Desc}
@@ -31,65 +33,49 @@ In this universe we can present the binary numbers as
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{LeibnizD}
 The finite type for these numbers can be described by
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{FinBD}
-Since this description of \AF{FinB} largely has the same structure as \AF{Leibniz}, and as a consequence also the numerical representation associated to \AF{Leibniz}, this would simplify proving that the indexed numerical representation is indeed equivalent to the representable representation (the maps out of \AF{FinB}). For more flexible ornaments, we can even describe the finite type as an ornament on the number system.
-
-\todo{Related work glookup. We do path and type simultaneously, for a small class, and with specific behaviour. They do type first, and then compute the paths.}
-
-\section{No Algebraic Ornaments for DescI}
-Another reason for not giving the indexed numerical representations is that, provided the descriptions and ornaments are \todo{nice}, these can be computed from their unindexed variants.
-
-Unfortunately, our descriptions are not nice. Morally speaking, the indexed numerical representations are always ornaments over the unindexed numerical representations. We can observe this directly for \AD{List} and \AD{Vec}, likewise, we can imagine how we can ornament \AF{RandomOD} to get its indexed variant. More generally, this ornament is always the algebraic ornament, which is formed by inserting fields which ensure that \AF{ornForget} and the index of the type always line up \cite{algorn}.
-
-However, this is not the case for \AD{DescI}, since the algebras \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X}\ \AF{⇶}\ \AV{X} for a description \AV{D} do not yield algebras its subdescriptions in a \AIC{δ}. We can see this if we try to derive the wanted algebraic ornament:
-
-Consequently, an algebraic ornament does not have sufficient information to re-index a description \AV{R} in a \AIC{δ}, making it impossible to present the intended indexed numerical representation as an algebraic ornament.
-
-We can remedy this by simply directly asking for the necessary functions, instead of hoping they bubble out of the functions out of interpretations.
-\[ ... \]
+Since this description of \AF{FinB} largely has the same structure as \AF{Leibniz}, and as a consequence also the numerical representation associated to \AF{Leibniz}, this would simplify proving that the indexed numerical representation is indeed equivalent to the representable representation (the maps out of \AF{FinB}). In a more flexible framework ornaments, we can even describe the finite type as an ornament on the number system.
 
 
-% \section{Why not indexed numerical representations} % is this even necessary?
+\section{Indexed numerical representations are not algebraic ornaments}\label{sec:ix-not-alg}
+From the theory of algebraic ornaments \cite{algorn}, we find that the type \AD{Vec} as an indexed variant of \AD{List}, can also be seen as an algebraic ornament. This construction takes an ornament between types \AV{A} and \AV{B}, and returns an ornament from \AV{B} to a type indexed over \AV{A}, representing ``\AV{B}s of a given underlying \AV{A}''. Instantiating this for naturals, lists and vectors, the algebraic ornament takes the ornament from naturals to lists, and returns an ornament from lists to vectors, by which vectors are lists of a fixed length.
 
+While we gave an explicit ornament from the unindexed to the indexed numerical representations, we might expect that ornament to be the algebraic ornament of \AF{trieifyOD}. However, this fails if we want to describe composite types like \AD{FingerTree} (unless we first flatten \AD{Digit} into the description of \AD{FingerTree}): Since the algebraic ornament (obviously) preserves a \AIC{σ}, it can not convert the unindexed numerical representation under a \AIC{δ} to the indexed variant. This means that the algebraic ornament on \AD{FingerTree} (given by \AF{toDesc}\ \AF{trieifyOD}) would only index the outer structure, leaving the \AD{Digit} fields unindexed.
 
-
-%\section{better folds and algebraic ornaments}
-%\investigate{Having a function of the same type as \AgdaFunction{ornForget} is not sufficient to deduce an ornament. An obstacle is that the usual empty type (no constructors) and the non-wellfounded empty type (only a recursive field) don't have an ornament. Also, while the leaf-preservation case spells itself out, the substitutions obviously don't give us a way to recover the equalities.} -> idk
-
-
-% \begin{remark}
-%     Not all functions $\mu D \to X$ come from algebras $[D] X \to X$. Consider the function $\mathrm{pred} : N \to N$, sending $\mathrm{suc} n$ to $n$ and 0 to 0.
-%     % https://q.uiver.app/#q=WzAsNyxbMCwwLCIxK04iXSxbMCwxLCJOIl0sWzEsMSwiTiJdLFsxLDAsIjErTiJdLFsyLDAsIk4iXSxbMywxLCJOIl0sWzMsMCwiTiJdLFswLDEsIlxcbWF0aHJte3N1Y30iLDJdLFszLDIsIj8iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMCwzLCIxK1xcbWF0aHJte3ByZWR9Il0sWzEsMiwiXFxtYXRocm17cHJlZH0iLDJdLFswLDIsIlxcbGFuZ2xlMCwgXFxtYXRocm17aWR9XFxyYW5nbGUiLDFdLFs0LDUsIlxcbWF0aHJte2lkfSIsMV0sWzQsNiwiXFxtYXRocm17cHJlZH0iXSxbNiw1LCIhISEiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkb3R0ZWQifX19XV0=
-%     \[\begin{tikzcd}
-%         {1+N} & {1+N} & N & N \\
-%         N & N && N
-%         \arrow["{\mathrm{suc}}"', from=1-1, to=2-1]
-%         \arrow["{?}", dashed, from=1-2, to=2-2]
-%         \arrow["{1+\mathrm{pred}}", from=1-1, to=1-2]
-%         \arrow["{\mathrm{pred}}"', from=2-1, to=2-2]
-%         \arrow["{\langle0, \mathrm{id}\rangle}"{description}, from=1-1, to=2-2]
-%         \arrow["{\mathrm{id}}"{description}, from=1-3, to=2-4]
-%         \arrow["{\mathrm{pred}}", from=1-3, to=1-4]
-%         \arrow["{!!!}", dotted, from=1-4, to=2-4]
-%     \end{tikzcd}\]
-%     We see that $\mathrm{pred}$ cannot come from a map $1 + N \to N$, as that map would be a retraction, while $\mathrm{pred}$ is not mono.
-% \end{remark}
+Nevertheless, we expect that a modifying the inlining ornamental algebras into algebraic ornaments, in the same way that \AF{itrieifyOD} diverges from the algebraic ornament, yields a variant of \AF{aOoA} which does coincide with \AF{itrieifyOD}.
 
 
 \section{Branching numerical representations}
-\begin{outline}
-We gave numerical representations by using nesting. You can also give the branching ones, if you had sigma-descriptions. This implementation of TrieO always computes the random-access variant of the datastructure. Can we implement a variant which computes the ``Braun tree'' variant of the datastructure?
-\end{outline}
+The numerical representations we construct via \AF{itrieifyOD} come in the form of heaps. Like random-access lists and finger trees, these numerical representations typically look like spines, storing elements in ever-growing trees hanging off this spine.
 
-% Braun trie? -> NO! not without indices, and then it is no longer an algebraic ornament(?)
+This is much in contrast with the Braun trees Hinze and Swierstra \cite{calcdata} compute. We can modify our construction of \AF{itrieifyOD} using 
+\ExecuteMetaData[Tex/Discussion]{power}
+to apply \AIC{ρ} \AV{k}-fold in the case of \AIC{ρ}\ \AV{\{if = k\}}, rather than applying \AIC{ρ} by nesting with a \AV{k}-element vector. \todo{Is that all there is to say? No algorn, no unindexed variant?}
 
 
+\section{No RoseTrees}
+In \AD{DescI}, we encode nested types by allowing nesting over a function of parameters \AF{Cxf}\ \AV{Γ}\ \AV{Γ}. This is less expressive than full nested types, which may also nest a recursive field under a strictly positive functor. For example, rose trees
+\ExecuteMetaData[Tex/Discussion]{RoseTree}
+cannot be directly expressed as a \AD{DescI}\footnote{And, since we do not have higher-order inductive arguments like Escot and Cockx \cite{practgen}, we can also not give an essentially equivalent definition.}. We can still describe a similar datatype of ``fixed-height'' rose trees
+\ExecuteMetaData[Tex/Discussion]{almost-RoseTree}
+which nests on the inside instead. Since lists can be empty, the rose trees are not necessarily of an actual fixed-height, and still coincide with rose trees.
 
-\section{Variables slightly later}
+If we were to describe full nested types, by allowing application functors over recursive arguments, we would need to convince Agda that these functors are indeed positive through, for example polarity annotations. Alternatively, we could encode strictly positive functors in a separate universe, which only allows to applications of parameters strictly positive contexts \cite{sijsling}. Finally, we could modify \AD{DescI} in such a way that we can decide if a description uses a parameter strictly positively, which would have to involve modifying \AIC{ρ} and \AIC{σ}, or adding variants of those formers only allowing strictly positive usage of parameters.
+
+
+\section{No levitation}
+Since our encoding does not support higher-order inductive arguments, let alone definitions by induction-recursion, \AD{DescI} certainly does not have a \AD{DescI}. Such self-describing universes have been described by Chapman et al. \cite{levitation}, and we expect that the other features of \AD{DescI}, parameters, nesting, and composition, would not obstruct a similar levitating variant of \AD{DescI}. Due to the work of Dagand and McBride \cite{orntrans}, ornaments might even be generalized to inductive-recursive descriptions.
+
+If that is the case, then a part of our definitions and constructions could be expressed inside such a framework, rather than by modifying the universe to suit our needs. In particular, rather than describing \AD{DescI} to describe datatypes with even more information, \AD{DescI} should be expressible as an ornament on plain descriptions, in contrast to how \AD{Desc} is an instance of \AD{DescI} in our framework. This would allow treating information explicitly in \AD{DescI}, and not at all in \AD{Desc}.
+
+Furthermore, constructions like \AF{trieifyOD}, which have the recursive structure of a fold over \AD{DescI}, could indeed be expressed by instantiating \AF{fold} to \AD{DescI}.\todo{Maybe a bit too dreamy.}
+
+
+%\section{Variables slightly later}
 %package them with the constructor descriptions rather than only after a sigma
 % separate substitutions -> probably 
 
 
-\section{Less commutative squares}
+%\section{Less commutative squares}
 %\autoref{rem:orn-lift} -> Discussion
 % \begin{remark}\label{rem:orn-lift}
 %     Rather than having the user provide two indices and show that the square commutes, we can ask for a ``lift'' $k$
@@ -107,50 +93,38 @@ We gave numerical representations by using nesting. You can also give the branch
 % \end{remark}
 
 
-\section{No RoseTrees}
-\begin{outline}    
-    Note that this allows us to express datatypes like finger trees, but not rose trees. Such datatypes would need a way to place a functor ``around the \AgdaInductiveConstructor{ρ}'', which then also requires a description of strictly positive functors. In our setup, this could only be encoded by separating general descriptions from strictly positive descriptions. The non-recursive fields of these strictly positive descriptions then need to be restricted to only allow compositions of strictly positive context functions. 
-    
-    This setup does not allow nesting over recursive fields, which is necessary for structures like rose trees. This is actually kind of essential for enumeration. Nesting over a recursive field is problematic: we can incorporate it by adding ``this'' implicitly to a \AgdaInductiveConstructor{δ}, but then the \AgdaBoundFontStyle{R} needs to be strictly positive in its last argument, meaning we need to split \AgdaDatatype{Desc} into a strictly positive part and normal part. The strictly positive part should then only allow strictly positive parameter transforms in recursive and non-recursive fields, requiring an embedding of transforms.
-\end{outline}
+
+%\section{δ is conservative over Desc and Orn}
+%If we include the ornament \AIC{∇σ} dropping a field by giving a default value \AV{V}\ \AF{⊧}\ \AV{S} in place of a \AIC{σ}:
+%\ExecuteMetaData[Tex/Discussion]{nabla-sigma}
+%then we can also represent \AIC{∙δ} without further modifying \AD{ConOrnDesc}. Namely
+%\ExecuteMetaData[Tex/Discussion]{comp-delta-nabla-sigma}
+%This emulates the \AIC{∙δ} over an ornament \AV{RR′}, by first adding a field of \AD{μ}\ (\AF{toDesc}\ \AV{RR′}) and then fixing a default value for \AD{μ}\ \AV{R} by using \AF%{ornForget}.
+%This makes the presentation of the descriptions and ornaments, and the interpretations of both simpler. However, this has the downside of needing a transport (or, %with-abstraction) for each pattern match on a value which would otherwise be a \AIC{δ}.
 
 
-\section{No levitation}
-\begin{outline}    
-    Rather, ornaments themselves could act as information bundles. If there was a description for \AgdaDatatype{Desc}, that is. Such a scheme of levitation would make it easier to switch between being able to actively manipulate information, and not having to interact with it at all. However, the complexity of our descriptions makes this a non-trivial task; since our \AgdaDatatype{Desc} is given by mutual recursion and induction-recursion, the descriptions, and the ornaments, would have to be amended to encode both forms of recursion as well. 
-    
-    If we levitate, then informed descriptions become ornaments over \AgdaDatatype{Desc}. This gives us the best of both worlds (modulo reflecting the description into a datatype): in plain descriptions, information does not even exist, and in informed descriptions, it is explicit. For levitation, we likely need induction-recursion and mutual recursion.
-
-    Also trieifyOD would be a fold over DescI lol. 
-\end{outline}
-
-\section{Odd numerical representations}
-the numerical representation of 2-3 fingertrees is a bit odd, or trivial.
-I do not know whether there is a datastructure (let alone numerical representation) which has amortized constant append on both sides, and has logarithmic lookup, but uses only simple nesting (i.e., nesting over a functor with only products and no sums).
-
-
-
-\section{Reconcile calculating and trieifyOD}
-\begin{outline}
-In the computation of generic numerical representations, we gave \AF{trieifyOD} directly, rather than as the consequence of a calculation. %\todo{This is simply because a) the wheels would come off very soon b) trieifyOD is not a definition but rather describes one.}
-
-By abstracting \AF{Def} over a function, we can elegantly describe the kind of object we are looking for
-\[ ... \]
-but because we factor through an interpretation into \AD{Type}, we still have to give the definition before we can construct the isomorphism.
-
-Maybe this works better for trieifyOD itself, where the isomorphism is really a composition of smaller isomorphisms by analyzing the descriptions, rather than one global isomorphism as is the case when comparing Lookup and VecD.
-
-See Tex.Disussion.Def-cong
-\end{outline}
+%\section{Reconcile calculating and trieifyOD}
+%\begin{outline}
+%    In the computation of generic numerical representations, we gave \AF{trieifyOD} directly, rather than as the consequence of a calculation. %\todo{This is simply because a) %the wheels would come off very soon b) trieifyOD is not a definition but rather describes one.}
+%
+%    By abstracting \AF{Def} over a function, we can elegantly describe the kind of object we are looking for
+%    \[ ... \]
+%    but because we factor through an interpretation into \AD{Type}, we still have to give the definition before we can construct the isomorphism.
+%
+%    Maybe this works better for trieifyOD itself, where the isomorphism is really a composition of smaller isomorphisms by analyzing the descriptions, rather than one global %isomorphism as is the case when comparing Lookup and VecD.
+%
+%    See Tex.Disussion.Def-cong
+%\end{outline}
 
 
 
-\section{?}
-While evidently Ix x != Fin (toN x) for arbitrary number systems, does the expected iso Ix x -> A = Trie A x yield Traversable, for free?
+%\section{?}
+%While evidently Ix x != Fin (toN x) for arbitrary number systems, does the expected iso Ix x -> A = Trie A x yield Traversable, for free?
+
+%\section{Odd numerical representations} % mark: but that's not _my_ problem is it?
+%the numerical representation of 2-3 fingertrees is a bit odd, or trivial.
+%I do not know whether there is a datastructure (let alone numerical representation) which has amortized constant append on both sides, and has logarithmic lookup, but uses only simple nesting (i.e., nesting over a functor with only products and no sums).
+
+% is fold and map really valid and terminating? -> the whole --cubical --safe not being safe really undermines this
 
 
-
-
-
-% \section{Useless}
-%\todo{We could also use a telescope for indices, but we do not.} -> ok.

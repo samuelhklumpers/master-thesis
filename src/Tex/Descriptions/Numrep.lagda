@@ -212,6 +212,7 @@ Lookup A n = Fin n → A
 ⊥→A≃⊤ .leftInv a = funExt (λ ())
 \end{code}
 
+
 \begin{code}
 ⊤→A≃A .fun f = f tt
 ⊤→A≃A .inv a = const a

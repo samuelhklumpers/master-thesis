@@ -27,10 +27,11 @@ We use the \AgdaFunction{power} combinator to ensure that the digit at position 
 
 
 \section{Generic numerical representations}\label{sec:trieo}
-In this section, we will demonstrate how we can use ornamental descriptions to generically compute unindexed numerical representations. \todo{Explain why not indexed}
-%The claim is that calculating a datastructure is actually an ornamental operation, so we might call our approach ``calculating ornaments''. 
-% mark: more
-The reasoning here proceeds differently from that in the calculation of \AD{Vec} from \bN{}. Indeed, we first construct a datatype and only prove it is the correct type after, as opposed to calculating the type by isomorphism reasoning. Nevertheless, the choices of fields depending on the analysis of a number system follow the same strategy.
+In this section, we will demonstrate how we can use ornamental descriptions to generically compute numerical representations. 
+
+The reasoning here proceeds differently from that in the calculation of \AD{Vec} from \bN{}. Indeed, we directly construct datatypes, 
+%and only prove it is the correct type after,
+rather than deriving them step-by-step using isomorphism reasoning. Nevertheless, the choices of fields depending on the analysis of a number system follow the same strategy. We will first present the unindexed numerical representations, explaining which fields it adds and why, by cases on the number system. Then, we will show the indexed numerical representations as an ornament on top of the unindexed variant, and how the indices built up incrementally as we descend over the structure of the number system.
 
 Recall the ``natural numbers''-information \AF{Number}, which gets its semantics from the conversion to \bN{}:
 \ExecuteMetaData[Ornament/Numerical]{toN-type}
@@ -38,19 +39,17 @@ which is defined by generalizing over the inner information bundle and folding u
 \ExecuteMetaData[Ornament/Numerical]{toN-con}
 The choice of interpretation restricts the numbers to the class of numbers which are evaluated as linear combinations of ``digits''\footnote{An arbitrary \AF{Number} system is not necessarily isomorphic to \bN{}, as the system can still be incomplete (i.e., it cannot express some numbers) or redundant (it has multiple representations of some numbers).}. This class certainly does not include all interesting number systems, but does include many systems that have associated arrays\footnote{Notably, arbitrary polynomials also have numerical representations, interpreting multiplication as precomposition.}. 
 
-We let this interpretation into \bN{} guide the computation of the associated numerical representation, which will be a (nested) type of finite sequences. In each case, we follow the computation in \AF{value} by inserting vectors of sizes corresponding to the weights of the number system:
+We let this interpretation into \bN{} guide the construction of the associated numerical representation. In each case, we follow the computation in \AF{value} by inserting vectors of sizes corresponding to the weights of the number system:
 \ExecuteMetaData[Ornament/Numerical]{trieifyOD}
-In the case of a leaf \AIC{𝟙} of weight \AV{k}, we insert a vector of size \AV{k}. Similarly, in a field \AIC{σ}, where the weight is determined by a value \AV{s} of \AV{S}, we insert a vector of the weight corresponding to the value of \AV{s}. Note that the actual value/number of elements a leaf or field contributes depends on the preceding multipliers of recursive fields: a recursive field of a number can have a weight \AV{k}, so we multiply the number of elements in a recursive sequence by wrapping the parameter in a vector of size \AV{k}. By roughly the same reasoning we pass the trieification of a subdescription \AV{R} the parameter wrapped in a vector, which we compose into the current numerical description by using the ornament \AIC{∙δ}. Since \AV{R} can have a different \AD{Info}, we generalized the whole construction over \AV{ϕ}\ \AV{:} \AD{InfoF}\ \AV{If}\ \AF{Number}.
+In\todo{Explain better} the case of a leaf \AIC{𝟙} of weight \AV{k}, we insert a vector of size \AV{k}. Similarly, in a field \AIC{σ}, where the weight is determined by a value \AV{s} of \AV{S}, we insert a vector of the weight corresponding to the value of \AV{s}. Note that the actual value/number of elements a leaf or field contributes depends on the preceding multipliers of recursive fields: a recursive field of a number can have a weight \AV{k}, so we multiply the number of elements in a recursive sequence by wrapping the parameter in a vector of size \AV{k}. By roughly the same reasoning we pass the trieification of a subdescription \AV{R} the parameter wrapped in a vector, which we compose into the current numerical description by using the ornament \AIC{∙δ}. Since \AV{R} can have a different \AD{Info}, we generalized the whole construction over \AV{ϕ}\ \AV{:} \AD{InfoF}\ \AV{If}\ \AF{Number}.
 
 As an example, let us define \AF{PhalanxD} as a number system and walk through the computation of its \AF{trieifyOD}. We define
 \ExecuteMetaData[Ornament/Numerical]{PhalanxND}
 Now, we see that applying \AF{trieifyOD} sends leaves with a value of \AV{k} to \AD{Vec}\ \AV{A}\ \AV{k}, so applying it to \AF{DigitND} yields
 \ExecuteMetaData[Ornament/Numerical]{DigitOD-2}
-which is equivalent to the \AF{DigitOD} from before, up to expanding a vector of \AV{k} elements into \AV{k} fields. The same happens for the first two constructors of \AF{PhalanxND}, replacing them with an empty vector and a vector of one element respectively. The \AF{ThreeND} in the last constructor gets trieified to \AF{DigitOD′} and composed by \AF{O∙δ+}, and the recursive field gets replaced by a recursive field nesting over vectors of length. Again, this is equivalent to \AF{FingerOD}, up to wrapping values in length one vectors, replacing \AD{Pair} with a length two vector, and inserting empty vectors.
+which is equivalent to the \AF{DigitOD} from before, up to expanding a vector of \AV{k} elements into \AV{k} fields. The same happens for the first two constructors of \AF{PhalanxND}, replacing them with an empty vector and a one-element vector respectively. The \AF{ThreeND} in the last constructor gets trieified to \AF{DigitOD′} and composed by \AF{O∙δ+}, and the recursive field gets replaced by a recursive field nesting over vectors of length. Again, this is equivalent to \AF{FingerOD}, up to wrapping values in length one vectors, replacing \AD{Pair} with a two-element vector, and inserting empty vectors.
 
-% proving the size is correct is a bit difficult because of the vectors in the nesting.
-
-\begin{outline}
-This concludes a bunch of things, including this thesis.
-\end{outline}
+The indexed numerical representations can be constructed from the unindexed numerical representations\todo{Explain better} by adding fields to track the indices where necessary, incrementally combining these into the indices at the leaves. In contrast to the computation of \AD{Vec} in \autoref{sec:desc-numrep}, where we gave the definition of the datatype by cases on the index, we will have to track the indices as we descend over structure of the number system by generalizing over an index-computing algebra: 
+\ExecuteMetaData[Ornament/Numerical]{itrieifyOD}
+Explain\todo{This concludes a bunch of things, including this thesis.}
 

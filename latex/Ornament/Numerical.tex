@@ -632,35 +632,6 @@
 \AgdaInductiveConstructor{[]}\<%
 \end{code}
 
-bin-2 : μ BinND tt tt
-bin-2 = con (inr (inr (inl (con (inl refl) , refl))))
-
-bin-5 : μ BinND tt tt
-bin-5 = con (inr (inl (con (inr (inr (inl (con (inl refl) , refl)))) , refl)))
-
--- simple the number system underlying simple finger trees
-DigND : DescI Number ∅ ⊤
-DigND = 𝟙 {if = 1} _
-      ∷ 𝟙 {if = 2} _
-      ∷ 𝟙 {if = 3} _
-      ∷ []
-
-FingND : DescI Number ∅ ⊤
-FingND = 𝟙 {if = 0} _
-       ∷ 𝟙 {if = 1} _
-       ∷ δ- {if = refl , refl , 1} {iff = id-InfoF} _ _ DigND (ρ0 {if = 2} _ (δ- {if = refl , refl , 1} {iff = id-InfoF} _ _ DigND (𝟙 {if = 0} _)))
-       ∷ []
-
--- 1 ⟨ 0 ⟩ 1
-finger-2 : μ FingND tt tt
-finger-2 = con (inr (inr (inl (con (inl refl) , con (inl refl) , con (inl refl) , refl))))
-
--- 1 ⟨ 2 ⟩ 2
-finger-7 : μ FingND tt tt
-finger-7 = con (inr (inr (inl (con (inl refl) , finger-2 , con (inr (inl refl)) , refl))))
-
-
-Theorem: given a number system D, there is a "good container" D', which also satisfies (x : μ D' A tt) → size x ≡ shape x
 %<*trieifyOD>
 \begin{code}%
 \>[0]\AgdaFunction{trieifyOD}\AgdaSpace{}%
@@ -697,7 +668,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \\
 %
 \>[2]\AgdaFunction{trie-desc}%
-\>[420I]\AgdaSymbol{:}\AgdaSpace{}%
+\>[13]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{D}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
@@ -709,7 +680,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaGeneralizable{If}\AgdaSpace{}%
 \AgdaFunction{Number}\<%
 \\
-\>[420I][@{}l@{\AgdaIndent{0}}]%
+%
 \>[13]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{OrnDesc}\AgdaSpace{}%
 \AgdaFunction{Plain}\AgdaSpace{}%
@@ -726,7 +697,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \\
 %
 \>[2]\AgdaFunction{trie-con}%
-\>[12]\AgdaSymbol{:}\AgdaSpace{}%
+\>[13]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{VxfO}\AgdaSpace{}%
@@ -745,7 +716,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaGeneralizable{If}\AgdaSpace{}%
 \AgdaFunction{Number}\<%
 \\
-\>[12][@{}l@{\AgdaIndent{0}}]%
+%
 \>[13]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{ConOrnDesc}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{Δ}\AgdaSpace{}%
@@ -991,24 +962,17 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 %</trieifyOD>
 
 
-\begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{PhalanxND}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\end{code}
 %<*PhalanxND>
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[2]\AgdaFunction{ThreeND}\AgdaSpace{}%
+\>[0]\AgdaFunction{ThreeND}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
 \AgdaFunction{Number}\AgdaSpace{}%
 \AgdaInductiveConstructor{∅}\AgdaSpace{}%
 \AgdaRecord{⊤}\<%
 \\
-%
-\>[2]\AgdaFunction{ThreeND}%
-\>[11]\AgdaSymbol{=}\AgdaSpace{}%
+\>[0]\AgdaFunction{ThreeND}%
+\>[9]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1016,7 +980,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
 %
-\>[11]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\>[9]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1024,7 +988,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
 %
-\>[11]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\>[9]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1032,22 +996,20 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
 %
-\>[11]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\>[9]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaInductiveConstructor{[]}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\>[2]\AgdaFunction{PhalanxND}\AgdaSpace{}%
+\>[0]\AgdaFunction{PhalanxND}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
 \AgdaFunction{Number}\AgdaSpace{}%
 \AgdaInductiveConstructor{∅}\AgdaSpace{}%
 \AgdaRecord{⊤}\<%
 \\
-%
-\>[2]\AgdaFunction{PhalanxND}%
-\>[13]\AgdaSymbol{=}\AgdaSpace{}%
+\>[0]\AgdaFunction{PhalanxND}%
+\>[11]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1055,7 +1017,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
 %
-\>[13]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\>[11]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1063,7 +1025,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
 %
-\>[13]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\>[11]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaFunction{δ-}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1080,7 +1042,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaFunction{ThreeND}\<%
 \\
 %
-\>[13]\AgdaSymbol{(}\AgdaSpace{}%
+\>[11]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{ρ0}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1088,7 +1050,7 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
 %
-\>[13]\AgdaSymbol{(}\AgdaSpace{}%
+\>[11]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{δ-}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1105,22 +1067,27 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \AgdaFunction{ThreeND}\<%
 \\
 %
-\>[13]\AgdaSymbol{(}\AgdaSpace{}%
+\>[11]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaNumber{0}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{})))}\<%
 \\
-\>[2][@{}l@{\AgdaIndent{0}}]%
+%
 \>[11]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaInductiveConstructor{[]}\<%
 \end{code}
 %</PhalanxND>
 
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{FingerOD}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\end{code}
 %<*DigitOD-2>
 \begin{code}%
-%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[2]\AgdaFunction{DigitOD′}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{OrnDesc}\AgdaSpace{}%
@@ -1366,156 +1333,968 @@ Theorem: given a number system D, there is a "good container" D', which also sat
 \end{code}
 %<*FingerOD-2>
 
+%<*itrieifyOD>
+\begin{code}%
+\>[0]\AgdaFunction{itrieifyOD}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{DescI}\AgdaSpace{}%
+\AgdaFunction{Number}\AgdaSpace{}%
+\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaRecord{⊤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{OrnDesc}\AgdaSpace{}%
+\AgdaFunction{Plain}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{▷}}\AgdaSpace{}%
+\AgdaFunction{const}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaBound{D}\<%
+\\
+\>[0]\AgdaFunction{itrieifyOD}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{itrie-desc}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{id-InfoF}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{where}\<%
+\\
+%
+\>[2]\AgdaFunction{itrie-desc}%
+\>[14]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{If}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{DescI}\AgdaSpace{}%
+\AgdaBound{If}\AgdaSpace{}%
+\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaRecord{⊤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{DescI}\AgdaSpace{}%
+\AgdaBound{If}\AgdaSpace{}%
+\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaRecord{⊤}\AgdaSymbol{)}\<%
+\\
+%
+\>[14]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟧D}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSymbol{)}\<%
+\\
+%
+\>[14]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaRecord{InfoF}\AgdaSpace{}%
+\AgdaBound{If}\AgdaSpace{}%
+\AgdaFunction{Number}\<%
+\\
+%
+\>[14]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{OrnDesc}\AgdaSpace{}%
+\AgdaFunction{Plain}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{▷}}\AgdaSpace{}%
+\AgdaFunction{const}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaBound{D}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{itrie-con}%
+\>[14]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{If}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{DescI}\AgdaSpace{}%
+\AgdaBound{If}\AgdaSpace{}%
+\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaRecord{⊤}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{VxfO}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaGeneralizable{W}\AgdaSpace{}%
+\AgdaGeneralizable{V}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{ConI}\AgdaSpace{}%
+\AgdaBound{If}\AgdaSpace{}%
+\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaGeneralizable{V}\AgdaSpace{}%
+\AgdaRecord{⊤}\AgdaSymbol{)}\<%
+\\
+%
+\>[14]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟧C}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{p}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\<%
+\\
+%
+\>[14]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaRecord{InfoF}\AgdaSpace{}%
+\AgdaBound{If}\AgdaSpace{}%
+\AgdaFunction{Number}\<%
+\\
+%
+\>[14]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{ConOrnDesc}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{Δ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{▷}}\AgdaSpace{}%
+\AgdaFunction{const}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{W}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaGeneralizable{W}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{J}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaFunction{Plain}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaBound{C}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{itrie-desc}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaInductiveConstructor{[]}%
+\>[24]\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{ϕ}%
+\>[29]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{[]}\<%
+\\
+%
+\>[2]\AgdaFunction{itrie-desc}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{C}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{ϕ}%
+\>[29]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{itrie-con}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₁}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaBound{ϕ}\<%
+\\
+%
+\>[29]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaFunction{itrie-desc}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₂}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaBound{ϕ}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{itrie-con}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{ϕ}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaSymbol{.}\AgdaField{𝟙f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{itrie-con}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{ρ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{j}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{ϕ}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{OΔσ+}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaInductiveConstructor{ρ}%
+\>[9]\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaSymbol{.}\AgdaField{ρf}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)))}\<%
+\\
+%
+\>[9]\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{itrie-con}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{m}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaBound{ϕ}\AgdaSymbol{))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{itrie-con}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{σ}\AgdaSpace{}%
+\AgdaBound{S}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{if}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{ϕ}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Oσ+}\AgdaSpace{}%
+\AgdaBound{S}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{s}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaSymbol{.}\AgdaField{σf}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{if}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{s}\AgdaSymbol{))}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{itrie-con}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{s}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{s}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaBound{ϕ}\AgdaSymbol{))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{itrie-con}\AgdaSpace{}%
+\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{f}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{δ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{if}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{if}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{iff}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{iff}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{j}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{ϕ}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaKeyword{with}\AgdaSpace{}%
+\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaSymbol{.}\AgdaField{δf}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{if}\<%
+\\
+%
+\>[2]\AgdaSymbol{...}\AgdaSpace{}%
+\AgdaSymbol{|}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{k}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{OΔσ+}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{O∙δ+}%
+\>[12]\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))}\<%
+\\
+%
+\>[12]\AgdaSymbol{(}\AgdaFunction{itrie-desc}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘InfoF}}\AgdaSpace{}%
+\AgdaBound{iff}\AgdaSymbol{))}\<%
+\\
+%
+\>[12]\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}%
+\>[1283I]\AgdaFunction{itrie-con}%
+\>[17]\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+\>[1283I][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{n}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ornForget}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{itrie-desc}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∘InfoF}}\AgdaSpace{}%
+\AgdaBound{iff}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaSymbol{.}\AgdaField{snd}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaBound{ϕ}\AgdaSymbol{))}\<%
+\end{code}
+%</itrieifyOD>
 
-
-
-
-
-_L+_ : List (ConI If Γ J ∅) → DescI If Γ J → DescI If Γ J
-[]        L+ D = D
-(C ∷ Cs)  L+ D = C ∷ (Cs L+ D)
-
-PathD : (D : DescI Number ∅ ⊤) → Desc ∅ (μ D tt tt)
-PathD′ : (D : DescI If ∅ ⊤) (if : InfoF If Number) → Desc ∅ (μ D tt tt)
-
-PathD E = PathD′ E id-InfoF
-PathD′ E if = PathDD E if λ a b → con
-  module PathD where
-    N : _
-    N = μ E tt tt
-
-    PathDD : (D : DescI If ∅ ⊤) (if : InfoF If Number) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → Desc ∅ (μ E tt tt)
-    PathDC : (C : ConI If ∅ ⊤ V) (if : InfoF If Number) (f : Vxf ∅ W V) → (∀ b → ⟦ C ⟧ (λ _ _ → N) (tt , f b) _ → N) → List (Con ∅ (μ E tt tt) W)
-
-    PathDD []      if ϕ = []
-    PathDD (C ∷ D) if ϕ = PathDC C if id (λ _ c → ϕ _ _ (inl c)) L+ PathDD D if λ p i → ϕ p i ∘ inr
-
-    PathDC (𝟙 {if = k} j) if f ϕ
-      = σ- (const (Fin (if .𝟙f k))) (𝟙 (λ { (_ , w) → ϕ w refl }))
-      ∷ []
-
-    -- looks scary, pretty regular to write down though
-    PathDC (ρ {if = k} j g C) if f ϕ
-      = σ- (const (Fin (if .ρf k))) (σ+ (const N) (σ+ (λ { (p , w , _) → ⟦ C ⟧ (λ _ _ → N) (p , f w) tt }) (ρ0 (snd ∘ fst ∘ snd) (𝟙 λ { (_ , (w , n) , c) → ϕ w (n , c) }))))
-      ∷ L.map (σ+ (const N)) (PathDC C if (f ∘ fst) (λ { (w , n) c → ϕ w (n , c) }))
-
-    PathDC (σ S {if = k} h C)     if f ϕ
-      = σ+ (λ { (p , w) → S (p , f w) }) (σ+ (λ { (p , w , s) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , s)) tt }) (σ- (λ { (p , (w , s) , c) → Fin (if .σf _ k (p , f w) s) }) (𝟙 λ { (p , (w , s) , c) → ϕ w (s , c) })))
-      ∷ L.map (σ+ λ { (p , w) → S (p , f w) }) (PathDC C if (h ∘ Vxf-▷ f S) λ { (w , s) c → ϕ w (s , c) })
-
-    PathDC (δ {If′ = If′} {if = k} {iff = iff} j g R h C) if f ϕ with if .δf _ _ k
-    ... | refl , refl , k
-      = σ- (const (Fin k)) (σ+ (const (μ R tt tt)) (σ+ (λ { (p , w , r) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , r)) tt }) (δ- (snd ∘ fst ∘ snd) ! (PathD′ R (if ∘InfoF iff)) (𝟙 λ { (p , (w , r) , c) → ϕ w (r , c) }))))
-      ∷ L.map (δ+ ! ! R) (PathDC C if (λ { (w , r) → h (f w , r) }) λ { (w , r) c → ϕ w (r , c) })
-
-unμ : {D : DescI If Γ J} → ∀ {p i} → μ D p i ≃ ⟦ D ⟧ (μ D) p i
-unμ .fst (con x) = x
-unμ .snd .equiv-proof y .fst = con y , λ i → y
-unμ .snd .equiv-proof y .snd (con x , p) = ΣPathP ((λ i → con (p (~ i))) , λ j i → p (~ j ∨ i))
-
-PathD-correct : ∀ D n → μ (PathD D) tt n ≃ Fin (value n)
-PathD-correct D n = compEquiv unμ {!compEquiv (go D id-InfoF n) {!!}!}
-  where
-  open PathD D
-
-  go :  (E : DescI If ∅ ⊤) (if : InfoF If Number)
-        (c : ⟦ E ⟧ (λ _ _ → N id-InfoF) ⇶ (λ _ _ → N id-InfoF))
-     →  ∀ n → ⟦ PathDD id-InfoF E if c ⟧ (μ (PathD D)) tt n ≃ ⟦ PathDD id-InfoF E if c ⟧ (λ _ n → Fin (value n)) tt n
-     
-  go2 : (E : ConI If ∅ ⊤ V) (if : InfoF If Number) → ∀ n v → ⟦ {!PathDC!} ⟧ (μ (PathD D)) (tt , v) n ≃ ⟦ {!!} ⟧ (λ _ n → Fin (value n)) (tt , v) n
-
-  go []       _  _ _ = idEquiv ⊥
-  go (E ∷ Es) if c n = {!⟦ PathDD id-InfoF (E ∷ Es) if c ⟧ (μ (PathD D)) tt n!}
-  
-  --go []       n = {!idEquiv ⊥!}
-  --go (E ∷ Es) n = {!⊎-equiv (go2 E n tt) (go Es n)!}
-
-  go2 E n = {!!}
-
-
-BinID : Desc ∅ (μ BinND tt tt)
-BinID = PathD BinND
-
-BinI : μ BinND tt tt → Type
-BinI n = μ BinID tt n
-
--- the constructors are
--- i0  : ⊥ → BinI 0
--- 1b1 : 2 → BinI n → BinI (n 1b)
--- 1b0 : 1 → BinI (n 1b)
--- 2b1 : 2 → BinI n → BinI (n 2b)
--- 2b0 : 2 → BinI (n 2b)
--- (I think)
-
--- like the 3rd index into bin-5
-bin-3/5 : BinI bin-5
-bin-3/5 = con (inr (inl (# 1 , _ , (refl , ((con (inr (inr (inr (inr (inl (_ , (# 0 , refl)))))))) , refl)))))
-
-ITrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) id (μ D tt tt) ! (toDesc (TrieO D))
-ITrieO D = ITrieO′ D D id-InfoF
-  module ITrieO where
-    module _ (D' : DescI Number ∅ ⊤) where
-      ITrieO′ : (D : DescI If ∅ ⊤) (if : InfoF If Number) → OrnDesc Plain (∅ ▷ const Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D if))
-      
-      N : _
-      N = μ D' tt tt
-
-      ITrieO-desc : (D : DescI If ∅ ⊤) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → (if : InfoF If Number) → OrnDesc Plain (∅ ▷ const Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D if))
-
-      ITrieO-con  : ∀ {U V} {W : ExTel (∅ ▷ const Type)} {f : VxfO ! U V} {g : VxfO id W U}
-                 (C : ConI If ∅ ⊤ V) → (∀ a b → ⟦ C ⟧ (λ _ _ → N) (tt , f (g {p = a} b)) _ → N) → (if : InfoF If Number)
-                 → ConOrnDesc Plain {W = W} {K = μ D' tt tt} g ! (toCon {f = f} (TrieO.TrieO-con D' C if))
-
-      ITrieO-desc []      ϕ if = []
-      ITrieO-desc (C ∷ D) ϕ if = ITrieO-con C (λ a b x → ϕ tt b (inl x)) if ∷ (ITrieO-desc D (ϕ ∘₃ inr) if)
-      
-      ITrieO-con {f = f} {g = g} (𝟙 {if = k} j) ϕ if
-        = σ _ id (g ∘ fst) (𝟙 (λ { (p , w , _) → ϕ p w refl }) λ p → refl) (λ p → refl)
-
-      ITrieO-con {f = f} {g = g} (ρ {if = k} j h C) ϕ if
-        = Δσ (const N) (g ∘ fst) id
-        ( ρ (λ (p , w , n) → n) (λ { (_ , A) → _ , Vec A (if .ρf k) })
-          (ITrieO-con C (λ { a (u , n) x → ϕ a u (n , x) }) if)
-        (λ p → refl) (λ p → refl)) (λ p → refl)
-        
-      ITrieO-con {f = f} {g = g} (σ S {if = k} h C)      ϕ if
-        = σ _ id (VxfO-▷ g (S ∘ over f))
-        ( σ _ id (VxfO-▷ (VxfO-▷ g (S ∘ over f)) (λ { ((_ , A) , _ , s) → Vec A (if .σf _ k _ s) }))
-          (ITrieO-con C (λ { a ((w , s) , _) x → ϕ a w (s , x) }) if)
-        λ p → refl) λ p → refl
-        
-      ITrieO-con {f = f} {g = g} (δ {if = k} {iff = iff} j g' R h C) ϕ if with if .δf _ _ k
-      ... | refl , refl , k
-        = Δσ (const (μ R tt tt)) (g ∘ fst) id
-        ( Δσ (const (μ D' tt tt)) (g ∘ fst ∘ fst) id
-        ( ∙δ {f'' = VxfO-▷-map (g ∘ fst ∘ fst)
-                     (liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
-                     (liftM2 (μ (toDesc (ITrieO-desc R {!!} (if ∘InfoF iff)))) (λ p → tt , Vec (id (p .fst) .snd) k) (λ x → snd (snd x)))
-                     {!!} }
-             (λ { ((_ , A) , ((w , r) , _)) → tt , Vec A k }) (snd ∘ snd)
-          (ITrieO-con C {!λ { a (((w , r) , n) , _)  x → ϕ a w (r , {!!}) }!} if)
-          {!ITrieO R!} id
-        (λ _ _ → refl) (λ _ _ → refl) λ p → refl) λ p → refl) λ p → refl
-    
-      ITrieO′ D if = ITrieO-desc D {!!} if
-
-
---(liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
---ITrieO-desc R (λ { a b x → ϕ {!!} {!!} {!!} }) (if ∘InfoF iff)
-
--- to prove: size x ≡ shape x
--- * μ D is likely to be Traversable when all σ's in it are
--- * as every S in a DescI Number ∅ ⊤ is necessarily invariant, it is also trivially Traversable
-
--- to prove: every OrnDesc induces an ornamental algebra -> doesn't work
--- to prove: for some appropriate Ix : (D : DescI Number ∅ ⊤) → Desc ∅ (μ D tt tt),
---           Ix D is also initial for the algebra of the algebraic ornament induced by the ornamental algebra (yes)
-
--- to summarize, for every number system, there is an appropriate "list", which has an appropriate "vector"
--- this vector is representable, the list is traversable, and everything still satisfies size ≡ shape ≡ index
-
-UnitD : DescI Number ∅ ⊤
-UnitD = 𝟙 {if = 1} _
-      ∷ []
-
-
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{FingerIOD}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{pattern}\AgdaSpace{}%
+\AgdaInductiveConstructor{three1}%
+\>[18]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaKeyword{pattern}\AgdaSpace{}%
+\AgdaInductiveConstructor{three2}%
+\>[18]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\>[2]\AgdaKeyword{pattern}\AgdaSpace{}%
+\AgdaInductiveConstructor{three3}%
+\>[18]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaKeyword{pattern}\AgdaSpace{}%
+\AgdaInductiveConstructor{phalanx1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaKeyword{pattern}\AgdaSpace{}%
+\AgdaInductiveConstructor{phalanx2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₁}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\>[2]\AgdaKeyword{pattern}\AgdaSpace{}%
+\AgdaInductiveConstructor{phalanx3}\AgdaSpace{}%
+\AgdaBound{l}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{con}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{inj₁}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{l}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{DigitIOD}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{OrnDesc}\AgdaSpace{}%
+\AgdaFunction{Plain}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{▷}}\AgdaSpace{}%
+\AgdaFunction{const}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaFunction{ThreeND}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaFunction{ThreeND}\<%
+\\
+%
+\>[2]\AgdaFunction{DigitIOD}%
+\>[12]\AgdaSymbol{=}%
+\>[15]\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{1}\AgdaSymbol{)}\<%
+\\
+%
+\>[12]\AgdaSymbol{(}%
+\>[15]\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{three1}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\>[12]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{2}\AgdaSymbol{)}\<%
+\\
+%
+\>[12]\AgdaSymbol{(}%
+\>[15]\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{three2}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\>[12]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{3}\AgdaSymbol{)}\<%
+\\
+%
+\>[12]\AgdaSymbol{(}%
+\>[15]\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{three3}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\>[12]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaInductiveConstructor{[]}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{FingerIOD}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{OrnDesc}\AgdaSpace{}%
+\AgdaFunction{Plain}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{∅}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{▷}}\AgdaSpace{}%
+\AgdaFunction{const}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaFunction{PhalanxND}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{!}\AgdaSpace{}%
+\AgdaFunction{PhalanxND}\<%
+\\
+%
+\>[2]\AgdaFunction{FingerIOD}%
+\>[13]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{0}\AgdaSymbol{)}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{phalanx1}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\>[13]\AgdaOperator{\AgdaInductiveConstructor{∷}}%
+\>[16]\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{1}\AgdaSymbol{)}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{phalanx2}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\\
+%
+\>[13]\AgdaOperator{\AgdaInductiveConstructor{∷}}%
+\>[16]\AgdaFunction{OΔσ+}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaFunction{ThreeND}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{))}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaFunction{O∙δ+}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{1}\AgdaSymbol{))}\<%
+\\
+%
+\>[16]\AgdaFunction{DigitIOD}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaFunction{OΔσ+}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaFunction{PhalanxND}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{))}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaInductiveConstructor{ρ}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{2}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
+\\
+\>[13][@{}l@{\AgdaIndent{0}}]%
+\>[15]\AgdaSymbol{(}\AgdaFunction{OΔσ+}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
+\AgdaFunction{ThreeND}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSpace{}%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{))}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaFunction{O∙δ+}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
+\AgdaSymbol{\})}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{1}\AgdaSymbol{))}\<%
+\\
+%
+\>[16]\AgdaFunction{DigitIOD}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaFunction{OΔσ-}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Vec}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaNumber{0}\AgdaSymbol{)}\<%
+\\
+%
+\>[13]\AgdaSymbol{(}%
+\>[16]\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{((((\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{l}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{phalanx3}\AgdaSpace{}%
+\AgdaBound{l}\AgdaSpace{}%
+\AgdaBound{m}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{const}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))))))))}\<%
+\\
+%
+\>[13]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaInductiveConstructor{[]}\<%
+\end{code}
