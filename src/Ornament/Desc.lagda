@@ -28,7 +28,6 @@ private variable
   A B C X Y Z : Type
   P P′ : Type
 
-
 infixr 5 _∷_
 infixr 10 _▷_
 infixr 0 _⇶_
@@ -251,8 +250,8 @@ data ConI If Γ V J where
      →  ConI If Γ V J
      
   δ  :  {if : If .δi Δ K} {iff : InfoF If′ If}
-        (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (R : DescI If′ Δ K)
-        (h : Vxf Γ (V ▷ liftM2 (μ R) g j) W) (C : ConI If Γ W J)
+        (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt)
+        (R : DescI If′ Δ K) (C : ConI If Γ V J)
      →  ConI If Γ V J
 \end{code}
 %</Con>
@@ -274,13 +273,11 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \end{code}
 %</sigma-pm>
 
-\begin{code}
 δ+ : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ (V ▷ liftM2 (μ D) g j) J → ConI If Γ V J
 δ+ {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R id D
 
 δ- : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ V J → ConI If Γ V J
 δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R fst D
-\end{code}
 
 -- ordinary recursive field
 %<*rho-zero>
@@ -309,8 +306,7 @@ infix 10 ⟦_⟧C ⟦_⟧D
 ⟦ 𝟙 j          ⟧C X pv          i = i ≡ j pv
 ⟦ ρ j f D      ⟧C X pv@(p , v)  i = X (f p) (j pv) × ⟦ D ⟧C X pv i
 ⟦ σ S h D      ⟧C X pv@(p , v)  i = Σ[ s ∈ S pv ] ⟦ D ⟧C X (p , h (v , s)) i
-⟦ δ j g R h D  ⟧C X pv@(p , v)  i
-  = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧C X (p , h (v , s)) i
+⟦ δ j g R D    ⟧C X pv          i = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧C X pv i
 
 ⟦_⟧D : DescI If Γ J  → ( ⟦ Γ ⟧tel tt   → J → Type)
                      →   ⟦ Γ ⟧tel tt   → J → Type
@@ -344,10 +340,10 @@ fold f p i (con x) = f p i (mapDesc _ p i f x)
 mapDesc (C ∷ D) p j f (inj₁ x) = inj₁ (mapCon C p j tt f x)
 mapDesc (C ∷ D) p j f (inj₂ y) = inj₂ (mapDesc D p j f y)
 
-mapCon (𝟙 k)         p j v f      x  = x
-mapCon (ρ k g C)     p j v f (r , x) = fold f (g p) (k (p , v)) r , mapCon C p j v f x
-mapCon (σ S h C)     p j v f (s , x) = s , mapCon C p j (h (v , s)) f x
-mapCon (δ k g R h C) p j v f (r , x) = r , mapCon C p j (h (v , r)) f x
+mapCon (𝟙 k)        p j v f      x  = x
+mapCon (ρ k g C)    p j v f (r , x) = fold f (g p) (k (p , v)) r , mapCon C p j v f x
+mapCon (σ S h C)    p j v f (s , x) = s , mapCon C p j (h (v , s)) f x
+mapCon (δ k g R C)  p j v f (r , x) = r , mapCon C p j v f x
 \end{code}
 
 * Examples
@@ -438,9 +434,9 @@ module _ where
   FingerD  =  𝟙 _
            ∷  σ-    (λ ((_ , A) , _) → A)
            (  𝟙 _)
-           ∷  δ- _  (λ (p , _) → p) DigitD
+           ∷  δ _   (λ (p , _) → p) DigitD
            (  ρ _   (λ (_ , A) → (_ , Node A))
-           (  δ- _  (λ (p , _) → p) DigitD
+           (  δ _   (λ (p , _) → p) DigitD
            (  𝟙 _)))
            ∷  []
 \end{code}

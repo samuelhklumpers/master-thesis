@@ -15,6 +15,7 @@ open import Agda.Primitive
 open import Function.Base
 open import Data.Unit
 open import Data.Empty
+open import Data.List
 open import Data.Maybe
 open import Data.Product renaming (proj₁ to fst; proj₂ to snd)
 open import Data.Sum
@@ -148,4 +149,22 @@ module ∙δ′ {If : Info} {If′ : Info} {c : Cxf Δ Γ}
            DE)
 \end{code}
 %</comp-delta-nabla-sigma>
+
+%<*RoseTree>
+\begin{code}
+data RoseTree (A : Type) : Type where
+  rose : A → List (RoseTree A) → RoseTree A
+\end{code}
+%</RoseTree>
+
+
+%<*almost-RoseTree>
+\begin{code}
+RoseD : Desc (∅ ▷ const Type) ⊤
+RoseD  = σ- (λ { ((_ , A) , _) → A })
+       ( ρ ! (λ { (_ , A) → _ , List A})
+       ( 𝟙 _))
+       ∷ []
+\end{code}
+%</almost-RoseTree>
 \end{document}

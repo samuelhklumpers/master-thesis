@@ -85,7 +85,7 @@ value {D = D} = value-lift D id-InfoF
     value-con  (σ S {if = S→ℕ} h C)                 (s , x)
              = ϕ .σf _ S→ℕ _ s + value-con C x
 
-    value-con  (δ {if = if} {iff = iff} j g R h C)  (r , x)
+    value-con  (δ {if = if} {iff = iff} j g R C)    (r , x)
              with ϕ .δf _ _ if
     ...      | refl , refl , k  
              = k * value-lift R (ϕ ∘InfoF iff) r + value-con C x
@@ -136,11 +136,10 @@ trieifyOD D = trie-desc D id-InfoF
     ( OΔσ- (λ ((_ , A) , _ , s) → Vec A (ϕ .σf _ if _ s))
     ( trie-con C ϕ))
 
-  trie-con {f = f} (δ {if = if} {iff = iff} j g R h C) ϕ
+  trie-con {f = f} (δ {if = if} {iff = iff} j g R C) ϕ
     with ϕ .δf _ _ if    
   ... | refl , refl , k
-    = O∙δ+  ! (λ ((_ , A) , _) → (_ , Vec A k))
-            (trie-desc R (ϕ ∘InfoF iff))
+    = ∙δ !  (λ { ((_ , A) , _) → (_ , Vec A k) }) (trie-desc R (ϕ ∘InfoF iff))
             (λ _ _ → refl) (λ _ _ → refl)
     ( trie-con C ϕ)
 \end{code}
@@ -158,91 +157,100 @@ ThreeND  = 𝟙 {if = 1} _
 PhalanxND : DescI Number ∅ ⊤
 PhalanxND  = 𝟙 {if = 0} _
            ∷ 𝟙 {if = 1} _
-           ∷ δ- {if = refl , refl , 1} {iff = id-InfoF} _ _ ThreeND
+           ∷ δ {if = refl , refl , 1} {iff = id-InfoF} _ _ ThreeND
            ( ρ0 {if = 2} _
-           ( δ- {if = refl , refl , 1} {iff = id-InfoF} _ _ ThreeND
+           ( δ {if = refl , refl , 1} {iff = id-InfoF} _ _ ThreeND
            ( 𝟙 {if = 0} _))) 
            ∷ []
 \end{code}
 %</PhalanxND>
 
-\begin{code}
-module FingerOD where
-\end{code}
 %<*DigitOD-2>
 \begin{code}
-  DigitOD′ : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id ThreeND
-  DigitOD′  = OΔσ- (λ ((_ , A) , _) → Vec A 1)
-            ( 𝟙 _ (const refl))
-            ∷ OΔσ- (λ ((_ , A) , _) → Vec A 2)
-            ( 𝟙 _ (const refl))
-            ∷ OΔσ- (λ ((_ , A) , _) → Vec A 3)
-            ( 𝟙 _ (const refl))
-            ∷ []
+DigitOD : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id ThreeND
+DigitOD  = OΔσ- (λ ((_ , A) , _) → Vec A 1)
+          ( 𝟙 _ (const refl))
+          ∷ OΔσ- (λ ((_ , A) , _) → Vec A 2)
+          ( 𝟙 _ (const refl))
+          ∷ OΔσ- (λ ((_ , A) , _) → Vec A 3)
+          ( 𝟙 _ (const refl))
+          ∷ []
 \end{code}
 %</DigitOD-2>
 
 %<*FingerOD-2>
 \begin{code}
-  FingerOD′  : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id PhalanxND
-  FingerOD′  = OΔσ- (λ ((_ , A) , _) → Vec A 0)
-             ( 𝟙 _ (const refl))
-             ∷ OΔσ- (λ ((_ , A) , _) → Vec A 1)
-             ( 𝟙 _ (const refl))
-             ∷ O∙δ+ ! (λ ((_ , p) , _) → (_ , Vec p 1)) DigitOD′ (λ _ _ → refl) (λ _ _ → refl)
-             ( ρ _ (λ (_ , A) → _ , Vec A 2) (const refl) (const refl)
-             ( O∙δ+ ! (λ ((_ , p) , _) → (_ , Vec p 1)) DigitOD′ (λ _ _ → refl) (λ _ _ → refl)
-             ( OΔσ- (λ ((_ , A) , _) → Vec A 0)
-             ( 𝟙 _ (const refl)) )))
-             ∷ []
+FingerOD  : OrnDesc Plain (∅ ▷ const Type) ! ⊤ id PhalanxND
+FingerOD  = OΔσ- (λ ((_ , A) , _) → Vec A 0)
+           ( 𝟙 _ (const refl))
+           ∷ OΔσ- (λ ((_ , A) , _) → Vec A 1)
+           ( 𝟙 _ (const refl))
+           ∷ ∙δ ! (λ ((_ , p) , _) → (_ , Vec p 1)) DigitOD (λ _ _ → refl) (λ _ _ → refl)
+           ( ρ _ (λ (_ , A) → _ , Vec A 2) (const refl) (const refl)
+           ( ∙δ ! (λ ((_ , p) , _) → (_ , Vec p 1)) DigitOD (λ _ _ → refl) (λ _ _ → refl)
+           ( OΔσ- (λ ((_ , A) , _) → Vec A 0)
+           ( 𝟙 _ (const refl)) )))
+           ∷ []
 \end{code}
 %<*FingerOD-2>
 
-%<*itrieifyOD>
+%<*itrieify-type>
 \begin{code}
-itrieifyOD : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) ! (μ D tt tt) ! D
-itrieifyOD D = itrie-desc D D (λ _ _ → con) id-InfoF
-  where
+itrieifyOD : (N : DescI Number ∅ ⊤)
+           →  OrnDesc Plain (∅ ▷ const Type)
+              id (μ N tt tt) ! (toDesc (trieifyOD N))
+itrieifyOD N = itrie-desc N N (λ _ _ → con) id-InfoF
+\end{code}
+%</itrieify-type>
+\begin{code}
+  where mutual
+  open trieifyOD N
+\end{code}
+%<*itrieify-desc>
+\begin{code}
   itrie-desc  : ∀ {If} (N' : DescI If ∅ ⊤) (D : DescI If ∅ ⊤)
-              → (⟦ D ⟧D (μ N') ⇶ μ N')
-              → InfoF If Number
-              → OrnDesc Plain (∅ ▷ const Type) ! (μ N' tt tt) ! D
-
-  itrie-con   : ∀ {If} (N' : DescI If ∅ ⊤) {f : VxfO ! W V} (C : ConI If ∅ V ⊤)
-              → (∀ p w → ⟦ C ⟧C (μ N') (tt , f {p = p} w) _ → μ N' tt tt)
-              → InfoF If Number
-              → ConOrnDesc {Δ = ∅ ▷ const Type} {W = W} {J = μ N' tt tt} Plain f ! C
-
+              (n : ⟦ D ⟧D (μ N') ⇶ μ N') (ϕ : InfoF If Number)
+              →  OrnDesc Plain (∅ ▷ const Type)
+                 id (μ N' tt tt) ! (toDesc (trie-desc D ϕ) )
   itrie-desc N' []      n ϕ  = []
   itrie-desc N' (C ∷ D) n ϕ  = itrie-con N' C (λ p w x → n _ _ (inj₁ x)) ϕ
                              ∷ itrie-desc N' D (λ p w x → n _ _ (inj₂ x)) ϕ
-
+\end{code}
+%</itrieify-desc>
+%<*itrieify-con>
+\begin{code}
+  itrie-con   : ∀ {If} (N' : DescI If ∅ ⊤) {f : VxfO id W V}
+              {g : VxfO ! V U} (C : ConI If ∅ U ⊤)
+              (n : ∀ p w → ⟦ C ⟧C (μ N') (tt , g (f {p = p} w)) _ → μ N' tt tt)
+              (ϕ : InfoF If Number)
+              →  ConOrnDesc {Δ = ∅ ▷ const Type} {W = W} {J = μ N' tt tt} Plain
+                 {c = id} f ! (toCon (trie-con {f = g} C ϕ))
   itrie-con N' (𝟙 {if = k} j) n ϕ
-    = OΔσ- (λ ((_ , A) , _) → Vec A (ϕ .𝟙f k))
+    = Oσ- _
     ( 𝟙 (λ { (p , w) → n p w refl }) (const refl))
 
   itrie-con N' (ρ {if = k} j g C) n ϕ
     = OΔσ+ (λ _ → μ N' tt tt)
-    ( ρ  (λ { (p , w , m) → m }) (λ (_ , A) → (_ , Vec A (ϕ .ρf k)))
-         (const refl) (const refl)
-    ( itrie-con N' C (λ { p (w , m) x → n p w (m , x) }) ϕ))
+    ( ρ  (λ { (p , w , i) → i }) (λ { (_ , A) → _ })
+         (λ _ → refl) (λ _ → refl)
+    ( itrie-con N' C (λ { p (w , i) x → n p w (i , x) }) ϕ))
 
   itrie-con N' (σ S {if = if} h C) n ϕ
-    = Oσ+ S
-    ( OΔσ- (λ ((_ , A) , _ , s) → Vec A (ϕ .σf _ if _ s))
+    = Oσ+ (S ∘ over _)
+    ( Oσ- _
     ( itrie-con N' C (λ { p (w , s) x → n p w (s , x) }) ϕ))
 
-  itrie-con N' {f = f} (δ {if = if} {iff = iff} j g R h C) n ϕ
+  itrie-con N' {f = f} (δ {if = if} {iff = iff} j g R C) n ϕ
     with ϕ .δf _ _ if    
   ... | refl , refl , k
     = OΔσ+ (λ _ → μ R tt tt)
-    ( O∙δ+  (λ { (p , w , r) → r }) (λ ((_ , A) , _) → (_ , Vec A k))
+    ( ∙δ  (λ { (p , w , i) → i }) (λ ((_ , A) , _) → (_ , Vec A k))
             (itrie-desc R R (λ _ _ → con) (ϕ ∘InfoF iff))
             (λ _ _ → refl) (λ _ _ → refl)
-    ( itrie-con  N' C (λ { p ((w , r) , z) x
-        → n p w (ornForget (itrie-desc R R (λ _ _ → con) (ϕ ∘InfoF iff)) (tt , Vec (p .snd) k) r z , x) }) ϕ))
+    ( itrie-con N' C (λ { p (w , i) x → n p w (i , x) }) ϕ))
 \end{code}
-%</itrieifyOD>
+%</itrieify-con>
+
 
 \begin{code}
 module FingerIOD where
@@ -254,29 +262,28 @@ module FingerIOD where
   pattern phalanx2 = con (inj₂ (inj₁ refl))
   pattern phalanx3 l m r = con (inj₂ (inj₂ (inj₁ (l , m , r , refl))))
 
-  DigitIOD : OrnDesc Plain (∅ ▷ const Type) ! (μ ThreeND tt tt) ! ThreeND
-  DigitIOD  =  OΔσ- (λ ((_ , A) , _) → Vec A 1)
-            (  𝟙 (const three1) (const refl))
-            ∷ OΔσ- (λ ((_ , A) , _) → Vec A 2)
-            (  𝟙 (const three2) (const refl))
-            ∷ OΔσ- (λ ((_ , A) , _) → Vec A 3)
-            (  𝟙 (const three3) (const refl))
+  IDigitOD : OrnDesc Plain (∅ ▷ const Type) id (μ ThreeND tt tt) ! (toDesc DigitOD)
+  IDigitOD  = Oσ- _
+            ( 𝟙 (const three1) (const refl))
+            ∷ Oσ- _
+            ( 𝟙 (const three2) (const refl))
+            ∷ Oσ- _
+            ( 𝟙 (const three3) (const refl))
             ∷ []
 
-  FingerIOD : OrnDesc Plain (∅ ▷ const Type) ! (μ PhalanxND tt tt) ! PhalanxND
-  FingerIOD  = OΔσ- (λ ((_ , A) , _) → Vec A 0)
-             (  𝟙 (const phalanx1) (const refl))
-             ∷  OΔσ- (λ ((_ , A) , _) → Vec A 1)
-             (  𝟙 (const phalanx2) (const refl))
-             ∷  OΔσ+ (const (μ ThreeND tt tt))
-             (  O∙δ+ (λ { (p , w , r) → r }) (λ ((_ , A) , _) → (_ , Vec A 1))
-                DigitIOD (λ _ _ → refl) (λ _ _ → refl)
-             (  OΔσ+ (const (μ PhalanxND tt tt))
-             (  ρ (λ { (p , w , m) → m }) (λ (_ , A) → _ , Vec A 2) (const refl) (const refl)
-               (OΔσ+ (const (μ ThreeND tt tt))
-             (  O∙δ+ (λ { (p , w , r) → r }) (λ ((_ , A) , _) → (_ , Vec A 1))
-                DigitIOD (λ _ _ → refl) (λ _ _ → refl)
-             (  OΔσ- (λ ((_ , A) , _) → Vec A 0)
-             (  𝟙 (λ { (p , ((((_ , l) , _) , m) , r) , _) → phalanx3 l m r } ) (const refl))))))))
-             ∷ []
+
+  IFingerOD : OrnDesc Plain (∅ ▷ const Type) id (μ PhalanxND tt tt) ! (toDesc FingerOD)
+  IFingerOD  = Oσ- _
+             ( 𝟙 (const phalanx1) (const refl))
+             ∷ Oσ- _
+             ( 𝟙 (const phalanx2) (const refl))
+             ∷ OΔσ+ (const (μ ThreeND tt tt))
+             ( ∙δ (λ { (p , w , r) → r }) _ IDigitOD (λ _ _ → refl) (λ _ _ → refl)
+             ( OΔσ+ (const (μ PhalanxND tt tt))
+             ( ρ (λ { (p , w , m) → m }) (λ (_ , A) → _ , Vec A 2) (λ _ → refl) (λ _ → refl)
+             ( OΔσ+ (const (μ ThreeND tt tt))
+             ( ∙δ (λ { (p , w , r) → r }) _ IDigitOD (λ _ _ → refl) (λ _ _ → refl)
+             ( Oσ- _
+             ( 𝟙 (λ { (_ , ((_ , l) , m) , r) → phalanx3 l m r }) (λ _ → refl))))))))
+             ∷ [] 
 \end{code}

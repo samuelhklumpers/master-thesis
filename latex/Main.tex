@@ -89,6 +89,7 @@
 \newcommand{\added}[1]{\textcolor{git-green}{+#1}}
 \newcommand{\changed}[1]{\textcolor{git-orange}{$\bullet$#1}}
 \newcommand{\towrite}[1]{\todo[color=cyan]{#1}}
+\newcommand{\lowprio}[1]{\todo[color=nondescriptyellow]{#1}}
 \newcommand{\toremove}[1]{\textcolor{red}{This is going to be (re)moved: ``#1''}}
 
   
@@ -115,6 +116,12 @@ In the general case, employing datatype-generic programming can curtail code-dup
 
 In this thesis, we apply generic programming and ornaments to numerical representations, giving a recipe to compute such a representation from a provided number system.
 For this, we describe a generic universe and a type of ornaments on it, allowing us to formulate the recipe as an ornament from a number system to the computed datatype.
+
+
+Todo legend:
+\todo{To do}
+\towrite{There is something missing here}
+\lowprio{General and vague self-criticism, might ignore. Might do something if I have time on my hands.}
 \end{abstract}
 
 
@@ -128,17 +135,11 @@ This thesis explains the concepts numerical representations and ornaments, and a
 \listoftodos
 
 \section{Introduction}\label{sec:introduction}
-% outline:
-%
 \input{Introduction}
 
 
 \part*{Background}\label{part:background}
 \addcontentsline{toc}{part}{\nameref{part:background}}
-% outline:
-% 
-\todo{go emph pass}
-\todo{go cite pass}
 We extend upon existing work in the domain of generic programming and ornaments, so let us take a closer look at the nuts and bolts to see what all the concepts are about.
 
 We will describe some common datatypes and how they can be used for programming, exploring how dependent types also let us use datatypes to prove properties of programs, or write programs that are correct-by-construction, leading us to discuss descriptions of datatypes and ornaments.
@@ -146,11 +147,7 @@ We will describe some common datatypes and how they can be used for programming,
 \input{Background}
 
 
-\part{Descriptions}\label{part:ornament}
-% outline:
-% we explained why descriptions and ornaments are crucial to achieve our goals
-% however, the descriptions we explained earlier are not powerful enough to house finger trees
-% To capture finger trees as an ornament over a number system, we will need to describe ornaments over nested datatypes. In this section we will work out descriptions and ornaments suitable for nested datatypes.
+\part{Descriptions}\label{part:descriptions}
 If we are going to simplify working with complex sequence types by instantiating generic programs to them, we should first make sure that these types fit into the descriptions. We construct descriptions for nested datatypes by extending the encoding of parametric and indexed datatypes from \autoref{ssec:background-ix} with three features: information bundles, parameter transformation, and description composition. Also, to make sharing constructors easier, we introduce variable transformations. Transforming variables before they are passed to child descriptions allows both aggressively hiding variables and introducing values as if by let-constructs.
 
 We base the encoding of off existing encodings \cite{sijsling,practgen}. The descriptions take shape as sums of products, enforce indices at leaf nodes, and have explicit parameter and variable telescopes. Unlike some other encodings \cite{effectfully, practgen}, we do not allow higher-order inductive arguments. We use \texttt{--type-in-type} and \texttt{--with-K} to simplify the presentation, noting that these can be eliminated respectively by moving to \AD{Typeω} and by implementing interpretations as datatypes, as described in \autoref{app:withoutk}.
@@ -158,12 +155,10 @@ We base the encoding of off existing encodings \cite{sijsling,practgen}. The des
 \input{Descriptions}
 
 
-\part{Ornaments}\label{part:ornament2_rename_the_other}
-% outline:
-% 
+\part{Ornaments}\label{part:ornaments}
 In the framework of \AD{DescI} in the last section, we can write down a number system and its meaning as the starting point of the construction of a numerical representation. To write down the generic construction of those numerical representations, we will need a language in which we can describe modifications on the number systems.
 
-In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of (plenty of) examples. We omit the definition of the ornaments, since we will only construct new datatypes, rather than relate pre-existing types\todo{Maybe, I will throw the ornaments into the appendix along with the conversion from ornamental description to ornament}.
+In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of examples. We omit the definition of the ornaments, since we will only construct new datatypes, rather than relate pre-existing types\todo{Maybe, I will throw the ornaments into the appendix along with the conversion from ornamental description to ornament}.
 
 \todo{do we need to remark more?}
 
@@ -171,41 +166,22 @@ In this section, we will describe the ornamental descriptions for the \AD{DescI}
 
 
 \part{Numerical representations}\label{part:numrep}
-% outline:
-% 
 The ornamental descriptions of the last section, together with the descriptions and number systems from before, complete the toolset we will use to construct numerical representations as ornaments.
 
-To summarize, we will use the descriptions with information of \AF{Number} to represent numbers. We then seek to present the calculation of \autoref{sec:desc-numrep} as an ornament rather than a bare definition. In fact, we have already seen ornaments to numerical representations before, such as \AF{ListOD} and \AF{RandomOD}. Generalizing those ornaments, we construct numerical representations by means of an ornament-computing function, sending number systems to the ornamental descriptions which describe their numerical representations. 
+To summarize, we using \AD{DescI}\ \AF{Number} to represent number systems, we will paraphrase the calculation of \autoref{sec:desc-numrep} as an ornament rather than a direct definition. In fact, we have already seen ornaments to numerical representations before, such as \AF{ListOD} and \AF{RandomOD}. Generalizing those ornaments, we construct numerical representations by means of an ornament-computing function, sending number systems to the ornamental descriptions that describe their numerical representations. 
 
-\changed{Redo (or check) the Agda snippets below here.}
-\changed{Somewhat final version above, draft/notes/rough comments/outline below.}
 \input{NumericalRepresentations}
 
 %\part{Related work}\label{part:related}
-% outline: let's just work this into the discussion to avoid making a mess ok?
-% 
-% \input{RelatedWork}
+%summarizing why everything that is in my references is there
 
 \part{Discussion}
-% outline:
-% 
-
-
-
-
-
-
-
-
-
 \input{Discussion}
 
 
 \printbibliography
 
 \part{Appendix}
-% outline:
-% 
 \input{Appendix}
 
 

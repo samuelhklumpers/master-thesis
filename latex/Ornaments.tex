@@ -5,9 +5,7 @@ We will define \AD{OrnDesc}\ \AV{If′ Δ c J i D} to represent the ornaments bu
 \ExecuteMetaData[Ornament/OrnDesc]{OrnDesc}
 We use \AF{∼} to write down pointwise equality of functions, which in this case all are commutativity squares. Since \AD{ConI} allows the transformation of variable telescopes, we have to dedicate a lot of lines to writing down commutativity squares for variables, which along with the generally high number of arguments and implicits\footnote{Of which even more are hidden!} makes the definition rather dry and long. However, these squares involving \AD{Vxf} can generally ignored, as witnessed by the \AF{Oσ+} and \AF{Oσ-} variants of the constructors, which automatically fill those squares in the common cases of binding or ignoring fields.
 
-Due to the \AIC{δ•} constructor \AD{OrnDesc}, \AD{ConOrnDesc}, and \AF{toDesc} become tightly connected\footnote{We left out the variable square for \AIC{δ•}, because it is honestly just too long. If this was included, then the mutual block would also include \AF{ornForget} and its friend \AF{ornErase}.}, so we give the definition as one large mutual block.
-
-The ornaments acting on the constructors now consist of three groups: ornaments that preserve structure, ornaments that extend structure, and ornaments that compose structures. The structure-preserving ornaments are
+The constructor ornaments can be split into three segments: structure-preserving ornaments, extensions, and composition. The structure-preserving ornaments are
 \ExecuteMetaData[Ornament/OrnDesc]{ConOrn-preserve}
 These represent the ornaments in which the base description and the target description share the same field, up to conversions of parameters, variables, and indices.
 
@@ -27,7 +25,7 @@ The precise meaning of ornamental descriptions as descriptions is given by the c
 \ExecuteMetaData[Ornament/OrnDesc]{toDesc}
 which makes use of the implicit \AV{If′} fields in the constructor ornaments to reconstruct the information on the target description.
 
-But let us make the uses of \AD{OrnDesc} more clear by means of examples, where we make use of the variants of some ornaments specialized to binding or ignoring fields\footnote{With analogues for \AIC{Δσ}, (\AIC{Δ})\AIC{δ}, \AIC{δ•}, and like before the non-nested recursive field.}:
+But let us make the uses of \AD{OrnDesc} more clear by means of examples, where we make use of the variants of some ornaments specialized to binding or ignoring fields:
 \ExecuteMetaData[Ornament/OrnDesc]{O-sigma-pm}
 With these we can give the familiar ornamental description from \AD{List} to \AD{Vec}:
 \ExecuteMetaData[Ornament/OrnDesc]{VecOD}
