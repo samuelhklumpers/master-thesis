@@ -55,9 +55,11 @@ Nevertheless, we expect that if one defines \AF{indexO} by inlining \AF{ornAlg} 
 \section{No RoseTrees}
 In \AD{DescI}, we encode nested types by allowing nesting over a function of parameters \AF{Cxf}\ \AV{Γ}\ \AV{Γ}. This is less expressive than full nested types, which may also nest a recursive field under a strictly positive functor. For example, rose trees
 \ExecuteMetaData[Tex/Discussion]{RoseTree}
-cannot be directly expressed as a \AD{DescI}\footnote{And, since \AD{DescI} does not allow for higher-order inductive arguments like Escot and Cockx \cite{practgen}, we can also not give an essentially equivalent definition.}. We can still describe a similar datatype of ``fixed-height'' rose trees
-\ExecuteMetaData[Tex/Discussion]{almost-RoseTree}
-which nests on the inside instead. Since lists can be empty, the rose trees are not necessarily of an actual fixed-height, and still coincide with rose trees.
+cannot be directly expressed as a \AD{DescI}\footnote{And, since \AD{DescI} does not allow for higher-order inductive arguments like Escot and Cockx \cite{practgen}, we can also not give an essentially equivalent definition.}.\todo{Can still do}
+
+%We can still describe a similar datatype of ``fixed-height'' rose trees
+%\ExecuteMetaData[Tex/Discussion]{almost-RoseTree}
+%which nests on the inside instead. Since lists can be empty, the rose trees are not necessarily of an actual fixed-height, and still coincide with rose trees.
 
 If we were to describe full nested types, allowing applications of functors in the types of recursive arguments, we would have to convince Agda that these functors are indeed positive, possibly by using polarity annotations\footnote{\url{https://github.com/agda/agda/pull/6385}}. Alternatively, we could encode strictly positive functors in a separate universe, which only allows using parameters in strictly positive contexts \cite{sijsling}. Finally, we could modify \AD{DescI} in such a way that we can decide if a description uses a parameter strictly positively, for which we would modify \AIC{ρ} and \AIC{σ}, or add variants of \AIC{ρ} and \AIC{σ} restricted to strictly positive usage of parameters.
 

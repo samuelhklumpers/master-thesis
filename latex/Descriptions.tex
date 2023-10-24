@@ -1,12 +1,19 @@
 \section{Numerical Representations}\label{sec:desc-numrep}
-Before we dive into descriptions, let us revisit the situation of \bN{}, \AD{List} and \AD{Vec}. If it was not coincidence that gave us ornaments from \bN{} to \AD{List} and from \AD{List} to \AD{Vec}, then we can expect to find ornaments beforehand, instead of as a consequence of the definitions of \AD{List} and \AD{Vec}.
+Before we dive into descriptions, let us revisit the situation of \bN{}, \AD{List} and \AD{Vec}. If it was not a coincidence that there are ornaments from \bN{} to \AD{List} and from \AD{List} to \AD{Vec}, then we can expect to find ornaments beforehand, instead of as a consequence of the definitions of \AD{List} and \AD{Vec}.\todo{e}
 
-Rather than finding the properties of \AD{Vec} that were already there, let us view \AD{Vec} as a consequence of the definition of \bN{} and \AF{lookup}. From \bN{}, we obtain a trivial type of arrays by reading \AF{lookup} as a prescript:
+Rather than finding the properties of \AD{Vec} that were already there, let us view \AD{Vec} as a consequence of the definition of \bN{} and \AF{lookup}. From \bN{}, we obtain a trivial type\todo{Ik zou uitkijken met 'trivial type of arrays' -- wij zijn in ons
+paper duidelijk dat het over 'flexible arrays' gaat. Misschien
+uitleggen dat het niet over de 'standaard' arrays gaan, maar een
+datastructuur met lookups.} of arrays by reading \AF{lookup} as a prescript:
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Lookup2}
 For this definition, the lookup function is simply the identity function on \AD{Lookup}. As this is the prototypical array corresponding to natural numbers, any other array type we define should satisfy all the same properties and laws \AD{Lookup} does, and should in fact be equivalent.
 
 
-We remark that without further assumptions, we cannot use the equality type \AD{≡} for this notion of sameness of types: repeating the definition of a type gives two distinct types with no equality between them. Instead, we import another notion of sameness, known as isomorphisms:
+We remark that without further assumptions, we cannot use the equality type \AD{≡} for this notion of sameness of types: repeating\todo{'repeating the definition of a type' - volgens mij heet dit
+onderscheid ook wel generative vs applicative. Maar misschien nog
+beter, een type met een andere naam (maar dezelfde constructors) is
+not equal to Vec.
+} the definition of a type gives two distinct types with no equality between them. Instead, we import another notion of sameness, known as isomorphisms:
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Iso}
 An \AD{Iso} from \AV{A} to \AV{B} is a map from \AV{A} to \AV{B} with a (two-sided) inverse\footnote{This is equivalent to the other notion of equivalence: there is a map $f : A \to B$, and for each \AV{b} in \AV{B} there is exactly one \AV{a} in \AV{A} for which $f(a) = b$.}. In terms of elements, this means that elements of \AV{A} and \AV{B} are in one-to-one correspondence.
 
@@ -22,7 +29,7 @@ To keep the resulting \AD{Iso}s readable, we construct them as chains of smaller
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-lemmas}
 In the terminology of \autoref{sec:background-proving}, \AF{⊥-strict} states that ``if A is false, then A \emph{is} false'', if we allow reading isomorphisms as ``\emph{is}'', while \AF{<-split} states that the set of numbers below $n+1$ is 1 greater than the set of numbers below $n$.
 
-Using these, we can calculate\footnote{Here we make non-essential use of \AF{cong}, later we do need function extensionality, which has to be postulated or brought in via Cubical Agda.}
+Using these, we can calculate\footnote{Here we make non-essential use of \AF{cong} for type families. In the derivation of \AD{Vec} we use function extensionality, which has to be postulated or brought in via Cubical Agda.}
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-def}
 This gives a different (but equivalent) definition of \AD{Fin} compared to \AF{FinD}: the description \AF{FinD} describes \AD{Fin} as an inductive family, whereas \AF{Fin-def} gives the same definition as a type-computing function \cite{progorn}.
 
@@ -40,6 +47,20 @@ This explains how we can compute a type of lists or arrays (a numerical represen
 
 
 \section{Augmented Descriptions}
+\begin{outline}
+    De definitie van number system (record Info) is nieuw en hangt vrij
+   nauw samen met de universe die je gebruikt. Dat is (deels) te
+   begrijpen -- je wilt datastructuren beschrijven als ornaments van
+   numbers. Maar nu voelt de presentatie enigsinds backwards -- je
+   definieert de Info type die precies past op je descriptions, ipv uit
+   te leggen wat een number system is -- een soort specificatie
+   opstellen die los staat van de implementatie adhv descriptions. Hoe
+   zou je Peano/binary numbers/skew binary numbers/enz beschrijven
+   hiermee? En waarom is dit de juiste abstractie voor number systems?
+   (En kun je die vraag beantwoorden zonder te refereren aan
+   descriptions)
+\end{outline}
+
 To describe more general numerical representations, we must first describe more general number systems. We do so very loosely, however, allowing for tree-like number systems so long as the values of nodes are linear combinations of the values of subnodes. This generalizes positional number systems such as \bN{} and binary numbers, and allows for more exotic number systems, but for example does not include \bN{}\ \AD{×}\ \bN{} with the Cantor pairing function as a number system.
 
 By requiring that nodes are interpreted as linear combinations of subnodes, we can implement a universe of number systems as a special case of earlier universes by baking the relevant multipliers into the type-formers. Descriptions in the universe of number systems can then both be interpreted to datatypes, and can evaluate their values to \bN{} using the multipliers in their structure.
@@ -66,7 +87,10 @@ which makes it possible to downcast (or upcast) between different types of infor
 
 
 \section{The Universe}\label{ssec:desc}
-We also need to take care that the numerical representations we will construct indeed fit in our universe. The final universe \AD{U-ix} of \autoref{ssec:background-ix}, while already quite general, still excludes many interesting datastructures. In particular, the encoding of parameters forces recursive type occurrences to have the same applied parameters, ruling out nested datatypes such as (binary) random-access lists \cite{calcdata,purelyfunctional}:
+We also need to take care that the numerical representations we will construct indeed fit in our universe. The final universe \AD{U-ix} of \autoref{ssec:background-ix}, while already quite general, still excludes many interesting datastructures. In particular, the encoding of parameters forces recursive type occurrences to have the same applied parameters, ruling out nested datatypes such as (binary) random-access lists \cite{calcdata,purelyfunctional}\todo{Kun je aannemelijk maken dat er geen dependently typed encoding
+bestaat van Finger Trees? Voor binary random access lijsten, perfect
+trees, en lambda termen bestaan die wel... Of is de constructie te
+omslachtig?}:
 \ExecuteMetaData[Tex/DescOrn]{random-access}
 and finger trees \cite{fingertrees}:
 \ExecuteMetaData[Tex/DescOrn]{finger-tree}
@@ -74,6 +98,15 @@ Even if we could represent nested types in \AD{U-ix} we would find it still stru
 
 We will resolve these issues as follows. We can describe nested types by allowing parameters to be transformed before they are passed to recursive fields \cite{initenough}. By transforming variables before they are passed to subsequent fields, it becomes possible to hide fields that are not referenced later and to share or reuse constructor descriptions. Finally, by adding a variant of \AIC{σ} specialized to descriptions, we can describe composite datatypes more succinctly\todo{Compare this to Haskell, in which representations are type classes, which directly refer to other types (even to the type itself in a recursive instance). (But that's also just there because in Haskell the type always already exists and they do not care about positivity and termination).}.
 
+\begin{outline}
+    Ik merk dat ik -- door de afstand in tijd (een poosje geleden) en
+   ruimte (best een paar blzs terug) -- moeite heb om zo'n grote data
+   type als DescI te begrijpen. Kun je misschien toch iets meer uitleg
+   geven? Wat is er veranderd? Welke indices zijn toegevoegd/aangepast?
+   Er blijft ook een hoop hetzelfde: descriptions zijn lijsten van
+   constructors. Iets meer uitleg hier is echt nodig om de code te
+   begrijpen.
+\end{outline}
 Combining these changes, we define the following universe:
 \ExecuteMetaData[Ornament/Desc]{Desc}
 where the constructors are defined as:

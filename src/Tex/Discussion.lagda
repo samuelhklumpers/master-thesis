@@ -22,7 +22,6 @@ open import Data.Sum
 open import Data.Nat
 open import Relation.Binary.PropositionalEquality hiding (J)
 
-
 open import Ornament.Desc
 open import Ornament.OrnDesc
 
@@ -156,6 +155,55 @@ data RoseTree (A : Type) : Type where
   rose : A → List (RoseTree A) → RoseTree A
 \end{code}
 %</RoseTree>
+
+%<*RoseTree2>
+\begin{code}
+data RoseTree′ (A : Type) : Type where
+  nil  : A → RoseTree′ A                       
+  cons : RoseTree′ A → RoseTree′ A → RoseTree′ A  
+\end{code}
+%</RoseTree2>
+-- nil x       ↔ rose x []
+-- cons rx ry  ↔ rose y (rx ∷ rys) where ry = rose y rys
+
+%<*Iso>
+\AgdaTarget{Iso}
+\AgdaTarget{rightInv}
+\AgdaTarget{leftInv}
+\begin{code}
+record _≃_ A B : Type where
+  constructor iso
+  field
+    fun  : A → B
+    inv  : B → A
+    rightInv  : ∀ b → fun (inv b) ≡ b 
+    leftInv   : ∀ a → inv (fun a) ≡ a
+\end{code}
+%</Iso>
+
+\begin{code}
+Rose-correct : (A : Type) → RoseTree A ≃ RoseTree′ A
+Rose-correct A = iso to from ret sec
+  where
+  to : RoseTree A → RoseTree′ A
+  to (rose x [])          = nil x
+  to (rose x (rx ∷ rxs))  = cons (to rx) (to (rose x rxs))
+
+  from : RoseTree′ A → RoseTree A
+  from (nil x)       = rose x []
+  from (cons rx ry)  with from ry
+  ... | rose y rys   = rose y (from rx ∷ rys)
+
+  ret : (b : RoseTree′ A) → to (from b) ≡ b
+  ret (nil x)       = refl
+  ret (cons rx ry)  with from ry in p
+  ... | rose y rys = cong₂ cons (ret rx) (trans (cong to (sym p)) (ret ry) )
+
+  sec : (a : RoseTree A) → from (to a) ≡ a
+  sec (rose x [])          = refl
+  sec (rose x (rx ∷ rxs))  with from (to (rose x rxs)) in p | sec (rose x rxs)
+  ... | rose .x .rxs | refl = cong (rose x ∘ (_∷ rxs)) (sec rx)
+\end{code}
 
 
 %<*almost-RoseTree>

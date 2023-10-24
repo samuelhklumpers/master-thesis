@@ -108,15 +108,6 @@ length (x ∷ xs)  = suc (length xs)
 \end{code}
 %</length>
 
-%<*HBool>
-\AgdaTarget{HBool}
-\begin{code}
-data HBool : Bool → Type where
-  hfalse  : HBool false
-  htrue   : HBool true
-\end{code}
-%</HBool>
-
 %<*Fin>
 \AgdaTarget{Fin}
 \begin{code}
@@ -379,13 +370,13 @@ data μ-rec (D : U-rec) : Type where
 
 
 \begin{code}
-module ℕD-bad where
+module NatD-bad where
 \end{code}
 
 %<*NatD>
 \begin{code}
-  ℕD  : U-rec
-  ℕD  = 𝟙 ⊕ ρ
+  NatD  : U-rec
+  NatD  = 𝟙 ⊕ ρ
 \end{code}
 %</NatD>
 
@@ -528,10 +519,21 @@ private variable
 
 %<*tele-helpers>
 \begin{code}
-map₂ : ∀ {A B C} → (∀ {a} → B a → C a) → Σ A B → Σ A C
-map₂ f (a , b) = (a , f b)
+map-var : ∀ {A B C} → (∀ {a} → B a → C a) → Σ A B → Σ A C
+map-var f (a , b) = (a , f b)
 
-map-var = map₂
+Cxf : (Δ Γ : Tel P) → Type
+Cxf Δ Γ = ∀ {p} → ⟦ Δ ⟧tel p → ⟦ Γ ⟧tel p
+
+Vxf : Cxf Δ Γ → (W : ExTel Δ) (V : ExTel Γ) → Type
+Vxf g W V = ∀ {d} → ⟦ W ⟧tel d → ⟦ V ⟧tel (g d)
+
+var→par : {g : Cxf Δ Γ} → Vxf g W V → ⟦ Δ & W ⟧tel → ⟦ Γ & V ⟧tel
+var→par v (d , w) = _ , v w
+
+Vxf-▷ :  {g : Cxf Δ Γ} (v : Vxf g W V) (S : V ⊢ Type)
+       →  Vxf g (W ▷ (S ∘ var→par v)) (V ▷ S)
+Vxf-▷ v S (p , w) = v p , w
 \end{code}
 %</tele-helpers>
 
@@ -574,19 +576,21 @@ module ListD-bad where
 %<*ListD>
 \begin{code}
   ListD : U-par (∅ ▷ const Type)
-  ListD = 𝟙
-        ∷ σ (λ ((_ , A) , _) → A) (ρ 𝟙)
-        ∷ []
+  ListD  =  𝟙
+         ∷  σ (λ { ((_ , A) , _) → A })
+         (  ρ
+            𝟙)
+         ∷  []
 \end{code}
 %</ListD>
 
 %<*SigmaD>
 \begin{code}
 SigmaD : U-par (∅ ▷ const Type ▷ λ { (_ , _ , A) → A → Type })
-SigmaD =  σ (λ (((_ , A) , _) ,  _)       → A    )
-       (  σ (λ ((_       , B) , (_ , a))  → B a  )
-          𝟙)
-       ∷  []
+SigmaD  =  σ (λ { (((_ , A) , _) ,  _)       → A } )
+        (  σ (λ { ((_       , B) , (_ , a))  → B a } )
+           𝟙)
+        ∷  []
 \end{code}
 %</SigmaD>
 
@@ -638,10 +642,10 @@ data μ-ix (D : U-ix Γ I) (p : ⟦ Γ ⟧tel tt) (i : I) : Type where
 \begin{code}
 FinD : U-ix ∅ ℕ
 FinD = σ (const ℕ)
-     ( 𝟙 (λ (_ , (_ , n)) → suc n))
+     ( 𝟙 (λ { (_ , (_ , n)) → suc n } ))
      ∷ σ (const ℕ)
-     ( ρ (λ (_ , (_ , n)) → n)
-     ( 𝟙 (λ (_ , (_ , n)) → suc n)))
+     ( ρ (λ { (_ , (_ , n)) → n } )
+     ( 𝟙 (λ { (_ , (_ , n)) → suc n } )))
      ∷ []
 \end{code}
 %</FinD>
@@ -651,9 +655,9 @@ FinD = σ (const ℕ)
 VecD : U-ix (∅ ▷ const Type) ℕ
 VecD = 𝟙 (const zero)
      ∷  σ (const ℕ)
-     (  σ (λ ((_ , A) , _) → A )
-     (  ρ (λ (_ , ((_ , n) , _)) → n)
-     (  𝟙 (λ (_ , ((_ , n) , _)) → suc n))))
+     (  σ (λ { ((_ , A) , _) → A } )
+     (  ρ (λ { (_ , ((_ , n) , _)) → n } )
+     (  𝟙 (λ { (_ , ((_ , n) , _)) → suc n } ))))
      ∷ []
 \end{code}
 %</VecD>
@@ -695,21 +699,20 @@ private variable
 
 %<*new-Nat-List>
 \begin{code}
-Desc  = U-ix
-Con   = Con-ix
-μ     = μ-ix
-
 ! : A → ⊤
 ! x = tt
 
-ℕD  : Desc ∅ ⊤
-ℕD  = 𝟙 !
-    ∷ ρ ! (𝟙 !)
-    ∷ []
+NatD  : U-ix ∅ ⊤
+NatD  = 𝟙 !
+      ∷ ρ !
+      ( 𝟙 !)
+      ∷ []
 
-ListD  : Desc (∅ ▷ const Type) ⊤
+ListD  : U-ix (∅ ▷ const Type) ⊤
 ListD  = 𝟙 !
-       ∷ σ (λ ((_ , A) , _) → A) (ρ ! (𝟙 !))
+       ∷ σ (λ { ((_ , A) , _) → A })
+       ( ρ !
+       ( 𝟙 ! ))
        ∷ []
 \end{code}
 %</new-Nat-List>
@@ -771,159 +774,238 @@ module foldr′ where
   list-123 = con (inj₂ (inj₁ (suc zero , con (inj₂ (inj₁ (suc (suc zero) , con (inj₂ (inj₁ (suc (suc (suc zero)) , con (inj₁ refl) , refl))) , refl))) , refl)))
 \end{code}
 
-%<*Orn-type>
-\begin{code}
-Cxf : (Δ Γ : Tel P) → Type
-Cxf Δ Γ = ∀ {p} → ⟦ Δ ⟧tel p → ⟦ Γ ⟧tel p
-
-data Orn (g : Cxf Δ Γ) (i : J → I) :
-     Desc Γ I → Desc Δ J → Type
-\end{code}
-%</Orn-type>
-
-%<*ornForget-type>
-\begin{code}
-ornForget  : ∀ {g i} → Orn g i D E
-           → ∀ p j → μ E p j → μ D (g p) (i j) 
-\end{code}
-%</ornForget-type>
-
-%<*ConOrn-type>
-\begin{code}
-Cxf′ : Cxf Δ Γ → (W : ExTel Δ) (V : ExTel Γ) → Type
-Cxf′ g W V = ∀ {d} → ⟦ W ⟧tel d → ⟦ V ⟧tel (g d)
-
-data ConOrn (g : Cxf Δ Γ) (v : Cxf′ g W V) (i : J → I) :
-            Con Γ V I → Con Δ W J → Type
-\end{code}
-%</ConOrn-type>
-
 \begin{code}
 private variable
-  CD CE : Con Γ V I
+  CD CE : Con-ix Γ V I
 \end{code}
 
-%<*Orn>
+%<*hpty>
 \begin{code}
-data Orn g i where
-    []   : Orn g i [] []
-    _∷_  : ConOrn g id i CD CE → Orn g i D E
-         → Orn g i (CD ∷ D) (CE ∷ E)  
-\end{code}
-%</Orn>
-
-%<*ConOrn-helpers>
-\begin{code}
-over : {g : Cxf Δ Γ} → Cxf′ g W V → ⟦ Δ & W ⟧tel → ⟦ Γ & V ⟧tel
-over v (d , w) = _ , v w
-
-Cxf′-▷ :  {g : Cxf Δ Γ} (v : Cxf′ g W V) (S : V ⊢ Type)
-       →  Cxf′ g (W ▷ (S ∘ over v)) (V ▷ S)
-Cxf′-▷ v S (p , w) = v p , w
-
-_⊧_ : (V : Tel P) → V ⊢ Type → Type
-V ⊧ S = ∀ p → S p
-
-⊧-▷ : ∀ {S} → V ⊧ S → ∀ {p} → ⟦ V ⟧tel p → ⟦ V ▷ S ⟧tel p
-⊧-▷ s v = v , s (_ , v)
-
 _∼_ : {B : A → Type} → (f g : ∀ a → B a) → Type
 f ∼ g = ∀ a → f a ≡ g a
 \end{code}
-%</ConOrn-helpers>
+%</hpty>
 
 \begin{code}
 infix 0 _∼_
+
+private variable
+  re-par : Cxf Δ Γ
+  re-var : Vxf {Δ = Δ} {Γ = Γ} re-par W V
+  re-index : J → I
 \end{code}
+
+\begin{code}
+mutual
+\end{code}
+%<*Orn>
+\begin{code}
+  data  Orn (re-par : Cxf Δ Γ) (re-index : J → I) :
+        U-ix Γ I → U-ix Δ J → Type where
+      []   : Orn re-par re-index [] []
+      _∷_  : ConOrn re-par id re-index CD CE
+           → Orn re-par re-index D E
+           → Orn re-par re-index (CD ∷ D) (CE ∷ E)  
+\end{code}
+%</Orn>
+
 
 %<*ConOrn>
 \begin{code}
-data ConOrn {W = W} {V = V} g v i where
-  𝟙  : ∀ {i′ j′}
-     → i ∘ j′ ∼ i′ ∘ over v
-     → ConOrn g v i (𝟙 i′) (𝟙 j′)
+  data ConOrn (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V) (re-index : J → I) :
+              Con-ix Γ V I → Con-ix Δ W J → Type where
+    𝟙  : ∀ {i j}
+       → re-index ∘ j ∼ i ∘ var→par re-var
+       → ConOrn re-par re-var re-index (𝟙 i) (𝟙 j)
 
-  ρ  : ∀ {i′ j′ CD CE}
-     → ConOrn g v i CD CE
-     → i ∘ j′ ∼ i′ ∘ over v
-     → ConOrn g v i (ρ i′ CD) (ρ j′ CE)
+    ρ  : ∀ {i j CD CE}
+       → re-index ∘ j ∼ i ∘ var→par re-var
+       → ConOrn re-par re-var re-index CD CE
+       → ConOrn re-par re-var re-index (ρ i CD) (ρ j CE)
 
-  σ  : ∀ {S} {CD CE}
-     → ConOrn g (Cxf′-▷ v S) i CD CE
-     → ConOrn g v i (σ S CD) (σ (S ∘ over v) CE)
+    σ  : ∀ {S CD CE}
+       → ConOrn re-par (Vxf-▷ re-var S) re-index CD CE
+       → ConOrn re-par re-var re-index (σ S CD) (σ (S ∘ var→par re-var) CE)
 
-  Δσ  : ∀ {S} {CD CE}
-      → ConOrn g (v ∘ fst) i CD CE
-      → ConOrn g v i CD (σ S CE)
+    Δσ  : ∀ {S CD CE}
+        → ConOrn re-par (re-var ∘ fst) re-index CD CE
+        → ConOrn re-par re-var re-index CD (σ S CE)
 \end{code}
 %</ConOrn>
 
-  ∇σ  : ∀ {S} {CD CE}
-      → (s : V ⊧ S)
-      → ConOrn g (⊧-▷ s ∘ v) i CD CE
-      → ConOrn g v i (σ S CD) CE
-
 %<*NatD-ListD>
 \begin{code}
-ℕD-ListD : Orn ! id ℕD ListD
-ℕD-ListD  = (𝟙 (const refl))
-          ∷ (Δσ (ρ (𝟙 (const refl)) (const refl)))
-          ∷ []
+NatD-ListD : Orn ! id NatD ListD
+NatD-ListD  = 𝟙 (const refl)
+            ∷ Δσ {S = λ { ((_ , A), _) → A }}
+            ( ρ (const refl)
+            ( 𝟙 (const refl)))
+            ∷ []
 \end{code}
 %</NatD-ListD>
 
 %<*ListD-VecD>
 \begin{code}
 ListD-VecD : Orn id ! ListD VecD
-ListD-VecD  = (𝟙 (const refl))
-            ∷ (Δσ (σ (ρ (𝟙 (const refl)) (const refl))))
+ListD-VecD  = 𝟙 (const refl)
+            ∷ Δσ {S = λ _ → ℕ}
+            ( σ
+            ( ρ {j = λ { (_ , (_ , n) , _) → n }}      (const refl)
+            ( 𝟙 {j = λ { (_ , (_ , n) , _) → suc n }}  (const refl))))
             ∷ []
 \end{code}
 %</ListD-VecD>
 
-%<*ornErase-type>
+%<*bimap>
 \begin{code}
-ornErase  : ∀ {X} {g i} → Orn g i D E
-          → ∀ p j  → ⟦ E ⟧D (λ p j → X (g p) (i j)) p j
-                   → ⟦ D ⟧D X (g p) (i j)
-
-conOrnErase : ∀  {g i} {W V} {X} {v : Cxf′ g W V}
-                 {CD : Con Γ V I} {CE : Con Δ W J}
-            → ConOrn g v i CD CE
-            → ∀ p j  → ⟦ CE ⟧C (λ p j → X (g p) (i j)) p j
-                     → ⟦ CD ⟧C X (over v p) (i j)
+bimap  : {A B C D E : Type}
+       → (A → B → C) → (D → A) → (E → B)
+       → D → E → C
+bimap f g h d e = f (g d) (h e)
 \end{code}
-%</ornErase-type>
+%</bimap>
 
+\begin{code}
+mutual
+\end{code}
 %<*ornErase>
 \begin{code}
-ornErase (CD ∷ D) p j (inj₁ x) = inj₁ (conOrnErase CD (p , tt) j x)
-ornErase (CD ∷ D) p j (inj₂ x) = inj₂ (ornErase D p j x)
+  ornErase  : ∀ {re-par re-index} {X}
+            → Orn re-par re-index D E
+            →  ⟦ E ⟧D (bimap X re-par re-index)
+               ⇶ bimap (⟦ D ⟧D X) re-par re-index
+  ornErase (CD ∷ D) p j (inj₁ x) = inj₁ (conOrnErase CD (p , tt) j x)
+  ornErase (CD ∷ D) p j (inj₂ x) = inj₂ (ornErase D p j x)
 
-conOrnErase {i = i} (𝟙 sq) p j x = trans (cong i x) (sq p)
+  conOrnErase  : ∀  {re-par re-index} {W V} {X} {re-var : Vxf re-par W V}
+                   {CD : Con-ix Γ V I} {CE : Con-ix Δ W J}
+               → ConOrn re-par re-var re-index CD CE
+               →  ⟦ CE ⟧C (bimap X re-par re-index)
+                  ⇶ bimap (⟦ CD ⟧C X) (var→par re-var) re-index
+  conOrnErase {re-index = i} (𝟙 sq) p j x    = trans (cong i x) (sq p)
+  conOrnErase {X = X} (ρ sq CD) p j (x , y)  = subst (X _) (sq p) x
+                                             , conOrnErase CD p j y
+  conOrnErase (σ CD) (p , w) j (s , x)       = s
+                                             , conOrnErase CD (p , w , s) j x
+  conOrnErase (Δσ CD) (p , w) j (s , x)      = conOrnErase CD (p , w , s) j x
 \end{code}
 %</ornErase>
 
-\begin{code}
-conOrnErase {g = g} {X = X} (ρ CD sq) (p , v) j (x , y) = subst (X (g p)) (sq (p , v)) x , conOrnErase CD (p , v) j y
-conOrnErase (σ CD) (p , w) j (s , x) = s , conOrnErase CD (p , w , s) j x
-conOrnErase (Δσ CD) (p , w) j (s , x) = conOrnErase CD (p , w , s) j x
-\end{code}
-conOrnErase {v = v} (∇σ s CD) p j x = s (over v p) , conOrnErase CD p j x
 
 
 %<*ornAlg>
 \begin{code}
-ornAlg  : ∀ {D : Desc Γ I} {E : Desc Δ J} {g} {i}
-        → Orn g i D E
-        → ⟦ E ⟧D (λ p j → μ D (g p) (i j)) ⇶ λ p j → μ D (g p) (i j)
+ornAlg  : ∀ {D : U-ix Γ I} {E : U-ix Δ J} {re-par re-index}
+        → Orn re-par re-index D E
+        →  ⟦ E ⟧D (bimap (μ-ix D) re-par re-index)
+           ⇶ bimap (μ-ix D) re-par re-index
 ornAlg O p j x = con (ornErase O p j x)
 \end{code}
 %</ornAlg>
+
+%<*ornForget-type>
+\begin{code}
+ornForget  : ∀ {re-par re-index} → Orn re-par re-index D E
+           → μ-ix E ⇶ bimap (μ-ix D) re-par re-index 
+\end{code}
+%</ornForget-type>
 
 %<*ornForget>
 \begin{code}
 ornForget O = fold (ornAlg O)
 \end{code}
 %</ornForget>
+
+\begin{code}
+mutual
+\end{code}
+
+%<*OrnDesc>
+\begin{code}
+  data  OrnDesc (Δ : Tel ⊤) (J : Type)
+        (re-par : Cxf Δ Γ) (re-index : J → I)
+        : U-ix Γ I → Type where
+    []   : OrnDesc Δ J re-par re-index []
+    _∷_  : ConOrnDesc Δ ∅ J re-par ! re-index CD
+         → OrnDesc Δ J re-par re-index D
+         → OrnDesc Δ J re-par re-index (CD ∷ D)
+\end{code}
+%</OrnDesc>
+
+%<*ConOrnDesc>
+\begin{code}
+  data ConOrnDesc  (Δ : Tel ⊤) (W : ExTel Δ) (J : Type)
+                   (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V) (re-index : J → I)
+                   : Con-ix Γ V I → Type where  
+    𝟙  : ∀ {i} (j : W ⊢ J)
+       → re-index ∘ j ∼ i ∘ var→par re-var
+       → ConOrnDesc Δ W J re-par re-var re-index (𝟙 i)
+
+    ρ  : ∀ {i} {CD} (j : W ⊢ J)
+       → re-index ∘ j ∼ i ∘ var→par re-var
+       → ConOrnDesc Δ W J re-par re-var re-index CD
+       → ConOrnDesc Δ W J re-par re-var re-index (ρ i CD)
+
+    σ  : ∀ (S : V ⊢ Type) {CD}
+       → ConOrnDesc Δ (W ▷ S ∘ var→par re-var) J re-par (Vxf-▷ re-var S) re-index CD
+       → ConOrnDesc Δ W J re-par re-var re-index (σ S CD)
+
+    Δσ  : ∀ (S : W ⊢ Type) {CD}
+        → ConOrnDesc Δ (W ▷ S) J re-par (re-var ∘ fst) re-index CD
+        → ConOrnDesc Δ W J re-par re-var re-index CD
+\end{code}
+%</ConOrnDesc>
+
+%<*NatOD>
+\begin{code}
+NatOD : OrnDesc (∅ ▷ const Type) ⊤ ! ! NatD
+NatOD  = 𝟙 (λ _ → tt) (λ a → refl)
+       ∷ Δσ (λ { ((_ , A) , _) → A })
+       ( ρ (λ _ → tt) (λ a → refl)
+       ( 𝟙 (λ _ → tt) (λ a → refl)) )
+       ∷ []
+\end{code}
+%</NatOD>
+
+\begin{code}
+mutual
+\end{code}
+
+%<*toDesc>
+\begin{code}
+  toDesc  : {D : U-ix Γ I} → OrnDesc Δ J re-par re-index D
+          → U-ix Δ J
+  toDesc []         = []
+  toDesc (COD ∷ OD) = toCon COD ∷ toDesc OD
+
+  toCon  : ∀ {CD : Con-ix Γ V I} {re-par} {W} {re-var : Vxf re-par W V}
+         → ConOrnDesc Δ W J re-par re-var re-index CD
+         → Con-ix Δ W J
+  toCon (𝟙 j j∼i)               = 𝟙 j
+  toCon (ρ j j∼i COD)           = ρ j (toCon COD)
+  toCon {re-var = v} (σ S COD)  = σ (S ∘ var→par v) (toCon COD)
+  toCon (Δσ S COD)              = σ S (toCon COD)
+\end{code}
+%</toDesc>
+
+\begin{code}
+mutual
+\end{code}
+%<*toOrn>
+\begin{code}
+  toOrn  :  {D : U-ix Γ I}
+            (OD : OrnDesc Δ J re-par re-index D)
+         →  Orn re-par re-index D (toDesc OD)
+  toOrn []         = []
+  toOrn (COD ∷ OD) = toConOrn COD ∷ toOrn OD
+
+  toConOrn :  ∀ {CD : Con-ix Γ V I} {re-par} {W} {re-var : Vxf re-par W V}
+           →  (COD : ConOrnDesc Δ W J re-par re-var re-index CD)
+           →  ConOrn re-par re-var re-index CD (toCon COD)
+  toConOrn (𝟙 j j∼i)               = 𝟙 j∼i
+  toConOrn (ρ j j∼i COD)           = ρ j∼i  (toConOrn COD)
+  toConOrn (σ S COD)               = σ      (toConOrn COD)
+  toConOrn (Δσ S COD)              = Δσ     (toConOrn COD)
+\end{code}
+%</toOrn>
 \end{document}

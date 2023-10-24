@@ -1,5 +1,4 @@
 \section{Agda}\label{sec:background-agda}
-\changed{Add more citations and then double check them below here}
 We formalize our work in the programming language Agda \cite{agda}. While we will only occasionally reference Haskell, those more familiar with Haskell might understand (the reasonable part of) Agda as the subset of total Haskell programs \cite{agda2hs}.
 
 Agda is a total functional programming language with dependent types. Here, totality means that functions of a given type always terminate in a value of that type, ruling out non-terminating (and not obviously terminating) programs. Using dependent types we can use Agda as a proof assistant, allowing us to state and prove theorems about our datastructures and programs. 
@@ -171,11 +170,11 @@ In the descriptions directly relay the parameter telescope to the constructors, 
 Of the constructors we only modify the \AIC{σ} to request a type \AV{S} in the context of \AV{V}, and to extend the context for the subsequent fields by \AV{S}:
 \ExecuteMetaData[Tex/Background]{Con-par}
 Replacing the function \AV{S →}\ \AD{U-sop} by \AD{Con-par}\ (\AV{V}\ \AIC{▷}\ \AV{S}) allows us to bind the value of \AV{S} while avoiding the higher order argument. 
-We define a helper
+We define a helper\todo{Split or explain all the crazy helpers}
 \ExecuteMetaData[Tex/Background]{tele-helpers}
 and interpret this universe as follows:
 \ExecuteMetaData[Tex/Background]{int-par}
-In particular, provide \AV{X} the parameters and variables in the \AIC{σ} case, and extend context by \AV{s} before passing to the rest of the interpretation.
+In particular, we provide \AV{X} the parameters and variables in the \AIC{σ} case, and extend context by \AV{s} before passing to the rest of the interpretation.
 
 In this universe, we can describe lists using a one-type telescope:
 \ExecuteMetaData[Tex/Background]{ListD}
@@ -186,12 +185,12 @@ having one constructor with two fields. Here, the first field of type \AV{A} add
 
 
 \subsection{Indexed types}\label{ssec:background-ix}
-Lastly, we can integrate indexed types into the universe by abstracting over indices
+Lastly, we can integrate indexed types \cite{iir} into the universe by abstracting over indices
 \ExecuteMetaData[Tex/Background]{U-ix}
 Recall that in native Agda datatypes, a choice of constructor can fix the indices of the recursive fields and the resultant type, so we encode:
 \ExecuteMetaData[Tex/Background]{Con-ix}
 %In most cases, the index is simply threaded through the interpretation, allowing for a choice in the relevant codes.
-If we are constructing a term of some indexed type, then the previous choices of constructors and arguments build up the actual index of this term. This actual index must then match the index we expected in the declaration of this term. This means that in the case of a leaf, we have to replace the unit type with the necessary equality between the expected and actual indices \cite{algorn}\todo{Surely this isn't the first time someone used = to make indexed types. Sijsling and McBride (algOrn) cite Dybjer 1994, which has no mention of encoding indexed types as functors in the first place (it feels more like index-first). Practical generic doesn't mention it and just uses =.}:
+If we are constructing a term of some indexed type, then the previous choices of constructors and arguments build up the actual index of this term. This actual index must then match the index we expected in the declaration of this term. This means that in the case of a leaf, we have to replace the unit type with the necessary equality between the expected and actual indices \cite{algorn}:
 \ExecuteMetaData[Tex/Background]{int-ix}
 In a recursive field, the expected index can be chosen based on parameters and variables. % mark: wording
 
@@ -199,17 +198,20 @@ In this universe, we can define finite types and vectors as:
 \ExecuteMetaData[Tex/Background]{FinD}
 and
 \ExecuteMetaData[Tex/Background]{VecD}
-These are equivalent, but since we do not model implicit fields, they are slightly different in use compared to \AD{Fin} and \AD{Vec}. In the first constructor of \AF{VecD} we report an actual index of \AIC{zero}. In the second, we have a field \bN{} to bring the index \AV{n} into scope, which is used to request a recursive field with index \AV{n}, and report the actual index of \AIC{suc}\ \AV{n}.
+These are equivalent, but since we do not model implicit fields, they are slightly different in use compared to \AD{Fin} and \AD{Vec}. In the first constructor of \AF{VecD} we report an actual index of \AIC{zero}. In the second, we have a field \bN{} to bring the index \AV{n} into scope, which is used to request a recursive field with index \AV{n}, and report the actual index of \AIC{suc}\ \AV{n}. 
 
-We can now compare the structures in the quadruple (\bN{}, \AD{List}, \AD{Fin}, \AD{Vec}) by looking at their descriptions.
+Let us also show how the definitions of naturals and lists from earlier sections can be replicated in \AD{U-ix}
+\ExecuteMetaData[Tex/Background]{new-Nat-List}
+Writing the descriptions \AF{NatD}, \AF{ListD} and \AF{VecD} next to each other makes it easy to see the similarities: \AF{ListD} is the same as \AF{NatD} with a type parameter and one more \AIC{σ}. Likewise, \AF{VecD} is the same as \AF{ListD}, but now indexing over \bN{} and with yet one more \AIC{σ} of \bN{}. This kind of analysis is the focus of \autoref{sec:background-ornaments}.
 
+\subsubsection{Generic Programming}
 As a bonus, we can also use \AD{U-ix} for generic programming. For example, by a long construction which can be found in \autoref{app:gfold}, we can define the generic \AF{fold} operation:
 \ExecuteMetaData[Tex/Background]{fold-type}
-Intuitively, \AF{fold} operation works as follows: Suppose the information of one constructor application of \AV{D}, where the recursive positions are valued in \AV{X}, can be collapsed to a value of \AV{X} again. Then, by recursively collapsing the constructors from the bottom up, we can collapse all values of \AD{μ-ix}\ \AV{D} to values of \AV{X}.
+Let us describe how \AF{fold} works intuitively. We can interpret a term of \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X} as a term of \AF{μ-ix}\ \AV{D}, where the recursive positions hold values of \AV{X} rather than values of \AF{μ-ix}\ \AV{D}. Then \AF{fold} states that a function collapsing such terms into values of \AV{X} extends to a function collapsing \AF{μ-ix}\ \AV{D} into \AV{X}, recursively collapsing applications of \AIC{con} from the bottom up.
 
-As a more concrete example, instantiating \AF{fold} to \AF{ListD}, we get (up to some type equivalences):
+As a more concrete example, when instantiating \AF{fold} to \AF{ListD}, the type \AF{⟦}\ \AV{ListD}\ \AF{⟧D}\ \AV{X} reduces (up to equivalence) to \AD{⊤}\ \AD{⊎}\ (\AV{A}\ \AD{×}\ \AV{X}\ \AV{A})\ \AF{→}\ \AV{X}\ \AV{A}, and \AF{fold} becomes
 \ExecuteMetaData[Tex/Background]{foldr-type}
-which, much like the familiar foldr operation lets us consume a list to a value \AV{X A}, provided a value \AV{X A} in the empty case, and a means to convert a pair (\AV{A}, \AV{X A}) to \AV{X A}.
+which, much like the familiar \AF{foldr} operation lets us consume a \AD{List}\ \AV{A} to produce a value \AV{X A}, provided a value \AV{X A} in the empty case, and a means to convert a pair (\AV{A}, \AV{X A}) to \AV{X A}.
 
 Do note that this version takes a polymorphic function as an argument, as opposed to the usual fold which has the quantifiers on the outside:
 \ExecuteMetaData[Tex/Background]{usual-fold}
@@ -218,64 +220,69 @@ Like a couple of constructions we will encounter in later sections, we can recov
 
 
 \section{Ornaments}\label{sec:background-ornaments}
-In this section we will introduce a simplified definition of ornaments, which we will use to compare descriptions. We port some descriptions from before to \AF{U-ix}: 
-\ExecuteMetaData[Tex/Background]{new-Nat-List}
-Purely looking at their descriptions, \bN{} and \AD{List} are rather similar, except that \AD{List} has a parameter and an extra field \bN{} does not have. We could say that we can form the type of lists by starting from \bN{} and adding this parameter and field, while keeping everything else the same. In the other direction, we see that each list corresponds to a natural by stripping this information. Likewise, the type of vectors is almost identical to \AD{List}, can be formed from it by adding indices, and each vector corresponds to a list by dropping the indices.
+In this section we will introduce a simplified definition of ornaments, which we will use to compare descriptions. Purely looking at their descriptions, \bN{} and \AD{List} are rather similar, except that \AD{List} has a parameter and an extra field \bN{} does not have. We could say that we can form the type of lists by starting from \bN{} and adding this parameter and field, while keeping everything else the same. In the other direction, we see that each list corresponds to a natural by stripping this information. Likewise, the type of vectors is almost identical to \AD{List}, can be formed from it by adding indices, and each vector corresponds to a list by dropping the indices.
 
-These and similar observations can be generalized using ornaments \cite{algorn, progorn, sijsling}, which define a binary relation describing which datatypes can be formed by decorating others. Conceptually, an ornament from a type \AV{A} to a type \AV{B} represents that \AV{B} can be formed from \AV{A} by adding information or making the indices more specific. Consequently, for each ornament from \AV{A} to \AV{B}, we expect to get a function from \AV{B} to \AV{A} erasing this information and reverting to less specific indices. If the indices \AV{J} and parameters \AV{Δ} of \AV{B} are more specific than the indices \AV{I} and parameters \AV{Γ} of \AV{A}, we require functions from \AV{J} to \AV{I} and from \AV{Δ} to \AV{Γ}. % mark: does not parse 
-The ornaments
-\ExecuteMetaData[Tex/Background]{Orn-type}
-should thus come with a function:
-\ExecuteMetaData[Tex/Background]{ornForget-type}
-where we define \AF{Cxf} as the type of functions between (the interpretations of) \AV{Δ} and \AV{Γ}.
+Observations like these can be generalized using ornaments \cite{algorn, progorn, sijsling}, which define a binary relation describing which datatypes can be formed by ``decorating'' others. Conceptually, a type can be decorated by adding or modifying fields, extending its parameters, or refining its indices.
 
-Since we are working with sums-of-products descriptions, we can decide that ornaments cannot change the number or order of constructors, and the actual work happens in the constructor ornaments:
-\ExecuteMetaData[Tex/Background]{ConOrn-type}
-and we define ornaments as lists of ornaments for all constructors:
+Essential to the concept of ornaments is the ability to convert back, forgetting the extra structure. After all, if there is an ornament from \AV{A} to \AV{B}, then \AV{B} is \AV{A} with extra fields and parameters, and more specific indices. In that case, we should also be able to discard those extra fields, parameters, and more specific indices, obtaining a conversion from \AV{B} to \AV{A}. If \AV{A} is a \AD{U-ix}\ \AV{Γ}\ \AV{I} and \AV{B} is a \AD{U-ix}\ \AV{Δ}\ \AV{J}, then a conversion from \AV{B} to \AV{A} presupposes a function \AV{re-par :}\ \AF{Cxf}\ \AV{Δ}\ \AV{Γ} for re-parametrization, and a function \AV{re-index :}\ \AV{J}\ \AV{→}\ \AV{I} for re-indexing.
+
+In the same way that descriptions in \AD{U-ix} are lists of constructor descriptions, ornaments are lists of constructor ornaments. We define the type of ornaments reparametrizing with \AV{re-par} and reindexing with \AV{re-index} as a type indexed over \AD{U-ix}:
 \ExecuteMetaData[Tex/Background]{Orn}
-(Similarly to \AF{Cxf}, we use \AF{Cxf′} as the type of functions between variables, respecting \AV{g}). To (readably) write down \AD{ConOrn}, we use a couple of helpers and shorthands
-\ExecuteMetaData[Tex/Background]{ConOrn-helpers}
-% these only serve to add noise to this picture and appease the type checker. conceptually, you can view them as the ``natural'' conversions between some slightly different telescopes
-These mostly interconvert values between similar telescopes. But notably, if \AV{S} is of type \AV{V ⊢ Type}, then \AV{S} is a type in the context of \AV{V}, and \AV{V ⊧ S} is the type of values of \AV{S} in the context of \AV{V}.
+The conversion between types induced by an ornament is then embodied by the forgetful map
+\ExecuteMetaData[Tex/Background]{bimap}
+\ExecuteMetaData[Tex/Background]{ornForget-type}
+which will revert the modifications made by the constructor ornaments, and restores the original indices and parameters.
 
-Now we can define \AD{ConOrn}. We expect that adding nothing gives an identity ornament, which is encoded in the first three constructors of \AD{ConOrn}.
+The allowed modifications are controlled by the definition of constructor ornaments \AD{ConOrn}. We must keep in mind that each constructor of \AD{ConOrn} also has to be reverted by \AF{ornForget}, accordingly, some modifications have preconditions, which are in this case always pointwise equalities:
+\ExecuteMetaData[Tex/Background]{htpy}
+Since constructors exist in the context of variables, we let constructor ornaments transform variables with \AV{re-var}, in addition to parameters and indices.
+
+The first three constructors of \AD{ConOrn} represent the operations which copy the corresponding constructors of \AD{Con-ix}\footnote{Viewing \AD{ConOrn} as a binary relation on \AD{Con-ix}, these represent the preservation of \AD{ConOrn} by \AIC{𝟙}, \AIC{ρ}, and \AIC{σ}, up to parameters, variables, and indices.}. The \AIC{Δσ} constructors allows one to add fields which are not present on the original datatype.
 \ExecuteMetaData[Tex/Background]{ConOrn}
-On the other hand, the \AIC{∆σ} constructor states that we can add fields on the right-hand side. Since the parameters, indices, and variables need not be identical on both sides (in particular, the variables can diverge even more depending on the preceding ornament), we have to ask that for \AIC{𝟙} and \AIC{ρ}, these are related by a structure-respecting conversion, or more graphically, a commuting square\footnote{For \AIC{σ}, the relation is baked in by letting the resulting descriptions only differ by the conversion \AV{v}.}. % In fact, we will soon see that these pieces of information are exactly what we need to complete \AF{ornForget}.
+% yes re-par can be implicit most of the time
+% when you actually start using ornaments generically, it will come back to bite you though
+The commuting square \AF{re-index}\ \AF{∘}\ \AV{j}\ \AF{∼}\ \AV{i}\ \AF{∘}\ \AF{var→par}\ \AV{re-var} in the first two constructors ensures that the indices on both sides are indeed related, up to \AV{re-index} and \AV{re-var}.
 
-We can now formulate the formation of \AD{List} from \bN{} as an ornament:
+Now, we can show that lists are indeed naturals decorated with fields:
 \ExecuteMetaData[Tex/Background]{NatD-ListD}
-As \bN{} has no parameters or indices, we see that \AD{List} has more specific parameters, namely a single type parameter, and also no indices. Because of this, all commuting squares factor through the unit type and are trivial. This ornament preserves most structure of \bN{}, only adding a field of the type parameter of \AD{List} using \AIC{∆σ}.
+This ornament preserves most structure of \bN{}, only adding a field using \AIC{∆σ}\footnote{Note that \AV{S}, and some later arguments we provide to ornaments, are implicit argument: Agda would happily infer them from \AF{ListD} and later \AF{VecD} had we omitted them.}. As \bN{} has no parameters or indices, \AD{List} has more specific parameters, namely a single type parameter. Consequently, all commuting squares factor through the unit type and can be satisfied with \AV{λ}\ \AV{\_}\ \AV{→}\ \AIC{refl}. 
 
-We can also ornament \AD{List} to become \AD{Vec}, for which the index is more informative, but the ornament does equally little:
+We can also ornament lists to get vectors by reindexing them over \bN{}
 \ExecuteMetaData[Tex/Background]{ListD-VecD}
-Now the commuting square for the indices is equally trivial. While the square for the parameters is still simple, it is now an identity square, rather than a trivial square.
+We bind a new field of \bN{} with \AIC{∆σ}, extracting it in \AIC{𝟙} and \AIC{ρ} to declare that the constructor corresponding to \AIC{\_∷\_} takes a vector of length \AV{n} and returns a vector of length \AIC{suc}\ \AV{n}. 
 
-We deferred the definition of \AF{ornForget}, so let us give it now. The process is split into two steps: first, we define a function to strip off a single layer of ornamentation:
-\ExecuteMetaData[Tex/Background]{ornErase-type}
-which uses the commutativity squares we required earlier to revert some values (and parameters, indices, and variables) to the unornamented type. For example, in the case of the \AIC{𝟙} preserving ornament\footnote{The other cases can be found in \autoref{app:ornforget}.}:
-\ExecuteMetaData[Tex/Background]{ornErase}
-This function defines an algebra for the functor associated to a description \AV{E}:
-\ExecuteMetaData[Tex/Background]{ornAlg}
-We can now make good use of the generic \AF{fold} we defined for \AD{U-ix}!
+The conversions from lists to naturals, and from vectors to lists are given by \AF{ornForget}. We define \AF{ornForget} as a \AF{fold} over an algebra that erases a single layer of decorations
 \ExecuteMetaData[Tex/Background]{ornForget}
-Other than establishing that \AV{E} in an ornament \AD{Orn}\ \AV{g}\ \AV{i}\ \AV{D}\ \AV{E} is an adorned version of \AV{D} by witnessing that each value in \AV{E} has an underlying value in \AV{D}, the function \AF{ornForget} also makes it easy to generalize relations of functions between similar types. For example, if we instantiate \AF{ornForget} for \AF{ℕD-ListD}, then the statement that list concatenation preserves length can equivalently be expressed as the commutation of concatenation and \AF{ornForget}.
+Recursively applying this algebra, which reinterprets values of \AV{E} as values of \AV{D}, lets us take apart a value in the fixpoint \AD{μ-ix}\ \AV{E} and rebuild it to a value of \AF{μ-ix}\ \AV{D}. This algebra
+\ExecuteMetaData[Tex/Background]{ornAlg}
+is a special case of the erasing function, which undecorates interpretations of arbitrary types \AV{X}:
+\ExecuteMetaData[Tex/Background]{ornErase}
+Reading off the ornament, we see which bits of \AV{CE} are new and which are copied from \AV{CD}, and consequently which parts of a term \AV{x} under an interpretation of \AV{CE} need to be forgotten, and which needs to be copied or translated. Specifically, the first three cases of \AF{conOrnErase} correspond to the structure-preserving ornaments, and merely translate equivalent structures from \AV{CE} to \AV{CD}.
+
+For example, in the first case the ornament \AIC{𝟙}\ \AV{sq} copies leaves, telling us that \AV{CD} is \AIC{𝟙 i'} and \AV{CE} is \AIC{𝟙 j'}. The interpretation \AV{⟦ 𝟙 j' ⟧C \_ p j} of a leaf \AV{𝟙 j'} at parameters \AV{p} and index \AV{j} is simply the equality of expected and actual indices \AV{j ≡ (j' p)}. The term \AV{x} of \AV{j ≡ (j' p)}, then only has to be converted to the corresponding proof of equality on the \AV{CD} side: \AV{re-index j ≡ (i' (var→par re-var p))}. This is precisely accomplished by applying \AF{re-index} to both sides and composing with the square \AV{sq} at \AV{p}.
+
+Likewise, in the case of \AIC{ρ} we only have to show that \AV{x} can be converted from one \AIC{ρ} to the other \AIC{ρ} by translating its parameters, and in the \AIC{σ} case the field is directly copied. The only other ornament \AIC{Δσ} adding fields, is easily undone by removing those fields. 
+
+Thus, \AF{ornForget} establishes that \AV{E} in an ornament \AD{Orn}\ \AV{g}\ \AV{i}\ \AV{D}\ \AV{E} is an adorned version of \AV{D} by associating to each value of \AV{E} its an underlying value in \AV{D}. Additionally, \AF{ornForget} makes it simple to relate functions between related types. For example, instantiating \AF{ornForget} for \AF{NatD-ListD} yields \AF{length}. Hence, the statement that \AF{length} sends concatenation \AF{\_++\_} to addition \AF{\_+\_}, i.e. \AV{length (xs ++ ys) ≡ length xs + length ys}, is equivalent to the statement that \AF{\_++\_} and \AF{\_+\_} are related, or that \AF{\_++\_} is a lifting of \AF{\_+\_} \cite{orntrans}. \marker{Ik hoop dat dit minder wazig is en de mental typechecking load wat reduceert.}
 
 % remark, ornForget is not epi in general because of ∆σ ⊥
 
-
 \section{Ornamental Descriptions}\label{sec:background-ornamental-descriptions}
-Ornaments allow us to establish that \AD{Vec} is a more elaborate \AD{List}, but only after writing down \AF{VecD} first; even though the fact that an ornament uniquely determines its right-hand side suggests that we could use ornaments as lists of instructions to construct a type from the left-hand side.
+By defining the ornaments \AF{NatD-ListD} and \AF{ListD-VecD} we could show that lists are numbers with fields and vectors are lists with fixed lengths. Even though we had to give \AF{ListD} before we could define \AF{NatD-ListD}, the value of \AF{NatD-ListD} actually forces the right-hand side to be \AF{ListD}. \marker{End A}
 
-For that use-case, we can use ornamental descriptions\todo{Which in fact happened before ornaments, if we look at McB11}:
-\towrite{write this}
+This means we can also use an ornament to represent a description as a patch on top of another description, if we leave out the right-hand side of the ornament. Ornamental descriptions are precisely defined as ornaments without the right-hand side, and effectively bundle a description and an ornament to it. Their definition is analogous to that of ornaments, making the arguments which would only appear in the new description explicit:
+\ExecuteMetaData[Tex/Background]{OrnDesc}
+\ExecuteMetaData[Tex/Background]{ConOrnDesc}
+Using \AD{OrnDesc} we can describe lists as the patch on \AF{NatD} which inserts a \AIC{σ} in the constructor corresponding to \AIC{suc}:
+\ExecuteMetaData[Tex/Background]{NatOD}
+To extract \AF{ListD} from \AF{NatOD}, we can use the projection applying the patch in an ornamental description:
+\ExecuteMetaData[Tex/Background]{toDesc}
+The other projection reconstructs the ornament \AF{NatD-ListD} from \AF{NatOD}:
+\ExecuteMetaData[Tex/Background]{toOrn}
+As a consequence, \AD{OrnDesc} enjoys the features of both \AD{Desc} and \AD{Orn}, such as interpretation into a datatype by \AF{μ} and the conversion to the underlying type by \AF{ornForget}, by factoring through these projections.
 
-\begin{outline}
-Compared to ornaments, ornamental descriptions do not have a description on the right-hand side.
+In later sections, %mark: precisely?
+we will routinely use \AD{OrnDesc} to view triples like (\AF{NatD}, \AF{ListD}, \AF{VecD}) as a base type equipped with two patches in sequence.
 
-The right-hand side can instead be computed from an ornamental description:
 
-along with the ornament relating both sides:
-
-ListOD
-VecOD
-\end{outline}
+% exercise to reader: show OrnDesc AD ~ Exist[ BD in Desc ] Orn AD BD  
