@@ -165,14 +165,15 @@ By setting \AV{P}\ \AV{=}\ \AD{⊤}, we recover the previous definition of param
 \ExecuteMetaData[Tex/Background]{ExTel}
 representing a telescope of variables over the fixed parameter-telescope \AV{Γ}, which can be extended independently of \AV{Γ}. Extensions can be interpreted by interpreting the variable part given the interpretation of the parameter part:
 \ExecuteMetaData[Tex/Background]{int-ExTel}
+We will name maps \AV{Δ → Γ} of telescopes \AF{Cxf}\ \AV{Δ}\ \AV{Γ}. Given such a map \AV{g}, name maps \AV{W → V} between extensions \AF{Vxf}\ \AV{g}\ \AV{W}\ \AV{V}:
+\ExecuteMetaData[Tex/Background]{tele-helpers} %mark: map-var
+We also defined two functions we will use extensively later: \AF{var→par} states that a map of extensions extend to a map of the whole telescope, and \AF{Vxf-▷} lets us extend a map of extensions by acting as the identity on a new variable. 
+
 In the descriptions directly relay the parameter telescope to the constructors, resetting the variable telescope to \AIC{∅} for each constructor:
 \ExecuteMetaData[Tex/Background]{U-par}
 Of the constructors we only modify the \AIC{σ} to request a type \AV{S} in the context of \AV{V}, and to extend the context for the subsequent fields by \AV{S}:
 \ExecuteMetaData[Tex/Background]{Con-par}
-Replacing the function \AV{S →}\ \AD{U-sop} by \AD{Con-par}\ (\AV{V}\ \AIC{▷}\ \AV{S}) allows us to bind the value of \AV{S} while avoiding the higher order argument. 
-We define a helper\todo{Split or explain all the crazy helpers}
-\ExecuteMetaData[Tex/Background]{tele-helpers}
-and interpret this universe as follows:
+Replacing the function \AV{S →}\ \AD{U-sop} by \AD{Con-par}\ (\AV{V}\ \AIC{▷}\ \AV{S}) allows us to bind the value of \AV{S} while avoiding the higher order argument. The interpretation of the universe is then:
 \ExecuteMetaData[Tex/Background]{int-par}
 In particular, we provide \AV{X} the parameters and variables in the \AIC{σ} case, and extend context by \AV{s} before passing to the rest of the interpretation.
 
@@ -268,9 +269,9 @@ Thus, \AF{ornForget} establishes that \AV{E} in an ornament \AD{Orn}\ \AV{g}\ \A
 % remark, ornForget is not epi in general because of ∆σ ⊥
 
 \section{Ornamental Descriptions}\label{sec:background-ornamental-descriptions}
-By defining the ornaments \AF{NatD-ListD} and \AF{ListD-VecD} we could show that lists are numbers with fields and vectors are lists with fixed lengths. Even though we had to give \AF{ListD} before we could define \AF{NatD-ListD}, the value of \AF{NatD-ListD} actually forces the right-hand side to be \AF{ListD}. \marker{End A}
+By defining the ornaments \AF{NatD-ListD} and \AF{ListD-VecD} we could show that lists are numbers with fields and vectors are lists with fixed lengths. Even though we had to give \AF{ListD} before we could define \AF{NatD-ListD}, the value of \AF{NatD-ListD} actually forces the right-hand side to be \AF{ListD}.
 
-This means we can also use an ornament to represent a description as a patch on top of another description, if we leave out the right-hand side of the ornament. Ornamental descriptions are precisely defined as ornaments without the right-hand side, and effectively bundle a description and an ornament to it. Their definition is analogous to that of ornaments, making the arguments which would only appear in the new description explicit:
+This means we can also use an ornament to represent a description as a patch on top of another description, if we leave out the right-hand side of the ornament. Ornamental descriptions are precisely defined as ornaments without the right-hand side, and effectively bundle a description and an ornament to it\footnote{Consequently, \AD{OrnDesc}\ \AV{Δ}\ \AV{J}\ \AV{g}\ \AV{i}\ \AV{D} must simply be a convenient representation of \AD{Σ}\ (\AD{U-ix}\ \AV{Δ}\ \AV{J})\ (\AD{Orn}\ \AV{g}\ \AV{i}\ \AV{D}).}. Their definition is analogous to that of ornaments, making the arguments which would only appear in the new description explicit:
 \ExecuteMetaData[Tex/Background]{OrnDesc}
 \ExecuteMetaData[Tex/Background]{ConOrnDesc}
 Using \AD{OrnDesc} we can describe lists as the patch on \AF{NatD} which inserts a \AIC{σ} in the constructor corresponding to \AIC{suc}:

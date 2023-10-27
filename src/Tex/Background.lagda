@@ -889,7 +889,7 @@ mutual
                                              , conOrnErase CD (p , w , s) j x
   conOrnErase (Δσ CD) (p , w) j (s , x)      = conOrnErase CD (p , w , s) j x
 \end{code}
-%</ornErase>
+%</ornErase> 
 
 
 

@@ -1,21 +1,26 @@
-\section{δ is conservative}\label{sec:redundant-delta}
-We define our universe \AD{DescI} with \AIC{δ} as a former of fields with known descriptions, because this makes it easier to write down \AF{trieifyOD}, even though \AIC{δ} is redundant. If more concise universes and ornaments are preferable, we can actually get all the features of \AIC{δ} and ornaments like \AIC{∙δ} by describing them using \AIC{σ}, annotations, and other ornaments.
+Expectation:
 
-Indeed, rather than using \AIC{δ} to add a field from a description \AV{R}, we can simply use \AIC{σ} to add \AV{S}\ \AV{=}\ \AD{μ}\ \AV{R}, and remember that \AV{S} came from \AV{R} in the information
-\ExecuteMetaData[Tex/Discussion]{Delta-Info}
-We can then define \AIC{δ} as a pattern synonym matching on the \AIC{just} case, and \AIC{σ} matching on the \AIC{nothing} case.
+We can define \AF{PathOD} as a generic ornament from a \AD{DescI}\ \AF{Number} to the corresponding finite type, such that \AF{PathOD}\ \AV{ND}\ \AV{n} is equivalent to \AD{Fin}\ (\AF{value}\ \AV{n}). Then, we can show that \AF{itrieOD}\ \AV{ND}\ \AV{n} has a \AF{tabulate}/\AF{lookup} pair for \AF{PathOD}\ \AV{ND}\ \AV{n}, from which it follows that \AF{itrieOD}\ \AV{ND}\ \AV{n}\ \AV{A} is equivalent to \AF{PathOD}\ \AV{ND}\ \AV{n}\ \AV{→}\ \AV{A}, and in consequence \AF{itrieOD}\ \AV{ND} corresponds to \AD{Vec}. From the \AF{Recomputation} lemma it follows that the index \AV{n} of \AF{itrieOD}\ \AV{ND}\ \AV{n} corresponds to applying \AF{ornForget} twice.
 
-Recall that the ornament \AIC{∙δ} lets us compose an ornament from \AV{D} to \AV{D'} with an ornament from \AV{R} to \AV{R'}, yielding an ornament from \AIC{δ}\ \AV{D}\ \AV{R} to \AIC{δ}\ \AV{D'}\ \AV{R'}. This ornament can be modelled by first adding a new field \AD{μ}\ \AV{R'}, and then deleting the original \AD{μ}\ \AV{R} field. The ornament \AIC{∇} \cite{kophd} allows one to provide a default value for a field, deleting it from the description. Hence, we can model \AIC{∙δ} by binding a value \AV{r'} of \AD{μ}\ \AV{R'} with \AF{OΔσ+} and deleting the field \AD{μ}\ \AV{R} using a default value computed by \AF{ornForget}.
+Due to the \AF{remember}-\AF{forget} isomorphism \cite{algorn}, we have that \AF{trieOD}\ \AV{ND} is equivalent to \AV{Σ}\ (\AD{μ} \AV{ND})\ (\AF{itrieOD}\ \AV{ND}), whence \AF{trieOD}\ \AV{ND} is a normal (also referred to as Naperian) functor. This yields traversability of \AF{trieOD}\ \AV{ND}, and consequently \AF{toList}\footnote{Note that the foldable structure we get from the generic \AF{fold} is significantly harder to work with for this purpose.}. 
 
+We know that the upper square in
+% https://q.uiver.app/#q=WzAsNixbMCwxLCJcXG1hdGhybXt0cmllfVxcIFxcbWF0aHJte05EfSJdLFsxLDEsIlxcbWF0aHJte0xpc3R9Il0sWzAsMCwiXFxtYXRocm17aXRyaWV9XFwgXFxtYXRocm17TkR9Il0sWzEsMCwiXFxtYXRocm17VmVjfSJdLFsxLDIsIlxcbWF0aGJie059Il0sWzAsMiwiXFxtYXRocm17TkR9Il0sWzAsMSwiXFxtYXRocm17dG9MaXN0fSJdLFsyLDAsIlxcbWF0aHJte2ZvcmdldH0iLDJdLFsyLDMsIlxcbWF0aHJte3RvVmVjfSJdLFszLDEsIlxcbWF0aHJte3RvTGlzdH0iXSxbNSw0LCJcXG1hdGhybXt2YWx1ZX0iLDJdLFswLDUsIlxcbWF0aHJte2ZvcmdldH0iLDJdLFsxLDQsIlxcbWF0aHJte2xlbmd0aH0iXV0=
+\[\begin{tikzcd}
+	{\mathrm{itrie}\ \mathrm{ND}} & {\mathrm{Vec}} \\
+	{\mathrm{trie}\ \mathrm{ND}} & {\mathrm{List}} \\
+	{\mathrm{ND}} & {\mathbb{N}}
+	\arrow["{\mathrm{toList}}", from=2-1, to=2-2]
+	\arrow["{\mathrm{forget}}"', from=1-1, to=2-1]
+	\arrow["{\mathrm{toVec}}", from=1-1, to=1-2]
+	\arrow["{\mathrm{toList}}", from=1-2, to=2-2]
+	\arrow["{\mathrm{value}}"', from=3-1, to=3-2]
+	\arrow["{\mathrm{forget}}"', from=2-1, to=3-1]
+	\arrow["{\mathrm{length}}", from=2-2, to=3-2]
+\end{tikzcd}\]
+commutes, and due to the recomputation lemma, the outer square also commutes. Because \AF{ornForget} from \AF{itrieOD}\ \AV{ND} to \AF{trieOD}\ \AV{ND} is ``epi'' (that is, it covers by ranging over \AV{n}), we find that the lower square also commutes.
 
-\section{Indices do not depend on parameters}\label{sec:no-dep-ix}
-In \AD{DescI}, we represent the indices of a description as a single constant type, as opposed to an extension of the parameter telescope \cite{practgen}. This simplification keeps the treatment of ornaments and numerical representations more to the point, but rules out types like the identity type \AD{≡}. Another consequence of not allowing indices to depend on parameters is that algebraic ornaments \cite{algorn} can not be formulated in \AD{OrnDesc} in their fully general form.
-
-By replacing index computing functions \AV{Γ}\ \AF{\&}\ \AV{V}\ \AF{⊢}\ \AV{I} with dependent functions
-\ExecuteMetaData[Tex/Discussion]{index-interpretation}
-we can allow indices to depend on parameters in our framework. As a consequence, we have to modify nested recursive fields to ask for the index type \AF{⟦}\ \AV{I}\ \AF{⟧tel} precomposed with \AV{g :}\ \AF{Cxf}\ \AV{Γ Γ}, and we have to replace the square like \AV{i}\ \AF{∘}\ \AV{j′}\ \AF{∼}\ \AV{i′}\ \AF{∘}\ \AF{over}\ \AV{v} in the definition of ornaments with heterogeneous squares.
-
-
+Reality:
 \section{Σ-descriptions are more natural for expressing finite types}\label{sec:closed-universe}
 Due to our representation of types as sums of products, representing the finite types of arbitrary number systems quickly becomes hard. Consider the binary numbers from before
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{Leibniz}
@@ -42,6 +47,13 @@ The numerical representations we construct via \AF{trieifyOD} look like random-a
 In contrast, structures like Braun trees, as Hinze and Swierstra \cite{calcdata} compute from binary numbers, reflect the weight of a node by branching themselves. Because this kind of branching is uniform, i.e., each branch looks the same, we can still give an equivalent construction. By combining \AF{trieifyOD} and \AF{itrieifyOD}, and using 
 \ExecuteMetaData[Tex/Discussion]{power}
 to apply \AIC{ρ} \AV{k}-fold in the case of \AIC{ρ}\ \AV{\{if = k\}}, rather than over \AV{k}-element vectors, we can replicate the structure of a Braun tree from \AF{BinND}. However, if we use the Σ-descriptions we discussed above, we can more elegantly present these structures by adding an internal branch over \AD{Fin}\ \AV{k}.
+
+\section{Indices do not depend on parameters}\label{sec:no-dep-ix}
+In \AD{DescI}, we represent the indices of a description as a single constant type, as opposed to an extension of the parameter telescope \cite{practgen}. This simplification keeps the treatment of ornaments and numerical representations more to the point, but rules out types like the identity type \AD{≡}. Another consequence of not allowing indices to depend on parameters is that algebraic ornaments \cite{algorn} can not be formulated in \AD{OrnDesc} in their fully general form.
+
+By replacing index computing functions \AV{Γ}\ \AF{\&}\ \AV{V}\ \AF{⊢}\ \AV{I} with dependent functions
+\ExecuteMetaData[Tex/Discussion]{index-interpretation}
+we can allow indices to depend on parameters in our framework. As a consequence, we have to modify nested recursive fields to ask for the index type \AF{⟦}\ \AV{I}\ \AF{⟧tel} precomposed with \AV{g :}\ \AF{Cxf}\ \AV{Γ Γ}, and we have to replace the square like \AV{i}\ \AF{∘}\ \AV{j′}\ \AF{∼}\ \AV{i′}\ \AF{∘}\ \AF{over}\ \AV{v} in the definition of ornaments with heterogeneous squares.
 
 
 \section{Indexed numerical representations are not algebraic ornaments}\label{sec:ix-not-alg}
@@ -70,6 +82,17 @@ Since our encoding does not support higher-order inductive arguments, let alone 
 If that is the case, then modifications of universes like \AD{Info} could be expressed internally. In particular, rather than defining \AD{DescI} such that it can describe datatypes with the information of, e.g., number systems, \AD{DescI} should be expressible as an ornamental description on \AD{Desc}, in contrast to how \AD{Desc} is an instance of \AD{DescI} in our framework. This would allow treating information explicitly in \AD{DescI}, and not at all in \AD{Desc}.
 
 Furthermore, constructions like \AF{trieifyOD}, which have the recursive structure of a fold over \AD{DescI}, could indeed be expressed by instantiating \AF{fold} to \AD{DescI}.\lowprio{Maybe a bit too dreamy.}
+
+
+\section{δ is conservative}\label{sec:redundant-delta}
+We define our universe \AD{DescI} with \AIC{δ} as a former of fields with known descriptions, because this makes it easier to write down \AF{trieifyOD}, even though \AIC{δ} is redundant. If more concise universes and ornaments are preferable, we can actually get all the features of \AIC{δ} and ornaments like \AIC{∙δ} by describing them using \AIC{σ}, annotations, and other ornaments.
+
+Indeed, rather than using \AIC{δ} to add a field from a description \AV{R}, we can simply use \AIC{σ} to add \AV{S}\ \AV{=}\ \AD{μ}\ \AV{R}, and remember that \AV{S} came from \AV{R} in the information
+\ExecuteMetaData[Tex/Discussion]{Delta-Info}
+We can then define \AIC{δ} as a pattern synonym matching on the \AIC{just} case, and \AIC{σ} matching on the \AIC{nothing} case.
+
+Recall that the ornament \AIC{∙δ} lets us compose an ornament from \AV{D} to \AV{D'} with an ornament from \AV{R} to \AV{R'}, yielding an ornament from \AIC{δ}\ \AV{D}\ \AV{R} to \AIC{δ}\ \AV{D'}\ \AV{R'}. This ornament can be modelled by first adding a new field \AD{μ}\ \AV{R'}, and then deleting the original \AD{μ}\ \AV{R} field. The ornament \AIC{∇} \cite{kophd} allows one to provide a default value for a field, deleting it from the description. Hence, we can model \AIC{∙δ} by binding a value \AV{r'} of \AD{μ}\ \AV{R'} with \AF{OΔσ+} and deleting the field \AD{μ}\ \AV{R} using a default value computed by \AF{ornForget}.
+
 
 
 %\section{Variables slightly later}

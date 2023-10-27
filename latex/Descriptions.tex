@@ -1,23 +1,15 @@
 \section{Numerical Representations}\label{sec:desc-numrep}
-Before we dive into descriptions, let us revisit the situation of \bN{}, \AD{List} and \AD{Vec}. If it was not a coincidence that there are ornaments from \bN{} to \AD{List} and from \AD{List} to \AD{Vec}, then we can expect to find ornaments beforehand, instead of as a consequence of the definitions of \AD{List} and \AD{Vec}.\todo{e}
+Before we dive into descriptions, let us revisit \bN{}, \AD{List} and \AD{Vec}. At first, we defined \AD{Vec} as the length-indexed variant of \AD{List}, such that \AF{lookup} becomes total, and satisfies nice properties like \AF{lookup-insert}. Abstractly, \AD{Vec} is an implementation of finite maps with domain \AD{Fin}, where finite maps are simply those types with operations like \AF{insert}, \AF{remove}, \AF{lookup}, and \AF{tabulate}\footnote{The function \AF{tabulate}\ \AV{:}\ (\AD{Fin}\ \AV{n}\ \AV{→}\ \AV{A})\ \AV{→}\ \AV{Vec}\ \AV{A}\ \AV{n} collects an assignment of elements \AV{f} into a vector \AF{tabulate}\ \AV{f}.}, satisfying relations or laws like \AF{lookup-insert} and \AF{lookup}\ \AF{∘}\ \AF{tabulate}\ \AD{≡}\ \AF{id}. 
 
-Rather than finding the properties of \AD{Vec} that were already there, let us view \AD{Vec} as a consequence of the definition of \bN{} and \AF{lookup}. From \bN{}, we obtain a trivial type\todo{Ik zou uitkijken met 'trivial type of arrays' -- wij zijn in ons
-paper duidelijk dat het over 'flexible arrays' gaat. Misschien
-uitleggen dat het niet over de 'standaard' arrays gaan, maar een
-datastructuur met lookups.} of arrays by reading \AF{lookup} as a prescript:
+For comparison, we can define a trivial implementation of finite maps, by reading \AF{lookup} as a prescript
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Lookup2}
-For this definition, the lookup function is simply the identity function on \AD{Lookup}. As this is the prototypical array corresponding to natural numbers, any other array type we define should satisfy all the same properties and laws \AD{Lookup} does, and should in fact be equivalent.
+Since \AF{lookup} is simply the identity function on \AF{Lookup}, this unsurprisingly satisfies the laws of finite maps, provided we define \AF{insert} and \AF{remove} correctly.
 
-
-We remark that without further assumptions, we cannot use the equality type \AD{≡} for this notion of sameness of types: repeating\todo{'repeating the definition of a type' - volgens mij heet dit
-onderscheid ook wel generative vs applicative. Maar misschien nog
-beter, een type met een andere naam (maar dezelfde constructors) is
-not equal to Vec.
-} the definition of a type gives two distinct types with no equality between them. Instead, we import another notion of sameness, known as isomorphisms:
+Predictably\footnote{Since \AF{lookup} is an isomorphism with \AF{tabulate} as inverse, as we see from the relations \AF{lookup}\ \AF{∘}\ \AF{tabulate}\ \AD{≡}\ \AF{id} and  \AF{tabulate}\ \AF{∘}\ \AF{lookup}\ \AD{≡}\ \AF{id}.}, \AD{Vec} is \emph{representable}, that is, we have that \AF{Lookup} and \AD{Vec} are equivalent, in the sense that there is an isomorphism between \AF{Lookup} and \AD{Vec}\footnote{Without further assumptions, we cannot use the equality type \AD{≡} for this notion of equivalence of types: a type with a different name but exactly the same constructors as \AD{Vec} would not be equal to \AD{Vec}.}
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Iso}
 An \AD{Iso} from \AV{A} to \AV{B} is a map from \AV{A} to \AV{B} with a (two-sided) inverse\footnote{This is equivalent to the other notion of equivalence: there is a map $f : A \to B$, and for each \AV{b} in \AV{B} there is exactly one \AV{a} in \AV{A} for which $f(a) = b$.}. In terms of elements, this means that elements of \AV{A} and \AV{B} are in one-to-one correspondence.
 
-Now, rather than defining \AD{Vec} ``out of the blue'' and proving that it is correct or isomorphic to \AD{Lookup}, we can also turn the \AD{Iso} on its head: Starting from the equation that \AD{Vec} is equivalent to \AD{Lookup}, we derive a definition of \AD{Vec} as if solving that equation \cite{calcdata}. As a warm-up, we can also derive \AD{Fin} from the fact that \AD{Fin}\ \AV{n} should contain \AV{n} elements, and thus be isomorphic to \AV{Σ[ m ∈ ℕ ] m < n}.
+We can also establish properties like \AF{lookup-insert} from this equivalence, rather than deriving it ourselves. Rather than finding the properties of \AD{Vec} that were already there, let us view \AD{Vec} as a consequence of the definition of \bN{} and \AF{lookup}. Turning the \AD{Iso} on its head, and starting from the equation that \AD{Vec} is equivalent to \AD{Lookup}, we derive a definition of \AD{Vec} as if solving that equation \cite{calcdata}. As a warm-up, we can also derive \AD{Fin} from the fact that \AD{Fin}\ \AV{n} should contain \AV{n} elements, and thus be isomorphic to \AV{Σ[ m ∈ ℕ ] m < n}.
 
 To express such a definition by isomorphism, we define:
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Def}
@@ -29,7 +21,7 @@ To keep the resulting \AD{Iso}s readable, we construct them as chains of smaller
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-lemmas}
 In the terminology of \autoref{sec:background-proving}, \AF{⊥-strict} states that ``if A is false, then A \emph{is} false'', if we allow reading isomorphisms as ``\emph{is}'', while \AF{<-split} states that the set of numbers below $n+1$ is 1 greater than the set of numbers below $n$.
 
-Using these, we can calculate\footnote{Here we make non-essential use of \AF{cong} for type families. In the derivation of \AD{Vec} we use function extensionality, which has to be postulated or brought in via Cubical Agda.}
+Using these, we can calculate\footnote{Here we make non-essential use of \AF{cong} for type families. In the derivation of \AD{Vec} we use function extensionality, which has to be postulated, or can be obtained by using the cubical path types.}
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-def}
 This gives a different (but equivalent) definition of \AD{Fin} compared to \AF{FinD}: the description \AF{FinD} describes \AD{Fin} as an inductive family, whereas \AF{Fin-def} gives the same definition as a type-computing function \cite{progorn}.
 
@@ -43,7 +35,37 @@ which yields us a definition of vectors
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Vec}
 and the \AD{Iso} to \AF{Lookup} in one go.
 
-This explains how we can compute a type of lists or arrays (a numerical representation, here, \AD{Vec}) from a number system (\bN{}).
+In conclusion, we just directly computed a type of finite maps (a numerical representation, here, \AD{Vec}) from a number system (\bN{}).
+
+
+\section{Temporary}
+\subsection{Number systems}
+
+In order to describe more general numerical representations, we must also describe more general number systems. Let us first compare some number systems. For example, we have \bN{}, and the binary numbers
+\ExecuteMetaData[Tex/Descriptions/Number]{Leibniz}
+As a more exotic example, we have a number system which uses smaller ``number system''
+\ExecuteMetaData[Tex/Descriptions/Number]{Phalanx}
+and is defined by composing it in its structures
+\ExecuteMetaData[Tex/Descriptions/Number]{Carpal}
+We observe that across these systems, the interpretation of a number is computed by simple recursion. In particular leaves have associated constants, recursive fields correspond to multiplication and addition, while fields can defer to another function. If we describe the types in \AD{U-sop}, we can thus encode each of these systems by associating a single number to each \AIC{𝟙} and \AIC{ρ}, and a function to each \AIC{σ}, up to equivalence.
+
+In essence, this encodes number systems as structures that at each node linearly combine values of subnodes, generalizing positional number systems in \emph{dense} representation\footnote{Consequently, this excludes the skew binary numbers \cite{oka95b} in their useful sparse representation, but this functionality can be regained by allowing for addition \emph{and} variable multiplication in a \AIC{σ}. While not worked out in this thesis, this extension is compatible with the later constructions.}.
+
+Using a modified version of \AD{U-sop}, we can encode the examples we gave as follows. Note that in \bN{}, we have to insert fields of \AD{⊤}, so we can express that the second constructor acts as $x \mapsto x + 1$
+\ExecuteMetaData[Tex/Descriptions/Number]{Nat-num}
+marking all leaves as zero. The binary numbers admit a similar encoding, but multiply their recursive fields by two instead
+\ExecuteMetaData[Tex/Descriptions/Number]{Leibniz-num}
+The \AD{Carpal} system can be encoded by using the interpretation of \AD{Phalanx}
+\ExecuteMetaData[Tex/Descriptions/Number]{Carpal-num}
+\marker{End A}
+
+\subsection{Nested types}
+Returning to the numerical representations, we have to remark that our last universe \AD{U-ix} does not allow us to define all useful datatypes. Consider for example binary random-access lists.
+
+\subsection{Composite types}
+
+\subsection{Hiding variables}
+
 
 
 \section{Augmented Descriptions}
@@ -60,11 +82,10 @@ This explains how we can compute a type of lists or arrays (a numerical represen
    (En kun je die vraag beantwoorden zonder te refereren aan
    descriptions)
 \end{outline}
+\mark{Ik denk dat de vorm die een getalsysteem kan hebben (i.e., universe), sterk gekoppeld is aan hoe deze geinterpreteerd kan worden, en hoe die geabstraheerd kan worden. Specificaties van ``wat is een getalsysteem'' zijn in die zin vrij fragiel, zouden we pure positional number systems definieren, dan vallen fingertrees buiten de boot, zouden we sparse skew binary numbers willen encoderen, dan moeten we ineens weer reeksen waarden als variabele factoren moeten interpreteren. Daarom denk ik dat een uitleg vanuit de gedachtengang ``we hebben descriptions, en kijk hoe weinig we hoeven aan te passen om daar ook getallen mee te beschrijven'' een betere aanleiding geeft voor wat er later in ieder geval met Info aan zit te komen.}
 
-To describe more general numerical representations, we must first describe more general number systems. We do so very loosely, however, allowing for tree-like number systems so long as the values of nodes are linear combinations of the values of subnodes. This generalizes positional number systems such as \bN{} and binary numbers, and allows for more exotic number systems, but for example does not include \bN{}\ \AD{×}\ \bN{} with the Cantor pairing function as a number system.
 
-By requiring that nodes are interpreted as linear combinations of subnodes, we can implement a universe of number systems as a special case of earlier universes by baking the relevant multipliers into the type-formers. Descriptions in the universe of number systems can then both be interpreted to datatypes, and can evaluate their values to \bN{} using the multipliers in their structure.
-
+\marker{Rewrite}
 For there to be an ornament between a number system and its numerical representation, the descriptions of both need to live in the same universe. Hence, we will generalize the type of descriptions over information such as multipliers later, rather than defining a new universe of number systems here. The information needed to describe a number system can be separated between the type-formers. Namely, a leaf \AIC{𝟙} requires a constant in \bN{}, a recursive field \AIC{ρ} requires a multiplier in \bN{}, while a field \AIC{σ} will need a function to convert values to \bN{}.
 
 To facilitate marking type-formers with specific bits of information, we define \todo{Compare this with the usual metadata in generics like in Haskell, but then a bit more wild. Also think of annotations on fingertrees.}
