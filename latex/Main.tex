@@ -86,12 +86,12 @@
 \definecolor{git-orange}{HTML}{C69026}
 \definecolor{nondescriptyellow}{HTML}{D6B656}
 
-\newcommand{\added}[1]{\textcolor{git-green}{+#1}}
-\newcommand{\changed}[1]{\textcolor{git-orange}{$\bullet$#1}}
+%\newcommand{\added}[1]{\textcolor{git-green}{+#1}}
+%\newcommand{\changed}[1]{\textcolor{git-orange}{$\bullet$#1}}
 \newcommand{\towrite}[1]{\todo[color=cyan]{#1}}
 \newcommand{\marker}[1]{\todo[color=green]{#1}}
 \newcommand{\lowprio}[1]{\todo[color=nondescriptyellow]{#1}}
-\newcommand{\toremove}[1]{\textcolor{red}{This is going to be (re)moved: ``#1''}}
+%\newcommand{\toremove}[1]{\textcolor{red}{This is going to be (re)moved: ``#1''}}
 
   
 \lstnewenvironment{semicomment}{\color{gray}\lstset{breaklines=true}}{}
@@ -102,38 +102,42 @@
 \newcommand{\bN}{\AgdaDatatype{ℕ}}
 \newcommand{\bL}{\AgdaDatatype{Leibniz}}
 
-
-\title{Ornaments and Proof Transport applied to Numerical Representations}
+\title{Generic Numerical Representations via Ornaments}
 \author{Samuel Klumpers\\6057314}
 
+%\usepackage{subfiles}
+%example: latexmk -pdf -use-make -lualatex -halt-on-error -synctex=1 Introduction.tex
 
 \begin{document}
 \maketitle
 
-\begin{abstract}
-The dependently typed functional programming language Agda encourages defining custom datatypes to write correct-by-construction programs with\todo{long}. In some cases, even those datatypes can be made correct-by-construction, by manually distilling them from a mixture of requirements, as opposed to pulling them out of thin air\todo{distracted}. This is in particular the case for numerical representations, a class of datastructures inspired by number systems, containing structures such as linked lists and binary trees. However, constructing datatypes in this manner, and establishing the necessary relations between them can quickly become tedious and duplicative.
 
-In the general case, employing datatype-generic programming can curtail code-duplication by allowing the definition of constructions that can be instantiated to a class of types. Furthermore, ornaments make it possible to succinctly describe relations between structurally similar types.
+\begin{comment}
+    The dependently typed functional programming language Agda encourages defining custom datatypes to write correct-by-construction programs with\todo{long}. In some cases, even those datatypes can be made correct-by-construction, by manually distilling them from a mixture of requirements, as opposed to pulling them out of thin air\todo{distracted}. This is in particular the case for numerical representations, a class of datastructures inspired by number systems, containing structures such as linked lists and binary trees. However, constructing datatypes in this manner, and establishing the necessary relations between them can quickly become tedious and duplicative.
 
-In this thesis, we apply generic programming and ornaments to numerical representations, giving a recipe to compute such a representation from a provided number system.
-For this, we describe a generic universe and a type of ornaments on it, allowing us to formulate the recipe as an ornament from a number system to the computed datatype.
-
-
-Todo legend:
-\todo{To do}
-\towrite{There is something missing here}
-\lowprio{General and vague self-criticism, might ignore. Might do something if I have time on my hands.}
+    In the general case, employing datatype-generic programming can curtail code-duplication by allowing the definition of constructions that can be instantiated to a class of types. Furthermore, ornaments make it possible to succinctly describe relations between structurally similar types.
+    
+    In this thesis, we apply generic programming and ornaments to numerical representations, giving a recipe to compute such a representation from a provided number system.
+    For this, we describe a generic universe and a type of ornaments on it, allowing us to formulate the recipe as an ornament from a number system to the computed datatype.
+    
+    
+    Todo legend:
+    \todo{To do}
+    \towrite{There is something missing here}
+    \lowprio{General and vague self-criticism, might ignore. Might do something if I have time on my hands.}
 \end{abstract}
 
 
 \begin{comment}
-This thesis explains the concepts numerical representations and ornaments, and aims to combine these to simplify the presentation and verification of finger trees. We demonstrate the generalizability and easier verification of the resulting code. Further, we also investigate to which extent descriptions and ornaments, and generic programs built on top of these, remain effective in a setting without axiom K.
+    This thesis explains the concepts numerical representations and ornaments, and aims to combine these to simplify the presentation and verification of finger trees. We demonstrate the generalizability and easier verification of the resulting code. Further, we also investigate to which extent descriptions and ornaments, and generic programs built on top of these, remain effective in a setting without axiom K.
 \end{comment}
-    
 
+
+\newpage
 \tableofcontents
 
 \listoftodos
+
 
 \section{Introduction}\label{sec:introduction}
 \input{Introduction}
@@ -150,27 +154,28 @@ We will describe some common datatypes and how they can be used for programming,
 
 
 \part{Descriptions}\label{part:descriptions}
-If we are going to simplify working with complex sequence types by instantiating generic programs to them, we should first make sure that these types fit into the descriptions. We construct descriptions for nested datatypes by extending the encoding of parametric and indexed datatypes from \autoref{ssec:background-ix} with three features: information bundles, parameter transformation, and description composition. Also, to make sharing constructors easier, we introduce variable transformations. Transforming variables before they are passed to child descriptions allows both aggressively hiding variables and introducing values as if by let-constructs.
+Before we can analyse and describe number systems and their numerical representations using generic programs, we first have to ensure that these types fit into the descriptions. In this section we discuss how some numerical representations are hard to describe using only the descriptions of parametric indexed inductive types \AD{U-ix}, and based on this discussion we present an extension of \AD{U-ix} incorporating metadata, parameter transformation, description composition, and variable transformation.
 
-We base the encoding of off existing encodings \cite{sijsling,practgen}. The descriptions take shape as sums of products, enforce indices at leaf nodes, and have explicit parameter and variable telescopes. Unlike some other encodings \cite{effectfully, practgen}, we do not allow higher-order inductive arguments. We use \texttt{--type-in-type} and \texttt{--with-K} to simplify the presentation, noting that these can be eliminated respectively by moving to \AD{Typeω} and by implementing interpretations as datatypes, as described in \autoref{app:withoutk}.
+%Unlike some other encodings \cite{effectfully, practgen}, we do not allow higher-order inductive arguments. %Like before, we use \texttt{--type-in-type} and \texttt{--with-K} to simplify the presentation, noting that these can be eliminated respectively by moving to \AD{Typeω} and by implementing interpretations as datatypes, as described in \autoref{app:withoutk}.
+%We base the encoding of off existing encodings \cite{sijsling,practgen}. The descriptions take shape as sums of products, enforce indices at leaf nodes, and have explicit parameter and variable telescopes. 
 
 \input{Descriptions}
 
 
 \part{Ornaments}\label{part:ornaments}
-In the framework of \AD{DescI} in the last section, we can write down a number system and its meaning as the starting point of the construction of a numerical representation. To write down the generic construction of those numerical representations, we will need a language in which we can describe modifications on the number systems.
+In the framework of \AD{DescI} of the last section, we can write down a number system and its meaning as the starting point of the construction of a numerical representation. To write down the generic construction of those numerical representations, we will need a language in which we can describe modifications on the number systems.
 
-In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of examples. We omit the definition of the ornaments, since we will only construct new datatypes, rather than relate pre-existing types\todo{Maybe, I will throw the ornaments into the appendix along with the conversion from ornamental description to ornament}.
-
-\todo{do we need to remark more?}
+In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of examples. We omit the definition of the ornaments, since we will only construct new datatypes, rather than relate pre-existing types.
+%\todo{Maybe, I will throw the ornaments into the appendix along with the conversion from ornamental description to ornament}.
+%\todo{do we need to remark more?}
 
 \input{Ornaments}
 
 
-\part{Numerical representations}\label{part:numrep}
+\part{Generic Numerical Representations}\label{part:numrep}
 The ornamental descriptions of the last section, together with the descriptions and number systems from before, complete the toolset we will use to construct numerical representations as ornaments.
 
-To summarize, we using \AD{DescI}\ \AF{Number} to represent number systems, we will paraphrase the calculation of \autoref{sec:desc-numrep} as an ornament rather than a direct definition. In fact, we have already seen ornaments to numerical representations before, such as \AF{ListOD} and \AF{RandomOD}. Generalizing those ornaments, we construct numerical representations by means of an ornament-computing function, sending number systems to the ornamental descriptions that describe their numerical representations. 
+To summarize, using \AD{DescI}\ \AF{Number} to represent number systems, we paraphrase the calculation of \autoref{sec:desc-numrep} as an ornament, rather than a direct definition. In fact, we have already seen ornaments to numerical representations before, such as \AF{ListOD} and \AF{RandomOD}. Generalizing those ornaments, we construct numerical representations by means of an ornament-computing function, sending number systems to the ornamental descriptions that describe their numerical representations. 
 
 \input{NumericalRepresentations}
 
@@ -178,6 +183,13 @@ To summarize, we using \AD{DescI}\ \AF{Number} to represent number systems, we w
 %summarizing why everything that is in my references is there
 
 \part{Discussion}
+\marker{End A}
+
+\lowprio{Proof is left as exercise to the reader. Hint $\Sigma$-descriptions will come in handy.} 
+
+\towrite{This concludes a bunch of things, including this thesis. Combine conclusion and discussion? ``We did X, but there still are many improvements that could be made''}
+
+
 \input{Discussion}
 
 

@@ -55,7 +55,7 @@ open import Data.Fin
 Lookup : Type → ℕ → Type
 Lookup A n = Fin n → A
 
-intp : Desc (∅ ▷ const Type) ℕ → Type → ℕ → Type 
+intp : Desc (∅ ▷ λ _ → Type) ℕ → Type → ℕ → Type 
 intp D A n = μ D (_ , A) n
 
 

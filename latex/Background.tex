@@ -6,7 +6,7 @@ Agda is a total functional programming language with dependent types. Here, tota
 In this section, we will explain and highlight some parts of Agda which we use in the later sections. 
 Many of the types we use in this section are also described and explained in most Agda tutorials (\cite{ulftutorial}, \cite{plfa}, etc.), and can be imported from the standard library \cite{agdastdlib}.
 
-Note that we use \texttt{--type-in-type} to keep the explanations more readable. 
+%Note that we use \texttt{--type-in-type} to keep the explanations more readable. 
 %and \texttt{--with-K}
 % Even though the former makes Agda inconsistent, and the latter is not strictly necessary, we know that our work can be ported to a setting with neither option \autoref{app:withoutK}.
 
@@ -264,7 +264,7 @@ For example, in the first case the ornament \AIC{𝟙}\ \AV{sq} copies leaves, t
 
 Likewise, in the case of \AIC{ρ} we only have to show that \AV{x} can be converted from one \AIC{ρ} to the other \AIC{ρ} by translating its parameters, and in the \AIC{σ} case the field is directly copied. The only other ornament \AIC{Δσ} adding fields, is easily undone by removing those fields. 
 
-Thus, \AF{ornForget} establishes that \AV{E} in an ornament \AD{Orn}\ \AV{g}\ \AV{i}\ \AV{D}\ \AV{E} is an adorned version of \AV{D} by associating to each value of \AV{E} its an underlying value in \AV{D}. Additionally, \AF{ornForget} makes it simple to relate functions between related types. For example, instantiating \AF{ornForget} for \AF{NatD-ListD} yields \AF{length}. Hence, the statement that \AF{length} sends concatenation \AF{\_++\_} to addition \AF{\_+\_}, i.e. \AV{length (xs ++ ys) ≡ length xs + length ys}, is equivalent to the statement that \AF{\_++\_} and \AF{\_+\_} are related, or that \AF{\_++\_} is a lifting of \AF{\_+\_} \cite{orntrans}. \marker{Ik hoop dat dit minder wazig is en de mental typechecking load wat reduceert.}
+Thus, \AF{ornForget} establishes that \AV{E} in an ornament \AD{Orn}\ \AV{g}\ \AV{i}\ \AV{D}\ \AV{E} is an adorned version of \AV{D} by associating to each value of \AV{E} its an underlying value in \AV{D}. Additionally, \AF{ornForget} makes it simple to relate functions between related types. For example, instantiating \AF{ornForget} for \AF{NatD-ListD} yields \AF{length}. Hence, the statement that \AF{length} sends concatenation \AF{\_++\_} to addition \AF{\_+\_}, i.e. \AV{length (xs ++ ys) ≡ length xs + length ys}, is equivalent to the statement that \AF{\_++\_} and \AF{\_+\_} are related, or that \AF{\_++\_} is a lifting of \AF{\_+\_} \cite{orntrans}. %\marker{Ik hoop dat dit minder wazig is en de mental typechecking load wat reduceert.}
 
 % remark, ornForget is not epi in general because of ∆σ ⊥
 

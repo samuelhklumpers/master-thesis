@@ -14,20 +14,22 @@ open import Agda.Primitive
 
 open import Data.Unit
 open import Data.Nat
+
+open import Tex.Introduction
 \end{code}
 
-%<*Leibniz>
+data Bin : Type where
+  0b       : Bin
+  _1b _2b  : Bin → Bin
+
+%<*Bin>
 \begin{code}
-data Leibniz : Type where
-  0b       : Leibniz
-  _1b _2b  : Leibniz → Leibniz
-
-toℕ-Leibniz : Leibniz → ℕ
-toℕ-Leibniz 0b     = 0
-toℕ-Leibniz (n 1b) = 1 + 2 * toℕ-Leibniz n
-toℕ-Leibniz (n 2b) = 2 + 2 * toℕ-Leibniz n
+toℕ-Bin : Bin → ℕ
+toℕ-Bin 0b     = 0
+toℕ-Bin (1b n) = 1 + 2 * toℕ-Bin n
+toℕ-Bin (2b n) = 2 + 2 * toℕ-Bin n
 \end{code}
-%</Leibniz>
+%</Bin>
 
 %<*Phalanx>
 \begin{code}
@@ -105,19 +107,19 @@ Nat-num  = 𝟙 0
 
 \end{code}
 
-%<*Leibniz-num>
+%<*Bin-num>
 \begin{code}
-Leibniz-num : U-num
-Leibniz-num  = 𝟙 0 
-             ∷ σ ⊤ (λ _ → 1)
-             ( ρ 2
-             ( 𝟙 0 ))
-             ∷ σ ⊤ (λ _ → 2)
-             ( ρ 2
-             ( 𝟙 0 ))
-             ∷ []
+Bin-num  : U-num
+Bin-num  = 𝟙 0 
+         ∷ σ ⊤ (λ _ → 1)
+         ( ρ 2
+         ( 𝟙 0 ))
+         ∷ σ ⊤ (λ _ → 2)
+         ( ρ 2
+         ( 𝟙 0 ))
+         ∷ []
 \end{code}
-%</Leibniz-num>
+%</Bin-num>
 
 %<*Phalanx-num>
 \begin{code}

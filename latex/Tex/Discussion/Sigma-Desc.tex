@@ -409,61 +409,61 @@
 -- here is the construction of using Paths using lists of constructors
 -- it is very hard to combine with the indexed numerical representations
 
-_L+_ : List (ConI If Γ J ∅) → DescI If Γ J → DescI If Γ J
+_L+_ : List (ConI Me Γ J ∅) → DescI Me Γ J → DescI Me Γ J
 []        L+ D = D
 (C ∷ Cs)  L+ D = C ∷ (Cs L+ D)
 
 PathD : (D : DescI Number ∅ ⊤) → Desc ∅ (μ D tt tt)
-PathD′ : (D : DescI If ∅ ⊤) (if : InfoF If Number) → Desc ∅ (μ D tt tt)
+PathD′ : (D : DescI Me ∅ ⊤) (me : MetaF Me Number) → Desc ∅ (μ D tt tt)
 
-PathD E = PathD′ E id-InfoF
-PathD′ E if = PathDD E if λ a b → con
+PathD E = PathD′ E id-MetaF
+PathD′ E me = PathDD E me λ a b → con
   module PathD where
     N : _
     N = μ E tt tt
 
-    PathDD : (D : DescI If ∅ ⊤) (if : InfoF If Number) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → Desc ∅ (μ E tt tt)
-    PathDC : (C : ConI If ∅ ⊤ V) (if : InfoF If Number) (f : Vxf ∅ W V) → (∀ b → ⟦ C ⟧ (λ _ _ → N) (tt , f b) _ → N) → List (Con ∅ (μ E tt tt) W)
+    PathDD : (D : DescI Me ∅ ⊤) (me : MetaF Me Number) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → Desc ∅ (μ E tt tt)
+    PathDC : (C : ConI Me ∅ ⊤ V) (me : MetaF Me Number) (f : Vxf ∅ W V) → (∀ b → ⟦ C ⟧ (λ _ _ → N) (tt , f b) _ → N) → List (Con ∅ (μ E tt tt) W)
 
-    PathDD []      if ϕ = []
-    PathDD (C ∷ D) if ϕ = PathDC C if id (λ _ c → ϕ _ _ (inl c)) L+ PathDD D if λ p i → ϕ p i ∘ inr
+    PathDD []      me ϕ = []
+    PathDD (C ∷ D) me ϕ = PathDC C me id (λ _ c → ϕ _ _ (inl c)) L+ PathDD D me λ p i → ϕ p i ∘ inr
 
-    PathDC (𝟙 {if = k} j) if f ϕ
-      = σ- (const (Fin (if .𝟙f k))) (𝟙 (λ { (_ , w) → ϕ w refl }))
+    PathDC (𝟙 {me = k} j) me f ϕ
+      = σ- (λ _ → (Fin (me .𝟙f k))) (𝟙 (λ { (_ , w) → ϕ w refl }))
       ∷ []
 
     -- looks scary, pretty regular to write down though
-    PathDC (ρ {if = k} j g C) if f ϕ
-      = σ- (const (Fin (if .ρf k))) (σ+ (const N) (σ+ (λ { (p , w , _) → ⟦ C ⟧ (λ _ _ → N) (p , f w) tt }) (ρ0 (snd ∘ fst ∘ snd) (𝟙 λ { (_ , (w , n) , c) → ϕ w (n , c) }))))
-      ∷ L.map (σ+ (const N)) (PathDC C if (f ∘ fst) (λ { (w , n) c → ϕ w (n , c) }))
+    PathDC (ρ {me = k} j g C) me f ϕ
+      = σ- (λ _ → (Fin (me .ρf k))) (σ+ (λ _ → N) (σ+ (λ { (p , w , _) → ⟦ C ⟧ (λ _ _ → N) (p , f w) tt }) (ρ0 (snd ∘ fst ∘ snd) (𝟙 λ { (_ , (w , n) , c) → ϕ w (n , c) }))))
+      ∷ L.map (σ+ (λ _ → N)) (PathDC C me (f ∘ fst) (λ { (w , n) c → ϕ w (n , c) }))
 
-    PathDC (σ S {if = k} h C)     if f ϕ
-      = σ+ (λ { (p , w) → S (p , f w) }) (σ+ (λ { (p , w , s) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , s)) tt }) (σ- (λ { (p , (w , s) , c) → Fin (if .σf _ k (p , f w) s) }) (𝟙 λ { (p , (w , s) , c) → ϕ w (s , c) })))
-      ∷ L.map (σ+ λ { (p , w) → S (p , f w) }) (PathDC C if (h ∘ Vxf-▷ f S) λ { (w , s) c → ϕ w (s , c) })
+    PathDC (σ S {me = k} h C)     me f ϕ
+      = σ+ (λ { (p , w) → S (p , f w) }) (σ+ (λ { (p , w , s) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , s)) tt }) (σ- (λ { (p , (w , s) , c) → Fin (me .σf _ k (p , f w) s) }) (𝟙 λ { (p , (w , s) , c) → ϕ w (s , c) })))
+      ∷ L.map (σ+ λ { (p , w) → S (p , f w) }) (PathDC C me (h ∘ Vxf-▷ f S) λ { (w , s) c → ϕ w (s , c) })
 
-    PathDC (δ {If′ = If′} {if = k} {iff = iff} j g R h C) if f ϕ with if .δf _ _ k
+    PathDC (δ {Me′ = Me′} {me = k} {iff = iff} j g R h C) me f ϕ with me .δf _ _ k
     ... | refl , refl , k
-      = σ- (const (Fin k)) (σ+ (const (μ R tt tt)) (σ+ (λ { (p , w , r) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , r)) tt }) (δ- (snd ∘ fst ∘ snd) ! (PathD′ R (if ∘InfoF iff)) (𝟙 λ { (p , (w , r) , c) → ϕ w (r , c) }))))
-      ∷ L.map (δ+ ! ! R) (PathDC C if (λ { (w , r) → h (f w , r) }) λ { (w , r) c → ϕ w (r , c) })
+      = σ- (λ _ → (Fin k)) (σ+ (λ _ → (μ R tt tt)) (σ+ (λ { (p , w , r) → ⟦ C ⟧ (λ _ _ → N) (p , h (f w , r)) tt }) (δ- (snd ∘ fst ∘ snd) ! (PathD′ R (me ∘MetaF iff)) (𝟙 λ { (p , (w , r) , c) → ϕ w (r , c) }))))
+      ∷ L.map (δ+ ! ! R) (PathDC C me (λ { (w , r) → h (f w , r) }) λ { (w , r) c → ϕ w (r , c) })
 
-unμ : {D : DescI If Γ J} → ∀ {p i} → μ D p i ≃ ⟦ D ⟧ (μ D) p i
+unμ : {D : DescI Me Γ J} → ∀ {p i} → μ D p i ≃ ⟦ D ⟧ (μ D) p i
 unμ .fst (con x) = x
 unμ .snd .equiv-proof y .fst = con y , λ i → y
 unμ .snd .equiv-proof y .snd (con x , p) = ΣPathP ((λ i → con (p (~ i))) , λ j i → p (~ j ∨ i))
 
 PathD-correct : ∀ D n → μ (PathD D) tt n ≃ Fin (value n)
-PathD-correct D n = compEquiv unμ {!compEquiv (go D id-InfoF n) {!!}!}
+PathD-correct D n = compEquiv unμ {!compEquiv (go D id-MetaF n) {!!}!}
   where
   open PathD D
 
-  go :  (E : DescI If ∅ ⊤) (if : InfoF If Number)
-        (c : ⟦ E ⟧ (λ _ _ → N id-InfoF) ⇶ (λ _ _ → N id-InfoF))
-     →  ∀ n → ⟦ PathDD id-InfoF E if c ⟧ (μ (PathD D)) tt n ≃ ⟦ PathDD id-InfoF E if c ⟧ (λ _ n → Fin (value n)) tt n
+  go :  (E : DescI Me ∅ ⊤) (me : MetaF Me Number)
+        (c : ⟦ E ⟧ (λ _ _ → N id-MetaF) ⇶ (λ _ _ → N id-MetaF))
+     →  ∀ n → ⟦ PathDD id-MetaF E me c ⟧ (μ (PathD D)) tt n ≃ ⟦ PathDD id-MetaF E me c ⟧ (λ _ n → Fin (value n)) tt n
      
-  go2 : (E : ConI If ∅ ⊤ V) (if : InfoF If Number) → ∀ n v → ⟦ {!PathDC!} ⟧ (μ (PathD D)) (tt , v) n ≃ ⟦ {!!} ⟧ (λ _ n → Fin (value n)) (tt , v) n
+  go2 : (E : ConI Me ∅ ⊤ V) (me : MetaF Me Number) → ∀ n v → ⟦ {!PathDC!} ⟧ (μ (PathD D)) (tt , v) n ≃ ⟦ {!!} ⟧ (λ _ n → Fin (value n)) (tt , v) n
 
   go []       _  _ _ = idEquiv ⊥
-  go (E ∷ Es) if c n = {!⟦ PathDD id-InfoF (E ∷ Es) if c ⟧ (μ (PathD D)) tt n!}
+  go (E ∷ Es) me c n = {!⟦ PathDD id-MetaF (E ∷ Es) me c ⟧ (μ (PathD D)) tt n!}
   
   --go []       n = {!idEquiv ⊥!}
   --go (E ∷ Es) n = {!⊎-equiv (go2 E n tt) (go Es n)!}
@@ -489,57 +489,57 @@ BinI n = μ BinID tt n
 bin-3/5 : BinI bin-5
 bin-3/5 = con (inr (inl (# 1 , _ , (refl , ((con (inr (inr (inr (inr (inl (_ , (# 0 , refl)))))))) , refl)))))
 
-ITrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ const Type) id (μ D tt tt) ! (toDesc (TrieO D))
-ITrieO D = ITrieO′ D D id-InfoF
+ITrieO : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ λ _ → Type) id (μ D tt tt) ! (toDesc (TrieO D))
+ITrieO D = ITrieO′ D D id-MetaF
   module ITrieO where
     module _ (D' : DescI Number ∅ ⊤) where
-      ITrieO′ : (D : DescI If ∅ ⊤) (if : InfoF If Number) → OrnDesc Plain (∅ ▷ const Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D if))
+      ITrieO′ : (D : DescI Me ∅ ⊤) (me : MetaF Me Number) → OrnDesc Plain (∅ ▷ λ _ → Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D me))
       
       N : _
       N = μ D' tt tt
 
-      ITrieO-desc : (D : DescI If ∅ ⊤) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → (if : InfoF If Number) → OrnDesc Plain (∅ ▷ const Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D if))
+      ITrieO-desc : (D : DescI Me ∅ ⊤) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → (me : MetaF Me Number) → OrnDesc Plain (∅ ▷ λ _ → Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D me))
 
-      ITrieO-con  : ∀ {U V} {W : ExTel (∅ ▷ const Type)} {f : VxfO ! U V} {g : VxfO id W U}
-                 (C : ConI If ∅ ⊤ V) → (∀ a b → ⟦ C ⟧ (λ _ _ → N) (tt , f (g {p = a} b)) _ → N) → (if : InfoF If Number)
-                 → ConOrnDesc Plain {W = W} {K = μ D' tt tt} g ! (toCon {f = f} (TrieO.TrieO-con D' C if))
+      ITrieO-con  : ∀ {U V} {W : ExTel (∅ ▷ λ _ → Type)} {f : Vxf ! U V} {g : Vxf id W U}
+                 (C : ConI Me ∅ ⊤ V) → (∀ a b → ⟦ C ⟧ (λ _ _ → N) (tt , f (g {p = a} b)) _ → N) → (me : MetaF Me Number)
+                 → ConOrnDesc Plain {W = W} {K = μ D' tt tt} g ! (toCon {f = f} (TrieO.TrieO-con D' C me))
 
-      ITrieO-desc []      ϕ if = []
-      ITrieO-desc (C ∷ D) ϕ if = ITrieO-con C (λ a b x → ϕ tt b (inl x)) if ∷ (ITrieO-desc D (ϕ ∘₃ inr) if)
+      ITrieO-desc []      ϕ me = []
+      ITrieO-desc (C ∷ D) ϕ me = ITrieO-con C (λ a b x → ϕ tt b (inl x)) me ∷ (ITrieO-desc D (ϕ ∘₃ inr) me)
       
-      ITrieO-con {f = f} {g = g} (𝟙 {if = k} j) ϕ if
+      ITrieO-con {f = f} {g = g} (𝟙 {me = k} j) ϕ me
         = σ _ id (g ∘ fst) (𝟙 (λ { (p , w , _) → ϕ p w refl }) λ p → refl) (λ p → refl)
 
-      ITrieO-con {f = f} {g = g} (ρ {if = k} j h C) ϕ if
-        = Δσ (const N) (g ∘ fst) id
-        ( ρ (λ (p , w , n) → n) (λ { (_ , A) → _ , Vec A (if .ρf k) })
-          (ITrieO-con C (λ { a (u , n) x → ϕ a u (n , x) }) if)
+      ITrieO-con {f = f} {g = g} (ρ {me = k} j h C) ϕ me
+        = Δσ (λ _ → N) (g ∘ fst) id
+        ( ρ (λ (p , w , n) → n) (λ { (_ , A) → _ , Vec A (me .ρf k) })
+          (ITrieO-con C (λ { a (u , n) x → ϕ a u (n , x) }) me)
         (λ p → refl) (λ p → refl)) (λ p → refl)
         
-      ITrieO-con {f = f} {g = g} (σ S {if = k} h C)      ϕ if
-        = σ _ id (VxfO-▷ g (S ∘ over f))
-        ( σ _ id (VxfO-▷ (VxfO-▷ g (S ∘ over f)) (λ { ((_ , A) , _ , s) → Vec A (if .σf _ k _ s) }))
-          (ITrieO-con C (λ { a ((w , s) , _) x → ϕ a w (s , x) }) if)
+      ITrieO-con {f = f} {g = g} (σ S {me = k} h C)      ϕ me
+        = σ _ id (Vxf-▷ g (S ∘ over f))
+        ( σ _ id (Vxf-▷ (Vxf-▷ g (S ∘ over f)) (λ { ((_ , A) , _ , s) → Vec A (me .σf _ k _ s) }))
+          (ITrieO-con C (λ { a ((w , s) , _) x → ϕ a w (s , x) }) me)
         λ p → refl) λ p → refl
         
-      ITrieO-con {f = f} {g = g} (δ {if = k} {iff = iff} j g' R h C) ϕ if with if .δf _ _ k
+      ITrieO-con {f = f} {g = g} (δ {me = k} {iff = iff} j g' R h C) ϕ me with me .δf _ _ k
       ... | refl , refl , k
-        = Δσ (const (μ R tt tt)) (g ∘ fst) id
-        ( Δσ (const (μ D' tt tt)) (g ∘ fst ∘ fst) id
-        ( ∙δ {f'' = VxfO-▷-map (g ∘ fst ∘ fst)
-                     (liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
-                     (liftM2 (μ (toDesc (ITrieO-desc R {!!} (if ∘InfoF iff)))) (λ p → tt , Vec (id (p .fst) .snd) k) (λ x → snd (snd x)))
+        = Δσ (λ _ → (μ R tt tt)) (g ∘ fst) id
+        ( Δσ (λ _ → (μ D' tt tt)) (g ∘ fst ∘ fst) id
+        ( ∙δ {f'' = Vxf-▷-map (g ∘ fst ∘ fst)
+                     (liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (me ∘MetaF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
+                     (liftM2 (μ (toDesc (ITrieO-desc R {!!} (me ∘MetaF iff)))) (λ p → tt , Vec (id (p .fst) .snd) k) (λ x → snd (snd x)))
                      {!!} }
              (λ { ((_ , A) , ((w , r) , _)) → tt , Vec A k }) (snd ∘ snd)
-          (ITrieO-con C {!λ { a (((w , r) , n) , _)  x → ϕ a w (r , {!!}) }!} if)
+          (ITrieO-con C {!λ { a (((w , r) , n) , _)  x → ϕ a w (r , {!!}) }!} me)
           {!ITrieO R!} id
         (λ _ _ → refl) (λ _ _ → refl) λ p → refl) λ p → refl) λ p → refl
     
-      ITrieO′ D if = ITrieO-desc D {!!} if
+      ITrieO′ D me = ITrieO-desc D {!!} me
 
 
---(liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (if ∘InfoF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
---ITrieO-desc R (λ { a b x → ϕ {!!} {!!} {!!} }) (if ∘InfoF iff)
+--(liftM2 (μ (toDesc (TrieO.TrieO-desc D' R (me ∘MetaF iff)))) (λ { ((_ , A) , _) → tt , Vec A k }) !)
+--ITrieO-desc R (λ { a b x → ϕ {!!} {!!} {!!} }) (me ∘MetaF iff)
 
 -- to prove: size x ≡ shape x
 -- * μ D is likely to be Traversable when all σ's in it are
@@ -553,7 +553,7 @@ ITrieO D = ITrieO′ D D id-InfoF
 -- this vector is representable, the list is traversable, and everything still satisfies size ≡ shape ≡ index
 
 UnitD : DescI Number ∅ ⊤
-UnitD = 𝟙 {if = 1} _
+UnitD = 𝟙 {me = 1} _
       ∷ []
 
 

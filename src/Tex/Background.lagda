@@ -45,7 +45,7 @@ if true   then t else e = t
 %</conditional>
 
 %<*Nat>
-\AgdaTarget{ℕ}
+\AgdaTarget{ℕ, zero, suc}
 \begin{code}
 data ℕ : Type where
   zero  : ℕ
@@ -154,7 +154,7 @@ lookup (x ∷ xs) (suc i) = lookup xs i
 %</lookup>
 
 %<*equiv>
-\AgdaTarget{\_≡\_, ≡}
+\AgdaTarget{\_≡\_, ≡, refl}
 \begin{code}
 data _≡_ (a : A) : A → Type where
   refl : a ≡ a
@@ -221,9 +221,7 @@ lookup-insert (x ∷ xs)  (suc i)  y = lookup-insert xs i y
 %</lookup-insert>
 
 %<*uplus>
-\AgdaTarget{\_⊎\_, ⊎}
-\AgdaTarget{inj₁}
-\AgdaTarget{inj₂}
+\AgdaTarget{\_⊎\_, ⊎, inj₁, inj₂}
 \begin{code}
 data _⊎_ A B : Type where
   inj₁ : A → A ⊎ B
@@ -237,10 +235,7 @@ infix 10 _⊎_
 \end{code}
 
 %<*product>
-\AgdaTarget{\_×\_, ×}
-\AgdaTarget{\_\,\_, \,}
-\AgdaTarget{fst}
-\AgdaTarget{snd}
+\AgdaTarget{\_×\_, ×, \_\,\_, \,, fst, snd}
 \begin{code}
 record _×_ A B : Type where
   constructor _,_
@@ -253,12 +248,11 @@ record _×_ A B : Type where
 \begin{code}
 open _×_ public
 
-infixl 5 _×_
+infixl 16 _×_
 \end{code}
 
 %<*true>
-\AgdaTarget{⊤}
-\AgdaTarget{tt}
+\AgdaTarget{⊤, tt}
 \begin{code}
 record ⊤ : Type where
   constructor tt
@@ -292,7 +286,7 @@ record Σ A (P : A → Type) : Type where
 %</exists>
 
 \begin{code}
-open Σ
+open Σ public
 
 Σ-syntax : ∀ {ℓ ℓ'} (A : Type ℓ) (P : A → Type ℓ') → Type (ℓ-max ℓ ℓ')
 Σ-syntax = Σ
@@ -385,8 +379,7 @@ infixr 5 _∷_
 \end{code}
 
 %<*U-sop>
-\AgdaTarget{Con-sop}
-\AgdaTarget{U-sop}
+\AgdaTarget{Con-sop, U-sop}
 \begin{code}
 data Con-sop : Type
 data U-sop : Type where
@@ -461,7 +454,7 @@ data Tel′ where
 %<*sigma-tel>
 \begin{code}
 Σ-Tel : Tel′
-Σ-Tel = ∅ ▷ const Type ▷ (λ A → A → Type) ∘ snd
+Σ-Tel = ∅ ▷ (λ _ → Type) ▷ (λ A → A → Type) ∘ snd
 \end{code}
 %</sigma-tel>
 
@@ -518,6 +511,7 @@ private variable
 %</int-ExTel>
 
 %<*tele-helpers>
+\AgdaTarget{map-var, Cxf, Vxf, var→par, Vxf-▷}
 \begin{code}
 map-var : ∀ {A B C} → (∀ {a} → B a → C a) → Σ A B → Σ A C
 map-var f (a , b) = (a , f b)
@@ -575,7 +569,7 @@ module ListD-bad where
 \end{code}
 %<*ListD>
 \begin{code}
-  ListD : U-par (∅ ▷ const Type)
+  ListD : U-par (∅ ▷ λ _ → Type)
   ListD  =  𝟙
          ∷  σ (λ { ((_ , A) , _) → A })
          (  ρ
@@ -585,8 +579,9 @@ module ListD-bad where
 %</ListD>
 
 %<*SigmaD>
+\AgdaTarget{SigmaD}
 \begin{code}
-SigmaD : U-par (∅ ▷ const Type ▷ λ { (_ , _ , A) → A → Type })
+SigmaD : U-par (∅ ▷ (λ _ → Type) ▷ λ { (_ , _ , A) → A → Type })
 SigmaD  =  σ (λ { (((_ , A) , _) ,  _)       → A } )
         (  σ (λ { ((_       , B) , (_ , a))  → B a } )
            𝟙)
@@ -639,11 +634,12 @@ data μ-ix (D : U-ix Γ I) (p : ⟦ Γ ⟧tel tt) (i : I) : Type where
 %</mu-ix>
 
 %<*FinD>
+\AgdaTarget{FinD}
 \begin{code}
 FinD : U-ix ∅ ℕ
-FinD = σ (const ℕ)
+FinD = σ (λ _ → ℕ)
      ( 𝟙 (λ { (_ , (_ , n)) → suc n } ))
-     ∷ σ (const ℕ)
+     ∷ σ (λ _ → ℕ)
      ( ρ (λ { (_ , (_ , n)) → n } )
      ( 𝟙 (λ { (_ , (_ , n)) → suc n } )))
      ∷ []
@@ -651,10 +647,11 @@ FinD = σ (const ℕ)
 %</FinD>
 
 %<*VecD>
+\AgdaTarget{VecD}
 \begin{code}
-VecD : U-ix (∅ ▷ const Type) ℕ
-VecD = 𝟙 (const zero)
-     ∷  σ (const ℕ)
+VecD : U-ix (∅ ▷ λ _ → Type) ℕ
+VecD = 𝟙 (λ _ → zero)
+     ∷  σ (λ _ → ℕ)
      (  σ (λ { ((_ , A) , _) → A } )
      (  ρ (λ { (_ , ((_ , n) , _)) → n } )
      (  𝟙 (λ { (_ , ((_ , n) , _)) → suc n } ))))
@@ -663,6 +660,7 @@ VecD = 𝟙 (const zero)
 %</VecD>
 
 %<*fold-type>
+\AgdaTarget{⇶, fold}
 \begin{code}
 _⇶_ : (X Y : A → B → Type) → Type
 X ⇶ Y = ∀ a b → X a b → Y a b
@@ -698,6 +696,7 @@ private variable
 \end{code}
 
 %<*new-Nat-List>
+\AgdaTarget{\!, NatD, ListD}
 \begin{code}
 ! : A → ⊤
 ! x = tt
@@ -708,7 +707,7 @@ NatD  = 𝟙 !
       ( 𝟙 !)
       ∷ []
 
-ListD  : U-ix (∅ ▷ const Type) ⊤
+ListD  : U-ix (∅ ▷ λ _ → Type) ⊤
 ListD  = 𝟙 !
        ∷ σ (λ { ((_ , A) , _) → A })
        ( ρ !
@@ -764,7 +763,7 @@ module foldr′ where
   sum′ = foldr' go
     where
     go : ⟦ ListD ⟧D (λ z _ → (z .snd → ℕ) → ℕ) ⇶ (λ z _ → (z .snd → ℕ) → ℕ)
-    go p _ (inj₁ x) = const zero
+    go p _ (inj₁ x) = λ _ → zero
     go p _ (inj₂ (inj₁ (x , f , _))) y = y x + f y
 
   sum : {A : Type} → (A → ℕ) → μ-ix ListD (_ , A) _ → ℕ
@@ -780,6 +779,7 @@ private variable
 \end{code}
 
 %<*hpty>
+\AgdaTarget{∼, \_∼\_}
 \begin{code}
 _∼_ : {B : A → Type} → (f g : ∀ a → B a) → Type
 f ∼ g = ∀ a → f a ≡ g a
@@ -834,29 +834,32 @@ mutual
 %</ConOrn>
 
 %<*NatD-ListD>
+\AgdaTarget{NatD-ListD}
 \begin{code}
 NatD-ListD : Orn ! id NatD ListD
-NatD-ListD  = 𝟙 (const refl)
+NatD-ListD  = 𝟙 (λ _ → refl)
             ∷ Δσ {S = λ { ((_ , A), _) → A }}
-            ( ρ (const refl)
-            ( 𝟙 (const refl)))
+            ( ρ (λ _ → refl)
+            ( 𝟙 (λ _ → refl)))
             ∷ []
 \end{code}
 %</NatD-ListD>
 
 %<*ListD-VecD>
+\AgdaTarget{ListD-VecD}
 \begin{code}
 ListD-VecD : Orn id ! ListD VecD
-ListD-VecD  = 𝟙 (const refl)
+ListD-VecD  = 𝟙 (λ _ → refl)
             ∷ Δσ {S = λ _ → ℕ}
             ( σ
-            ( ρ {j = λ { (_ , (_ , n) , _) → n }}      (const refl)
-            ( 𝟙 {j = λ { (_ , (_ , n) , _) → suc n }}  (const refl))))
+            ( ρ {j = λ { (_ , (_ , n) , _) → n }}      (λ _ → refl)
+            ( 𝟙 {j = λ { (_ , (_ , n) , _) → suc n }}  (λ _ → refl))))
             ∷ []
 \end{code}
 %</ListD-VecD>
 
 %<*bimap>
+\AgdaTarget{bimap}
 \begin{code}
 bimap  : {A B C D E : Type}
        → (A → B → C) → (D → A) → (E → B)
@@ -869,6 +872,7 @@ bimap f g h d e = f (g d) (h e)
 mutual
 \end{code}
 %<*ornErase>
+\AgdaTarget{ornErase, conOrnErase}
 \begin{code}
   ornErase  : ∀ {re-par re-index} {X}
             → Orn re-par re-index D E
@@ -894,6 +898,7 @@ mutual
 
 
 %<*ornAlg>
+\AgdaTarget{ornAlg}
 \begin{code}
 ornAlg  : ∀ {D : U-ix Γ I} {E : U-ix Δ J} {re-par re-index}
         → Orn re-par re-index D E
@@ -911,6 +916,7 @@ ornForget  : ∀ {re-par re-index} → Orn re-par re-index D E
 %</ornForget-type>
 
 %<*ornForget>
+\AgdaTarget{ornForget}
 \begin{code}
 ornForget O = fold (ornAlg O)
 \end{code}
@@ -957,8 +963,9 @@ mutual
 %</ConOrnDesc>
 
 %<*NatOD>
+\AgdaTarget{NatOD}
 \begin{code}
-NatOD : OrnDesc (∅ ▷ const Type) ⊤ ! ! NatD
+NatOD : OrnDesc (∅ ▷ λ _ → Type) ⊤ ! ! NatD
 NatOD  = 𝟙 (λ _ → tt) (λ a → refl)
        ∷ Δσ (λ { ((_ , A) , _) → A })
        ( ρ (λ _ → tt) (λ a → refl)

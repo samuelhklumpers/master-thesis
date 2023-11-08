@@ -1,42 +1,38 @@
-\todo{'Programming is hard' - citation needed? Misschien beter om de
-nadruk te leggen op iets als 'statically typed programming languages
-can rule out certain errors before a program is executed'? Of
-misschien: the development of complex programs hits the limits of
-what humans can understand? Zoiets?}
-\begin{outline}
-Programming is hard, but using the right tools can make it easier. Logically, much time and effort goes into creating such tools. Because it hard to memorize the documentation of a library, we have code suggestion; to read code more easily, we have code highlighting; to write tidy code, we have linters and formatters; to make sure code does what we hope it does, we use testing; to easily access the right tool for each of the above, we have IDEs. 
+%\documentclass[Main.tex]{subfiles}
+%\begin{document}
 
-In this thesis, we look at how we can make written code more easy to verify and to reuse, or even to generate from scratch. We hope that this lets us spend more time on writing code rather than tests, spend less time repeating similar work, and save time by writing more powerful code.
+There is a close relation between number systems and container objects or collections, which contain a certain number of elements. Examples of numerical representations, which are datastructures designed after a number system, are explored in Okasaki's Purely Functional Data Structures (\cite{purelyfunctional}, chapter 9), reinterpreting some known datastructures as numerical representations.
 
-We use the language Agda \cite{agda}, of which the dependent types form the logic we use to specify and verify the code we write.
-\end{outline}
-\todo{Maar misschien is het nog beter om een iets andere opening gambit te
-kiezen. Er is een 'folklore' relatie tussen getalsystemen en
-datastructuren -- maar wat bedoel je hier precies mee? Kunnen we
-niet ornaments (en dependent types) gebruiken om deze relatie
-precies te maken? En wat levert dit inzicht ons op?}
+To illustrate this, consider the binary numbers in their bijective, or zeroless, form (least significant digit first)
+\ExecuteMetaData[Tex/Introduction]{Bin}
+Here, \AIC{0b} corresponds to 0, \AIC{1b}\ \AV{n} corresponds to \AV{2n + 1}, representing the positive odd numbers, and \AIC{2b} corresponds to \AV{2n + 2}, representing the positive even numbers. As a positional number system, \AD{Bin} has digits 1 and 2, and counting from the left starting at 0, the weight of a digit at the \AV{i}th position is $2^i$. For example, the number 5 is represented by \AIC{1b}\ \AIC{2b}\ \AIC{0b}, since $1 \cdot 2^0 + 2 \cdot 2^1 + 0 \cdot 2^2 = 5$.
 
-\begin{outline}
-In our approach, we describe a part of the language inside the language itself. This allows us to reason about the structure of other code using code itself. Such descriptions of code can then be interpreted to generate usable code. Using constructions known as ornaments \cite{algorn, sijsling}, we can also discuss how we can transform one piece of code into another by comparing the descriptions of the two pieces.
-\end{outline}
-\todo{Ik zou proberen om weg te blijven van 'we describe a part of the
-language inside the language itself' - deze alinea is zonder
-voorbeelden nogal vaag. Beter is om concrete voorbeelden van
-datastructuren te geven - die duidelijk overeenkomen met
-getalsystemen.}
+Compare this to the type of random-access lists (complete binary trees) in their nested (non-uniformly recursive) form (\cite{purelyfunctional}, subsections 9.2.2 and 10.1.2)
+\ExecuteMetaData[Tex/Introduction]{Random}
+Note that \AIC{One} and \AIC{Two} take one and two values of \AV{A} respectively, but in the recursive field we pass the type of pairs \AV{A}\ \AD{×}\ \AV{A} as the parameter instead, hence the non-uniformity. One level deeper, \AIC{One} would ask for two values of \AV{A}, and another level deeper for four, and so on.
 
-We will describe and then generate a class of container\todo{container} types (which are types that contain elements of other types) from number systems. The idea is that some container types ``look like'' a number system by squinting a bit. Consequently, types of that class of containers are known as numerical representations \cite{purelyfunctional}. This leads us to our research question:
-\todo{Dan kun je de onderzoeksvraag duidelijk maken: dit is geen toeval, maar wat is de relatie dan wel? Ik denk dat een uitgewerkt voorbeeld, ook al is die 'bekend' zoals random-access lijsten oid hier heel nuttig zou kunnen zijn.}
+Stripping the fields from a random-access list \AV{xs} reveals a binary number \AF{size}\ \AV{xs} again
+\ExecuteMetaData[Tex/Introduction]{size}\todo{A}
+For example, applying \AF{size} to \AIC{One}\ \AV{\_}\ (\AIC{Two}\ \AV{\_}\ \AV{\_} \AIC{Zero}) gives us back \AIC{1b}\ \AIC{2b}\ \AIC{0b}. We called this number \AF{size} because it coincides with the number of elements in \AV{xs}: evidently, the \AF{size} and number of elements of \AIC{Zero} are both zero. On the other hand, suppose that \AV{xs} of type \AD{Random}\ (\AV{A}\ \AD{×}\ \AV{A}) has size \AV{n}. Since \AV{A}\ \AD{×}\ \AV{A} contains two values of \AV{A}, we have doubled the weight of \AV{xs}, so that it actually contains \AV{2n} values of \AV{A}. Consequently, \AIC{One}\ \AV{x}\ \AV{xs} contains \AV{2n + 1} values, and \AIC{Two}\ \AV{x}\ \AV{y}\ \AV{xs} contains \AV{2n + 2} values, so in general any \AV{ys} contains \AF{size}\ \AV{ys} values.
 
-\textit{Can numerical representations be described as ornaments on number systems, and how does this make generating them and verifying their properties easier?}
+In fact, if we remove the fields from random-access lists, binary numbers and random-access lists are essentially the same datatype. Conversely, we can describe random-access lists as binary numbers decorated with fields. Exactly such ``informal human observations'' can be made more precise and general using the language of ornaments as described by McBride \cite{algorn}. This language effectively describes up to which modifications, such as adding or deleting fields, one datatype can be seen as a more elaborate version of another. In it, we can formulate random-access lists as an ornament on binary numbers, and get \AF{size} for free as the forgetful function.
 
-Generating numerical representations is closely related to calculating datastructures \cite{calcdata}. As an example, one can calculate the definition of a random-access list by applying a chain of type isomorphisms to the representable container, which is defined by the lookup function from (Leibniz or bijective base-2) binary numbers. Likewise, ornaments and their applications to numerical representations have been studied before, describing binomial heaps as an ornament on (ordinary) binary numbers \cite{progorn}. The underlying descriptions in this approach correspond roughly to the indexed polynomial endofunctors on the type of types. We also know that we can use the algebraic structure arising from ornaments to construct different, algebraic, ornaments \cite{algorn}. In an example this is used to obtain a description of vectors with an ornament from lists.
+Datastructures with relations to number systems occur more commonly, which raises the questions of how we can make this relation explicit in more general cases, but also which number systems have associated numerical representations, and which numerical representations arise from ornaments.
 
-We seek to expand upon these developments by generating the numerical representation from a number system, collecting the instances of calculated datastructures under one generic calculation. However, we cannot formulate this as an ornamental operation in most existing frameworks, which are based on indexed polynomial endofunctors. Namely, nested datatypes, such as the random-access list mentioned above, cannot be directly represented by such functors. Furthermore, these calculations target indexed containers, while the algebras arising from ornaments suggest that we only have to make an ornament to the unindexed containers, which yields the indexed containers by the algebraic ornament construction.
+%and can also be derived formally.
+%Other instances of numerical representations include, as examples, the unary naturals and linked lists, skew binary numbers and skew random-access lists, and also different abstractions like uniform trees and heaps. There are formalized examples of numerical representations due to Hinze and Swierstra \cite{calcdata}, where efficient datastructures are derived from their ``inefficient reference implementation'', in which the reference implementations are based on number systems. In the other direction, Ko and Gibbons \cite{progorn} demonstrate that binomial heaps can be seen as structured binary numbers, by presenting binomial heaps as an ornament on binary numbers.
 
-Our contribution will be to rework part of the existing theory and techniques of descriptions and ornaments to comfortably fit a class of number systems and numerical representations into this theory, which then also encompasses nested datatypes. We will then use this to formalize the construction of numerical representations from their number systems as an ornament.
-\todo{In de inleiding ook goed om te noemen dat deze universe constructies de manier zijn om (datatype) generic programming in Agda te doen.}
+%This prompts the question: ``do all number systems have numerical representations, and can all such numerical representations be presented as ornaments?''.
+In this thesis we will explore how, for a certain generalization of positional number systems, we can construct all numerical representations as ornaments, and how some known examples of numerical representations fit into this framework, making the following contributions:
+\begin{enumerate}
+    \item We define a universe in which we will encode number systems and numerical representations. This universe allows annotations, non-uniform datatypes, and composite datatypes. By encoding those datatypes in the universe, we gain the ability to write generic programs over them.
+    \item Then, we adapt the language of ornaments to this universe, which lets us relate datatypes up to insertion of fields, nesting, and refinement of parameters, indices, and variables.
+    \item Finally, we prove the existence of two variants of numerical representations by demonstrating generic functions from number systems to ornaments, establishing that each number system has a numerical representation of the same structure.
+\end{enumerate}
+As far as we are aware, this provides the first encoding that combines general (indexed) inductive types with non-uniform recursion. The incorporation of metadata also hopefully allows for the exploration of more constrained generic functions %(e.g., complete enumeration)
+without requiring the programmer to redefine the universe they are working over. The accompanying definition of ornaments, while less powerful and theoretically justified than other definitions \cite{sijsling,kophd}, may add a new dimension of flexibility to the space of ornaments by allowing ornaments to modify the nesting of datatypes.\todo{Maybe note we're also effectively studying the effect of nesting, composite types and variable transforms on the theory of descriptions and ornaments.}
 
-To make the research question formal, we first need to properly define the concepts of descriptions and ornaments.
+We formalize our work using the dependently typed proof assistant Agda \cite{agda}, using the unsafe \AV{--type-in-type} option so that the presented code is not diluted by the level variables, knowing that our universe (and primarily the telescopes) can be made consistent \cite{practgen}. We also use \AV{--with-K} (refer to \autoref{app:withoutk}) and omit many type variables by using variable generalization.
 
-% \footnote{Maybe refer to the appendix, to which extent you can squash datatypes.}
+%To make the research question formal, we first need to properly define the concepts of descriptions and ornaments.
+%\end{document}

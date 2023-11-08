@@ -19,12 +19,12 @@ open import Data.Empty
 open import Data.Product renaming (proj₁ to fst; proj₂ to snd)
 open import Data.Sum
 open import Data.Nat
-
+open import Data.String
 
 open import Function.Base
 
 private variable
-  J K L : Type
+  I J K : Type
   A B C X Y Z : Type
   P P′ : Type
 
@@ -90,7 +90,7 @@ V ⊧ S reads as "an interpretation of S"
 %<*tele-shorthands>
 \begin{code}
 _▷′_ : (Γ : Tel P) (S : Type) → Tel P
-Γ ▷′ S = Γ ▷ const S
+Γ ▷′ S = Γ ▷ λ _ → S
 
 _&_⊢_ : (Γ : Tel ⊤) → ExTel Γ → Type → Type
 Γ & V ⊢ A = V ⊢ A
@@ -101,106 +101,83 @@ _&_⊢_ : (Γ : Tel ⊤) → ExTel Γ → Type → Type
 Cxf : (Γ Δ : Tel ⊤) → Type
 Cxf Γ Δ = ⟦ Γ ⟧tel tt → ⟦ Δ ⟧tel tt
 
-Vxf : (Γ : Tel ⊤) (V W : ExTel Γ) → Type
-Vxf Γ V W = ∀ {p} → ⟦ V ⟧tel p → ⟦ W ⟧tel p
-
-VxfO : (f : Cxf Γ Δ) (V : ExTel Γ) (W : ExTel Δ) → Type
-VxfO f V W = ∀ {p} → ⟦ V ⟧tel p → ⟦ W ⟧tel (f p)
+Vxf : (f : Cxf Γ Δ) (V : ExTel Γ) (W : ExTel Δ) → Type
+Vxf f V W = ∀ {p} → ⟦ V ⟧tel p → ⟦ W ⟧tel (f p)
 \end{code}
 %</tele-shorthands>
 _&_⊢_ is the same as _⊢_, but shortens {V : ExTel Γ} → V ⊢ A to Γ & V ⊢ A
 A Cxf is a parameter transformation
 A Vxf is a variable transformation
-A VxfO is a variable transformation over a parameter transformation
+A Vxf is a variable transformation over a parameter transformation
 
 * Combinators
 \begin{code}
-over : {f : Cxf Γ Δ} → VxfO f V W → ⟦ Γ & V ⟧tel → ⟦ Δ & W ⟧tel
-over g (p , v) = _ , g v
+var→par : {f : Cxf Γ Δ} → Vxf f V W → ⟦ Γ & V ⟧tel → ⟦ Δ & W ⟧tel
+var→par g (p , v) = _ , g v
 
-Vxf-▷ : (f : Vxf Γ V W) (S : W ⊢ Type) → Vxf Γ (V ▷ (S ∘ over f)) (W ▷ S)
+Vxf-▷ : ∀ {c : Cxf Γ Δ} (f : Vxf c V W) (S : W ⊢ Type) → Vxf c (V ▷ (S ∘ var→par f)) (W ▷ S)
 Vxf-▷ f S (p , v) = f p , v
 
-VxfO-▷ : ∀ {c : Cxf Γ Δ} (f : VxfO c V W) (S : W ⊢ Type) → VxfO c (V ▷ (S ∘ over f)) (W ▷ S)
-VxfO-▷ f S (p , v) = f p , v
-
-VxfO-▷-map : {c : Cxf Γ Δ} (f : VxfO c V W) (S : W ⊢ Type) (T : V ⊢ Type) → (∀ p v → T (p , v) → S (c p , f v)) → VxfO c (V ▷ T) (W ▷ S)
-VxfO-▷-map f S T m (v , t) = (f v , m _ v t)
+Vxf-▷-map : {c : Cxf Γ Δ} (f : Vxf c V W) (S : W ⊢ Type) (T : V ⊢ Type) → (∀ p v → T (p , v) → S (c p , f v)) → Vxf c (V ▷ T) (W ▷ S)
+Vxf-▷-map f S T m (v , t) = (f v , m _ v t)
 
 &-▷ : ∀ {S} → (p : ⟦ Δ & W ⟧tel) → S p → ⟦ Δ & W ▷ S ⟧tel
 &-▷ (p , v) s = p , v , s
 
-⊧-▷ : ∀ {V : ExTel Γ} {S} → V ⊧ S → Vxf Γ V (V ▷ S)
+⊧-▷ : ∀ {V : ExTel Γ} {S} → V ⊧ S → Vxf id V (V ▷ S)
 ⊧-▷ s v = v , s (_ , v)
 \end{code}
-
-{- -- parameter-variable transformation
-Exf : (Γ Δ : Tel ⊤) (V : ExTel Γ) (W : ExTel Δ) → Type
-Exf Γ Δ V W = ⟦ Γ & V ⟧tel → ⟦ Δ & W ⟧tel -}
-
-{- Cxf-Exf : Cxf Γ Δ → Exf Γ Δ ∅ ∅
-Cxf-Exf f (p , _) = f p , _ 
-
-Vxf-Exf : Vxf Γ V W → Exf Γ Γ V W
-Vxf-Exf f (p , v) = p , f v 
-
-
-{- &-drop-▷ : ∀ {S} → ⟦ Γ & V ▷ S ⟧tel → ⟦ Γ & V ⟧tel
-&-drop-▷ (p , v , s) = p , v -}
-
-{- Exf-▷ : (f : Exf Γ Δ V W) (S : W ⊢ Type) → Exf Γ Δ (V ▷ (S ∘ f)) (W ▷ S)
-Exf-▷ f S (p , v , s) = let (p' , v') = f (p , v) in p' , v' , s -}
 
 * Descriptions
 Information bundles (see ConI), a bundle If effectively requests an extra piece of information of, e.g., type 𝟙i when defining a constructor using 𝟙
 
-%<*Info>
+%<*Meta>
 \begin{code}
-record Info : Type where
+record Meta : Type where
   field
     𝟙i : Type
     ρi : Type
     σi : (S : Γ & V ⊢ Type) → Type
     δi : Tel ⊤ → Type → Type
 \end{code}
-%</Info>
+%</Meta>
 Informed descriptions know who they are! we don't need to introduce ourselves twice, unlike newcomers like (S : Γ & V ⊢ Type)
 
 \begin{code}
-open Info public
+open Meta public
 \end{code}
 
-Information transformers, if there is a transformation InfoF If′ If from the more specific bundle If′ to the less specific bundle If, then a DescI If′ can act as a DescI If
-%<*InfoF>
+Information transformers, if there is a transformation MetaF Me′ If from the more specific bundle Me′ to the less specific bundle If, then a DescI Me′ can act as a DescI Me
+%<*MetaF>
 \begin{code}
-record InfoF (L R : Info) : Type where
+record MetaF (L R : Meta) : Type where
   field
     𝟙f : L .𝟙i → R .𝟙i
     ρf : L .ρi → R .ρi
     σf : {V : ExTel Γ} (S : V ⊢ Type) → L .σi S → R .σi S
     δf : ∀ Γ A → L .δi Γ A → R .δi Γ A
 \end{code}
-%</InfoF>
+%</MetaF>
 
 \begin{code}
-open InfoF public
+open MetaF public
 
-id-InfoF : ∀ {X} → InfoF X X
-id-InfoF .𝟙f = id
-id-InfoF .ρf = id
-id-InfoF .σf _ = id
-id-InfoF .δf _ _ = id
+id-MetaF : ∀ {X} → MetaF X X
+id-MetaF .𝟙f = id
+id-MetaF .ρf = id
+id-MetaF .σf _ = id
+id-MetaF .δf _ _ = id
 
-_∘InfoF_ : ∀ {X Y Z} → InfoF Y Z → InfoF X Y → InfoF X Z
-(ϕ ∘InfoF ψ) .𝟙f x = ϕ .𝟙f (ψ .𝟙f x)
-(ϕ ∘InfoF ψ) .ρf x = ϕ .ρf (ψ .ρf x)
-(ϕ ∘InfoF ψ) .σf S x = ϕ .σf S (ψ .σf S x)
-(ϕ ∘InfoF ψ) .δf Γ A x = ϕ .δf Γ A (ψ .δf Γ A x)
+_∘MetaF_ : ∀ {X Y Z} → MetaF Y Z → MetaF X Y → MetaF X Z
+(ϕ ∘MetaF ψ) .𝟙f x = ϕ .𝟙f (ψ .𝟙f x)
+(ϕ ∘MetaF ψ) .ρf x = ϕ .ρf (ψ .ρf x)
+(ϕ ∘MetaF ψ) .σf S x = ϕ .σf S (ψ .σf S x)
+(ϕ ∘MetaF ψ) .δf Γ A x = ϕ .δf Γ A (ψ .δf Γ A x)
 \end{code}
 
 %<*Plain>
 \begin{code}
-Plain : Info
+Plain : Meta
 Plain .𝟙i = ⊤
 Plain .ρi = ⊤
 Plain .σi _ = ⊤
@@ -208,8 +185,21 @@ Plain .δi _ _ = ⊤
 \end{code}
 %</Plain>
 
+
+%<*Names>
+\begin{code}
+Names : Meta
+Names .𝟙i = ⊤
+Names .ρi = String
+Names .σi _ = String
+Names .δi _ _ = String
+\end{code}
+%</Names>
+
+
+
 %<*Countable>
-Countable : Info
+Countable : Meta
 Countable .𝟙i = ⊤
 Countable .ρi = ⊤
 Countable .σi S = ∀ pv → ℕ ↠ S pv
@@ -219,71 +209,94 @@ Countable .δi _ _ = ⊤
 No extra information at all! The magic of eta-expansion makes sure that a DescI Plain never gets into someone's way
 \begin{code}
 private variable
-  If If′ : Info
+  Me Me′ : Meta
 \end{code}
 
 
-A DescI If Γ J describes a PIType Γ J, augmented by the bundle If, note that an If has no effect the fixpoint!
+A DescI Me Γ I describes a PIType Γ I, augmented by the bundle Me, note that an Me has no effect the fixpoint!
+\begin{code}
+mutual
+\end{code}
+
 %<*Desc>
 \begin{code}
-data DescI (If : Info) (Γ : Tel ⊤) (J : Type) : Type
-data ConI (If : Info) (Γ : Tel ⊤) (V : ExTel Γ) (J : Type) : Type 
-data μ (D : DescI If Γ J) (p : ⟦ Γ ⟧tel tt) : J → Type
-
-data DescI If Γ J where
-  []   : DescI If Γ J
-  _∷_  : ConI If Γ ∅ J → DescI If Γ J → DescI If Γ J
+  data DescI (Me : Meta) (Γ : Tel ⊤) (I : Type) : Type where
+    []   : DescI Me Γ I
+    _∷_  : ConI Me Γ ∅ I → DescI Me Γ I → DescI Me Γ I
 \end{code} 
 %</Desc>
 
 %<*Con>
 \begin{code}
-data ConI If Γ V J where
-  𝟙 : {if : If .𝟙i} (j : Γ & V ⊢ J) → ConI If Γ V J
-  
-  ρ  :  {if : If .ρi}
-        (j : Γ & V ⊢ J) (g : Cxf Γ Γ) (C : ConI If Γ V J)
-     →  ConI If Γ V J
-     
-  σ  :  (S : V ⊢ Type) {if : If .σi S}
-        (h : Vxf Γ (V ▷ S) W) (C : ConI If Γ W J)
-     →  ConI If Γ V J
-     
-  δ  :  {if : If .δi Δ K} {iff : InfoF If′ If}
-        (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt)
-        (R : DescI If′ Δ K) (C : ConI If Γ V J)
-     →  ConI If Γ V J
+  data ConI (Me : Meta) (Γ : Tel ⊤) (V : ExTel Γ) (I : Type) : Type where
+    𝟙  : {me : Me .𝟙i} (i : Γ & V ⊢ I) → ConI Me Γ V I
+
+    ρ  :  {me : Me .ρi}
+          (g : Cxf Γ Γ) (i : Γ & V ⊢ I) (C : ConI Me Γ V I)
+       →  ConI Me Γ V I
+
+    σ  :  (S : V ⊢ Type) {me : Me .σi S}
+          (w : Vxf id (V ▷ S) W) (C : ConI Me Γ W I)
+       →  ConI Me Γ V I
+
+    δ  :  {me : Me .δi Δ J} {iff : MetaF Me′ Me}
+          (d : Γ & V ⊢ ⟦ Δ ⟧tel tt) (j : Γ & V ⊢ J) 
+          (R : DescI Me′ Δ J) (C : ConI Me Γ V I)
+       →  ConI Me Γ V I
 \end{code}
 %</Con>
-𝟙 : ... → X p (j (p , v)) 
-ρ : ... → X (g p) (j (p , v)) → ...
-σ : ... → (s : S (p , v)) → let w = h (v , s) in ...
-δ : ... → (r : μ R (g (p , v)) (j (p , v))) → let w = h (v , r) in ...
+𝟙 : ... → X p (i (p , v)) 
+ρ : ... → X (g p) (i (p , v)) → ...
+σ : ... → (s : S (p , v)) → let w = w (v , s) in ...
+δ : ... → (r : μ R (g (p , v)) (i (p , v))) → let w = w (v , r) in ...
 -- Maybe g could be Γ & V ⊢ ⟦ Γ ⟧tel tt
+
+
+* Interpretation
+\begin{code}
+  infix 10 ⟦_⟧C ⟦_⟧D
+\end{code}
+
+%<*interpretation>
+\begin{code}
+  ⟦_⟧C : ConI Me Γ V I  → ( ⟦ Γ ⟧tel tt   → I → Type)
+                        →   ⟦ Γ & V ⟧tel  → I → Type
+  ⟦ 𝟙 i′         ⟧C X pv          i = i ≡ i′ pv
+  ⟦ ρ g i′ D     ⟧C X pv@(p , v)  i = X (g p) (i′ pv) × ⟦ D ⟧C X pv i
+  ⟦ σ S w D      ⟧C X pv@(p , v)  i = Σ[ s ∈ S pv ] ⟦ D ⟧C X (p , w (v , s)) i
+  ⟦ δ d j R D    ⟧C X pv          i = Σ[ s ∈ μ R (d pv) (j pv) ] ⟦ D ⟧C X pv i
+
+  ⟦_⟧D : DescI Me Γ I  → ( ⟦ Γ ⟧tel tt   → I → Type)
+                       →   ⟦ Γ ⟧tel tt   → I → Type
+  ⟦ []     ⟧D X p i = ⊥
+  ⟦ C ∷ D  ⟧D X p i = (⟦ C ⟧C X (p , tt) i) ⊎ (⟦ D ⟧D X p i)
+\end{code}
+%</interpretation>
+
+%<*fpoint>
+\begin{code}
+  data μ (D : DescI Me Γ I) (p : ⟦ Γ ⟧tel tt) : I → Type  where
+    con : ∀ {i} → ⟦ D ⟧D (μ D) p i → μ D p i
+\end{code}
+%</fpoint>
+
 
 The variable transformations (Vxf) in σ and δ let us choose which variables we retain for the remainder of the description
 using them, we define "smart" σ and δ, where the + variant retains the last variable, while the - variant drops it
 %<*sigma-pm>
 \begin{code}
-σ+ : (S : Γ & V ⊢ Type) → {If .σi S} → ConI If Γ (V ▷ S) J → ConI If Γ V J
-σ+ S {if} C = σ S {if = if} id C
+σ+ : (S : Γ & V ⊢ Type) → {me : Me .σi S} → ConI Me Γ (V ▷ S) I → ConI Me Γ V I
+σ+ S {me} C = σ S {me = me} id C
 
-σ- : (S : Γ & V ⊢ Type) → {If .σi S} → ConI If Γ V J → ConI If Γ V J
-σ- S {if} C = σ S {if = if} fst C
+σ- : (S : Γ & V ⊢ Type) → {me : Me .σi S} → ConI Me Γ V I → ConI Me Γ V I
+σ- S {me} C = σ S {me = me} fst C
 \end{code}
 %</sigma-pm>
 
-δ+ : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ (V ▷ liftM2 (μ D) g j) J → ConI If Γ V J
-δ+ {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R id D
-
-δ- : {if : If .δi Δ K} {iff : InfoF If′ If} → (j : Γ & V ⊢ K) (g : Γ & V ⊢ ⟦ Δ ⟧tel tt) (D : DescI If′ Δ K) → ConI If Γ V J → ConI If Γ V J
-δ- {if = if} {iff = iff} j g R D = δ {if = if} {iff = iff} j g R fst D
-
--- ordinary recursive field
 %<*rho-zero>
 \begin{code}
-ρ0 : {if : If .ρi} {V : ExTel Γ} → V ⊢ J → ConI If Γ V J → ConI If Γ V J
-ρ0 {if = if} r D = ρ {if = if} r id D
+ρ0 : {me : Me .ρi} {V : ExTel Γ} → V ⊢ I → ConI Me Γ V I → ConI Me Γ V I
+ρ0 {me = me} i D = ρ {me = me} id i D
 \end{code}
 %</rho-zero>
 
@@ -294,56 +307,28 @@ Desc = DescI Plain
 \end{code}
 %</Plain-synonyms>
 
-* Interpretation
-\begin{code}
-infix 10 ⟦_⟧C ⟦_⟧D
-\end{code}
-
-%<*interpretation>
-\begin{code}
-⟦_⟧C : ConI If Γ V J  → ( ⟦ Γ ⟧tel tt   → J → Type)
-                      →   ⟦ Γ & V ⟧tel  → J → Type
-⟦ 𝟙 j          ⟧C X pv          i = i ≡ j pv
-⟦ ρ j f D      ⟧C X pv@(p , v)  i = X (f p) (j pv) × ⟦ D ⟧C X pv i
-⟦ σ S h D      ⟧C X pv@(p , v)  i = Σ[ s ∈ S pv ] ⟦ D ⟧C X (p , h (v , s)) i
-⟦ δ j g R D    ⟧C X pv          i = Σ[ s ∈ μ R (g pv) (j pv) ] ⟦ D ⟧C X pv i
-
-⟦_⟧D : DescI If Γ J  → ( ⟦ Γ ⟧tel tt   → J → Type)
-                     →   ⟦ Γ ⟧tel tt   → J → Type
-⟦ []     ⟧D X p i = ⊥
-⟦ C ∷ D  ⟧D X p i = (⟦ C ⟧C X (p , tt) i) ⊎ (⟦ D ⟧D X p i)
-\end{code}
-%</interpretation>
-
-%<*fpoint>
-\begin{code}
-data μ D p where
-  con : ∀ {i} → ⟦ D ⟧D (μ D) p i → μ D p i
-\end{code}
-%</fpoint>
-
 %<*fold-type>
 \begin{code}
-fold : ∀ {D : DescI If Γ J} {X} → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
+fold : ∀ {D : DescI Me Γ I} {X} → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
 \end{code}
 %</fold-type>
 
 \begin{code}     
-mapDesc : ∀ {D' : DescI If Γ J} (D : DescI If Γ J) {X}
-        → ∀ p j  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ D') p j → ⟦ D ⟧D X p j
+mapDesc : ∀ {D' : DescI Me Γ I} (D : DescI Me Γ I) {X}
+        → ∀ p i  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ D') p i → ⟦ D ⟧D X p i
         
-mapCon : ∀ {D' : DescI If Γ J} {V} (C : ConI If Γ V J) {X}
-       → ∀ p j v → ⟦ D' ⟧D X ⇶ X → ⟦ C ⟧C (μ D') (p , v) j → ⟦ C ⟧C X (p , v) j
+mapCon : ∀ {D' : DescI Me Γ I} {V} (C : ConI Me Γ V I) {X}
+       → ∀ p i v → ⟦ D' ⟧D X ⇶ X → ⟦ C ⟧C (μ D') (p , v) i → ⟦ C ⟧C X (p , v) i
 
 fold f p i (con x) = f p i (mapDesc _ p i f x)
 
-mapDesc (C ∷ D) p j f (inj₁ x) = inj₁ (mapCon C p j tt f x)
-mapDesc (C ∷ D) p j f (inj₂ y) = inj₂ (mapDesc D p j f y)
+mapDesc (C ∷ D) p i f (inj₁ x) = inj₁ (mapCon C p i tt f x)
+mapDesc (C ∷ D) p i f (inj₂ y) = inj₂ (mapDesc D p i f y)
 
-mapCon (𝟙 k)        p j v f      x  = x
-mapCon (ρ k g C)    p j v f (r , x) = fold f (g p) (k (p , v)) r , mapCon C p j v f x
-mapCon (σ S h C)    p j v f (s , x) = s , mapCon C p j (h (v , s)) f x
-mapCon (δ k g R C)  p j v f (r , x) = r , mapCon C p j v f x
+mapCon (𝟙 j)        p i v f      x  = x
+mapCon (ρ g j C)    p i v f (r , x) = fold f (g p) (j (p , v)) r , mapCon C p i v f x
+mapCon (σ S w C)    p i v f (s , x) = s , mapCon C p i (w (v , s)) f x
+mapCon (δ d j R C)  p i v f (r , x) = r , mapCon C p i v f x
 \end{code}
 
 * Examples
@@ -351,31 +336,27 @@ mapCon (δ k g R C)  p j v f (r , x) = r , mapCon C p j v f x
 module _ where
 \end{code}
 
-%<*NatD>
+%<*NatD-and-ListD>
 \begin{code}
   NatD  : Desc ∅ ⊤
   NatD  = 𝟙 _
         ∷ ρ0 _ (𝟙 _)
         ∷ []
-\end{code}
-%</NatD>
 
-%<*ListD>
-\begin{code}
-  ListD : Desc (∅ ▷ const Type) ⊤
+  ListD : Desc (∅ ▷ λ _ → Type) ⊤
   ListD = 𝟙 _
        ∷  σ- (λ ((_ , A) , _) → A)
        (  ρ0 _ (𝟙 _))
        ∷  []
 \end{code}
-%</ListD>
+%</NatD-and-ListD>
 
 %<*VecD>
 \begin{code}
-  VecD  : Desc (∅ ▷ const Type) ℕ
-  VecD  =  𝟙 (const 0)
+  VecD  : Desc (∅ ▷ λ _ → Type) ℕ
+  VecD  =  𝟙 (λ _ → 0)
         ∷  σ-  (λ ((_ , A) , _) → A)
-        (  σ+  (const ℕ)
+        (  σ+  (λ _ → ℕ)
         (  ρ0  (λ (_ , (_ , n)) → n)
         (  𝟙   (λ (_ , (_ , n)) → suc n))))
         ∷  []
@@ -391,14 +372,14 @@ module _ where
 
 %<*RandomD>
 \begin{code}
-  RandomD  : Desc (∅ ▷ const Type) ⊤
+  RandomD  : Desc (∅ ▷ λ _ → Type) ⊤
   RandomD  =  𝟙 _
            ∷  σ-   (λ ((_ , A) , _) → A)
-           (  ρ _  (λ (_ , A) → (_ , Pair A))
+           (  ρ    (λ (_ , A) → (_ , (A × A))) _
            (  𝟙 _))
            ∷  σ-   (λ ((_ , A) , _) → A)
            (  σ-   (λ ((_ , A) , _) → A)
-           (  ρ _  (λ (_ , A) → (_ , Pair A))
+           (  ρ    (λ (_ , A) → (_ , (A × A))) _
            (  𝟙 _)))
            ∷  []
 \end{code}
@@ -406,7 +387,7 @@ module _ where
 
 %<*DigitD>
 \begin{code}
-  DigitD  : Desc (∅ ▷ const Type) ⊤
+  DigitD  : Desc (∅ ▷ λ _ → Type) ⊤
   DigitD  =  σ-  (λ ((_ , A) , _) → A)
           (  𝟙 _)
           ∷  σ-  (λ ((_ , A) , _) → A)
@@ -430,14 +411,107 @@ module _ where
 
 %<*FingerD>
 \begin{code}
-  FingerD : Desc (∅ ▷ const Type) ⊤
+  FingerD : Desc (∅ ▷ λ _ → Type) ⊤
   FingerD  =  𝟙 _
-           ∷  σ-    (λ ((_ , A) , _) → A)
+           ∷  σ-  (λ ((_ , A) , _) → A)
            (  𝟙 _)
-           ∷  δ _   (λ (p , _) → p) DigitD
-           (  ρ _   (λ (_ , A) → (_ , Node A))
-           (  δ _   (λ (p , _) → p) DigitD
+           ∷  δ   (λ (p , _) → p) _ DigitD
+           (  ρ   (λ (_ , A) → (_ , Node A)) _
+           (  δ   (λ (p , _) → p) _ DigitD
            (  𝟙 _)))
            ∷  []
 \end{code}
 %</FingerD>
+
+
+
+%<*Number>
+\begin{code}
+Number : Meta
+Number .𝟙i = ℕ
+Number .ρi = ℕ
+Number .σi S = ∀ p → S p → ℕ
+Number .δi Γ J = (Γ ≡ ∅) × (J ≡ ⊤) × ℕ
+\end{code}
+%</Number>
+
+%<*toN-type>
+\begin{code}
+value : {D : DescI Number Γ ⊤} → ∀ {p} → μ D p tt → ℕ
+\end{code}
+%</toN-type>
+
+\begin{code}
+value {D = D} = value-lift D id-MetaF
+  where
+  value-lift : (D : DescI Me Γ ⊤) → MetaF Me Number → ∀ {p} → μ D p tt → ℕ
+  
+  value-lift {Me = Me} D ϕ = fold (λ _ _ → value-desc D) _ tt
+    where
+\end{code}
+
+%<*toN-con>
+\begin{code}
+    value-desc : (D : DescI Me Γ ⊤) → ∀ {a b} → ⟦ D ⟧D (λ _ _ → ℕ) a b → ℕ
+    value-con : (C : ConI Me Γ V ⊤) → ∀ {a b} → ⟦ C ⟧C (λ _ _ → ℕ) a b → ℕ
+
+    value-desc (C ∷ D) (inj₁ x) = value-con C x
+    value-desc (C ∷ D) (inj₂ y) = value-desc D y
+
+    value-con  (𝟙 {me = k} j) refl                          
+             = ϕ .𝟙f k
+
+    value-con  (ρ {me = k} g j C)                   (n , x)
+             = ϕ .ρf k * n + value-con C x
+
+    value-con  (σ S {me = S→ℕ} h C)                 (s , x)
+             = ϕ .σf _ S→ℕ _ s + value-con C x
+
+    value-con  (δ {me = me} {iff = iff} g j R C)    (r , x)
+             with ϕ .δf _ _ me
+    ...      | refl , refl , k  
+             = k * value-lift R (ϕ ∘MetaF iff) r + value-con C x
+\end{code}
+%</toN-con>
+
+%<*NatND>
+\begin{code}
+NatND : DescI Number ∅ ⊤
+NatND = 𝟙 {me = 0} _
+      ∷ ρ0 {me = 1} _ (𝟙 {me = 1} _)
+      ∷ []
+\end{code}
+%</NatND>
+
+%<*BinND>
+\begin{code}
+BinND : DescI Number ∅ ⊤
+BinND = 𝟙 {me = 0} _
+      ∷ ρ0 {me = 2} _ (𝟙 {me = 1} _)
+      ∷ ρ0 {me = 2} _ (𝟙 {me = 2} _)
+      ∷ []
+\end{code}
+%</BinND>
+
+%<*PhalanxND>
+\begin{code}
+PhalanxND : DescI Number ∅ ⊤
+PhalanxND  = 𝟙 {me = 1} _
+           ∷ 𝟙 {me = 2} _
+           ∷ 𝟙 {me = 3} _
+           ∷ []
+\end{code}
+%</PhalanxND>
+
+%<*CarpalND>
+\begin{code}
+CarpalND : DescI Number ∅ ⊤
+CarpalND  = 𝟙 {me = 0} _
+          ∷ 𝟙 {me = 1} _
+          ∷ δ {me = refl , refl , 1} {id-MetaF} _ _ PhalanxND
+          ( ρ0 {me = 2} _
+          ( δ {me = refl , refl , 1} {id-MetaF} _ _ PhalanxND
+          ( 𝟙 {me = 0} _)))
+          ∷ []
+\end{code}
+%</CarpalND>

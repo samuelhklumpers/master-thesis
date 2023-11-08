@@ -215,7 +215,7 @@ Lookup A n = Fin n → A
 
 \begin{code}
 ⊤→A≃A .fun f = f tt
-⊤→A≃A .inv a = const a
+⊤→A≃A .inv a = λ _ → a
 ⊤→A≃A .rightInv b = refl
 ⊤→A≃A .leftInv a = refl
 \end{code}

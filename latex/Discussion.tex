@@ -2,7 +2,7 @@ Expectation:
 
 We can define \AF{PathOD} as a generic ornament from a \AD{DescI}\ \AF{Number} to the corresponding finite type, such that \AF{PathOD}\ \AV{ND}\ \AV{n} is equivalent to \AD{Fin}\ (\AF{value}\ \AV{n}). Then, we can show that \AF{itrieOD}\ \AV{ND}\ \AV{n} has a \AF{tabulate}/\AF{lookup} pair for \AF{PathOD}\ \AV{ND}\ \AV{n}, from which it follows that \AF{itrieOD}\ \AV{ND}\ \AV{n}\ \AV{A} is equivalent to \AF{PathOD}\ \AV{ND}\ \AV{n}\ \AV{→}\ \AV{A}, and in consequence \AF{itrieOD}\ \AV{ND} corresponds to \AD{Vec}. From the \AF{Recomputation} lemma it follows that the index \AV{n} of \AF{itrieOD}\ \AV{ND}\ \AV{n} corresponds to applying \AF{ornForget} twice.
 
-Due to the \AF{remember}-\AF{forget} isomorphism \cite{algorn}, we have that \AF{trieOD}\ \AV{ND} is equivalent to \AV{Σ}\ (\AD{μ} \AV{ND})\ (\AF{itrieOD}\ \AV{ND}), whence \AF{trieOD}\ \AV{ND} is a normal (also referred to as Naperian) functor. This yields traversability of \AF{trieOD}\ \AV{ND}, and consequently \AF{toList}\footnote{Note that the foldable structure we get from the generic \AF{fold} is significantly harder to work with for this purpose.}. 
+Due to the \AF{remember}-\AF{forget} isomorphism \cite{algorn}, we have that \AF{trieOD}\ \AV{ND} is equivalent to \AV{Σ}\ (\AD{μ} \AV{ND})\ (\AF{itrieOD}\ \AV{ND}), whence \AF{trieOD}\ \AV{ND} is a normal functor (also referred to as Traversable). This yields traversability of \AF{trieOD}\ \AV{ND}, and consequently \AF{toList}\footnote{Note that the foldable structure we get from the generic \AF{fold} is significantly harder to work with for this purpose.}. 
 
 We know that the upper square in
 % https://q.uiver.app/#q=WzAsNixbMCwxLCJcXG1hdGhybXt0cmllfVxcIFxcbWF0aHJte05EfSJdLFsxLDEsIlxcbWF0aHJte0xpc3R9Il0sWzAsMCwiXFxtYXRocm17aXRyaWV9XFwgXFxtYXRocm17TkR9Il0sWzEsMCwiXFxtYXRocm17VmVjfSJdLFsxLDIsIlxcbWF0aGJie059Il0sWzAsMiwiXFxtYXRocm17TkR9Il0sWzAsMSwiXFxtYXRocm17dG9MaXN0fSJdLFsyLDAsIlxcbWF0aHJte2ZvcmdldH0iLDJdLFsyLDMsIlxcbWF0aHJte3RvVmVjfSJdLFszLDEsIlxcbWF0aHJte3RvTGlzdH0iXSxbNSw0LCJcXG1hdGhybXt2YWx1ZX0iLDJdLFswLDUsIlxcbWF0aHJte2ZvcmdldH0iLDJdLFsxLDQsIlxcbWF0aHJte2xlbmd0aH0iXV0=
@@ -60,7 +60,7 @@ we can allow indices to depend on parameters in our framework. As a consequence,
 Algebraic ornaments \cite{algorn}, generalize observations such as that \AD{Vec} is an indexed variant of \AD{List}, in a single definition \AF{aOoA} (the algebraic ornament of the ornamental algebra). The construction of that ornament takes an ornament between types \AV{A} and \AV{B}, and returns an ornament from \AV{B} to a type indexed over \AV{A}, representing ``\AV{B}s of a given underlying \AV{A}''. Instantiating this for naturals, lists and vectors, the algebraic ornament takes the ornament from naturals to lists, and returns an ornament from lists to vectors, by which vectors are lists of a fixed length.
 
 While we gave an explicit ornament \AF{itrieifyOD} on \AF{trieifyOD}, we might expect \AF{itrieifyOD} to be the algebraic ornament of \AF{trieifyOD}. However, this fails if we want to describe composite types like \AD{FingerTree} (unless we first flatten \AD{Digit} into the description of \AD{FingerTree}): The algebraic ornament (obviously) preserves a \AIC{σ}, so it cannot convert the unindexed numerical representation under a \AIC{δ} to the indexed variant. This means that the algebraic ornament on \AD{FingerTree}\ \AV{=}\ \AF{toDesc}\ (\AF{trieifyOD}\ \AF{PhalanxND}) would only index the outer structure, leaving the \AD{Digit} fields unindexed.
-
+\todo{Note, we don't bind deltas anymore}
 Nevertheless, we expect that if one defines \AF{indexO} by inlining \AF{ornAlg} into \AF{aOoA}, the definition of \AF{indexO} can be modified to apply itself in the case of \AIC{∙δ}. Then, applying \AF{indexO} to \AF{trieifyOD} should coincide with \AF{itrieifyOD}.
 
 
@@ -79,7 +79,7 @@ If we were to describe full nested types, allowing applications of functors in t
 \section{No levitation}
 Since our encoding does not support higher-order inductive arguments, let alone definitions by induction-recursion, there is no code for \AD{DescI} in itself. Such self-describing universes have been described by Chapman et al. \cite{levitation}, and we expect that the other features of \AD{DescI}, such as parameters, nesting, and composition, would not obstruct a similar levitating variant of \AD{DescI}. Due to the work of Dagand and McBride \cite{orntrans}, ornaments might even be generalized to inductive-recursive descriptions.
 
-If that is the case, then modifications of universes like \AD{Info} could be expressed internally. In particular, rather than defining \AD{DescI} such that it can describe datatypes with the information of, e.g., number systems, \AD{DescI} should be expressible as an ornamental description on \AD{Desc}, in contrast to how \AD{Desc} is an instance of \AD{DescI} in our framework. This would allow treating information explicitly in \AD{DescI}, and not at all in \AD{Desc}.
+If that is the case, then modifications of universes like \AD{Meta} could be expressed internally. In particular, rather than defining \AD{DescI} such that it can describe datatypes with the information of, e.g., number systems, \AD{DescI} should be expressible as an ornamental description on \AD{Desc}, in contrast to how \AD{Desc} is an instance of \AD{DescI} in our framework. This would allow treating information explicitly in \AD{DescI}, and not at all in \AD{Desc}.
 
 Furthermore, constructions like \AF{trieifyOD}, which have the recursive structure of a fold over \AD{DescI}, could indeed be expressed by instantiating \AF{fold} to \AD{DescI}.\lowprio{Maybe a bit too dreamy.}
 
@@ -88,10 +88,19 @@ Furthermore, constructions like \AF{trieifyOD}, which have the recursive structu
 We define our universe \AD{DescI} with \AIC{δ} as a former of fields with known descriptions, because this makes it easier to write down \AF{trieifyOD}, even though \AIC{δ} is redundant. If more concise universes and ornaments are preferable, we can actually get all the features of \AIC{δ} and ornaments like \AIC{∙δ} by describing them using \AIC{σ}, annotations, and other ornaments.
 
 Indeed, rather than using \AIC{δ} to add a field from a description \AV{R}, we can simply use \AIC{σ} to add \AV{S}\ \AV{=}\ \AD{μ}\ \AV{R}, and remember that \AV{S} came from \AV{R} in the information
-\ExecuteMetaData[Tex/Discussion]{Delta-Info}
+\ExecuteMetaData[Tex/Discussion]{Delta-Meta}
 We can then define \AIC{δ} as a pattern synonym matching on the \AIC{just} case, and \AIC{σ} matching on the \AIC{nothing} case.
 
 Recall that the ornament \AIC{∙δ} lets us compose an ornament from \AV{D} to \AV{D'} with an ornament from \AV{R} to \AV{R'}, yielding an ornament from \AIC{δ}\ \AV{D}\ \AV{R} to \AIC{δ}\ \AV{D'}\ \AV{R'}. This ornament can be modelled by first adding a new field \AD{μ}\ \AV{R'}, and then deleting the original \AD{μ}\ \AV{R} field. The ornament \AIC{∇} \cite{kophd} allows one to provide a default value for a field, deleting it from the description. Hence, we can model \AIC{∙δ} by binding a value \AV{r'} of \AD{μ}\ \AV{R'} with \AF{OΔσ+} and deleting the field \AD{μ}\ \AV{R} using a default value computed by \AF{ornForget}.
+
+
+\section{No sparse numerical representations}\label{sec:discussion-no-sparse}
+\begin{outline}
+\footnote{Consequently, this excludes the skew binary numbers \cite{oka95b} in their useful sparse representation, but this functionality can be regained by allowing for addition \emph{and} variable multiplication in a \AIC{σ}. While not worked out in this thesis, this extension is compatible with the later constructions.}.
+%The choice of interpretation restricts the numbers to the class of numbers which are evaluated as linear combinations of digits.
+\footnote{An arbitrary \AF{Number} system is not necessarily isomorphic to \bN{}, as the system can still be incomplete (i.e., it cannot express some numbers) or redundant (it has multiple representations of some numbers).}. This class certainly does not include all interesting number systems, but does include many systems that have associated arrays\footnote{Notably, arbitrary polynomials also have numerical representations, interpreting multiplication as precomposition.}. 
+\end{outline}
+    
 
 
 
@@ -152,4 +161,7 @@ Recall that the ornament \AIC{∙δ} lets us compose an ornament from \AV{D} to 
 
 % is fold and map really valid and terminating? -> the whole --cubical --safe not being safe really undermines this
 
-
+% + The use of 2-3 trees as opposed to pairs is essential: one can prove a lower
+% bound of Ω(√n) for insertion and deletion if the data structure is uniquely
+% determined by its size
+% - ralf
