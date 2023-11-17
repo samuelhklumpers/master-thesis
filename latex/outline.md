@@ -41,7 +41,7 @@ We can also define a type representing numbers as a datatype
 
 :memo: data \bN
 
-The constructor zero expresses that \bN always has an element 0, and succ expresses that for each element n, there is also an element representing n + 1. In conclusion, \bN represents the positive integers, henceforth naturals. Similarly, we can pattern match on \bN to define the comparison operator
+The constructor zero expresses that \bN always has an element 0, and succ expresses that for each element n, there is also an element representing n + 1. In conclusion, \bN represents the positive integers, henceforth natural numbers. Similarly, we can pattern match on \bN to define the comparison operator
 
 :memo: \_<\_
 
@@ -73,7 +73,7 @@ If the length of the list is known, then we already know for which indices looku
 
 This creates the singleton type HBool, in which knowing the type of a variable of HBool uniquely fixes its value: HBool true can only be constructed by htrue, while HBool false can only be constructed by hfalse.
 
-Applying this principle to naturals and lists, we can create a pair of types
+Applying this principle to natural numbers and lists, we can create a pair of types
 
 :memo: Fin
 
@@ -291,7 +291,7 @@ Let us look at a numerical representation presented as ornament in action.
 
 ## 3.1 Calculating vectors
 
-Let us put the calculation from 2.2 in the framework of ornaments. Recall the Peano naturals \bN and their description
+Let us put the calculation from 2.2 in the framework of ornaments. Recall the Peano natural numbers \bN and their description
 
 :memo: NatD
 

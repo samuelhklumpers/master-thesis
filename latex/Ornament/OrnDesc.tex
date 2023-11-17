@@ -681,11 +681,13 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\
 %
 \>[6]\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaDatatype{ConOrnDesc}\AgdaSpace{}%
-\AgdaBound{Me′}\AgdaSpace{}%
+\AgdaDatatype{ConOrnDesc}%
+\>[20]\AgdaBound{Me′}\AgdaSpace{}%
 \AgdaBound{re-var}\AgdaSpace{}%
-\AgdaBound{re-index}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{δ}\AgdaSpace{}%
+\AgdaBound{re-index}\<%
+\\
+%
+\>[20]\AgdaSymbol{(}\AgdaInductiveConstructor{δ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaGeneralizable{Me}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -704,8 +706,8 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \begin{code}%
 %
 \>[4]\AgdaInductiveConstructor{Δσ}%
-\>[461I]\AgdaSymbol{:}%
-\>[462I]\AgdaSymbol{(}\AgdaBound{S}\AgdaSpace{}%
+\>[459I]\AgdaSymbol{:}%
+\>[460I]\AgdaSymbol{(}\AgdaBound{S}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Δ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\&}}\AgdaSpace{}%
@@ -721,7 +723,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaBound{S}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaGeneralizable{W′}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[462I]%
+\>[.][@{}l@{}]\<[460I]%
 \>[9]\AgdaSymbol{(}\AgdaBound{v′}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Vxf}\AgdaSpace{}%
@@ -729,7 +731,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaGeneralizable{W′}\AgdaSpace{}%
 \AgdaBound{V}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[461I]%
+\>[.][@{}l@{}]\<[459I]%
 \>[7]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{p}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -773,7 +775,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[4]\AgdaInductiveConstructor{Δδ}%
-\>[510I]\AgdaSymbol{:}\AgdaSpace{}%
+\>[508I]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
@@ -794,7 +796,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaOperator{\AgdaFunction{⊢}}\AgdaSpace{}%
 \AgdaBound{J}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[510I]%
+\>[.][@{}l@{}]\<[508I]%
 \>[7]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{me′}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -830,8 +832,8 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \begin{code}%
 %
 \>[4]\AgdaInductiveConstructor{∙δ}%
-\>[551I]\AgdaSymbol{:}%
-\>[552I]\AgdaSymbol{\{}\AgdaBound{R}\AgdaSpace{}%
+\>[549I]\AgdaSymbol{:}%
+\>[550I]\AgdaSymbol{\{}\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
 \AgdaGeneralizable{If″}\AgdaSpace{}%
@@ -851,7 +853,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaOperator{\AgdaFunction{⟧tel}}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[552I]%
+\>[.][@{}l@{}]\<[550I]%
 \>[9]\AgdaSymbol{(}\AgdaBound{fΛ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{W}\AgdaSpace{}%
@@ -878,7 +880,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaOperator{\AgdaFunction{⊢}}\AgdaSpace{}%
 \AgdaGeneralizable{M}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[551I]%
+\>[.][@{}l@{}]\<[549I]%
 \>[7]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{RR′}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -961,11 +963,13 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\
 %
 \>[7]\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaDatatype{ConOrnDesc}\AgdaSpace{}%
-\AgdaBound{Me′}\AgdaSpace{}%
+\AgdaDatatype{ConOrnDesc}%
+\>[21]\AgdaBound{Me′}\AgdaSpace{}%
 \AgdaBound{re-var}\AgdaSpace{}%
-\AgdaBound{re-index}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{δ}\AgdaSpace{}%
+\AgdaBound{re-index}\<%
+\\
+%
+\>[21]\AgdaSymbol{(}\AgdaInductiveConstructor{δ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaGeneralizable{Me}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1040,8 +1044,8 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{toCon}%
-\>[10]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{re-par}\AgdaSpace{}%
+\>[10]\AgdaSymbol{:}%
+\>[13]\AgdaSymbol{\{}\AgdaBound{re-par}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Cxf}\AgdaSpace{}%
 \AgdaGeneralizable{Δ}\AgdaSpace{}%
@@ -1051,8 +1055,10 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaFunction{Vxf}\AgdaSpace{}%
 \AgdaBound{re-par}\AgdaSpace{}%
 \AgdaGeneralizable{W}\AgdaSpace{}%
-\AgdaGeneralizable{V}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{re-index}\AgdaSpace{}%
+\AgdaGeneralizable{V}\AgdaSymbol{\}}\<%
+\\
+%
+\>[13]\AgdaSymbol{\{}\AgdaBound{re-index}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaGeneralizable{J}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1287,8 +1293,8 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \begin{code}%
 %
 \>[2]\AgdaFunction{ornErase}%
-\>[895I]\AgdaSymbol{:}%
-\>[896I]\AgdaSymbol{∀}\AgdaSpace{}%
+\>[889I]\AgdaSymbol{:}%
+\>[890I]\AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Δ}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Γ}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{J}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -1306,7 +1312,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[896I]%
+\>[.][@{}l@{}]\<[890I]%
 \>[13]\AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
@@ -1353,7 +1359,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\<%
 \\
-\>[.][@{}l@{}]\<[895I]%
+\>[.][@{}l@{}]\<[889I]%
 \>[11]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧D}}\AgdaSpace{}%
@@ -1403,7 +1409,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{conOrnErase}%
-\>[991I]\AgdaSymbol{:}\AgdaSpace{}%
+\>[985I]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Δ}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Γ}\AgdaSpace{}%
@@ -1430,7 +1436,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[991I]%
+\>[.][@{}l@{}]\<[985I]%
 \>[14]\AgdaSymbol{\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{CD}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1767,8 +1773,8 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{ornAlg}%
-\>[1317I]\AgdaSymbol{:}%
-\>[1318I]\AgdaSymbol{∀}\AgdaSpace{}%
+\>[1311I]\AgdaSymbol{:}%
+\>[1312I]\AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Δ}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Γ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1784,7 +1790,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaBound{Δ}\AgdaSpace{}%
 \AgdaBound{Γ}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[1318I]%
+\>[.][@{}l@{}]\<[1312I]%
 \>[11]\AgdaSymbol{\{}\AgdaBound{re-index}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{J}\AgdaSpace{}%
@@ -1807,7 +1813,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaBound{D}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\<%
 \\
-\>[.][@{}l@{}]\<[1317I]%
+\>[.][@{}l@{}]\<[1311I]%
 \>[9]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaFunction{toDesc}\AgdaSpace{}%
 \AgdaBound{OD}\AgdaSpace{}%
@@ -1854,7 +1860,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{ornForget}%
-\>[1387I]\AgdaSymbol{:}\AgdaSpace{}%
+\>[1381I]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{re-var}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Cxf}\AgdaSpace{}%
@@ -1872,7 +1878,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaGeneralizable{Γ}\AgdaSpace{}%
 \AgdaGeneralizable{I}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[1387I]%
+\>[.][@{}l@{}]\<[1381I]%
 \>[12]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{OD}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2357,7 +2363,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaFunction{ListD}\<%
 \\
 \>[0]\AgdaFunction{VecOD}%
-\>[1778I]\AgdaSymbol{=}\AgdaSpace{}%
+\>[1772I]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -2368,7 +2374,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
 \\
-\>[.][@{}l@{}]\<[1778I]%
+\>[.][@{}l@{}]\<[1772I]%
 \>[6]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{OΔσ+}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
@@ -2582,7 +2588,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\
 %
 \>[2]\AgdaFunction{DigitOD}%
-\>[1932I]\AgdaSymbol{=}\AgdaSpace{}%
+\>[1926I]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{OΔσ-}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{((\AgdaUnderscore{}}\AgdaSpace{}%
@@ -2593,7 +2599,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[1932I]%
+\>[.][@{}l@{}]\<[1926I]%
 \>[10]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -2706,7 +2712,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \\
 %
 \>[2]\AgdaFunction{FingerOD}%
-\>[2019I]\AgdaSymbol{=}\AgdaSpace{}%
+\>[2013I]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
@@ -2714,7 +2720,7 @@ toConOrn :  {c : Cxf Δ Γ} {re-var : Vxf c W V} {re-index : J → I} {D : ConI 
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[2019I]%
+\>[.][@{}l@{}]\<[2013I]%
 \>[11]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaFunction{OΔσ-}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%

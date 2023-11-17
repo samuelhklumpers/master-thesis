@@ -378,40 +378,44 @@ module NatD-bad where
 infixr 5 _∷_
 \end{code}
 
-%<*U-sop>
-\AgdaTarget{Con-sop, U-sop}
-\begin{code}
-data Con-sop : Type
-data U-sop : Type where
-  []  : U-sop
-  _∷_ : Con-sop → U-sop → U-sop
-\end{code}
-%</U-sop>
 
 %<*Con-sop>
+\AgdaTarget{Con-sop}
 \begin{code}
-data Con-sop where
+data Con-sop : Type where
   𝟙    : Con-sop
   ρ    : Con-sop → Con-sop
   σ    : (S : Type) → (S → Con-sop) → Con-sop
 \end{code}
 %</Con-sop>
 
-%<*int-sop>
-\AgdaTarget{⟦\_⟧U-sop, ⟧U-sop}
+%<*U-sop>
+\AgdaTarget{U-sop}
+\begin{code}
+data U-sop : Type where
+  []  : U-sop
+  _∷_ : Con-sop → U-sop → U-sop
+\end{code}
+%</U-sop>
+
+%<*int-Con-sop>
 \AgdaTarget{⟦\_⟧C-sop, ⟧C-sop}
 \begin{code}
-⟦_⟧U-sop : U-sop → Type → Type
 ⟦_⟧C-sop : Con-sop → Type → Type
-
-⟦ []    ⟧U-sop X = ⊥
-⟦ C ∷ D ⟧U-sop X = ⟦ C ⟧C-sop X × ⟦ D ⟧U-sop X
-
 ⟦ 𝟙     ⟧C-sop X = ⊤
 ⟦ ρ C   ⟧C-sop X = X × ⟦ C ⟧C-sop X
 ⟦ σ S f ⟧C-sop X = Σ[ s ∈ S ] ⟦ f s ⟧C-sop X
 \end{code}
-%</int-sop>
+%</int-Con-sop>
+
+%<*int-U-sop>
+\AgdaTarget{⟦\_⟧U-sop, ⟧U-sop}
+\begin{code}
+⟦_⟧U-sop : U-sop → Type → Type
+⟦ []    ⟧U-sop X = ⊥
+⟦ C ∷ D ⟧U-sop X = ⟦ C ⟧C-sop X × ⟦ D ⟧U-sop X
+\end{code}
+%</int-U-sop>
 
 \begin{code}
 module ListD′ where
@@ -511,39 +515,39 @@ private variable
 %</int-ExTel>
 
 %<*tele-helpers>
-\AgdaTarget{map-var, Cxf, Vxf, var→par, Vxf-▷}
+\AgdaTarget{Cxf, Vxf, var→par, Vxf-▷}
 \begin{code}
-map-var : ∀ {A B C} → (∀ {a} → B a → C a) → Σ A B → Σ A C
-map-var f (a , b) = (a , f b)
-
 Cxf : (Δ Γ : Tel P) → Type
 Cxf Δ Γ = ∀ {p} → ⟦ Δ ⟧tel p → ⟦ Γ ⟧tel p
 
-Vxf : Cxf Δ Γ → (W : ExTel Δ) (V : ExTel Γ) → Type
+Vxf : Cxf Δ Γ → ExTel Δ → ExTel Γ → Type
 Vxf g W V = ∀ {d} → ⟦ W ⟧tel d → ⟦ V ⟧tel (g d)
 
 var→par : {g : Cxf Δ Γ} → Vxf g W V → ⟦ Δ & W ⟧tel → ⟦ Γ & V ⟧tel
 var→par v (d , w) = _ , v w
 
 Vxf-▷ :  {g : Cxf Δ Γ} (v : Vxf g W V) (S : V ⊢ Type)
-       →  Vxf g (W ▷ (S ∘ var→par v)) (V ▷ S)
+      →  Vxf g (W ▷ (S ∘ var→par v)) (V ▷ S)
 Vxf-▷ v S (p , w) = v p , w
 \end{code}
 %</tele-helpers>
 
-%<*U-par>
-\AgdaTarget{Con-par}
-\AgdaTarget{U-par}
+%<*Con-par>
 \begin{code}
-data Con-par (Γ : Tel ⊤) (V : ExTel Γ) : Type
-data U-par (Γ : Tel ⊤) : Type where
-  []   : U-par Γ
-  _∷_  : Con-par Γ ∅ → U-par Γ → U-par Γ
-
-data Con-par Γ V where
+data Con-par (Γ : Tel ⊤) (V : ExTel Γ) : Type where
   𝟙  : Con-par Γ V
   ρ  : Con-par Γ V → Con-par Γ V
   σ  : (S : V ⊢ Type) → Con-par Γ (V ▷ S) → Con-par Γ V
+\end{code}
+%</Con-par>
+
+%<*U-par>
+\AgdaTarget{U-par}
+\AgdaTarget{Con-par}
+\begin{code}
+data U-par (Γ : Tel ⊤) : Type where
+  []   : U-par Γ
+  _∷_  : Con-par Γ ∅ → U-par Γ → U-par Γ
 \end{code}
 %</U-par>
 
@@ -560,7 +564,7 @@ data Con-par Γ V where
 ⟦ 𝟙      ⟧C-par X pv          = ⊤
 ⟦ ρ C    ⟧C-par X pv          = X pv × ⟦ C ⟧C-par X pv
 ⟦ σ S C  ⟧C-par X pv@(p , v)
-  = Σ[ s ∈ S pv ] ⟦ C ⟧C-par (X ∘ map-var fst) (p , v , s)
+  = Σ[ s ∈ S pv ] ⟦ C ⟧C-par (X ∘ var→par fst) (p , v , s)
 \end{code}
 %</int-par>
 
@@ -589,26 +593,24 @@ SigmaD  =  σ (λ { (((_ , A) , _) ,  _)       → A } )
 \end{code}
 %</SigmaD>
 
-
-%<*U-ix>
-\AgdaTarget{Con-ix}
-\AgdaTarget{U-ix}
-\begin{code}
-data Con-ix (Γ : Tel ⊤) (V : ExTel Γ) (I : Type) : Type
-data U-ix (Γ : Tel ⊤) (I : Type) : Type where
-  []   : U-ix Γ I
-  _∷_  : Con-ix Γ ∅ I → U-ix Γ I → U-ix Γ I
-\end{code}
-%</U-ix>
-
 %<*Con-ix>
+\AgdaTarget{Con-ix}
 \begin{code}
-data Con-ix Γ V I where
+data Con-ix (Γ : Tel ⊤) (V : ExTel Γ) (I : Type) : Type where
   𝟙   : V ⊢ I → Con-ix Γ V I
   ρ   : V ⊢ I → Con-ix Γ V I → Con-ix Γ V I
   σ   : (S : V ⊢ Type) → Con-ix Γ (V ▷ S) I → Con-ix Γ V I
 \end{code}
 %</Con-ix>
+
+%<*U-ix>
+\AgdaTarget{U-ix}
+\begin{code}
+data U-ix (Γ : Tel ⊤) (I : Type) : Type where
+  []   : U-ix Γ I
+  _∷_  : Con-ix Γ ∅ I → U-ix Γ I → U-ix Γ I
+\end{code}
+%</U-ix>
 
 %<*int-ix>
 \AgdaTarget{⟦\_⟧C, ⟧C}
@@ -778,13 +780,13 @@ private variable
   CD CE : Con-ix Γ V I
 \end{code}
 
-%<*hpty>
-\AgdaTarget{∼, \_∼\_}
+%<*htpy>
+\AgdaTarget{∼, \_∼\_} 
 \begin{code}
 _∼_ : {B : A → Type} → (f g : ∀ a → B a) → Type
 f ∼ g = ∀ a → f a ≡ g a
 \end{code}
-%</hpty>
+%</htpy>
 
 \begin{code}
 infix 0 _∼_
@@ -812,7 +814,8 @@ mutual
 
 %<*ConOrn>
 \begin{code}
-  data ConOrn (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V) (re-index : J → I) :
+  data ConOrn (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V)
+              (re-index : J → I) :
               Con-ix Γ V I → Con-ix Δ W J → Type where
     𝟙  : ∀ {i j}
        → re-index ∘ j ∼ i ∘ var→par re-var
@@ -889,9 +892,9 @@ mutual
   conOrnErase {re-index = i} (𝟙 sq) p j x    = trans (cong i x) (sq p)
   conOrnErase {X = X} (ρ sq CD) p j (x , y)  = subst (X _) (sq p) x
                                              , conOrnErase CD p j y
-  conOrnErase (σ CD) (p , w) j (s , x)       = s
-                                             , conOrnErase CD (p , w , s) j x
-  conOrnErase (Δσ CD) (p , w) j (s , x)      = conOrnErase CD (p , w , s) j x
+  conOrnErase (σ CD) (p , w) j (s , x)    = s
+                                          , conOrnErase CD (p , w , s) j x
+  conOrnErase (Δσ CD) (p , w) j (s , x)   = conOrnErase CD (p , w , s) j x
 \end{code}
 %</ornErase> 
 
@@ -941,7 +944,8 @@ mutual
 %<*ConOrnDesc>
 \begin{code}
   data ConOrnDesc  (Δ : Tel ⊤) (W : ExTel Δ) (J : Type)
-                   (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V) (re-index : J → I)
+                   (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V)
+                   (re-index : J → I)
                    : Con-ix Γ V I → Type where  
     𝟙  : ∀ {i} (j : W ⊢ J)
        → re-index ∘ j ∼ i ∘ var→par re-var
@@ -953,11 +957,13 @@ mutual
        → ConOrnDesc Δ W J re-par re-var re-index (ρ i CD)
 
     σ  : ∀ (S : V ⊢ Type) {CD}
-       → ConOrnDesc Δ (W ▷ S ∘ var→par re-var) J re-par (Vxf-▷ re-var S) re-index CD
+       → ConOrnDesc  Δ (W ▷ S ∘ var→par re-var)
+                     J re-par (Vxf-▷ re-var S) re-index CD
        → ConOrnDesc Δ W J re-par re-var re-index (σ S CD)
 
     Δσ  : ∀ (S : W ⊢ Type) {CD}
-        → ConOrnDesc Δ (W ▷ S) J re-par (re-var ∘ fst) re-index CD
+        → ConOrnDesc  Δ (W ▷ S)
+                      J re-par (re-var ∘ fst) re-index CD
         → ConOrnDesc Δ W J re-par re-var re-index CD
 \end{code}
 %</ConOrnDesc>

@@ -13,6 +13,7 @@ FAST=false
 
 # naive fix 
 targets := $(shell git status | grep .lagda$$ | grep -v deleted | grep -v Notes | awk -F 'src/' '{print $$NF}' | awk -F '.lagda' '{print $$1}')
+# targets := $(shell du -a src | grep .lagda$$ | grep -v deleted | grep -v Notes | awk -F 'src/' '{print $$NF}' | awk -F '.lagda' '{print $$1}')
 
 lagda=$(AGDA) $(AFLAGS)
 
@@ -24,9 +25,9 @@ fast:
 	$(MAKE) all -e FAST=$(FAST)
 
 try:
-ifeq ($(FAST), true)
-	$(eval lagda=$(lagda) --only-scope-checking)
-endif
+#ifeq ($(FAST), true)
+#	$(eval lagda=$(lagda) --only-scope-checking)
+#endif
 	$(foreach target, $(targets), $(lagda) src/$(target).lagda && ) :
 #	$(foreach target, $(targets), perl latex/postprocess-latex.pl latex/$(target).tex > latex/$(target).processed && ) :
 #	$(foreach target, $(targets), mv latex/$(target).processed latex/$(target).tex && ) :

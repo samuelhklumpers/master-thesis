@@ -1,140 +1,120 @@
-\section{Numerical Representations}\label{sec:desc-numrep}
-Before we start rebuilding our universe, let us look at the construction of the simplest numerical representation \bN{}, \AD{List} and \AD{Vec}. At first, we defined \AD{Vec} as the length-indexed variant of \AD{List}, such that \AF{lookup} becomes total, and satisfies nice properties like \AF{lookup-insert}. Abstractly, \AD{Vec} is an implementation of finite maps with domain \AD{Fin}, where finite maps are simply those types with operations like \AF{insert}, \AF{remove}, \AF{lookup}, and \AF{tabulate}\footnote{The function \AF{tabulate}\ \AV{:}\ (\AD{Fin}\ \AV{n}\ \AV{→}\ \AV{A})\ \AV{→}\ \AV{Vec}\ \AV{A}\ \AV{n} collects an assignment of elements \AV{f} into a vector \AF{tabulate}\ \AV{f}.}, satisfying relations or laws like \AF{lookup-insert} and \AF{lookup}\ \AF{∘}\ \AF{tabulate}\ \AD{≡}\ \AF{id}. 
+\subsection{Numerical Representations}\label{sec:desc-numrep}
+Before we start rebuilding our universe, let us look at the construction of the simplest numerical representation \AD{Vec} from \bN{}. At first, we defined \AD{Vec} as the length-indexed variant of \AD{List}, so that \AF{lookup} becomes total and satisfies nice properties like \AF{lookup-insert}. Later, we gave another description of \AD{Vec} as an ornament on top of \AD{List}. More abstractly, \AD{Vec} is an implementation of finite maps with domain \AD{Fin}, where finite maps are simply those types with operations like \AF{insert}, \AF{remove}, \AF{lookup}, and \AF{tabulate}\footnote{The function \AF{tabulate}\ \AV{:}\ (\AD{Fin}\ \AV{n}\ \AV{→}\ \AV{A})\ \AV{→}\ \AV{Vec}\ \AV{A}\ \AV{n} collects an assignment of elements \AV{f} into a vector \AF{tabulate}\ \AV{f}.}, satisfying relations or laws like \AF{lookup-insert} and \AF{lookup}\ \AF{∘}\ \AF{tabulate}\ \AD{≡}\ \AF{id}.  \todo{chopping}
 
 For comparison, we can define a trivial implementation of finite maps, by reading \AF{lookup} as a prescript
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Lookup2}
-Since \AF{lookup} is simply the identity function on \AF{Lookup}, this unsurprisingly satisfies the laws of finite maps, provided we define \AF{insert} and \AF{remove} correctly.
+Since \AF{lookup} is simply the identity function on \AF{Lookup}, this immediately satisfies the laws of finite maps, provided we define \AF{insert} and \AF{remove} correctly.
 
-Predictably\footnote{Since \AF{lookup} is an isomorphism with \AF{tabulate} as inverse, as we see from the relations \AF{lookup}\ \AF{∘}\ \AF{tabulate}\ \AD{≡}\ \AF{id} and  \AF{tabulate}\ \AF{∘}\ \AF{lookup}\ \AD{≡}\ \AF{id}.}, \AD{Vec} is \emph{representable}, that is, we have that \AF{Lookup} and \AD{Vec} are equivalent, in the sense that there is an isomorphism between \AF{Lookup} and \AD{Vec}\footnote{Without further assumptions, we cannot use the equality type \AD{≡} for this notion of equivalence of types: a type with a different name but exactly the same constructors as \AD{Vec} would not be equal to \AD{Vec}.}
+Unsurprisingly, \AD{Vec} is \emph{representable}, that is, we have that \AF{Lookup} and \AD{Vec} are equivalent, in the sense that there is an \emph{isomorphism} between \AF{Lookup} and \AD{Vec}\footnote{Since \AF{lookup} is an isomorphism with \AF{tabulate} as inverse, as we see from the relations \AF{lookup}\ \AF{∘}\ \AF{tabulate}\ \AD{≡}\ \AF{id} and  \AF{tabulate}\ \AF{∘}\ \AF{lookup}\ \AD{≡}\ \AF{id}. Without further assumptions, we cannot use the equality type \AD{≡} for this notion of equivalence of types: a type with a different name but exactly the same constructors as \AD{Vec} would not be equal to \AD{Vec}.}
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Iso}
-An \AD{Iso} from \AV{A} to \AV{B} is a map from \AV{A} to \AV{B} with a (two-sided) inverse\footnote{This is equivalent to the other notion of equivalence: there is a map $f : A \to B$, and for each \AV{b} in \AV{B} there is exactly one \AV{a} in \AV{A} for which $f(a) = b$.}. In terms of elements, this means that elements of \AV{A} and \AV{B} are in one-to-one correspondence.
+An \AD{Iso} from \AV{A} to \AV{B} is a map from \AV{A} to \AV{B} with a (two-sided) inverse\footnote{In our situation (\AV{--with-K}), this is the same as the other notion of equivalence: there is a map $f : A \to B$, and for each \AV{b} in \AV{B} there is exactly one \AV{a} in \AV{A} for which $f(a) = b$.}. In terms of elements, this means that elements of \AV{A} and \AV{B} are in one-to-one correspondence.
 
-We can also establish properties like \AF{lookup-insert} from this equivalence, rather than deriving it ourselves. Rather than finding the properties of \AD{Vec} that were already there, let us view \AD{Vec} as a consequence of the definition of \bN{} and \AF{lookup}. Turning the \AD{Iso} on its head, and starting from the equation that \AD{Vec} is equivalent to \AD{Lookup}, we derive a definition of \AD{Vec} as if solving that equation \cite{calcdata}. As a warm-up, we can also derive \AD{Fin} from the fact that \AD{Fin}\ \AV{n} should contain \AV{n} elements, and thus be isomorphic to \AV{Σ[ m ∈ ℕ ] m < n}.
+Rather than deriving them ourselves, we can also establish properties like \AF{lookup-insert} from this equivalence. Instead of finding the properties of \AD{Vec} that were already there, let us view \AD{Vec} as a consequence of the definition of \bN{} and \AF{lookup}. By turning the \AD{Iso} on its head, and starting from the equation that \AD{Vec} is equivalent to \AD{Lookup}, we derive a definition of \AD{Vec} as if were solving an equation \cite{calcdata}.
 
-To express such a definition by isomorphism, we define:
+As a warm-up, we can also derive \AD{Fin} from the fact that \AD{Fin}\ \AV{n} should contain \AV{n} elements, and thus be isomorphic to \AV{Σ[ m ∈ ℕ ] m < n}. To express such a definition by isomorphism, we define:
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Def}
 using
 \ExecuteMetaData[Tex/Descriptions/Numrep]{isigma}
 The type \AD{Def}\ \AV{A} is deceptively simple, after all, there is (up to isomorphism) only one unique term in it! However, when using \AD{Def}initions, the implicit \AD{Σ'} extracts the right-hand side of a proof of an isomorphism, allowing us to reinterpret a proof as a definition.
 
-To keep the resulting \AD{Iso}s readable, we construct them as chains of smaller \AD{Iso}s using a variant of ``equational reasoning'' \cite{agdastdlib, plfa}, which lets us compose \AD{Iso}s while displaying the intermediate steps. In the calculation of \AD{Fin}, we will use the following lemmas
+To keep the isomorphisms we are trying to construct readable, we construct them as chains of simpler isomorphisms, using a variant of \emph{equational reasoning} \cite{agdastdlib, plfa}, letting us compose isomorphisms while displaying the intermediate steps. In the calculation of \AD{Fin}, we will use the following lemmas
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-lemmas}
-In the terminology of \autoref{sec:background-proving}, \AF{⊥-strict} states that ``if A is false, then A \emph{is} false'', if we allow reading isomorphisms as ``\emph{is}'', while \AF{<-split} states that the set of numbers below $n+1$ is 1 greater than the set of numbers below $n$.
-
-Using these, we can calculate\footnote{Here we make non-essential use of \AF{cong} for type families. In the derivation of \AD{Vec} we use function extensionality, which has to be postulated, or can be obtained by using the cubical path types.}
+If we allow reading isomorphisms as ``\emph{is}'', then the terminology of \autoref{sec:background-proving}, \AF{⊥-strict} states that ``if A is false, then A \emph{is} empty'', while \AF{<-split} states that the set of numbers below $n+1$ has one more element than the set of numbers below $n$. Using these, we can calculate\footnote{Making non-essential use of \AF{cong} for type families. In the derivation of \AD{Vec} we use function extensionality, which has to be postulated, or can be obtained by using the cubical path types.}
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin-def}
-This gives a different (but equivalent) definition of \AD{Fin} compared to \AF{FinD}: the description \AF{FinD} describes \AD{Fin} as an inductive family, whereas \AF{Fin-def} gives the same definition as a type-computing function \cite{progorn}.
-
-This \AD{Def} then extracts to a definition of \AD{Fin}
+This gives a different (but equivalent) definition of \AD{Fin} compared to \AF{FinD}; the description \AF{FinD} describes \AD{Fin} as an inductive family, whereas \AF{Fin-def} describes \AD{Fin} equivalently as a type-computing function \cite{progorn}. From this \AD{Def} we can extract a definition of \AD{Fin}
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Fin}
-To derive \AD{Vec}, we will use the isomorphisms
+To derive \AD{Vec}, we use the isomorphisms
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Vec-lemmas}
-which one can compare to the familiar exponential laws. These compose to calculate
+which one can compare to the familiar exponential laws. With these laws, we calculate the type of vectors
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Vec-def}
-which yields us a definition of vectors
+yielding a definition of vectors and the \AD{Iso} to \AF{Lookup} in one go
 \ExecuteMetaData[Tex/Descriptions/Numrep]{Vec}
-and the \AD{Iso} to \AF{Lookup} in one go.
-
 In conclusion, we computed a type of finite maps (the numerical representation \AD{Vec}) from a number system (\bN{}), by cases on the number system and making use of the values represented by the number system.
 
 
-\section{Room for Improvement}
-We could now carry on and attempt to generalize this calculation to more number systems, but we would quickly run into dead ends for certain numerical representations. Let us give an overview of what bits of \AD{U-ix} are still missing if we are going to generically construct all numerical representations we promised.
+\subsection{Room for Improvement}
+We could now carry on and attempt to generalize this calculation to other number systems, but we would quickly run into dead ends for certain numerical representations. Let us give an overview of what bits of \AD{U-ix} are still missing if we are going to generically construct all numerical representations we promised.
 
 %The universe \AD{U-ix} is missing some bits we will need to describe some numerical representations. \todo{Write}
 %In this section, we will point out which bits are missing, and the modifications to \AD{U-ix} we make in order to express all number systems and numerical representations we want.
 
-\subsection{Number systems}\label{ssec:numbers}
-In the calculation \AD{Vec} from \bN{}, we analyse and replicate the structure of \bN{}, deliberately choosing to add 0 fields in the case corresponding to \AIC{zero} and 1 field in the case of \AIC{one}, knowing the meaning of these constructors in terms of numerical value from the explanation of \bN{} in words\footnote{More accurately, the meaning of \bN{} comes from \AF{Fin}, which gets its meaning from our definition of \AF{\_<\_}.}. 
+\subsubsection{Number systems}\label{ssec:numbers}
+In the calculation \AD{Vec} from \bN{}, we analyze and replicate the structure of \bN{}, for which we use the meaning of these constructors as numbers assigned to them by our explanation of \bN{} in words\footnote{More accurately, the meaning of \bN{} comes from \AF{Fin}, which gets its meaning from our definition of \AF{\_<\_}.}. Based on that interpretation of constructors as numbers, we deliberately choose to add zero fields in the case corresponding to \AIC{zero} and choose to add one field in the case of \AIC{one}.
 
-However, if we want to compute numerical representations generically, we also have to convince the computer that our datatypes indeed represent number systems. As a first step, let us fix \bN{} as the primordial number system, so that we can compare other number systems by how they are mapped into \bN{}. For example, \bN{} is trivially interpreted by \AF{id}\ \AV{:}\ \bN{}\ \AV{→}\ \bN{}. The binary numbers as described in the introduction can be mapped to \bN{} by
+However, if we want to compute numerical representations generically, we also have to convince the computer that our datatypes indeed represent number systems. As a first step, let us fix \bN{} as the primordial number system, so that we can compare other number systems by how they are mapped into \bN{}. Trivially, \bN{} can be interpreted as a number system via \AF{id}\ \AV{:}\ \bN{}\ \AV{→}\ \bN{}.
+
+The binary numbers, as described in the introduction, can be mapped to \bN{} by
 \ExecuteMetaData[Tex/Descriptions/Number]{Bin}
-As a more exotic example, we have a number system
+As a more exotic example, we can describe a number system
 \ExecuteMetaData[Tex/Descriptions/Number]{Carpal}
-which is composed of smaller ``number systems''
+which consists of smaller ``number systems''
 \ExecuteMetaData[Tex/Descriptions/Number]{Phalanx}
-We could now define a general number system as a type \AV{N} equipped with a map \AV{N →}\ \bN{}, but this would both be too general for our purpose and opaque to generic programs. On the other hand, allowing only traditional positional number systems excludes number systems like \AD{Carpal}, which would otherwise still have valid numerical representations.
+We could now define a general number system as a type \AV{N} equipped with a map \AV{N →}\ \bN{}, but this would both be too general for our purpose and opaque to generic programs. On the other hand, allowing only traditional positional number systems excludes number systems like \AD{Carpal}, which would otherwise still have valid numerical representations, as we will see later.
 
-Instead, we observe that across the above examples, the interpretation of a number is computed by simple recursion. In particular leaves have associated constants, recursive fields correspond to multiplication and addition, while fields can defer to another function. If we describe the types in \AD{U-sop}, we can thus encode each of these systems by associating a single number to each \AIC{𝟙} and \AIC{ρ}, and a function to each \AIC{σ}, up to equivalence. In essence, this encodes number systems as structures that at each node linearly combine values of subnodes, generalizing positional number systems in \emph{dense} representation\footnote{This excludes some number systems, as we discuss in \autoref{sec:discussion-no-sparse}.}.
+Instead, we observe that across the above examples, the interpretation of a number is computed by a simple fold. In particular, leaves have associated constants, recursive fields correspond to multiplication and addition, while fields can defer to another function. If we encode number systems in \AD{U-sop}, we can thus encode each of these systems by associating a single number to each \AIC{𝟙} and \AIC{ρ}, and a function to each \AIC{σ}. This essentially encodes number systems as trees that evaluate nodes by linearly combining values of subnodes, generalizing \emph{dense} representations of positional number systems\footnote{As a consequence, this excludes the \emph{sparse} number systems, as we discuss in \autoref{sec:discussion-no-sparse}.}.
 
-Using a modified version of \AD{U-sop}, we can encode the examples we gave as follows. Note that in \bN{}, we have to insert fields of \AD{⊤}, so we can express that the second constructor acts as $x \mapsto x + 1$
+Using a modified version of \AD{U-sop}, we can encode the examples we gave as follows. Note that in \bN{}, we insert redundant fields of \AD{⊤} in order to express that the second constructor acts as $x \mapsto x + 1$
 \ExecuteMetaData[Tex/Descriptions/Number]{Nat-num}
 marking all leaves as zero. The binary numbers admit a similar encoding, but multiply their recursive fields by two instead
 \ExecuteMetaData[Tex/Descriptions/Number]{Bin-num}
-The \AD{Carpal} system can be encoded by using the interpretation of \AD{Phalanx}
+Finally, the \AD{Carpal} system can be encoded by using the interpretation of \AD{Phalanx}
 \ExecuteMetaData[Tex/Descriptions/Number]{Carpal-num}
 
 
-\subsection{Nested types}
-If our construction is going to cast \AD{Random}, as defined in \autoref{sec:introduction}, as the numerical representation associated to \AD{Bin}, then \AD{Random} needs to be describable to begin with. The recursive fields of \AD{Random} have parameters \AV{A}\ \AD{×}\ \AV{A} rather than \AV{A}, making \AD{Random} a nested type, as opposed to a uniformly recursive type in which the parameters of the recursive fields are identical to the top-level parameters. Consequently, \AD{Random} has no adequate description in \AD{U-ix}\footnote{Here, the ``inadequate'' descriptions either hardly resemble the user defined \AD{Random}, use indices to store the depth of a node (see \autoref{app:unnested}), or only have a complicated isomorphism to \AD{Random}.}. %\footnote{That is to say \AD{Random} does not have the kind of description in \AD{U-ix} that we will want to work with. In \autoref{app:unnested}, we give a description for \AD{Random} which calculates the sizes of the fields by tracking the depth in the index.}
+\subsubsection{Nested types}
+If our construction is going to cast \AD{Random}, as defined in \autoref{sec:introduction}, as the numerical representation associated to \AD{Bin}, then \AD{Random} needs to have a description to begin with. However, the recursive fields of \AD{Random} are not given the parameter \AV{A}, but \AV{A}\ \AD{×}\ \AV{A}. This makes \AD{Random} a nested type, as opposed to a uniformly recursive type, in which the parameters of the recursive fields would be identical to the top-level parameters. Consequently, \AD{Random} has no adequate description in \AD{U-ix}\footnote{Here, the ``inadequate'' descriptions either hardly resemble the user defined \AD{Random}, use indices to store the depth of a node (see \autoref{app:unnested}), or only have a complicated isomorphism to \AD{Random}.}. 
 
-Due to the work of Johann and Ghani \cite{initenough}, we can model general nested types as fixpoints of higher-order functors (i.e., endofunctors on the category of endofunctors)
+Due to the work of Johann and Ghani \cite{initenough}, we can model general nested types as fixpoints of \emph{higher-order functors} (i.e., endofunctors on the category of endofunctors)
 \ExecuteMetaData[Tex/Descriptions/Nested]{HMu}
-By placing the recursive field \AD{Mu}\ \AV{F} under \AV{F}, the functor \AV{F} can modify \AD{Mu}\ \AV{F} and \AV{A} to determine the type of the recursive field. \AD{Random} can then be encoded via \AD{Mu} as
+By placing the recursive field \AD{Mu}\ \AV{F} under \AV{F}, the functor \AV{F} can modify \AD{Mu}\ \AV{F} and \AV{A} to determine the type of the recursive field. We can encode \AD{Random} by a \AF{HFun} as
 \ExecuteMetaData[Tex/Descriptions/Nested]{HRandom}
-However, this definition is unsafe (as you might have been able to tell from the pragma disabling the positivity checker), i.e., \AD{Mu} is easily used to derive \AD{⊥} by passing a negative functor for \AV{F}. % since we cannot declare that \AV{F} is positive.
-
-Instead, we settle for the weaker, but safe, inner nesting. This kind of nesting can be described by a simple modification to the recursive field \AIC{ρ} in \AD{U-ix}
+However, this definition is unsafe\footnote{As you might have deduced from the pragma disabling the positivity checker. Consider \AF{HBad}\ \AV{F}\ \AV{A}\ \AV{=}\ \AV{F}\ \AV{A}\ \AV{→}\ \AD{⊥}.}, so we settle for the weaker but safe inner nesting instead. This kind of nesting is described by a simple modification to the recursive field \AIC{ρ} in \AD{U-ix}
 \ExecuteMetaData[Tex/Descriptions/Nested]{rho-nest}
 allowing a recursive field specify a transformation \AF{Cxf} that is applied to the parameters before they are passed to the recursive field. Correspondingly, the interpretation of \AIC{ρ} applies \AV{f} before passing \AV{p} to the recursive field \AV{X}
 \ExecuteMetaData[Tex/Descriptions/Nested]{rho-nest-int}
-With this modification, \AD{Random} can be transcribed literally
+With this modification, \AD{Random} can be directly transcribed 
 \ExecuteMetaData[Tex/Descriptions/Nested]{Random}
-using the map $A \mapsto A \times A$ to describe its nesting like usual.
+using the map $A \mapsto A \times A$ to describe its nesting as usual.
 
-To avoid the inconvenience caused by \AIC{ρ} for uniformly recursive types, we define a shorthand
-\ExecuteMetaData[Tex/Descriptions/Nested]{rho-zero}
-emulating the old behaviour of \AIC{ρ}.
+Of course, the nesting which is useful here is only an inconvenience for uniformly recursive types, so we define a shorthand
+\ExecuteMetaData[Tex/Descriptions/Nested]{rho0}
+emulating the behaviour of a uniformly recursive field.
 
+\subsubsection{Composite types}
+In \autoref{ssec:numbers}, we defined the number system \AF{Carpal-num} as a \emph{composite type}, in the sense that its description references another concrete type \AD{Phalanx}. By the same argument as there, the description \AD{Carpal-num} which relies on \AF{toℕ-Phalanx} to describe the value of \AD{Phalanx}, turns out to be too imprecise to recover the complete numerical representation generically. 
 
-\subsection{Composite types}
-In \autoref{ssec:numbers}, we defined the number system \AF{Carpal-num} as a composite type using \AD{Phalanx}. By the same argument as there, the description \AD{Carpal-num} which relies on \AF{toℕ-Phalanx} to describe the value of \AD{Phalanx}, turns out to be too imprecise to recover the full numerical representation generically. More generally, a generic function may inspect the outer structure of a composite type to construct the outer part of the numerical representation, but it would not see the structure of the other number systems inside.
+In comparison, generic programming facilities like the deriving-mechanism in Haskell allow for code like
+\begin{verbatim}
+{-# LANGUAGE DeriveFunctor #-}
 
-%The numerical representation of \AD{Carpal} are the fingertrees:
-%\[ Fingers \]
-%which are also a composite type using the numerical representation \AD{Digit} of \AD{Phalanx}. 
+data Two a = Two a a deriving Functor
+data Even a = Zero | More (Two a) (Even a) deriving Functor    
+\end{verbatim}
+In this example, we can define lists of even numbers of elements as lists of pairs of elements, and the functor instance for \AD{Even} can be derived generically, using that \AD{Two} has a (derived) functor instance. This would not work for \AD{U-ix} or \AD{U-num}, as a generic function would not be able to decide whether a field is of the form \AD{μ}\ \AV{D} to begin with. 
 
-Inlining the constructors of \AD{Phalanx} into \AD{Carpal} would allow generic constructions to see the structure of \AD{Phalanx}, but is undesirable here and in general, as this yields a type with two of the original constructors of \AD{Carpal}, and 9 more constructors for each combination of constructors of \AD{Phalanx}\footnote{If working with 11 constructors sounds too feasible, consider that defining addition on types like \AD{Carpal} (or concatenation its numerical representation) is not (yet) generic and, if fully written out, will instead demand 121 manually written cases.}. % although this is only relevant for 2-3-fingertrees as opposed to 2-fingertrees 
+Inlining the constructors of \AD{Phalanx} into \AD{Carpal} does allow generic constructions to see the structure of \AD{Phalanx}, but is undesirable in this case and in general, as this yields a type with two of the original constructors of \AD{Carpal}, and 9 more constructors for each combination of constructors of \AD{Phalanx}\footnote{If working with 11 constructors sounds too feasible, consider that defining addition on types like \AD{Carpal} (or concatenation on its numerical representation) is not (yet) generic and, if fully written out, will instead demand 121 manually written cases.}.
 
-Instead, we opt to add a new former to the universe, specialized to fields of known descriptions
+In order to make the descriptions of fields that have them visible to generics, we simply add a more specific former of fields to the universe, specialized to adding \emph{composite fields} from provided descriptions
 \ExecuteMetaData[Tex/Descriptions/Composite]{delta}
-taking the functions \AV{d} and \AV{j} to determine the parameters and indices passed to \AV{R}. A field encoded by \AIC{δ} is then interpreted identically to how it would be if we used \AIC{σ} and \AD{μ} instead\footnote{The omission of \AD{μ}\ \AV{R} is intentional, while workable, the construction of ornaments becomes significantly more complicated.}:
+taking the functions \AV{d} and \AV{j} to determine the parameters and indices passed to \AV{R}. A composite field encoded by \AIC{δ} is then interpreted identically to how it would be if we used \AIC{σ} and \AD{μ} instead\footnote{The omission of \AD{μ}\ \AV{R} from the variable telescope is intentional. While adding it is workable, it also significantly complicates the treatment of ornaments.}:
 \ExecuteMetaData[Tex/Descriptions/Composite]{delta-int}
+Using \AIC{δ} rather than \AIC{σ} allows us to reveal the description of a field to a generic program. Rather than adding \AD{Phalanx} via a \AIC{σ}, we would use \AIC{δ} to directly add \AF{Phalanx-num} instead.
 
-Using \AIC{δ} rather than \AIC{σ} allows us to reveal the description of a field to a generic program. Rather than adding \AD{Phalanx} via a \AIC{σ}, we would use \AIC{δ} to directly add \AF{Phalanx-num} instead. \todo{Compare this to Haskell, in which representations are type classes, which directly refer to other types (even to the type itself in a recursive instance). (But that's also just there because in Haskell the type always already exists, and they do not care about positivity and termination).}
-
-\subsection{Hiding variables}
-With the modifications described above, we can describe all the structures we want. However, there is one peculiarity in the way \AD{U-ix} handles variables, namely, each field added by a \AIC{σ} is treated as bound. Even if the value is then unused, all fields after the \AIC{σ} need to work around it. While only a minor inconvenience, this means that two subsequent fields which refer to the same variable will have to be encoded differently. Furthermore, adding fields of complicated types can quickly clutter the context when writing or inspecting a generic program.
+\subsubsection{Hiding variables}
+With the modifications described above, we can describe all the structures we want. However, there is one peculiarity in the way \AD{U-ix} handles variables. Namely, each field added by a \AIC{σ} is treated as bound, and even if the value is then unused, all fields afterwards need to work around it. This only poses a minor inconvenience, but this does mean that two subsequent fields which refer to the same variable will have to be encoded differently. Furthermore, adding fields of complicated types can quickly clutter the context when writing or inspecting a generic program.
 
 %\todo{With rather significant consequences on the definition of ornaments down the line\dots}
-Using a simple modification to how telescopes are used in \AD{U-ix}, we can emulate both bound and unbound fields without adding more formers to \AD{U-ix}. By accepting a transformation of variables \AF{Vxf}\ \AV{Γ}\ \AV{(V ▷ S)}\ \AV{W} after a \AIC{σ}\ \AV{S} in the context of \AV{V}, the remainder of the fields can be described in the context \AV{W}:
+With a simple modification to the handling of telescopes in \AD{U-ix}, we can emulate both bound and unbound fields, without adding more formers to \AD{U-ix}. By accepting a transformation of variables \AF{Vxf}\ \AV{Γ}\ \AV{(V ▷ S)}\ \AV{W} after a \AIC{σ}\ \AV{S} in the context of \AV{V}, the remainder of the fields can be described in the context \AV{W}:
 \ExecuteMetaData[Tex/Descriptions/Variable]{sigma-var}
-Of course, it would be no use to redefine \AIC{σ} in order to save the user some work, and instead leave the with the burden of manually adding these transformations, so we define shorthands emulating precisely the bound field
+Of course, it would be no use to redefine \AIC{σ} in an attempt to save the user some effort, while leaving them with the burden of manually adding these transformations. So, we define shorthands emulating precisely the bound field
 \ExecuteMetaData[Tex/Descriptions/Variable]{sigma-plus}
 and the unbound field
 \ExecuteMetaData[Tex/Descriptions/Variable]{sigma-minus}
 
 
-\section{A new Universe}\label{ssec:desc}
-%We also need to take care that the numerical representations we will construct indeed fit in our universe. The final universe \AD{U-ix} of \autoref{ssec:background-ix}, while already quite general, still excludes many interesting datastructures. In particular, the encoding of parameters forces recursive type occurrences to have the same applied parameters, ruling out nested datatypes such as (binary) random-access lists \cite{calcdata,purelyfunctional}
-
-%\ExecuteMetaData[Tex/DescOrn]{random-access}
-%and finger trees \cite{fingertrees}:
-%\ExecuteMetaData[Tex/DescOrn]{finger-tree}
-%Even if we could represent nested types in \AD{U-ix} we would find it still struggles with finger trees: Because adding non-recursive fields modifies the variable telescope, it %becomes hard to reuse parts of a description in different places. Apart from that, the number of constructors needed to describe finger trees and similar types also grows quickly when adding fields like \AD{Digit}.
-
-%We will resolve these issues as follows. We can describe nested types by allowing parameters to be transformed before they are passed to recursive fields \cite{initenough}. By transforming variables before they are passed to subsequent fields, it becomes possible to hide fields that are not referenced later and to share or reuse constructor descriptions. Finally, by adding a variant of \AIC{σ} specialized to descriptions, we can describe composite datatypes more succinctly
-
-\begin{comment}
-    Ik merk dat ik -- door de afstand in tijd (een poosje geleden) en
-   ruimte (best een paar blzs terug) -- moeite heb om zo'n grote data
-   type als DescI te begrijpen. Kun je misschien toch iets meer uitleg
-   geven? Wat is er veranderd? Welke indices zijn toegevoegd/aangepast?
-   Er blijft ook een hoop hetzelfde: descriptions zijn lijsten van
-   constructors. Iets meer uitleg hier is echt nodig om de code te
-   begrijpen.
-\end{comment}
-Now, we will define a new universe based on \AD{U-ix}, incorporating all modifications we described above. This universe is again the type of lists of constructors
+\subsection{A new Universe}\label{ssec:desc}
+\todo{Chopping from here}
+We can now define a new universe based on \AD{U-ix} by incorporating all modifications we described above. This universe is again the type of lists of constructors
 \ExecuteMetaData[Ornament/Desc]{Desc}
 Compared to \AD{U-ix}, \AD{DescI} is also parametrized over the metadata \AD{Meta}, which we will use later to encode number systems in \AD{DescI}.
 
@@ -144,7 +124,7 @@ Remark that \AIC{𝟙} remains the same, but \AIC{ρ} can now accept the transfo
 
 Let us take a fresh look at some datatypes from before, now through the lens of \AD{DescI}. We will leave the metadata aside for now by using
 \ExecuteMetaData[Ornament/Desc]{Plain-synonyms}
-Like before, we use the shorthands \AF{σ+}, \AF{σ-}, and \AF{ρ0} to keep descriptions which do not make use of the new features concise. 
+Like before, we use the shorthands \AF{σ+}, \AF{σ-}, and \AF{ρ0} to avoid cluttering descriptions which do not make use of the corresponding features. 
 
 We can describe \bN{} and \AD{List} as before
 \ExecuteMetaData[Ornament/Desc]{NatD-and-ListD}
@@ -161,7 +141,7 @@ With the nested recursive field \AIC{ρ}, we can almost repeat the definition of
 \ExecuteMetaData[Ornament/Desc]{RandomD}
 
 %To represent finger trees, we first represent the type of digits \AD{Digit}: \todo{reminder to cite this here if I end up not referencing finger trees earlier.}
-Binary fingertrees (as a simplification of 2-3 fingertrees \cite{fingertrees}), a nested datatype like \AD{Random}, instead storing elements in variably sized digits on both sides, can be composed from digits
+Binary finger trees (as a simplification of 2-3 finger trees \cite{fingertrees}), a nested datatype like \AD{Random}, instead storing elements in variably sized digits on both sides, can be composed from digits
 \ExecuteMetaData[Ornament/Desc]{DigitD}
 using \AIC{δ} to add fields represented by \AF{DigitD}
 \ExecuteMetaData[Ornament/Desc]{FingerD}
@@ -177,14 +157,14 @@ Like \AD{U-ix}, \AD{DescI} comes with a generic \AF{fold}
 which is defined analogously.
 
 
-\subsection{Annotating Descriptions with Metadata}
-We promised encodings of number systems in \AD{DescI}, so let us show how number systems are an instance of \AD{Meta} and how this lets use \AD{DescI} like we used \AD{U-num} to describe type and numerical value in one go.
+\subsubsection{Annotating Descriptions with Metadata}
+We promised encodings of number systems in \AD{DescI}, so let us explain how number systems can be described as \emph{metadata} and how this lets use \AD{DescI} in the same way we used \AD{U-num} to describe type and numerical value in the same description.
 
-By generalizing \AD{DescI} over \AD{Meta}, rather than coding the specification of number systems into the universe directly, we give ourselves the flexibility to both represent plain datatypes and number systems in the same universe. \AD{DescI} then uses the specific type of \AD{Meta} to query bits of information in the implicit fields in each of the type-formers. A term of \AD{Meta} simply lists the type of information to be queried at each type former: \todo{Compare this with the usual metadata in generics like in Haskell, but then a bit more wild. Also think of annotations on fingertrees.}
+By generalizing \AD{DescI} over \AD{Meta}, rather than coding the specification of number systems into the universe directly, we give ourselves the flexibility to both represent plain datatypes and number systems in the same universe. \AD{DescI} then uses the specific type of \AD{Meta} to query bits of information in the implicit fields in each of the type-formers. A term of \AD{Meta} simply lists the type of information to be queried at each type former\footnote{One can compare this to how generic representations of datatypes in Haskell can be (optionally) annotated with metadata making the names of datatypes, constructors and fields available on the type level.}:
 \ExecuteMetaData[Ornament/Desc]{Meta}
-When a \AIC{δ} includes another description, the metadata on that description is a priori unrelated to the top-level metadata. When this happens, we ask that both sides is related by a transformation:
+In composite fields \AIC{δ}, the metadata on the other description is not necessarily related to the top-level metadata. When this happens, we ask that both sides is related by a transformation
 \ExecuteMetaData[Ornament/Desc]{MetaF}
-which makes it possible to downcast (or upcast) between different types of metadata. This allows the inclusion of an annotated type \AD{DescI}\ \AV{Me} into an ordinary datatype \AD{Desc} without duplicating the former definition in \AD{Desc} first.
+making it possible to downcast (or upcast) between the different types of metadata. This allows us to include an annotated type \AD{DescI}\ \AV{Me} into an ordinary datatype \AD{Desc} without duplicating the former definition in \AD{Desc} first.
 
 The encoding of number systems by associating numbers to \AIC{𝟙} and \AIC{ρ}, and functions to \AIC{σ}, can be summarized as
 \ExecuteMetaData[Ornament/Desc]{Number} 
@@ -209,20 +189,3 @@ By making the fields querying information implicit in the type of descriptions, 
 
 But it is also possible to use \AD{Meta} to encode conventionally useful metadata such as field names
 \ExecuteMetaData[Ornament/Desc]{Names}
-
-
-\begin{comment}
-    De definitie van number system (record Meta) is nieuw en hangt vrij
-   nauw samen met de universe die je gebruikt. Dat is (deels) te
-   begrijpen -- je wilt datastructuren beschrijven als ornaments van
-   numbers. Maar nu voelt de presentatie enigsinds backwards -- je
-   definieert de Info type die precies past op je descriptions, ipv uit
-   te leggen wat een number system is -- een soort specificatie
-   opstellen die los staat van de implementatie adhv descriptions. Hoe
-   zou je Peano/binary numbers/skew binary numbers/enz beschrijven
-   hiermee? En waarom is dit de juiste abstractie voor number systems?
-   (En kun je die vraag beantwoorden zonder te refereren aan
-   descriptions)
-
-    Re: Ik denk dat de vorm die een getalsysteem kan hebben (i.e., universe), sterk gekoppeld is aan hoe deze geinterpreteerd kan worden, en hoe die geabstraheerd kan worden. Specificaties van ``wat is een getalsysteem'' zijn in die zin vrij fragiel, zouden we pure positional number systems definieren, dan vallen fingertrees buiten de boot, zouden we sparse skew binary numbers willen encoderen, dan moeten we ineens weer reeksen waarden als variabele factoren moeten interpreteren. Daarom denk ik dat een uitleg vanuit de gedachtengang ``we hebben descriptions, en kijk hoe weinig we hoeven aan te passen om daar ook getallen mee te beschrijven'' een betere aanleiding geeft voor wat er later in ieder geval met Info aan zit te komen.
-\end{comment}

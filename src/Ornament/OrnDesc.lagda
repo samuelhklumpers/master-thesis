@@ -99,7 +99,8 @@ mutual
       → {me : Me .δi Θ K} {iff : MetaF If″ Me}
         {me′ : Me′ .δi Θ K} {iff′ : MetaF If″ Me′}
       → ConOrnDesc Me′ re-var re-index CD
-      → ConOrnDesc Me′ re-var re-index (δ {Me} {me = me} {iff = iff} t j R CD)
+      → ConOrnDesc  Me′ re-var re-index
+                    (δ {Me} {me = me} {iff = iff} t j R CD)
 \end{code}
 %</ConOrn-preserve>
 
@@ -129,7 +130,8 @@ mutual
        → (p₂ : ∀ q w → k′ (m (q , w))  ≡ k (re-par q , re-var w))
        → ∀ {me} {iff} {me′ : Me′ .δi Λ M} {iff′ : MetaF If‴ Me′}
        → (DE : ConOrnDesc Me′ re-var re-index CD)
-       → ConOrnDesc Me′ re-var re-index (δ {Me} {me = me} {iff = iff} fΘ k R CD)
+       → ConOrnDesc  Me′ re-var re-index
+                     (δ {Me} {me = me} {iff = iff} fΘ k R CD)
 \end{code}
 %</ConOrn-compose>
 
@@ -141,7 +143,8 @@ mutual
   toDesc []       = []
   toDesc (CO ∷ O) = toCon CO ∷ toDesc O
 
-  toCon   : {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V} {re-index : J → I} {D : ConI Me Γ V I}
+  toCon   :  {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V}
+             {re-index : J → I} {D : ConI Me Γ V I}
           → ConOrnDesc Me′ re-var re-index D → ConI Me′ Δ W J
   toCon (𝟙 j x {me′ = me})
     = 𝟙 {me = me} j

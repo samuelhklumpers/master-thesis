@@ -58,7 +58,8 @@ open Meta
 
 %<*sigma-case>
 \begin{code}
-σ-case : (S : V ⊢ Type) → (∀ p → S p → ℕ) → ConI Number ∅ V ⊤ → ConI Number ∅ V ⊤
+σ-case  : (S : V ⊢ Type) → (∀ p → S p → ℕ)
+        → ConI Number ∅ V ⊤ → ConI Number ∅ V ⊤
 σ-case S f C = σ- S {me = f} C
 \end{code}
 %</sigma-case>
@@ -79,7 +80,8 @@ TreeOD D = Tree-desc D id-MetaF
              → OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ ! D
              
   Tree-con   : {re-var : Vxf ! W V} (C : ConI Me ∅ V ⊤) → MetaF Me Number
-             → ConOrnDesc {Δ = ∅ ▷ λ _ → Type} {W = W} {J = ⊤} Plain re-var ! C
+             → ConOrnDesc  {Δ = ∅ ▷ λ _ → Type} {W = W}
+                           {J = ⊤} Plain re-var ! C
 
   Tree-desc []      ϕ = []
   Tree-desc (C ∷ D) ϕ = Tree-con C ϕ ∷ Tree-desc D ϕ
@@ -100,7 +102,8 @@ TreeOD D = Tree-desc D id-MetaF
   Tree-con (δ {me = me} {iff = iff} g j R C) ϕ
     with ϕ .δf _ _ me    
   ... | refl , refl , k
-    = ∙δ  (λ { ((_ , A) , _) → (_ , Vec A k) }) ! (Tree-desc R (ϕ ∘MetaF iff))
+    = ∙δ  (λ { ((_ , A) , _) → (_ , Vec A k) }) !
+          (Tree-desc R (ϕ ∘MetaF iff))
           (λ _ _ → refl) (λ _ _ → refl)
     ( Tree-con C ϕ)
 \end{code}
@@ -127,9 +130,11 @@ FingerOD  = OΔσ- (λ ((_ , A) , _) → Vec A 0)
            ( 𝟙 _ (λ _ → refl))
            ∷ OΔσ- (λ ((_ , A) , _) → Vec A 1)
            ( 𝟙 _ (λ _ → refl))
-           ∷ ∙δ (λ ((_ , p) , _) → (_ , Vec p 1)) ! DigitOD (λ _ _ → refl) (λ _ _ → refl)
+           ∷ ∙δ  (λ ((_ , p) , _) → (_ , Vec p 1)) !
+                 DigitOD (λ _ _ → refl) (λ _ _ → refl)
            ( ρ (λ (_ , A) → _ , Vec A 2) _ (λ _ → refl) (λ _ → refl)
-           ( ∙δ (λ ((_ , p) , _) → (_ , Vec p 1)) ! DigitOD (λ _ _ → refl) (λ _ _ → refl)
+           ( ∙δ  (λ ((_ , p) , _) → (_ , Vec p 1)) !
+                 DigitOD (λ _ _ → refl) (λ _ _ → refl)
            ( OΔσ- (λ ((_ , A) , _) → Vec A 0)
            ( 𝟙 _ (λ _ → refl)) )))
            ∷ []
@@ -163,10 +168,12 @@ TrieOD N = Trie-desc N N (λ _ _ → con) id-MetaF
 \begin{code}
   Trie-con   : ∀ {Me} (N' : DescI Me ∅ ⊤) {re-var : Vxf id W V}
               {re-var′ : Vxf ! V U} (C : ConI Me ∅ U ⊤)
-              (n : ∀ p w → ⟦ C ⟧C (μ N') (tt , re-var′ (re-var {p = p} w)) _ → μ N' tt tt)
+              (n : ∀ p w  → ⟦ C ⟧C (μ N') (tt , re-var′ (re-var {p = p} w)) _
+                          → μ N' tt tt)
               (ϕ : MetaF Me Number)
-              →  ConOrnDesc {Δ = ∅ ▷ λ _ → Type} {W = W} {J = μ N' tt tt} Plain
-                 {re-par = id} re-var ! (toCon (Tree-con {re-var = re-var′} C ϕ))
+              →  ConOrnDesc  {Δ = ∅ ▷ λ _ → Type} {W = W}
+                             {J = μ N' tt tt} Plain {re-par = id}
+                             re-var ! (toCon (Tree-con {re-var = re-var′} C ϕ))
   Trie-con N' (𝟙 {me = k} j) n ϕ
     = Oσ- _
     ( 𝟙 (λ { (p , w) → n p w refl }) (λ _ → refl))

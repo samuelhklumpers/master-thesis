@@ -1,7 +1,7 @@
 
 
 
-\section{Generic Path types}
+\subsection{Generic Path types}
 We could, given \todo{Sigma-descriptions}, compute finite types, as an instance of the more general Path types, from the number system underlying a numerical representation. We could then define a generic and polymorphic lookup function for numerical representations.
 
 Diehl and Sheard \cite{glookup} derive Path types for infinitary inductive-recursive types, which come with a generic lookup function with a computation return type.
@@ -10,7 +10,7 @@ Diehl and Sheard \cite{glookup} derive Path types for infinitary inductive-recur
 
 
 \begin{comment}
-\section{Descriptions and ornaments}
+\subsection{Descriptions and ornaments}
 We compare our implementation to a selection of previous work, considering the following features
 
 
@@ -76,7 +76,7 @@ We take away some interesting points from this:
     \item Everything becomes completely unreadable without opacity.
 \end{itemize}
 
-\subsection{Merge me}
+\subsubsection{Merge me}
 
 
 \subsubsection{Ornamentation}
@@ -86,7 +86,7 @@ While we can derive datastructures from number systems by going through their in
 Being able to define a datatype and reflect its structure in the same language opens doors to many more interesting constructions \cite{practgen}; a lot of ``recipes'' we recognize, such as defining the eliminators for a given datatype, can be formalized and automated using reflection and macros. We expect that other type transformations can also be interpreted as ornaments, like the extraction of heterogeneous binary trees from level-polymorphic binary trees \cite{hetbin}. 
 
 
-\subsection{Takeways}
+\subsubsection{Takeways}
 At the very least, descriptions will need sums, products, and recursive positions as well. While we could use coinductive descriptions, bringing normal and recursive fields to the same level, we avoid this as it also makes ornaments a bit more wild\footnote{For better or worse, an ornament could refer to a different ornament for a recursive field.}. We represent indexed types by parametrizing over a type $I$. Since we are aiming for nested types, external polymorphism\footnote{E.g., for each type $A$ a description of lists of $A$ à la \cite{progorn}} does not suffice: we need to let descriptions control their contexts.
 
 We describe parameters by defining descriptions relative to a context. Here, a context is a telescope of types, where each type can depend on all preceding types:
@@ -112,7 +112,7 @@ Q: I should probably update my Agda and make use of the new opaque features to m
 
 \towrite{Adapt this to the non-proposal form.}
 
-\section{The Structure Identity Principle}
+\subsection{The Structure Identity Principle}
 If we write a program, and replace an expression by an equal one, then we can prove that the behaviour of the program can not change. Likewise, if we replace one implementation of an interface with another, in such a way that the correspondence respects all operations in the interface, then the implementations should be equal when viewed through the interface. Observations like these are instances of ``representation independence'', but even in languages with an internal notation of type equality, the applicability is usually exclusive to the metatheory.
 
 In our case, moving from Agda's ``usual type theory'' to Cubical Agda, \textit{univalence} \cite{cuagda} lets us internalize a kind of representation independence known as the Structure Identity Principle \cite{iri}, and even generalize it from equivalences to quasi-equivalence relations. 
@@ -121,7 +121,7 @@ We will also be able to apply univalence to get a true ``equational reasoning'' 
 
 Still, representation independence in may be internalized outside the homotopical setting in some cases \cite{tgalois}, and remains of interest in the context of generic constructions that conflict with cubical type theory.
 
-\section{Numerical Representations}
+\subsection{Numerical Representations}
 Rather than equating implementations after the fact, we can also ``compute'' datastructures by imposing equations. In the case of container types, one may observe similarities to number systems \cite{purelyfunctional} and call such containers numerical representations. One can then use these representations to prototype new datastructures that automatically inherit properties and equalities from their underlying number systems \cite{calcdata}.
 
 From another perspective, numerical representations run by using representability as a kind of ``strictification'' of types. %This suggests that we may be able to generalize the approach of numerical representations, using that any (non-indexed) infinitary inductive-recursive type supports a lookup operation \cite{glookup}.

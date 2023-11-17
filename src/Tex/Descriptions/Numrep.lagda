@@ -230,15 +230,18 @@ Lookup A n = Fin n → A
 %<*Vec-def>
 \begin{code}
 Vec-def : ∀ A n → Def (Lookup A n)
-Vec-def A zero    = (Fin zero → A)  ≃⟨⟩
-                    (⊥ → A)         ≃⟨ ⊥→A≃⊤ ⟩
-                    ⊤               ≃-∎ use-as-def
+Vec-def A zero    =
+  (Fin zero → A)  ≃⟨⟩
+  (⊥ → A)         ≃⟨ ⊥→A≃⊤ ⟩
+  ⊤               ≃-∎ use-as-def
 
-Vec-def A (suc n) = (Fin (suc n) → A) ≃⟨⟩
-                    (⊤ ⊎ Fin n → A) ≃⟨ ⊎→≃→× ⟩
-                    (⊤ → A) × (Fin n → A) ≃⟨ cong (_× (Fin n → A)) ⊤→A≃A ⟩
-                    A × (Fin n → A) ≃⟨ cong (A ×_) (by-definition (Vec-def A n)) ⟩
-                    A × (defined-by (Vec-def A n)) ≃-∎ use-as-def
+Vec-def A (suc n)        =
+  (Fin (suc n) → A)      ≃⟨⟩
+  (⊤ ⊎ Fin n → A)        ≃⟨ ⊎→≃→× ⟩
+  (⊤ → A) × (Fin n → A)  ≃⟨ cong (_× (Fin n → A)) ⊤→A≃A ⟩
+  A × (Fin n → A)        ≃⟨ cong (A ×_) (by-definition (Vec-def A n)) ⟩
+  A × (defined-by (Vec-def A n))
+                         ≃-∎ use-as-def
 \end{code}
 %</Vec-def>
 

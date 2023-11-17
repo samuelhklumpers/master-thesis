@@ -34,9 +34,9 @@ data HMu (H : HFun) (A : Type) : Type where
 %<*HRandom>
 \begin{code}
 data HRandom (F : Fun) (A : Type) : Type where
-  Zero :                       HRandom F A
-  One  : A      → F (A × A) →  HRandom F A
-  Two  : A → A  → F (A × A) →  HRandom F A
+  Zero  :                       HRandom F A
+  One   : A      → F (A × A) →  HRandom F A
+  Two   : A → A  → F (A × A) →  HRandom F A
 \end{code}
 %</HRandom>
 
@@ -53,15 +53,14 @@ data HTree (F : Fun) (A : Type) : Type where
 try2 : HMu HTree ⊤
 try2 = con (One tt (con (One tt (con Zero , con Zero)) , con Zero))
 
-
-data HBad (F : Fun) (A : Type) : Type where
-  bad : (F A → ⊥) → HBad F A
+HBad : HFun
+HBad F A = F A → ⊥
 
 bad-is-not-ok : HMu HBad ⊤ → ⊥
-bad-is-not-ok (con (bad x)) = x (con (bad x))
+bad-is-not-ok (con x) = x (con x)
 
 bad-is-ok : HMu HBad ⊤
-bad-is-ok = con (bad bad-is-not-ok)
+bad-is-ok = con bad-is-not-ok
 
 boom : ⊥
 boom = bad-is-not-ok bad-is-ok

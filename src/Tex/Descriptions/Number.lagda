@@ -53,7 +53,9 @@ data Carpal : Type where
 toℕ-Carpal : Carpal → ℕ
 toℕ-Carpal 0c = 0
 toℕ-Carpal 1c = 1
-toℕ-Carpal (2c l m r) = toℕ-Phalanx l + 2 * toℕ-Carpal m + toℕ-Phalanx r
+toℕ-Carpal (2c l m r)  = toℕ-Phalanx l
+                       + 2 * toℕ-Carpal m
+                       + toℕ-Phalanx r
 \end{code}
 %</Carpal>
 

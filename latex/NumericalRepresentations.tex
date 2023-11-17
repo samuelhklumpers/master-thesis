@@ -1,5 +1,5 @@
-\section{Unindexed Numerical Representations}\label{sec:trieo}
-In this section, we will demonstrate how we can use the ornamental descriptions to generically compute numerical representations. More precisely, we will define \AF{TreeOD}, which sends a number system to the corresponding type of full (nested) node trees over it. \todo{might need to find better names for TreeOD} \todo{Is full nested node trees accurate?}
+\subsection{Unindexed Numerical Representations}\label{sec:trieo}
+In this section, we will demonstrate how we can use the ornamental descriptions to generically compute numerical representations. More precisely, we will define \AF{TreeOD}, which sends a number system to the corresponding type of (nested) full trees over it.
 
 We proceed differently from the calculation of \AD{Vec} from \bN{}. Indeed, we will give ornamental descriptions, rather than deriving a direct definition step-by-step through isomorphism reasoning. Nevertheless, the choices of fields depending on the analysis of a number system follow the same strategy. We will first present the unindexed numerical representations, explaining case-by-case which fields it adds and why. In the next section, we will demonstrate the indexed numerical representations as an ornament on top of the unindexed variant. %, and how the indices built up incrementally as we descend over the structure of the number system.
 
@@ -24,7 +24,7 @@ which is equivalent to the \AF{DigitOD} from before, expanding a vector of \AV{k
 The \AF{PhalanxND} in the last constructor gets replaced with \AF{DigitOD} via \AF{O∙δ+}, and the recursive field gets replaced by a recursive field nesting over vectors of length. Again, this is equivalent to \AF{FingerOD}, wrapping values in length one vectors and inserting empty vectors.
 
 
-\section{Indexed Numerical Representations}\label{sec:itrieo}
+\subsection{Indexed Numerical Representations}\label{sec:itrieo}
 Like how \AD{List} has an ornament \AF{VecOD} to its \bN{}-indexed variant \AD{Vec}, we can also construct an ornament, which we will call \AF{TrieOD}\ \AV{D}, from the numerical representation \AF{TreeOD}\ \AV{D} to its \AV{D}-indexed variant:
 \ExecuteMetaData[Ornament/Numerical]{itrieify-type}
 Continuing the analogy to \AF{VecOD}, because \AF{TreeOD} already sorts out how the parameters should be nested and how many fields have to be added, this ornament only has to add fields reflecting the recursive indices, and use these to report indices corresponding to the number of values of \AV{A} contained in the numerical representation. We accomplish this by threading the partially applied constructors \AV{n} of the number system \AV{N} through the resulting description. In addition to generalizing over \AV{Me} to facilitate the \AIC{δ} case, like in \AF{TreeOD}, we also generalize over the index type \AV{N'}. When mapping over descriptions, the choice of constructor also selects the corresponding constructor of \AV{N'}.
@@ -33,7 +33,5 @@ We define \AF{Trie-con} by induction on \AV{C}, consuming bound values one-by-on
 \ExecuteMetaData[Ornament/Numerical]{itrieify-con}
 Only in the case for \AIC{ρ} and \AIC{δ} do we add fields, which are both promptly passed as expected indices to the next field using \AV{λ \{ (p , w , i) → i \}}. For \AIC{δ}, since \AF{Trie-desc}\ \AV{R} will be \AV{R}-indexed, we add a field of \AV{R} rather than \AV{N'}. The values of all fields, including \AIC{σ} are passed to \AV{n}; since \AV{n} starts as one constructor \AV{C} of \AV{N'}, when we arrive at \AIC{𝟙}, the final argument of \AV{n} can be filled with simply \AIC{refl} to determine the actual index.
 
-Since the \AV{N'}-index bound in the \AIC{ρ} case forces the number of elements in the recursive field, the value in the \AIC{σ} case corresponds to the number of elements added after this field, and the \AV{R}-index bound in the \AIC{δ} case likewise forces the number of elements in the subdescription, we know that when we arrive at \AIC{𝟙}, the total number of elements is exactly given by \AV{n}, and thus \AF{Trie-con} is correct. In turn, we conclude that \AF{Trie-desc} and \AF{TrieOD} correctly construct indexed numerical representations. 
-
-\lowprio{Example? I think the explanation of itrieifyOD is extensive enough to not warrant a repetition of fingerod in the indexed case.}
+Since the \AV{N'}-index bound in the \AIC{ρ} case forces the number of elements in the recursive field, the value in the \AIC{σ} case corresponds to the number of elements added after this field, and the \AV{R}-index bound in the \AIC{δ} case likewise forces the number of elements in the subdescription, we know that when we arrive at \AIC{𝟙}, the total number of elements is exactly given by \AV{n}, and thus \AF{Trie-con} is correct. In turn, we find that \AF{Trie-desc} and \AF{TrieOD} correctly construct indexed numerical representations.
 

@@ -13,6 +13,9 @@ open import Agda.Primitive
            ; Setω  to Typeω )
 
 open import Data.Product
+
+private variable
+  A : Type
 \end{code}
 
 %<*Bin>
@@ -23,7 +26,6 @@ data Bin : Type where
   1b_ 2b_  : Bin → Bin 
 \end{code}
 %</Bin>
-
 %<*Random>
 \AgdaTarget{Random, Zero, One, Two}
 \begin{code}
@@ -33,3 +35,12 @@ data Random (A : Type) : Type where
   Two   : A → A  → Random (A × A) →  Random A
 \end{code}
 %</Random>
+
+%<*size>
+\begin{code}
+size : Random A → Bin
+size Zero           = 0b
+size (One _    xs)  = 1b size xs
+size (Two x y  xs)  = 2b size xs
+\end{code}
+%</size>

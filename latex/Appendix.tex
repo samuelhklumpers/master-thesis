@@ -1,27 +1,45 @@
-\appendix
+%\section{Appendices}
 
+\begin{appendix}
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+    
 \todo{When finished, shuffle the appendices to the order they appear in}
 
-\section{Random and friends \textit{do} live in U-ix}\label{app:unnested}
+\subsection{fold and mapFold in full}\label{app:gfold}
+
+\todo{write me}
+
+
+\subsection{Without K but with universe hierarchies}\label{app:withoutk}
+
+
+\todo{write me}
+See \cite{practgen} and the small blurb rewriting interpretations as datatypes.
+
+\subsection{Random and friends \textit{do} live in U-ix}\label{app:unnested}
+Some injustice to \AD{U-ix} has been done, and it can actually give equivalent encodings for some types we claimed it could not encode effectively or at all. This of course relies on the word ``equivalent'' to do most of the work.
+
 Use \AF{power} and indices.
+
+Can still do an encoding of rosetrees.
+
+\todo{write me}
 
 \begin{outline}
 Kun je aannemelijk maken dat er geen dependently typed encoding bestaat van Finger Trees? Voor binary random access lijsten, perfect trees, en lambda termen bestaan die wel... Of is de constructie te omslachtig?
 \end{outline}
 
-\section{Index-first}
+\subsection{Index-first}
 
-\section{Without K but with universe hierarchies}\label{app:withoutk}
-See \cite{practgen} and the small blurb rewriting interpretations as datatypes.
+\subsection{Sigma descriptions}\label{app:large-sigma}
+\autoref{app:withoutk}
 
-\section{Sigma descriptions}\label{app:large-sigma}
-
-\section{ornForget and ornErase in full}\label{app:ornforget}
-
-\section{fold and mapFold in full}\label{app:gfold}
+\subsection{ornForget and ornErase in full}\label{app:ornforget}
 
 \begin{comment}
-    \section{Heterogenization}
+    \subsection{Heterogenization}
     %\input{Heterogenization.tex}
     
 \footnote{If a foldable universe means nothing to you, there are simpler encodings for parameters and indices, which are recorded in \autoref{app:large-sigma}.}
@@ -29,7 +47,7 @@ See \cite{practgen} and the small blurb rewriting interpretations as datatypes.
 
 \ExecuteMetaData[Ornament/OrnDesc]{toOrn} -> Appendix if at all
 
-    \section{More equivalences for less effort}\label{sec:userfriendly}
+    \subsection{More equivalences for less effort}\label{sec:userfriendly}
     Noting that constructing equivalences directly or from isomorphisms as in \autoref{ssec:leibniz} can quickly become challenging when one of the sides is complicated, we work out a different approach making use of the initial semantics of W-types instead. We claim that the functions in the isomorphism of \autoref{ssec:leibniz} were partially forced, but this fact was unused there.
     
     First, we explain that if we assume that one of the two sides of the equivalence is a fixpoint or initial algebra of a polynomial functor (that is, the \AgdaDatatype{μ} of a \AgdaDatatype{Desc′}), this simplifies giving an equivalence to showing that the other side is also initial.
@@ -44,6 +62,8 @@ See \cite{practgen} and the small blurb rewriting interpretations as datatypes.
     
     We interpret well-foundedness as an upper bound on the size of a type, leading us to claim that injectivity of the algebra map gives a lower bound, which is sufficient to induce the isomorphism. We sketch the proof of the theorem, relating part of this construction to similar concepts in the formalization of well-founded recursion in the Standard Library. In particular, we prove an irrelevance and an unfolding lemma, which lets us show that the map into any other algebra induced by recursion is indeed an algebra map. By showing that it is also unique, we conclude initiality, and get the isomorphism as a corollary. 
     
-    The theorem is applied and demonstrated to the example of binary naturals. We remark that the construction of well-foundedness looks similar to view-patterns. After this, we conclude that this example takes more lines that the direct derivation in \autoref{ssec:leibniz}, but we argue that most of this code can likely be automated.
+    The theorem is applied and demonstrated to the example of binary natural numbers. We remark that the construction of well-foundedness looks similar to view-patterns. After this, we conclude that this example takes more lines that the direct derivation in \autoref{ssec:leibniz}, but we argue that most of this code can likely be automated.
     
 \end{comment}
+
+\end{appendix}
