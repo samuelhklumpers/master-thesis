@@ -1,24 +1,23 @@
 \subsection{Ornamental descriptions}
 The ornamental descriptions for \AD{DescI} take the same shape as those in \autoref{sec:background-ornamental-descriptions}, generalized to handle nested types, variable transformations, and composite types. These ornamental descriptions are defined such that a \AD{OrnDesc}\ \AV{Me′ Δ re-par J re-index D} represents a patch from a base description \AV{D} to a description with metadata \AV{Me′}, parameters \AV{Δ} and indices \AV{J}.
 
-Note that metadata, as a non-structural property, no direct influence on ornaments, so we simply generalize over the information on \AV{D}, and query the information for the new description without imposing constraints.
+Note that metadata, as a non-structural property, has no direct influence on ornaments. So, we simply generalize over the metadata on \AV{D}, querying the metadata for the new description without imposing constraints.
 
-%We use \AF{∼} to write down pointwise equality of functions, which in this case all are commutativity squares. 
-Ornamental descriptions themselves are again lists of constructor ornaments 
+As always, we start off by defining ornamental descriptions as lists of constructor ornaments :
 \ExecuteMetaData[Ornament/OrnDesc]{OrnDesc}
-The constructor ornaments are also where we pay the price for the flexibility we built into \AD{ConI}. For example, as \AD{ConI} allows us to transform variables, \AD{ConOrnDesc} has to relate the transformations on both sides to guarantee the existence of \AF{ornForget}. A lot of lines are dedicated to the commutativity squares for variables, but these squares involving \AD{Vxf} can generally ignored, as witnessed by the \AF{Oσ+} and \AF{Oσ-} variants of the \AIC{σ} ornament, automatically filling those squares in the usual cases of binding or ignoring fields.
+Most of the modifications in \AD{DescI} are reflected in the constructor ornaments, and as a consequence this is also where we pay the price for the flexibility we built into \AD{ConI}. For example, because \AD{ConI} allows us to transform variables, \AD{ConOrnDesc} has to relate the transformations on both sides in order for \AF{ornForget} to exist. We (have to) dedicate a lot of lines to such commutativity squares of variables, but these squares involving \AD{Vxf} can generally be ignored; this is witnessed by the \AF{Oσ+} and \AF{Oσ-} variants of the \AIC{σ} ornament, automatically filling those squares in the usual cases of binding or ignoring fields.
 
 The structure-preserving ornaments are defined as usual
 \ExecuteMetaData[Ornament/OrnDesc]{ConOrn-preserve}
-where \AIC{ρ} has a new field relating the old and new nesting transforms \AV{g} and \AV{d}. Likewise, \AIC{σ} now has a field relating the old and new variable transforms, which for example prevents us from unbinding a field in the new description which was used in the old description. The ornament \AIC{δ} now represents the direct copying of a \AIC{δ} in descriptions up to \AV{re-par} and \AV{re-var}.
+where \AIC{ρ} has a new field relating the old and new nesting transforms \AV{g} and \AV{d}. Likewise, \AIC{σ} now has a field relating the old and new variable transforms, which for example prevents us from unbinding a field in the new description which was used in the old description. The ornament \AIC{δ} now represents the direct copying of a \AIC{δ} in descriptions (up to \AV{re-par} and \AV{re-var}).
 
-Where only \AIC{Δσ} could add fields before, we can now also add fields described by \AIC{δ} using \AIC{Δδ}
+Where only \AIC{Δσ} could add fields before, we can now also add fields described by \AIC{δ} using \AIC{Δδ}:
 \ExecuteMetaData[Ornament/OrnDesc]{ConOrn-extend}
 Again, \AIC{Δσ} requires the relation of old and new variables.
 
-Now if we have a description \AV{D'} with a composite field \AIC{δ}\ \AV{R}\ \AV{d}\ \AV{j}\ \AV{R}\ \AV{D} referencing \AV{R}, then we expect that a patch on \AV{R} also induces a patch on \AV{D'}. We generalize this by defining a kind of sequential composition of ornaments\footnote{As opposed to Ko's parallel composition \cite{kophd}, which composes two ornaments on the same description \AV{D}, producing something that incorporates changes from both.}, taking two ornamental descriptions, one on \AV{R} and one on \AV{D}, and producing an ornamental description on \AV{D'}:
+Now, if we have a description \AV{D'} with a composite field \AIC{δ}\ \AV{R}\ \AV{d}\ \AV{j}\ \AV{R}\ \AV{D} referencing \AV{R}, then we expect that a patch on \AV{R} also induces a patch on \AV{D'}. We generalize this by defining a kind of sequential composition of ornaments\footnote{As opposed to Ko's parallel composition \cite{kophd}, which composes two ornaments on the same description \AV{D}, producing something that incorporates changes from both.}, taking two ornamental descriptions, one on \AV{R} and one on \AV{D}, and producing an ornamental description on \AV{D'}:
 \ExecuteMetaData[Ornament/OrnDesc]{ConOrn-compose}
-Now if we try to forget \AIC{∙δ}, the parameters to \AV{R} can be computed in two ways. Namely, we can first convert back to the context of \AV{CD} according to \AV{DE} and compute the parameter for \AV{R} there with the original \AV{fΘ}, or we can first compute the parameter in the new context using the new \AV{fΛ} and then convert this back to the parameter for \AV{R} according to \AV{RR′}, or summarized in a diagram:  
+If we try to forget \AIC{∙δ}, the parameters to \AV{R} can be computed in two ways. Namely, we can first convert back to the context of \AV{CD} according to \AV{DE} and compute the parameter for \AV{R} there with the original \AV{fΘ}, or we can first compute the parameter in the new context using the new \AV{fΛ} and then convert this back to the parameter for \AV{R} according to \AV{RR′}. We can summarize both routes in a diagram:  
 % https://q.uiver.app/#q=WzAsNCxbMCwwLCJXIFxcJiBcXERlbHRhIl0sWzAsMSwiVlxcJiBcXEdhbW1hIl0sWzEsMCwiXFxMYW1iZGEiXSxbMSwxLCJcXFRoZXRhIl0sWzAsMSwiXFxtYXRocm17cmUtdmFyfVxcdGltZXNcXG1hdGhybXtyZS1pbmRleH0iLDJdLFswLDIsImZcXExhbWJkYSJdLFsxLDMsImZcXFRoZXRhIiwyXSxbMiwzLCJjJyJdXQ==
 \[\begin{tikzcd}
 	{W \& \Delta} & \Lambda \\
@@ -28,17 +27,17 @@ Now if we try to forget \AIC{∙δ}, the parameters to \AV{R} can be computed in
 	\arrow["f\Theta"', from=2-1, to=2-2]
 	\arrow["{c'}", from=1-2, to=2-2]
 \end{tikzcd}\]
-To avoid any ambiguity that arises from this, we require that both paths of parameters, and analogously indices, are equal. Using these and the other new commutativity squares, we can again define \AF{ornForget} by erasing ornaments.
-
-The precise meaning of ornamental descriptions as descriptions is given by the conversion:
+To avoid any ambiguity that arises from this, we require that both ways around this square are equal. Using these and the other new commutativity squares, we can again define \AF{ornForget} from an ornamental algebra analogous to the one for \AD{U-ix}:
+\ExecuteMetaData[Ornament/OrnDesc]{ornForget}
+The precise meaning of ornamental descriptions as descriptions is given by the conversion
 \ExecuteMetaData[Ornament/OrnDesc]{toDesc}
 which makes use of the implicit metadata fields in the constructor ornaments to reconstruct the metadata on the target description.
 
-With \AD{OrnDesc} we can reproduce the examples of the ornamental descriptions for \AD{U-ix} and also present some previously inexpressible types as ornamental descriptions. Using the variants of some ornaments specialized to binding or ignoring fields:
+With \AD{OrnDesc} we can reproduce the examples of the ornamental descriptions for \AD{U-ix}, and present some previously inexpressible types as ornamental descriptions. For this, we use the variants of some ornaments specialized to binding or ignoring fields, such as:
 \ExecuteMetaData[Ornament/OrnDesc]{O-sigma-pm}
-we can give the familiar ornamental description from \AD{List} to \AD{Vec}:
+We can then give the familiar ornamental description from \AD{List} to \AD{Vec}:
 \ExecuteMetaData[Ornament/OrnDesc]{VecOD}
-Rather than defining \AD{Random} in a vacuum, we can use the new flexibility in \AIC{ρ} and describe random access lists as an ornament from binary numbers:
+Rather than defining \AD{Random} on its own, we can use the new flexibility in \AIC{ρ} and describe random access lists as an ornament from binary numbers:
 \ExecuteMetaData[Ornament/OrnDesc]{RandomOD}
 Likewise, we can give an ornament turning phalanges into digits
 \ExecuteMetaData[Ornament/OrnDesc]{DigitOD}

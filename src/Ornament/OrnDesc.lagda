@@ -146,25 +146,25 @@ mutual
   toCon   :  {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V}
              {re-index : J → I} {D : ConI Me Γ V I}
           → ConOrnDesc Me′ re-var re-index D → ConI Me′ Δ W J
-  toCon (𝟙 j x {me′ = me})
+  toCon (𝟙 j _ {me′ = me})
     = 𝟙 {me = me} j
 
-  toCon (ρ j h x x₁ {me′ = me} CO)
+  toCon (ρ j h _ _ {me′ = me} CO)
     = ρ {me = me} j h (toCon CO)
 
-  toCon {re-var = v} (σ S h v′ x {me′ = me} CO)
+  toCon {re-var = v} (σ S h _ _ {me′ = me} CO)
     = σ (S ∘ var→par v) {me = me} h (toCon CO)
 
   toCon {re-var = v} (δ R j t {me′ = me} {iff′ = iff} CO)
     = δ {me = me} {iff = iff} (j ∘ var→par v) (t ∘ var→par v) R (toCon CO)
 
-  toCon (Δσ S h v′ x {me′ = me} CO)
+  toCon (Δσ S h _ _ {me′ = me} CO)
     = σ S {me = me} h (toCon CO)
   
   toCon (Δδ R t j {me′ = me} {iff′ = iff} CO)
     = δ {me = me} {iff = iff} t j R (toCon CO)
   
-  toCon (∙δ fΛ m RR′ p₁ p₂ {me′ = me} {iff′ = iff} CO)
+  toCon (∙δ fΛ m RR′ _ _ {me′ = me} {iff′ = iff} CO)
     = δ {me = me} {iff = iff} fΛ m (toDesc RR′) (toCon CO)
 \end{code}
 %</toDesc>
@@ -195,13 +195,16 @@ mutual
          ⟦ toDesc OD ⟧D (λ p j → μ D (re-var p) (re-index j)) ⇶
          (λ p j → μ D (re-var p) (re-index j))
   ornAlg OD p i x = con (ornErase OD p i x)
+\end{code}
 
+%<*ornForget>
+\begin{code}
   ornForget : {re-var : Cxf Δ Γ} {re-index : J → I} {D : DescI Me Γ I}
             → (OD : OrnDesc Me′ Δ re-var J re-index D)
             → μ (toDesc OD) ⇶ λ d j → μ D (re-var d) (re-index j)
   ornForget OD = fold (ornAlg OD)
 \end{code}
-
+%</ornForget>
 
 \begin{code}
 module _ {Me′ : Meta} {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V} {re-index : J → I} {Me : Meta} where  
@@ -221,16 +224,16 @@ module _ {Me′ : Meta} {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V} {re-index
     → ConOrnDesc Me′ re-var re-index (σ {Me} S {me = me} h CD)
   Oσ+ S {h = h} {me′ = me′} CO
     = σ S id (h ∘ Vxf-▷ re-var S) (λ _ → refl) {me′ = me′} CO
+\end{code}
+%</O-sigma-pm>
 
+\begin{code}
   Oσ- : (S : Γ & V ⊢ Type) {CD : ConI Me Γ V I}
     → {me : Me .σi S} {me′ : Me′ .σi (S ∘ var→par re-var)}
     → ConOrnDesc Me′ re-var re-index CD
     → ConOrnDesc Me′ re-var re-index (σ {Me} S {me = me} fst CD)
   Oσ- S {me′ = me′} CO = σ S fst re-var (λ _ → refl) {me′ = me′} CO
-\end{code}
-%</O-sigma-pm>
-
-\begin{code}
+  
   OΔσ+ : {CD : ConI Me _ _ _} (S : Δ & W ⊢ Type)
      → {me′ : Me′ .σi S}
      → ConOrnDesc Me′ (re-var ∘ fst) re-index CD

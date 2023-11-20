@@ -5,22 +5,32 @@
 \addcontentsline{toc}{section}{Appendices}
 \renewcommand{\thesubsection}{\Alph{subsection}}
     
-\todo{When finished, shuffle the appendices to the order they appear in}
+\todo{When all appendices are done, shuffle them into the order they are referenced in}
 
-\subsection{fold and mapFold in full}\label{app:gfold}
+\subsection{Folding}\label{app:gfold}
+In \autoref{ssec:generic-programming} and \autoref{sec:background-ornaments} we use \AF{fold}; we will give the complete definition of \AF{fold} here, but for \AD{DescI}, since it is essentially the same. We define the folding operation in what is effectively two steps to help out the termination checker, mutually defining \AF{fold} and a \AF{mapDesc}, representing the composition of the \AF{map} over interpretations (which we otherwise do not use and therefore did not define) and \AF{fold}:
+\ExecuteMetaData[Tex/Background]{mapFold}
+Here \AF{mapDesc} (and \AF{mapCon}) simply peel off and reassemble all non-recursive structure, applying \AF{fold} to the recursive fields; \AF{fold} is then defined in the usual way by applying its algebra \AV{f} to itself mapped over \AV{x}.
 
-\todo{write me}
+\subsection{Folding without Axiom K}\label{app:withoutk}
+It could be interesting to study ornaments in the context of univalence or cubical type theory; currently, the theory of ornaments produces a lot of isomorphisms from relations between types, but these are not yet as powerful as they could be when comparing properties between related types. Univalence gives us the means to turn equivalences\footnote{Which are the same as isomorphisms for all datatypes we could discuss without \AV{--cubical} anyway} into equalities, allowing us to put an isomorphism between types to work by transporting properties over it.
 
+Unfortunately, a direct port of ornaments into \AV{--cubical} is quickly stumped by the lack of Axiom K, as one would discover that the definitions of \AF{mapDesc} and \AF{mapCon} illegally pattern match on interpretations\footnote{Refer to \url{https://agda.readthedocs.io/en/v2.6.4.1-rc1/language/without-k.html} for the reason this is illegal; shortly put, recursion on a type which is not a datatype, and in our case the result of a function, can be used to derive \AD{⊥}.}.
 
-\subsection{Without K but with universe hierarchies}\label{app:withoutk}
+This can be remedied by presenting interpretations as datatypes, albeit a bit dubiously; at the time of writing, this is also how you can circumvent a restriction on pattern matching emplaced by \AV{--cubical-compatible}\footnote{\href{https://github.com/agda/agda/issues/5910\#issuecomment-1601301237}{Relevant GitHub issue}}. However, our case is not really that profound, as it simply uses the duality between type computing functions and indexed types. Furthermore, since \AD{Desc} and \AD{Con} are unindexed types, they cannot accidentally carry equational content, and pattern matching on them does not generate transports in \AF{⟦\_⟧D} and \AF{⟦\_⟧C} anyway, so that the definition of \AF{fold} was already (morally speaking) safe to begin with.
 
+With that out of the way, we can define the interpretations as indexed types
+\ExecuteMetaData[Appendix/Intp]{Intp}
+on which we are allowed to pattern match when defining \AF{mapDesc} and \AF{mapCon} in a way that is accepted:
+\ExecuteMetaData[Appendix/Intp]{mapDesc}
 
-\todo{write me}
-See \cite{practgen} and the small blurb rewriting interpretations as datatypes.
 
 \subsection{Random and friends \textit{do} live in U-ix}\label{app:unnested}
-Some injustice to \AD{U-ix} has been done, and it can actually give equivalent encodings for some types we claimed it could not encode effectively or at all. This of course relies on the word ``equivalent'' to do most of the work.
+Some injustice to \AD{U-ix} has been done, and we can actually give equivalent encodings for some types we claimed it could not encode effectively or at all. This of course relies on the word ``equivalent'' to do most of the work. \todo{To be expanded, or removed.}
 
+
+
+\begin{comment}
 Use \AF{power} and indices.
 
 Can still do an encoding of rosetrees.
@@ -38,7 +48,6 @@ Kun je aannemelijk maken dat er geen dependently typed encoding bestaat van Fing
 
 \subsection{ornForget and ornErase in full}\label{app:ornforget}
 
-\begin{comment}
     \subsection{Heterogenization}
     %\input{Heterogenization.tex}
     

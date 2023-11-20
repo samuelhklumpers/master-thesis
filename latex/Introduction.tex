@@ -1,14 +1,14 @@
 There is a close relation between \emph{number systems} and \emph{datastructures} containing certain numbers of elements. Examples of datastructures designed to resemble a number system, are explored in Okasaki's Purely Functional Data Structures (\cite{purelyfunctional}, chapter 9) as \emph{numerical representations}, relating some known datastructures to their underlying number system.
 
-To illustrate such an example, consider the binary numbers in their bijective, or zeroless, form (least significant digit first)
+To illustrate such an example, consider the binary numbers in their bijective, or zeroless, form (least significant digit first):
 \ExecuteMetaData[Tex/Introduction]{Bin}
 This definition declares that a binary number is either formed by \AIC{0b}, or by prepending either \AIC{1b} or \AIC{2b}. Here, \AIC{0b} represents the number 0, while \AIC{1b}\ \AV{n} corresponds to \AV{2n + 1}, representing the positive odd numbers, and \AIC{2b} corresponds to \AV{2n + 2}, representing the positive even numbers. As a \emph{positional number system}, \AD{Bin} has digits 1 and 2; counting from the left, starting at 0, the weight of a digit at the \AV{i}th position is $2^i$. For example, the number 5 is represented by \AIC{1b}\ \AIC{2b}\ \AIC{0b}, since $1 \cdot 2^0 + 2 \cdot 2^1 + 0 \cdot 2^2 = 5$.
 
-Compare this to the type of random-access lists (complete binary trees) in their \emph{nested} (non-uniformly recursive) form (\cite{purelyfunctional}, subsections 9.2.2 and 10.1.2)
+Compare this to the type of random-access lists (complete binary trees) in their \emph{nested} (non-uniformly recursive) form (\cite{purelyfunctional}, subsections 9.2.2 and 10.1.2):
 \ExecuteMetaData[Tex/Introduction]{Random}
 Similarly, a random-access list can be formed by \AIC{Zero}, or by prepending \AIC{One}\ \AV{x} for some \AV{x} in \AV{A}, or by \AIC{Two}\ \AV{x}\ \AV{y} with both \AV{x} and \AV{y} in \AV{A}. Note that in the recursive fields of \AIC{One} and \AIC{Two}, we pass the type of pairs \AV{A}\ \AD{×}\ \AV{A} as the parameter rather than simply \AV{A} (hence the non-uniformity). In this recursive field, a \AIC{One} would thus ask for two values of \AV{A}, and another level deeper for four, and so on.
 
-By forgetting that a random-access list \AV{xs} has fields, we find a binary number \AF{size}\ \AV{xs} again
+By forgetting that a random-access list \AV{xs} has fields, we find a binary number \AF{size}\ \AV{xs} again:
 \ExecuteMetaData[Tex/Introduction]{size}
 For example, applying \AF{size} to \AIC{One}\ \AV{\_}\ (\AIC{Two}\ \AV{\_}\ \AV{\_} \AIC{Zero}) gives us back \AIC{1b}\ \AIC{2b}\ \AIC{0b}. Additionally, this number given by \AF{size} coincides with the number of elements in \AV{xs}: evidently, the \AF{size} and number of elements of \AIC{Zero} are both zero. On the other hand, suppose that \AV{xs} of type \AD{Random}\ (\AV{A}\ \AD{×}\ \AV{A}) has size \AV{n}. Since \AV{A}\ \AD{×}\ \AV{A} contains two values of \AV{A}, we have doubled the weight of \AV{xs}, so that it actually contains \AV{2n} values of \AV{A}. Consequently, \AIC{One}\ \AV{x}\ \AV{xs} contains \AV{2n + 1} values, and \AIC{Two}\ \AV{x}\ \AV{y}\ \AV{xs} contains \AV{2n + 2} values, so in general any \AV{ys} contains \AF{size}\ \AV{ys} values.
 

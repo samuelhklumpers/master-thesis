@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[10pt, final]{article}
 
 \usepackage[style=alphabetic]{biblatex}
 \addbibresource{refs.bib}
@@ -100,7 +100,7 @@
 \newcommand{\bN}{\AgdaDatatype{ℕ}}
 \newcommand{\bL}{\AgdaDatatype{Leibniz}}
 
-\title{\large Utrecht University \\ Master Thesis \\ Computing Science \& Mathematical Sciences \\ \Large Generic Numerical Representations via Ornaments}
+\title{\large Utrecht University \\ Master Thesis \\ Computing Science \& Mathematical Sciences \\ \Large Generic Numerical Representations as Ornaments}
 
 \author{Samuel Klumpers\\6057314\\ \\ \textbf{Supervisors} \\ dr. Wouter Swierstra \\ dr. Paige North}
 
@@ -125,7 +125,7 @@ The concept of numerical representations as defined by Okasaki \cite{purelyfunct
 \section{Background}\label{part:background}
 Many of our constructions extend upon or are inspired by existing work in the domain of generic programming and ornaments, so let us take a closer look at the nuts and bolts to see what all the concepts are about.
 
-This section describes some common datatypes and how they can be used for programming, exploring how dependent types let us prove properties of programs, or write programs that are correct-by-construction. We then discuss how some of these proofs or programs can be generalized to classes of types by encoding datatypes using descriptions. Finally, we take a look at ornaments as a means to relate datatypes by their structure, or construct more datatypes of a given structure, but also as a way to identify comparable programs on structurally similar datatypes.
+This section describes some common datatypes and their usages, exploring how dependent types let us prove properties of programs, or write programs that are correct-by-construction. We then discuss certain proofs or programs can be generalized to classes of types by encoding datatypes using descriptions. Finally, we take a look at ornaments as a means to relate datatypes by their structure, or construct more datatypes of a given structure, but also as a way to identify comparable programs on structurally similar datatypes.
 
 \input{Background}
 
@@ -137,17 +137,17 @@ Before we can analyze number systems and their numerical representations using g
 
 
 \section{Ornaments}\label{part:ornaments}
-In the framework of \AD{DescI} of the last section, we can write down a number system and its meaning as the starting point of the construction of a numerical representation. To write down the generic construction of those numerical representations, we will need a language in which we can describe modifications on the number systems.
+In the framework of \AD{DescI} of the last section, we can write down a number system and its meaning in one description, and we can use this as the starting point for constructing numerical representations. To write down a generic construction of numerical representations from number systems, we will need a language in which we can describe modifications on the number systems.
 
-In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of examples. We omit the definition of the ornaments, since will be constructing new datatypes, rather than relating pre-existing ones.
+In this section, we will describe the ornamental descriptions for the \AD{DescI} universe, and explain their working by means of examples. As we will be constructing new datatypes, rather than relating pre-existing ones, we omit the definition of the ornaments.
 
 \input{Ornaments}
 
 
 \section{Generic Numerical Representations}\label{part:numrep}
-The ornamental descriptions of the last section, together with the descriptions and number systems from before, complete the toolset we will use to construct numerical representations as ornaments.
+The ornamental descriptions together with the descriptions and number systems from before complete the toolset we will use to construct numerical representations as ornaments.
 
-To summarize, using \AD{DescI}\ \AF{Number} to represent number systems, we paraphrase the calculation of \autoref{sec:desc-numrep} as an ornament, rather than a direct definition. In fact, we have already seen ornaments to numerical representations before, such as \AF{ListOD} and \AF{RandomOD}. Generalizing those ornaments, we construct numerical representations by means of an ornament-computing function, sending number systems to the ornamental descriptions that describe their numerical representations. 
+In summary, using \AD{DescI}\ \AF{Number} to represent number systems, we paraphrase calculations like in \autoref{sec:desc-numrep} as ornaments, rather than direct definitions. In fact, we have already seen ornaments to numerical representations before, such as \AF{ListOD} and \AF{RandomOD}. Generalizing those ornaments, we construct numerical representations by means of an ornament-computing function, sending number systems to the ornamental descriptions that describe their numerical representations. 
 
 \input{NumericalRepresentations}
 

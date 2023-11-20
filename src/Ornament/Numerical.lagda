@@ -75,17 +75,16 @@ open Meta
 \begin{code}
 TreeOD : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ ! D
 TreeOD D = Tree-desc D id-MetaF
-  module TreeOD where
+  module TreeOD where mutual
   Tree-desc  : (D : DescI Me ∅ ⊤) → MetaF Me Number
              → OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ ! D
+
+  Tree-desc []      ϕ = []
+  Tree-desc (C ∷ D) ϕ = Tree-con C ϕ ∷ Tree-desc D ϕ
              
   Tree-con   : {re-var : Vxf ! W V} (C : ConI Me ∅ V ⊤) → MetaF Me Number
              → ConOrnDesc  {Δ = ∅ ▷ λ _ → Type} {W = W}
                            {J = ⊤} Plain re-var ! C
-
-  Tree-desc []      ϕ = []
-  Tree-desc (C ∷ D) ϕ = Tree-con C ϕ ∷ Tree-desc D ϕ
-
   Tree-con (𝟙 {me = k} j) ϕ
     = OΔσ- (λ ((_ , A) , _) → Vec A (ϕ .𝟙f k))
     ( 𝟙 _ (λ _ → refl))
@@ -171,9 +170,9 @@ TrieOD N = Trie-desc N N (λ _ _ → con) id-MetaF
               (n : ∀ p w  → ⟦ C ⟧C (μ N') (tt , re-var′ (re-var {p = p} w)) _
                           → μ N' tt tt)
               (ϕ : MetaF Me Number)
-              →  ConOrnDesc  {Δ = ∅ ▷ λ _ → Type} {W = W}
-                             {J = μ N' tt tt} Plain {re-par = id}
-                             re-var ! (toCon (Tree-con {re-var = re-var′} C ϕ))
+              →  ConOrnDesc {Δ = ∅ ▷ λ _ → Type} {W = W}
+                   {J = μ N' tt tt} Plain {re-par = id}
+                   re-var ! (toCon (Tree-con {re-var = re-var′} C ϕ))
   Trie-con N' (𝟙 {me = k} j) n ϕ
     = Oσ- _
     ( 𝟙 (λ { (p , w) → n p w refl }) (λ _ → refl))

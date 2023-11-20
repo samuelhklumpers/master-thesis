@@ -1,17 +1,20 @@
 \subsection{Unindexed Numerical Representations}\label{sec:trieo}
-In this section, we will demonstrate how we can use the ornamental descriptions to generically compute numerical representations. More precisely, we will define \AF{TreeOD}, which sends a number system to the corresponding type of (nested) full trees over it.
+In this section we demonstrate the generic computation of numerical representations.
+We proceed differently from the calculation of \AD{Vec} from \bN{}. Indeed, we will give ornamental descriptions, rather than deriving direct definitions via step-by-step isomorphism reasoning. Nevertheless, the choices we make when inserting fields depending on the analysis of a number system follow the same strategy.
 
-We proceed differently from the calculation of \AD{Vec} from \bN{}. Indeed, we will give ornamental descriptions, rather than deriving a direct definition step-by-step through isomorphism reasoning. Nevertheless, the choices of fields depending on the analysis of a number system follow the same strategy. We will first present the unindexed numerical representations, explaining case-by-case which fields it adds and why. In the next section, we will demonstrate the indexed numerical representations as an ornament on top of the unindexed variant. %, and how the indices built up incrementally as we descend over the structure of the number system.
+We will first present the unindexed numerical representations, explaining case-by-case which fields it adds and why. In the next section, we will demonstrate the indexed numerical representations as an ornament on top of the unindexed variant. 
 
-To ornament a number system to its unindexed numerical representation, we recall the interpretation \AF{value} of number systems into \bN{}. Let us consider how each of the cases of \AD{ConI}\ \AF{Number} should be ornamented in order to actually give a numerical representation. Consider what happens at a leaf of value \AV{k} in a number system
+The unindexed representations are computed by \AF{TreeOD} in the form of ornamental descriptions, sending a number system to the corresponding type of (nested) full trees over it. The ornament is computed by cases on the number system, and in each case the size of the numerical representation has to match up with the \AF{value} of the number system.
+
+Let us refer to the sole parameter of a numerical representation as \AV{A}, and consider the case of a leaf of value \AV{k}:
 \ExecuteMetaData[Ornament/Numerical]{1-case}
-Let us refer to the sole parameter of a numerical representation as \AV{A}. Since the \AF{value} contributed by this leaf is constantly \AV{k}, a numerical representation should accordingly have \AV{k} fields of \AV{A} before this leaf, or equivalently a field containing \AV{k} values of \AV{A}. A recursive field of weight \AV{k}
+In this case, the leaf contributes a constant \AV{k} to the \AF{value}, so a numerical representation should accordingly have \AV{k} fields of \AV{A} before this leaf, or equivalently a field containing \AV{k} values of \AV{A}. A recursive field of weight \AV{k}
 \ExecuteMetaData[Ornament/Numerical]{rho-case}
-multiplies the value contributed by the recursive part by \AV{k}. Hence, the numerical representation should have a recursive field, in such a way that each ``\AV{A}'' in the recursive field actually contains \AV{k} values of \AV{A}. On the other hand, an ordinary field, sending its values to \bN{} by a mapping \AV{f}
+multiplies the value contributed by the recursive part by \AV{k}. Hence, the numerical representation should have a recursive field, in such a way that a recursive value of size \AV{x} actually represents \AV{k}\ \AF{*}\ \AV{x} values of \AV{A}. On the other hand, an ordinary field \AV{S} containing \AV{s}, of which the value is computed as \AV{f}\ \AV{s}
 \ExecuteMetaData[Ornament/Numerical]{sigma-case}
-is simply represented in the numerical representation by adding a field with \AV{k} values of \AV{A}. Finally, a field containing another number system \AV{R} with weight \AV{k}
+is simply represented in the numerical representation by adding a field with \AV{f}\ \AV{s} values of \AV{A}. Finally, a field containing another number system \AV{R} with weight \AV{k}
 \ExecuteMetaData[Ornament/Numerical]{delta-case}
-directly contributes values of \AV{R} multiplied by \AV{k}. The outer numerical representation should then replace \AV{R} with its numerical representation \AV{NR}, of which each value should represent \AV{k} values of \AV{A}, analogous to the recursive field.
+directly contributes values of \AV{R} multiplied by \AV{k}. The outer numerical representation should then replace \AV{R} with its numerical representation \AV{NR}, which should, like the recursive field, let its values weigh \AV{k} times their size.
 
 To describe the numerical representation, we encode these fields of weight \AV{k} with \AV{k}-element vectors, and in the same way, the multiplication by \AV{k} in the cases of \AIC{ρ} and \AIC{δ} is modelled by nesting over a \AV{k}-element vector. Combining all these cases and translating them to the language of ornaments we define the unindexed numerical representation:
 \ExecuteMetaData[Ornament/Numerical]{trieifyOD}
@@ -19,19 +22,23 @@ In most cases, we straightforwardly use \AF{OΔσ-} to insert vectors of the cor
 
 As an example, let us take a look at how \AF{TreeOD} transforms \AF{CarpalND} to its numerical representation, \AF{FingerOD}. Applying \AF{TreeOD} sends leaves with a value of \AV{k} to \AD{Vec}\ \AV{A}\ \AV{k}, so applying it to \AF{PhalanxND} yields
 \ExecuteMetaData[Ornament/Numerical]{DigitOD-2}
-which is equivalent to the \AF{DigitOD} from before, expanding a vector of \AV{k} elements into \AV{k} fields. The same happens for the first two constructors of \AF{CarpalND}, replacing them with an empty vector and a one-element vector respectively. The last constructor is more interesting
+which, after expanding vectors of \AV{k} elements into \AV{k} fields, is equivalent to the \AF{DigitOD} from before. The same happens for the first two constructors of \AF{CarpalND}, replacing them with an empty vector and a one-element vector respectively. The last constructor is more interesting:
 \ExecuteMetaData[Ornament/Numerical]{FingerOD-2}
-The \AF{PhalanxND} in the last constructor gets replaced with \AF{DigitOD} via \AF{O∙δ+}, and the recursive field gets replaced by a recursive field nesting over vectors of length. Again, this is equivalent to \AF{FingerOD}, wrapping values in length one vectors and inserting empty vectors.
+The \AF{PhalanxND} in the last constructor gets replaced with \AF{DigitOD} via \AF{O∙δ+}, and the recursive field gets replaced by a recursive field nesting over vectors of length. Again, this is equivalent to \AF{FingerOD}, up to wrapping values in length one vectors and inserting empty vectors.
 
 
 \subsection{Indexed Numerical Representations}\label{sec:itrieo}
 Like how \AD{List} has an ornament \AF{VecOD} to its \bN{}-indexed variant \AD{Vec}, we can also construct an ornament, which we will call \AF{TrieOD}\ \AV{D}, from the numerical representation \AF{TreeOD}\ \AV{D} to its \AV{D}-indexed variant:
 \ExecuteMetaData[Ornament/Numerical]{itrieify-type}
-Continuing the analogy to \AF{VecOD}, because \AF{TreeOD} already sorts out how the parameters should be nested and how many fields have to be added, this ornament only has to add fields reflecting the recursive indices, and use these to report indices corresponding to the number of values of \AV{A} contained in the numerical representation. We accomplish this by threading the partially applied constructors \AV{n} of the number system \AV{N} through the resulting description. In addition to generalizing over \AV{Me} to facilitate the \AIC{δ} case, like in \AF{TreeOD}, we also generalize over the index type \AV{N'}. When mapping over descriptions, the choice of constructor also selects the corresponding constructor of \AV{N'}.
-\ExecuteMetaData[Ornament/Numerical]{itrieify-desc}
-We define \AF{Trie-con} by induction on \AV{C}, consuming bound values one-by-one as arguments for the selected constructor \AV{n}, which will then produce the actual indices at the leaves. Since we are continuing where \AF{Tree-con} left off, we can copy most fields
-\ExecuteMetaData[Ornament/Numerical]{itrieify-con}
-Only in the case for \AIC{ρ} and \AIC{δ} do we add fields, which are both promptly passed as expected indices to the next field using \AV{λ \{ (p , w , i) → i \}}. For \AIC{δ}, since \AF{Trie-desc}\ \AV{R} will be \AV{R}-indexed, we add a field of \AV{R} rather than \AV{N'}. The values of all fields, including \AIC{σ} are passed to \AV{n}; since \AV{n} starts as one constructor \AV{C} of \AV{N'}, when we arrive at \AIC{𝟙}, the final argument of \AV{n} can be filled with simply \AIC{refl} to determine the actual index.
+To continue the analogy to \AF{VecOD}, we can use that \AF{TreeOD} already sorts out how the parameters should be nested and how many fields have to be added; as a consequence, this ornament only has to add fields reflecting the recursive indices, which are used to report indices corresponding to the number of values of \AV{A} contained in the numerical representation.
 
-Since the \AV{N'}-index bound in the \AIC{ρ} case forces the number of elements in the recursive field, the value in the \AIC{σ} case corresponds to the number of elements added after this field, and the \AV{R}-index bound in the \AIC{δ} case likewise forces the number of elements in the subdescription, we know that when we arrive at \AIC{𝟙}, the total number of elements is exactly given by \AV{n}, and thus \AF{Trie-con} is correct. In turn, we find that \AF{Trie-desc} and \AF{TrieOD} correctly construct indexed numerical representations.
+We accomplish this by threading the partially applied constructor \AV{n} of the number system \AV{N} through the resulting description; by feeding it all the sizes of the fields added by \AF{TreeOD}, we can use \AV{n} to compute the total size of an ornamented constructor.
+
+In addition to generalizing over \AV{Me} to facilitate the \AIC{δ} case as we did for \AF{TreeOD}, we now also generalize over the index type \AV{N'}. When mapping over the lists of constructors (i.e., descriptions), the choice of constructor also selects the corresponding constructor of \AV{N'}.:
+\ExecuteMetaData[Ornament/Numerical]{itrieify-desc}
+We define \AF{Trie-con} by induction on \AV{C}, binding the sizes of the subtries, to be fed as arguments to the selected constructor \AV{n}. Since we are continuing where \AF{Tree-con} left off, we can copy most fields:
+\ExecuteMetaData[Ornament/Numerical]{itrieify-con}
+We only have to add fields in the cases for \AIC{ρ} and \AIC{δ}, and in both they are promptly passed as expected indices to the next field using \AV{λ \{ (p , w , i) → i \}}; the only difference is that for \AIC{δ}, since \AF{Trie-desc}\ \AV{R} will be \AV{R}-indexed, we add a field of \AV{R} rather than \AV{N'}. The values of all fields, including \AIC{σ} are passed to \AV{n}; since \AV{n} starts as one constructor \AV{C} of \AV{N'}, when we arrive at \AIC{𝟙}, the final argument of \AV{n} can be filled with simply \AIC{refl} to determine the actual index.
+
+Since the \AV{N'}-index \AV{i} bound in the \AIC{ρ} case forces the number of elements in the recursive field to \AV{i}, the value in the \AIC{σ} case corresponds to the number of elements added after this field, and the \AV{R}-index \AV{i} bound in the \AIC{δ} case likewise forces the number of elements in the subdescription to be \AV{i}, we know that when we arrive at \AIC{𝟙}, the total number of elements is exactly given by \AV{n}, and thus \AF{Trie-con} is correct. In turn, we find that \AF{Trie-desc} and \AF{TrieOD} correctly construct indexed numerical representations.
 

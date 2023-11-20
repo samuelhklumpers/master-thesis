@@ -313,6 +313,7 @@ fold : ∀ {D : DescI Me Γ I} {X} → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
 \end{code}
 %</fold-type>
 
+%<*mapFold>
 \begin{code}     
 mapDesc : ∀ {D' : DescI Me Γ I} (D : DescI Me Γ I) {X}
         → ∀ p i  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ D') p i → ⟦ D ⟧D X p i
@@ -330,6 +331,7 @@ mapCon (ρ g j C)    p i v f (r , x) = fold f (g p) (j (p , v)) r , mapCon C p i
 mapCon (σ S w C)    p i v f (s , x) = s , mapCon C p i (w (v , s)) f x
 mapCon (δ d j R C)  p i v f (r , x) = r , mapCon C p i v f x
 \end{code}
+%</mapFold>
 
 * Examples
 \begin{code}
