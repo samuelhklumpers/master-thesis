@@ -107,7 +107,7 @@ PathD′ E me = PathDD E me λ a b → con
     N : _
     N = μ E tt tt
 
-    PathDD : (D : DescI Me ∅ ⊤) (me : MetaF Me Number) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → Desc ∅ (μ E tt tt)
+    PathDD : (D : DescI Me ∅ ⊤) (me : MetaF Me Number) → (⟦ D ⟧ (λ _ _ → N) →₃ λ _ _ → N) → Desc ∅ (μ E tt tt)
     PathDC : (C : ConI Me ∅ ⊤ V) (me : MetaF Me Number) (f : Vxf ∅ W V) → (∀ b → ⟦ C ⟧ (λ _ _ → N) (tt , f b) _ → N) → List (Con ∅ (μ E tt tt) W)
 
     PathDD []      me ϕ = []
@@ -142,7 +142,7 @@ PathD-correct D n = compEquiv unμ {!compEquiv (go D id-MetaF n) {!!}!}
   open PathD D
 
   go :  (E : DescI Me ∅ ⊤) (me : MetaF Me Number)
-        (c : ⟦ E ⟧ (λ _ _ → N id-MetaF) ⇶ (λ _ _ → N id-MetaF))
+        (c : ⟦ E ⟧ (λ _ _ → N id-MetaF) →₃ (λ _ _ → N id-MetaF))
      →  ∀ n → ⟦ PathDD id-MetaF E me c ⟧ (μ (PathD D)) tt n ≃ ⟦ PathDD id-MetaF E me c ⟧ (λ _ n → Fin (value n)) tt n
      
   go2 : (E : ConI Me ∅ ⊤ V) (me : MetaF Me Number) → ∀ n v → ⟦ {!PathDC!} ⟧ (μ (PathD D)) (tt , v) n ≃ ⟦ {!!} ⟧ (λ _ n → Fin (value n)) (tt , v) n
@@ -183,7 +183,7 @@ ITrieO D = ITrieO′ D D id-MetaF
       N : _
       N = μ D' tt tt
 
-      ITrieO-desc : (D : DescI Me ∅ ⊤) → (⟦ D ⟧ (λ _ _ → N) ⇶ λ _ _ → N) → (me : MetaF Me Number) → OrnDesc Plain (∅ ▷ λ _ → Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D me))
+      ITrieO-desc : (D : DescI Me ∅ ⊤) → (⟦ D ⟧ (λ _ _ → N) →₃ λ _ _ → N) → (me : MetaF Me Number) → OrnDesc Plain (∅ ▷ λ _ → Type) id (μ D' tt tt) ! (toDesc (TrieO.TrieO-desc D' D me))
 
       ITrieO-con  : ∀ {U V} {W : ExTel (∅ ▷ λ _ → Type)} {f : Vxf ! U V} {g : Vxf id W U}
                  (C : ConI Me ∅ ⊤ V) → (∀ a b → ⟦ C ⟧ (λ _ _ → N) (tt , f (g {p = a} b)) _ → N) → (me : MetaF Me Number)

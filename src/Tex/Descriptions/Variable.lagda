@@ -58,6 +58,7 @@ data μ-var (D : U-var Γ I) (p : ⟦ Γ ⟧tel tt) : I → Type where
 \end{code}
 
 %<*sigma-plus>
+\AgdaTarget{σ+}
 \begin{code}
 σ+ : ∀ {V} → (S : V ⊢ Type) → Con-var Γ (V ▷ S) I → Con-var Γ V I
 σ+ S C = σ S id C
@@ -65,6 +66,7 @@ data μ-var (D : U-var Γ I) (p : ⟦ Γ ⟧tel tt) : I → Type where
 %</sigma-plus>
 
 %<*sigma-minus>
+\AgdaTarget{σ-}
 \begin{code}
 σ- : ∀ {V} → (S : V ⊢ Type) → Con-var Γ V I → Con-var Γ V I
 σ- S C = σ S fst C

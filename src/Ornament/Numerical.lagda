@@ -72,6 +72,7 @@ open Meta
 %</delta-case>
 
 %<*trieifyOD>
+\AgdaTarget{TreeOD, Tree-desc, Tree-con}
 \begin{code}
 TreeOD : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ ! D
 TreeOD D = Tree-desc D id-MetaF
@@ -112,35 +113,38 @@ TreeOD D = Tree-desc D id-MetaF
 %<*DigitOD-2>
 \begin{code}
 DigitOD : OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ id PhalanxND
-DigitOD  = OΔσ- (λ ((_ , A) , _) → Vec A 1)
-          ( 𝟙 _ (λ _ → refl))
-          ∷ OΔσ- (λ ((_ , A) , _) → Vec A 2)
-          ( 𝟙 _ (λ _ → refl))
-          ∷ OΔσ- (λ ((_ , A) , _) → Vec A 3)
-          ( 𝟙 _ (λ _ → refl))
-          ∷ []
+DigitOD  = OneOD ∷ TwoOD ∷ ThreeOD ∷ []
+  where
+  OneOD    = OΔσ- (λ ((_ , A) , _) → Vec A 1)
+           ( 𝟙 _ (λ _ → refl))
+  TwoOD    = OΔσ- (λ ((_ , A) , _) → Vec A 2)
+           ( 𝟙 _ (λ _ → refl))
+  ThreeOD  = OΔσ- (λ ((_ , A) , _) → Vec A 3)
+           ( 𝟙 _ (λ _ → refl))
 \end{code}
 %</DigitOD-2>
 
 %<*FingerOD-2>
 \begin{code}
 FingerOD  : OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ id CarpalND
-FingerOD  = OΔσ- (λ ((_ , A) , _) → Vec A 0)
-           ( 𝟙 _ (λ _ → refl))
-           ∷ OΔσ- (λ ((_ , A) , _) → Vec A 1)
-           ( 𝟙 _ (λ _ → refl))
-           ∷ ∙δ  (λ ((_ , p) , _) → (_ , Vec p 1)) !
-                 DigitOD (λ _ _ → refl) (λ _ _ → refl)
-           ( ρ (λ (_ , A) → _ , Vec A 2) _ (λ _ → refl) (λ _ → refl)
-           ( ∙δ  (λ ((_ , p) , _) → (_ , Vec p 1)) !
-                 DigitOD (λ _ _ → refl) (λ _ _ → refl)
-           ( OΔσ- (λ ((_ , A) , _) → Vec A 0)
-           ( 𝟙 _ (λ _ → refl)) )))
-           ∷ []
+FingerOD = EmptyOD ∷ SingleOD ∷ DeepOD ∷ []
+  where
+  EmptyOD   = OΔσ- (λ ((_ , A) , _) → Vec A 0)
+            ( 𝟙 _ (λ _ → refl))
+  SingleOD  = OΔσ- (λ ((_ , A) , _) → Vec A 1)
+            ( 𝟙 _ (λ _ → refl))
+  DeepOD    = ∙δ  (λ ((_ , p) , _) → (_ , Vec p 1)) !
+                  DigitOD (λ _ _ → refl) (λ _ _ → refl)
+            ( ρ (λ (_ , A) → _ , Vec A 2) _ (λ _ → refl) (λ _ → refl)
+            ( ∙δ  (λ ((_ , p) , _) → (_ , Vec p 1)) !
+                  DigitOD (λ _ _ → refl) (λ _ _ → refl)
+            ( OΔσ- (λ ((_ , A) , _) → Vec A 0)
+            ( 𝟙 _ (λ _ → refl)) )))
 \end{code}
 %</FingerOD-2>
 
 %<*itrieify-type>
+\AgdaTarget{TrieOD}
 \begin{code}
 TrieOD : (N : DescI Number ∅ ⊤)
            →  OrnDesc Plain (∅ ▷ λ _ → Type)
@@ -153,17 +157,19 @@ TrieOD N = Trie-desc N N (λ _ _ → con) id-MetaF
   open TreeOD N
 \end{code}
 %<*itrieify-desc>
+\AgdaTarget{Trie-desc}
 \begin{code}
   Trie-desc  : ∀ {Me} (N' : DescI Me ∅ ⊤) (D : DescI Me ∅ ⊤)
-              (n : ⟦ D ⟧D (μ N') ⇶ μ N') (ϕ : MetaF Me Number)
+              (n : ⟦ D ⟧D (μ N') →₃ μ N') (ϕ : MetaF Me Number)
               →  OrnDesc Plain (∅ ▷ λ _ → Type)
                  id (μ N' tt tt) ! (toDesc (Tree-desc D ϕ) )
   Trie-desc N' []      n ϕ  = []
   Trie-desc N' (C ∷ D) n ϕ  = Trie-con N' C (λ p w x → n _ _ (inj₁ x)) ϕ
-                             ∷ Trie-desc N' D (λ p w x → n _ _ (inj₂ x)) ϕ
+                            ∷ Trie-desc N' D (λ p w x → n _ _ (inj₂ x)) ϕ
 \end{code}
 %</itrieify-desc>
 %<*itrieify-con>
+\AgdaTarget{Trie-con}
 \begin{code}
   Trie-con   : ∀ {Me} (N' : DescI Me ∅ ⊤) {re-var : Vxf id W V}
               {re-var′ : Vxf ! V U} (C : ConI Me ∅ U ⊤)

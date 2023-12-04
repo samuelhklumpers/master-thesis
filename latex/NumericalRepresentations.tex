@@ -34,7 +34,7 @@ To continue the analogy to \AF{VecOD}, we can use that \AF{TreeOD} already sorts
 
 We accomplish this by threading the partially applied constructor \AV{n} of the number system \AV{N} through the resulting description; by feeding it all the sizes of the fields added by \AF{TreeOD}, we can use \AV{n} to compute the total size of an ornamented constructor.
 
-In addition to generalizing over \AV{Me} to facilitate the \AIC{δ} case as we did for \AF{TreeOD}, we now also generalize over the index type \AV{N'}. When mapping over the lists of constructors (i.e., descriptions), the choice of constructor also selects the corresponding constructor of \AV{N'}.:
+In addition to generalizing over \AV{Me} to facilitate the \AIC{δ} case as we did for \AF{TreeOD}, we now also generalize over the index type \AV{N'}. When mapping over the lists of constructors (i.e., descriptions), the choice of constructor also selects the corresponding constructor of \AV{N'}:
 \ExecuteMetaData[Ornament/Numerical]{itrieify-desc}
 We define \AF{Trie-con} by induction on \AV{C}, binding the sizes of the subtries, to be fed as arguments to the selected constructor \AV{n}. Since we are continuing where \AF{Tree-con} left off, we can copy most fields:
 \ExecuteMetaData[Ornament/Numerical]{itrieify-con}

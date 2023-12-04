@@ -173,7 +173,7 @@ data _<_ : (n m : ℕ) → Type where
 \begin{code}
 infix 5 _<_
 
-{-# BUILTIN EQUALITY _≡_ #-}
+--{-# BUILTIN EQUALITY _≡_ #-}
 \end{code}
 
 %<*insert>
@@ -423,9 +423,12 @@ module ListD′ where
 %<*ListD-bad>
 \begin{code}
   ListD : Type → U-sop
-  ListD A = 𝟙
-          ∷ (σ A λ _ → ρ 𝟙)
-          ∷ []
+  ListD A = nilD ∷ consD ∷ []
+    where
+    nilD  = 𝟙          -- : List A
+    consD = σ A λ _ →  --   A
+            ρ          -- → List A
+            𝟙          -- → List A
 \end{code}
 %</ListD-bad>
 
@@ -574,11 +577,14 @@ module ListD-bad where
 %<*ListD>
 \begin{code}
   ListD : U-par (∅ ▷ λ _ → Type)
-  ListD  =  𝟙
-         ∷  σ (λ { ((_ , A) , _) → A })
-         (  ρ
-            𝟙)
+  ListD  =  nilD
+         ∷  consD                
          ∷  []
+    where
+    nilD   =  𝟙
+    consD  =  σ (λ { ((_ , A) , _) → A })  
+           (  ρ                           
+              𝟙)      
 \end{code}
 %</ListD>
 
@@ -586,9 +592,9 @@ module ListD-bad where
 \AgdaTarget{SigmaD}
 \begin{code}
 SigmaD : U-par (∅ ▷ (λ _ → Type) ▷ λ { (_ , _ , A) → A → Type })
-SigmaD  =  σ (λ { (((_ , A) , _) ,  _)       → A } )
-        (  σ (λ { ((_       , B) , (_ , a))  → B a } )
-           𝟙)
+SigmaD  =  σ (λ { (((_ , A) , _) ,  _)       → A } )    -- _,_  : (a : A) 
+        (  σ (λ { ((_       , B) , (_ , a))  → B a } )  --      → B a
+           𝟙)                                           --      → Σ A B
         ∷  []
 \end{code}
 %</SigmaD>
@@ -613,17 +619,17 @@ data U-ix (Γ : Tel ⊤) (I : Type) : Type where
 %</U-ix>
 
 %<*int-ix>
-\AgdaTarget{⟦\_⟧C, ⟧C}
-\AgdaTarget{⟦\_⟧D, ⟧D}
+\AgdaTarget{⟦\_⟧C-ix, ⟧C-ix}
+\AgdaTarget{⟦\_⟧D-ix, ⟧D-ix}
 \begin{code}
-⟦_⟧C : Con-ix Γ V I → (⟦ Γ ⟧tel tt → I → Type) → (⟦ Γ & V ⟧tel → I → Type)
-⟦ 𝟙 j    ⟧C X pv i = i ≡ (j pv)
-⟦ ρ j C  ⟧C X pv@(p , v) i = X p (j pv) × ⟦ C ⟧C X pv i
-⟦ σ S C  ⟧C X pv@(p , v) i = Σ[ s ∈ S pv ] ⟦ C ⟧C X (p , v , s) i
+⟦_⟧C-ix : Con-ix Γ V I → (⟦ Γ ⟧tel tt → I → Type) → (⟦ Γ & V ⟧tel → I → Type)
+⟦ 𝟙 j    ⟧C-ix X pv i = i ≡ (j pv)
+⟦ ρ j C  ⟧C-ix X pv@(p , v) i = X p (j pv) × ⟦ C ⟧C-ix X pv i
+⟦ σ S C  ⟧C-ix X pv@(p , v) i = Σ[ s ∈ S pv ] ⟦ C ⟧C-ix X (p , v , s) i
 
-⟦_⟧D : U-ix Γ I → (⟦ Γ ⟧tel tt → I → Type) → (⟦ Γ ⟧tel tt → I → Type)
-⟦ []      ⟧D X p i = ⊥
-⟦ C ∷ Cs  ⟧D X p i = ⟦ C ⟧C X (p , tt) i  ⊎ ⟦ Cs ⟧D X p i
+⟦_⟧D-ix : U-ix Γ I → (⟦ Γ ⟧tel tt → I → Type) → (⟦ Γ ⟧tel tt → I → Type)
+⟦ []      ⟧D-ix X p i = ⊥
+⟦ C ∷ Cs  ⟧D-ix X p i = ⟦ C ⟧C-ix X (p , tt) i  ⊎ ⟦ Cs ⟧D-ix X p i
 \end{code}
 %</int-ix>
 
@@ -631,7 +637,7 @@ data U-ix (Γ : Tel ⊤) (I : Type) : Type where
 \AgdaTarget{μ-ix}
 \begin{code}
 data μ-ix (D : U-ix Γ I) (p : ⟦ Γ ⟧tel tt) (i : I) : Type where
-  con : ⟦ D ⟧D (μ-ix D) p i → μ-ix D p i
+  con : ⟦ D ⟧D-ix (μ-ix D) p i → μ-ix D p i
 \end{code}
 %</mu-ix>
 
@@ -639,12 +645,13 @@ data μ-ix (D : U-ix Γ I) (p : ⟦ Γ ⟧tel tt) (i : I) : Type where
 \AgdaTarget{FinD}
 \begin{code}
 FinD : U-ix ∅ ℕ
-FinD = σ (λ _ → ℕ)
-     ( 𝟙 (λ { (_ , (_ , n)) → suc n } ))
-     ∷ σ (λ _ → ℕ)
-     ( ρ (λ { (_ , (_ , n)) → n } )
-     ( 𝟙 (λ { (_ , (_ , n)) → suc n } )))
-     ∷ []
+FinD = zeroD ∷ sucD ∷ []
+  where
+  zeroD  = σ (λ _ → ℕ)                         -- : (n : ℕ)
+         ( 𝟙 (λ { (_ , (_ , n)) → suc n } ))   -- → Fin (suc n)
+  sucD   = σ (λ _ → ℕ)                         -- : (n : ℕ)
+         ( ρ (λ { (_ , (_ , n)) → n } )        -- → Fin n
+         ( 𝟙 (λ { (_ , (_ , n)) → suc n } )))  -- → Fin (suc n)
 \end{code}
 %</FinD>
 
@@ -652,33 +659,36 @@ FinD = σ (λ _ → ℕ)
 \AgdaTarget{VecD}
 \begin{code}
 VecD : U-ix (∅ ▷ λ _ → Type) ℕ
-VecD = 𝟙 (λ _ → zero)
-     ∷  σ (λ _ → ℕ)
-     (  σ (λ { ((_ , A) , _) → A } )
-     (  ρ (λ { (_ , ((_ , n) , _)) → n } )
-     (  𝟙 (λ { (_ , ((_ , n) , _)) → suc n } ))))
+VecD = nilD                             
+     ∷ consD
      ∷ []
+  where
+  nilD   = 𝟙 (λ _ → zero)                             -- : Vec A zero
+  consD  = σ (λ _ → ℕ)                                -- : (n : ℕ)
+         ( σ (λ { ((_ , A) , _) → A } )               -- → A
+         ( ρ (λ { (_ , ((_ , n) , _)) → n } )         -- → Vec A n
+         ( 𝟙 (λ { (_ , ((_ , n) , _)) → suc n } ))))  -- → Vec A (suc n)
 \end{code}
 %</VecD>
 
 %<*fold-type>
-\AgdaTarget{⇶, fold}
+\AgdaTarget{→₃, fold}
 \begin{code}
-_⇶_ : (X Y : A → B → Type) → Type
-X ⇶ Y = ∀ a b → X a b → Y a b
+_→₃_ : (X Y : A → B → Type) → Type
+X →₃ Y = ∀ a b → X a b → Y a b
 
 fold : ∀ {D : U-ix Γ I} {X}
-     → ⟦ D ⟧D X ⇶ X → μ-ix D ⇶ X
+     → ⟦ D ⟧D-ix X →₃ X → μ-ix D →₃ X
 \end{code}
 %</fold-type>
 
 %<*fold>
 \begin{code}     
 mapDesc : ∀ {I} {D' : U-ix Γ I} (D : U-ix Γ I) {X}
-        → ∀ p j  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ-ix D') p j → ⟦ D ⟧D X p j
+        → ∀ p j  → ⟦ D' ⟧D-ix X →₃ X → ⟦ D ⟧D-ix (μ-ix D') p j → ⟦ D ⟧D-ix X p j
         
 mapCon : ∀ {I} {D' : U-ix Γ I} {V} (C : Con-ix Γ V I) {X}
-       → ∀ p j v → ⟦ D' ⟧D X ⇶ X → ⟦ C ⟧C (μ-ix D') (p , v) j → ⟦ C ⟧C X (p , v) j
+       → ∀ p j v → ⟦ D' ⟧D-ix X →₃ X → ⟦ C ⟧C-ix (μ-ix D') (p , v) j → ⟦ C ⟧C-ix X (p , v) j
 
 fold f p i (con x) = f p i (mapDesc _ p i f x)
 
@@ -704,17 +714,19 @@ private variable
 ! x = tt
 
 NatD  : U-ix ∅ ⊤
-NatD  = 𝟙 !
-      ∷ ρ !
-      ( 𝟙 !)
-      ∷ []
+NatD  = zeroD ∷ sucD ∷ []
+  where
+  zeroD  = 𝟙 !
+  sucD   = ρ !
+         ( 𝟙 !)
 
 ListD  : U-ix (∅ ▷ λ _ → Type) ⊤
-ListD  = 𝟙 !
-       ∷ σ (λ { ((_ , A) , _) → A })
-       ( ρ !
-       ( 𝟙 ! ))
-       ∷ []
+ListD  = nilD ∷ consD ∷ []
+  where
+  nilD   = 𝟙 ! 
+  consD  = σ (λ { ((_ , A) , _) → A })
+         ( ρ !
+         ( 𝟙 ! ))
 \end{code}
 %</new-Nat-List>
 
@@ -758,13 +770,13 @@ module foldr-fake where
 
 \begin{code}
 module foldr′ where
-  foldr' : ∀ {X} → ⟦ ListD ⟧D X ⇶ X → μ-ix ListD ⇶ X
+  foldr' : ∀ {X} → ⟦ ListD ⟧D-ix X →₃ X → μ-ix ListD →₃ X
   foldr' = fold {D = ListD}
 
-  sum′ : μ-ix ListD ⇶ λ (_ , A) _ → (A → ℕ) → ℕ
+  sum′ : μ-ix ListD →₃ λ (_ , A) _ → (A → ℕ) → ℕ
   sum′ = foldr' go
     where
-    go : ⟦ ListD ⟧D (λ z _ → (z .snd → ℕ) → ℕ) ⇶ (λ z _ → (z .snd → ℕ) → ℕ)
+    go : ⟦ ListD ⟧D-ix (λ z _ → (z .snd → ℕ) → ℕ) →₃ (λ z _ → (z .snd → ℕ) → ℕ)
     go p _ (inj₁ x) = λ _ → zero
     go p _ (inj₂ (inj₁ (x , f , _))) y = y x + f y
 
@@ -801,6 +813,7 @@ private variable
 mutual
 \end{code}
 %<*Orn>
+\AgdaTarget{Orn}
 \begin{code}
   data  Orn (re-par : Cxf Δ Γ) (re-index : J → I) :
         U-ix Γ I → U-ix Δ J → Type where
@@ -813,6 +826,7 @@ mutual
 
 
 %<*ConOrn>
+\AgdaTarget{ConOrn}
 \begin{code}
   data ConOrn (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V)
               (re-index : J → I) :
@@ -840,11 +854,12 @@ mutual
 \AgdaTarget{NatD-ListD}
 \begin{code}
 NatD-ListD : Orn ! id NatD ListD
-NatD-ListD  = 𝟙 (λ _ → refl)
-            ∷ Δσ {S = λ { ((_ , A), _) → A }}
-            ( ρ (λ _ → refl)
-            ( 𝟙 (λ _ → refl)))
-            ∷ []
+NatD-ListD  = nilO ∷ consO ∷ []
+  where
+  nilO   = 𝟙 (λ _ → refl)                   -- : List A
+  consO  = Δσ {S = λ { ((_ , A), _) → A }}  -- : A
+         ( ρ (λ _ → refl)                   -- → List A
+         ( 𝟙 (λ _ → refl)))                 -- → List A
 \end{code}
 %</NatD-ListD>
 
@@ -852,12 +867,15 @@ NatD-ListD  = 𝟙 (λ _ → refl)
 \AgdaTarget{ListD-VecD}
 \begin{code}
 ListD-VecD : Orn id ! ListD VecD
-ListD-VecD  = 𝟙 (λ _ → refl)
-            ∷ Δσ {S = λ _ → ℕ}
-            ( σ
-            ( ρ {j = λ { (_ , (_ , n) , _) → n }}      (λ _ → refl)
-            ( 𝟙 {j = λ { (_ , (_ , n) , _) → suc n }}  (λ _ → refl))))
-            ∷ []
+ListD-VecD  = nilO ∷ consO ∷ []
+  where
+  nilO   = 𝟙 (λ _ → refl)                           -- : Vec A zero
+  consO  = Δσ {S = λ _ → ℕ}                         -- : (n : ℕ)
+         ( σ                                        -- → A
+         ( ρ {j = λ { (_ , (_ , n) , _) → n }}      -- → Vec A n
+             (λ _ → refl)
+         ( 𝟙 {j = λ { (_ , (_ , n) , _) → suc n }}  -- → Vec A (suc n) 
+             (λ _ → refl))))
 \end{code}
 %</ListD-VecD>
 
@@ -879,16 +897,16 @@ mutual
 \begin{code}
   ornErase  : ∀ {re-par re-index} {X}
             → Orn re-par re-index D E
-            →  ⟦ E ⟧D (bimap X re-par re-index)
-               ⇶ bimap (⟦ D ⟧D X) re-par re-index
+            →  ⟦ E ⟧D-ix (bimap X re-par re-index)
+               →₃ bimap (⟦ D ⟧D-ix X) re-par re-index
   ornErase (CD ∷ D) p j (inj₁ x) = inj₁ (conOrnErase CD (p , tt) j x)
   ornErase (CD ∷ D) p j (inj₂ x) = inj₂ (ornErase D p j x)
 
   conOrnErase  : ∀  {re-par re-index} {W V} {X} {re-var : Vxf re-par W V}
                    {CD : Con-ix Γ V I} {CE : Con-ix Δ W J}
                → ConOrn re-par re-var re-index CD CE
-               →  ⟦ CE ⟧C (bimap X re-par re-index)
-                  ⇶ bimap (⟦ CD ⟧C X) (var→par re-var) re-index
+               →  ⟦ CE ⟧C-ix (bimap X re-par re-index)
+                  →₃ bimap (⟦ CD ⟧C-ix X) (var→par re-var) re-index
   conOrnErase {re-index = i} (𝟙 sq) p j x    = trans (cong i x) (sq p)
   conOrnErase {X = X} (ρ sq CD) p j (x , y)  = subst (X _) (sq p) x
                                              , conOrnErase CD p j y
@@ -905,8 +923,8 @@ mutual
 \begin{code}
 ornAlg  : ∀ {D : U-ix Γ I} {E : U-ix Δ J} {re-par re-index}
         → Orn re-par re-index D E
-        →  ⟦ E ⟧D (bimap (μ-ix D) re-par re-index)
-           ⇶ bimap (μ-ix D) re-par re-index
+        →  ⟦ E ⟧D-ix (bimap (μ-ix D) re-par re-index)
+           →₃ bimap (μ-ix D) re-par re-index
 ornAlg O p j x = con (ornErase O p j x)
 \end{code}
 %</ornAlg>
@@ -914,12 +932,11 @@ ornAlg O p j x = con (ornErase O p j x)
 %<*ornForget-type>
 \begin{code}
 ornForget  : ∀ {re-par re-index} → Orn re-par re-index D E
-           → μ-ix E ⇶ bimap (μ-ix D) re-par re-index 
+           → μ-ix E →₃ bimap (μ-ix D) re-par re-index 
 \end{code}
 %</ornForget-type>
 
 %<*ornForget>
-\AgdaTarget{ornForget}
 \begin{code}
 ornForget O = fold (ornAlg O)
 \end{code}
@@ -968,17 +985,18 @@ mutual
 \end{code}
 %</ConOrnDesc>
 
-%<*NatOD>
-\AgdaTarget{NatOD}
+%<*ListOD>
+\AgdaTarget{ListOD}
 \begin{code}
-NatOD : OrnDesc (∅ ▷ λ _ → Type) ⊤ ! ! NatD
-NatOD  = 𝟙 (λ _ → tt) (λ a → refl)
-       ∷ Δσ (λ { ((_ , A) , _) → A })
-       ( ρ (λ _ → tt) (λ a → refl)
-       ( 𝟙 (λ _ → tt) (λ a → refl)) )
-       ∷ []
+ListOD : OrnDesc (∅ ▷ λ _ → Type) ⊤ ! ! NatD
+ListOD = nilOD ∷ consOD ∷ []
+  where
+  nilOD   = 𝟙 (λ _ → tt) (λ _ → refl)     -- : List A
+  consOD  = Δσ (λ { ((_ , A) , _) → A })  -- : A 
+          ( ρ (λ _ → tt) (λ _ → refl)     -- → List A
+          ( 𝟙 (λ _ → tt) (λ _ → refl)) )  -- → List A
 \end{code}
-%</NatOD>
+%</ListOD>
 
 \begin{code}
 mutual
@@ -1005,6 +1023,7 @@ mutual
 mutual
 \end{code}
 %<*toOrn>
+\AgdaTarget{toOrn, toConOrn}
 \begin{code}
   toOrn  :  {D : U-ix Γ I}
             (OD : OrnDesc Δ J re-par re-index D)

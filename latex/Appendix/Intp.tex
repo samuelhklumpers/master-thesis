@@ -101,7 +101,7 @@
 \\
 \>[0]\AgdaKeyword{infixr}\AgdaSpace{}%
 \AgdaNumber{0}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⇶\AgdaUnderscore{}}}\<%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}→₃\AgdaUnderscore{}}}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -148,7 +148,7 @@
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⇶\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}→₃\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSpace{}%
@@ -162,7 +162,7 @@
 \AgdaPrimitive{Type}\<%
 \\
 \>[0]\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{→₃}}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
@@ -244,7 +244,7 @@
 \AgdaPrimitive{Type}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{→₃}}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(∀}\AgdaSpace{}%
@@ -260,7 +260,7 @@
 \AgdaBound{b}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{Z}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{→₃}}\AgdaSpace{}%
 \AgdaBound{Y}\<%
 \\
 \>[0]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
@@ -1004,7 +1004,11 @@
 
 --   ⟦ []     ⟧D X p i = ⊥
 --   ⟦ C ∷ D  ⟧D X p i = (⟦ C ⟧C X (p , tt) i) ⊎ (⟦ D ⟧D X p i)
+
 %<*Intp>
+\AgdaTarget{IntpC, IntpD}
+\AgdaTarget{𝟙-i, ρ-i, σ-i, δ-i}
+\AgdaTarget{∷-il, ∷-ir}
 \begin{code}%
 \>[0]\AgdaKeyword{mutual}\<%
 \\
@@ -1413,12 +1417,12 @@
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧D}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{→₃}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{μ}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{→₃}}\AgdaSpace{}%
 \AgdaBound{X}\<%
 \end{code}
 %</fold-type>
@@ -1450,7 +1454,7 @@
 \AgdaBound{D'}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧D}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{→₃}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -1498,7 +1502,7 @@
 \AgdaBound{D'}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧D}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⇶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{→₃}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -1689,3 +1693,4 @@
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
 %</mapFold>
+

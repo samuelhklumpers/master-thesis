@@ -30,7 +30,7 @@ private variable
 
 infixr 5 _∷_
 infixr 10 _▷_
-infixr 0 _⇶_
+infixr 0 _→₃_
 \end{code}
 
 %<*shorthands>
@@ -38,8 +38,8 @@ infixr 0 _⇶_
 _⇉_ : (X Y : A → Type) → Type
 X ⇉ Y = ∀ a → X a → Y a
 
-_⇶_ : (X Y : A → B → Type) → Type
-X ⇶ Y = ∀ a b → X a b → Y a b
+_→₃_ : (X Y : A → B → Type) → Type
+X →₃ Y = ∀ a b → X a b → Y a b
 
 liftM2 : (A → B → C) → (X → A) → (X → B) → X → C
 liftM2 f g h x = f (g x) (h x)
@@ -50,7 +50,7 @@ liftM2 f g h x = f (g x) (h x)
 %</shorthands>
 
 \begin{code}
-_∘₃_ : ∀ {X Y Z : A → B → Type} → X ⇶ Y → (∀ {a b} → Z a b → X a b) → Z ⇶ Y
+_∘₃_ : ∀ {X Y Z : A → B → Type} → X →₃ Y → (∀ {a b} → Z a b → X a b) → Z →₃ Y
 (g ∘₃ f) a b x = g a b (f x)
 \end{code}
 
@@ -132,6 +132,7 @@ Vxf-▷-map f S T m (v , t) = (f v , m _ v t)
 Information bundles (see ConI), a bundle If effectively requests an extra piece of information of, e.g., type 𝟙i when defining a constructor using 𝟙
 
 %<*Meta>
+\AgdaTarget{Meta, 𝟙i, ρi, σi, δi}
 \begin{code}
 record Meta : Type where
   field
@@ -149,6 +150,7 @@ open Meta public
 
 Information transformers, if there is a transformation MetaF Me′ If from the more specific bundle Me′ to the less specific bundle If, then a DescI Me′ can act as a DescI Me
 %<*MetaF>
+\AgdaTarget{MetaF, 𝟙f, ρf, σf, δf}
 \begin{code}
 record MetaF (L R : Meta) : Type where
   field
@@ -176,6 +178,7 @@ _∘MetaF_ : ∀ {X Y Z} → MetaF Y Z → MetaF X Y → MetaF X Z
 \end{code}
 
 %<*Plain>
+\AgdaTarget{Plain}
 \begin{code}
 Plain : Meta
 Plain .𝟙i = ⊤
@@ -187,6 +190,7 @@ Plain .δi _ _ = ⊤
 
 
 %<*Names>
+\AgdaTarget{Names}
 \begin{code}
 Names : Meta
 Names .𝟙i = ⊤
@@ -195,8 +199,6 @@ Names .σi _ = String
 Names .δi _ _ = String
 \end{code}
 %</Names>
-
-
 
 %<*Countable>
 Countable : Meta
@@ -219,6 +221,7 @@ mutual
 \end{code}
 
 %<*Desc>
+\AgdaTarget{DescI}
 \begin{code}
   data DescI (Me : Meta) (Γ : Tel ⊤) (I : Type) : Type where
     []   : DescI Me Γ I
@@ -227,6 +230,7 @@ mutual
 %</Desc>
 
 %<*Con>
+\AgdaTarget{ConI}
 \begin{code}
   data ConI (Me : Meta) (Γ : Tel ⊤) (V : ExTel Γ) (I : Type) : Type where
     𝟙  : {me : Me .𝟙i} (i : Γ & V ⊢ I) → ConI Me Γ V I
@@ -258,6 +262,7 @@ mutual
 \end{code}
 
 %<*interpretation>
+\AgdaTarget{⟦\_⟧C, ⟦\_⟧D, ⟧C, ⟧D}
 \begin{code}
   ⟦_⟧C : ConI Me Γ V I  → ( ⟦ Γ ⟧tel tt   → I → Type)
                         →   ⟦ Γ & V ⟧tel  → I → Type
@@ -274,6 +279,7 @@ mutual
 %</interpretation>
 
 %<*fpoint>
+\AgdaTarget{μ, con}
 \begin{code}
   data μ (D : DescI Me Γ I) (p : ⟦ Γ ⟧tel tt) : I → Type  where
     con : ∀ {i} → ⟦ D ⟧D (μ D) p i → μ D p i
@@ -301,6 +307,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 %</rho-zero>
 
 %<*Plain-synonyms>
+\AgdaTarget{Con, Desc}
 \begin{code}
 Con  = ConI Plain
 Desc = DescI Plain
@@ -309,27 +316,31 @@ Desc = DescI Plain
 
 %<*fold-type>
 \begin{code}
-fold : ∀ {D : DescI Me Γ I} {X} → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
+fold : ∀ {D : DescI Me Γ I} {X} → ⟦ D ⟧D X →₃ X → μ D →₃ X
 \end{code}
 %</fold-type>
 
 %<*mapFold>
+\AgdaTarget{mapDesc, mapCon}
 \begin{code}     
-mapDesc : ∀ {D' : DescI Me Γ I} (D : DescI Me Γ I) {X}
-        → ∀ p i  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ D') p i → ⟦ D ⟧D X p i
+mapDesc  : ∀ {D' : DescI Me Γ I} (D : DescI Me Γ I) {X}
+         → ∀ p i  → ⟦ D' ⟧D X →₃ X
+         → ⟦ D ⟧D (μ D') p i → ⟦ D ⟧D X p i
         
-mapCon : ∀ {D' : DescI Me Γ I} {V} (C : ConI Me Γ V I) {X}
-       → ∀ p i v → ⟦ D' ⟧D X ⇶ X → ⟦ C ⟧C (μ D') (p , v) i → ⟦ C ⟧C X (p , v) i
+mapCon  : ∀ {D' : DescI Me Γ I} {V} (C : ConI Me Γ V I) {X}
+        → ∀ p i v → ⟦ D' ⟧D X →₃ X
+        → ⟦ C ⟧C (μ D') (p , v) i → ⟦ C ⟧C X (p , v) i
 
 fold f p i (con x) = f p i (mapDesc _ p i f x)
 
 mapDesc (C ∷ D) p i f (inj₁ x) = inj₁ (mapCon C p i tt f x)
 mapDesc (C ∷ D) p i f (inj₂ y) = inj₂ (mapDesc D p i f y)
 
-mapCon (𝟙 j)        p i v f      x  = x
-mapCon (ρ g j C)    p i v f (r , x) = fold f (g p) (j (p , v)) r , mapCon C p i v f x
-mapCon (σ S w C)    p i v f (s , x) = s , mapCon C p i (w (v , s)) f x
-mapCon (δ d j R C)  p i v f (r , x) = r , mapCon C p i v f x
+mapCon (𝟙 j)        p i v f      x   = x
+mapCon (ρ g j C)    p i v f (r , x)  = fold f (g p) (j (p , v)) r
+                                     , mapCon C p i v f x
+mapCon (σ S w C)    p i v f (s , x)  = s , mapCon C p i (w (v , s)) f x
+mapCon (δ d j R C)  p i v f (r , x)  = r , mapCon C p i v f x
 \end{code}
 %</mapFold>
 
@@ -341,27 +352,32 @@ module _ where
 %<*NatD-and-ListD>
 \begin{code}
   NatD  : Desc ∅ ⊤
-  NatD  = 𝟙 _
-        ∷ ρ0 _ (𝟙 _)
-        ∷ []
+  NatD  = zeroD ∷ sucD ∷ []
+    where
+    zeroD  = 𝟙  _   -- : ℕ
+    sucD   = ρ0 _   -- : ℕ
+           ( 𝟙  _)  -- → ℕ
 
   ListD : Desc (∅ ▷ λ _ → Type) ⊤
-  ListD = 𝟙 _
-       ∷  σ- (λ ((_ , A) , _) → A)
-       (  ρ0 _ (𝟙 _))
-       ∷  []
+  ListD = nilD ∷ consD ∷ []
+    where
+    nilD    = 𝟙 _                       -- : List A
+    consD   = σ- (λ ((_ , A) , _) → A)  -- : A
+            ( ρ0 _                      -- → List A
+            ( 𝟙  _))                    -- → List A
 \end{code}
 %</NatD-and-ListD>
 
 %<*VecD>
 \begin{code}
   VecD  : Desc (∅ ▷ λ _ → Type) ℕ
-  VecD  =  𝟙 (λ _ → 0)
-        ∷  σ-  (λ ((_ , A) , _) → A)
-        (  σ+  (λ _ → ℕ)
-        (  ρ0  (λ (_ , (_ , n)) → n)
-        (  𝟙   (λ (_ , (_ , n)) → suc n))))
-        ∷  []
+  VecD = nilD ∷ consD ∷ []
+    where
+    nilD   = 𝟙 (λ _ → 0)                       -- : Vec A zero
+    consD  = σ-  (λ ((_ , A) , _) → A)         -- : A
+           ( σ+  (λ _ → ℕ)                     -- → (n : ℕ)
+           ( ρ0  (λ (_ , (_ , n)) → n)         -- → Vec A n
+           ( 𝟙   (λ (_ , (_ , n)) → suc n))))  -- → Vec A (suc n)
 \end{code}
 %</VecD>
 
@@ -375,59 +391,53 @@ module _ where
 %<*RandomD>
 \begin{code}
   RandomD  : Desc (∅ ▷ λ _ → Type) ⊤
-  RandomD  =  𝟙 _
-           ∷  σ-   (λ ((_ , A) , _) → A)
-           (  ρ    (λ (_ , A) → (_ , (A × A))) _
-           (  𝟙 _))
-           ∷  σ-   (λ ((_ , A) , _) → A)
-           (  σ-   (λ ((_ , A) , _) → A)
-           (  ρ    (λ (_ , A) → (_ , (A × A))) _
-           (  𝟙 _)))
-           ∷  []
+  RandomD = ZeroD ∷ OneD ∷ TwoD ∷ []
+    where
+    ZeroD  = 𝟙 _                                  -- : RandomD A
+    OneD   = σ-   (λ ((_ , A) , _) → A)           -- : A 
+           ( ρ    (λ (_ , A) → (_ , (A × A))) _   -- → Random (A × A)
+           ( 𝟙 _))                                -- → Random A
+    TwoD   = σ-   (λ ((_ , A) , _) → A)           -- : A
+           ( σ-   (λ ((_ , A) , _) → A)           -- → A
+           ( ρ    (λ (_ , A) → (_ , (A × A))) _   -- → Random (A × A)
+           ( 𝟙 _)))                               -- → Random A
 \end{code}
 %</RandomD>
 
 %<*DigitD>
 \begin{code}
   DigitD  : Desc (∅ ▷ λ _ → Type) ⊤
-  DigitD  =  σ-  (λ ((_ , A) , _) → A)
-          (  𝟙 _)
-          ∷  σ-  (λ ((_ , A) , _) → A)
-          (  σ-  (λ ((_ , A) , _) → A)
-          (  𝟙 _))
-          ∷  σ-  (λ ((_ , A) , _) → A)
-          (  σ-  (λ ((_ , A) , _) → A)
-          (  σ-  (λ ((_ , A) , _) → A)
-          (  𝟙 _)))
-          ∷  []
+  DigitD = OneD ∷ TwoD ∷ ThreeD ∷ []
+    where
+    OneD    =  σ-  (λ ((_ , A) , _) → A)  -- : A
+            (  𝟙 _)                       -- → Digit A
+    TwoD    =  σ-  (λ ((_ , A) , _) → A)  -- : A 
+            (  σ-  (λ ((_ , A) , _) → A)  -- → A 
+            (  𝟙 _))                      -- → Digit A
+    ThreeD  =  σ-  (λ ((_ , A) , _) → A)  -- : A 
+            (  σ-  (λ ((_ , A) , _) → A)  -- → A
+            (  σ-  (λ ((_ , A) , _) → A)  -- → A
+            (  𝟙 _)))                     -- → Digit A
 \end{code}
 %</DigitD>
-
-%<*Node>
-\begin{code}
-  data Node (A : Type) : Type where
-    two    : A → A      → Node A
-    three  : A → A → A  → Node A
-\end{code}
-%</Node>
 
 %<*FingerD>
 \begin{code}
   FingerD : Desc (∅ ▷ λ _ → Type) ⊤
-  FingerD  =  𝟙 _
-           ∷  σ-  (λ ((_ , A) , _) → A)
-           (  𝟙 _)
-           ∷  δ   (λ (p , _) → p) _ DigitD
-           (  ρ   (λ (_ , A) → (_ , Node A)) _
-           (  δ   (λ (p , _) → p) _ DigitD
-           (  𝟙 _)))
-           ∷  []
+  FingerD = EmptyD ∷ SingleD ∷ DeepD ∷ []
+    where
+    EmptyD   =  𝟙 _                                -- : Finger A
+    SingleD  =  σ-  (λ ((_ , A) , _) → A)          -- : A
+             (  𝟙 _)                               -- → Finger A
+    DeepD    =  δ   (λ (p , _) → p) _ DigitD       -- : Digit A 
+             (  ρ   (λ (_ , A) → (_ , (A × A))) _  -- → Finger (A × A)
+             (  δ   (λ (p , _) → p) _ DigitD       -- → Digit A
+             (  𝟙 _)))                             -- → Finger A
 \end{code}
 %</FingerD>
 
-
-
 %<*Number>
+\AgdaTarget{Number}
 \begin{code}
 Number : Meta
 Number .𝟙i = ℕ
@@ -438,6 +448,7 @@ Number .δi Γ J = (Γ ≡ ∅) × (J ≡ ⊤) × ℕ
 %</Number>
 
 %<*toN-type>
+\AgdaTarget{value}
 \begin{code}
 value : {D : DescI Number Γ ⊤} → ∀ {p} → μ D p tt → ℕ
 \end{code}
@@ -453,6 +464,7 @@ value {D = D} = value-lift D id-MetaF
 \end{code}
 
 %<*toN-con>
+\AgdaTarget{value-desc, value-con}
 \begin{code}
     value-desc : (D : DescI Me Γ ⊤) → ∀ {a b} → ⟦ D ⟧D (λ _ _ → ℕ) a b → ℕ
     value-con : (C : ConI Me Γ V ⊤) → ∀ {a b} → ⟦ C ⟧C (λ _ _ → ℕ) a b → ℕ
@@ -476,44 +488,51 @@ value {D = D} = value-lift D id-MetaF
 \end{code}
 %</toN-con>
 
-%<*NatND>
+\AgdaTarget{NatND}
 \begin{code}
 NatND : DescI Number ∅ ⊤
 NatND = 𝟙 {me = 0} _
       ∷ ρ0 {me = 1} _ (𝟙 {me = 1} _)
       ∷ []
 \end{code}
-%</NatND>
 
 %<*BinND>
+\AgdaTarget{BinND}
 \begin{code}
 BinND : DescI Number ∅ ⊤
-BinND = 𝟙 {me = 0} _
-      ∷ ρ0 {me = 2} _ (𝟙 {me = 1} _)
-      ∷ ρ0 {me = 2} _ (𝟙 {me = 2} _)
-      ∷ []
+BinND = 0bD ∷ 1bD ∷ 2bD ∷ []
+  where
+  0bD  = 𝟙 {me = 0} _
+  1bD  = ρ0 {me = 2} _
+       ( 𝟙 {me = 1} _)
+  2bD  = ρ0 {me = 2} _
+       ( 𝟙 {me = 2} _)
 \end{code}
 %</BinND>
 
 %<*PhalanxND>
+\AgdaTarget{PhalanxND}
 \begin{code}
 PhalanxND : DescI Number ∅ ⊤
-PhalanxND  = 𝟙 {me = 1} _
-           ∷ 𝟙 {me = 2} _
-           ∷ 𝟙 {me = 3} _
-           ∷ []
+PhalanxND = 1pD ∷ 2pD ∷ 3pD ∷ []
+  where
+  1pD  = 𝟙 {me = 1} _
+  2pD  = 𝟙 {me = 2} _
+  3pD  = 𝟙 {me = 3} _
 \end{code}
 %</PhalanxND>
 
 %<*CarpalND>
+\AgdaTarget{CarpalND}
 \begin{code}
 CarpalND : DescI Number ∅ ⊤
-CarpalND  = 𝟙 {me = 0} _
-          ∷ 𝟙 {me = 1} _
-          ∷ δ {me = refl , refl , 1} {id-MetaF} _ _ PhalanxND
+CarpalND = 0cD ∷ 1cD ∷ 2cD ∷ []
+  where
+  0cD     = 𝟙 {me = 0} _
+  1cD     = 𝟙 {me = 1} _
+  2cD     = δ {me = refl , refl , 1} {id-MetaF} _ _ PhalanxND
           ( ρ0 {me = 2} _
           ( δ {me = refl , refl , 1} {id-MetaF} _ _ PhalanxND
           ( 𝟙 {me = 0} _)))
-          ∷ []
 \end{code}
 %</CarpalND>

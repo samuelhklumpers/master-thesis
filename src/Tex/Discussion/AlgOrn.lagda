@@ -45,7 +45,7 @@ open Meta
 
 %<*almost-algorn>
 algOrn   : ∀ {J} (D : Desc ∅ I)
-         → (⟦ D ⟧D J ⇶ J)
+         → (⟦ D ⟧D J →₃ J)
          → OrnDesc Plain ∅ id (Σ I (J tt)) fst D
          
 algOrnC  : ∀ {W J} (C : Con ∅ V I) (c : Vxf id W V)
@@ -122,7 +122,7 @@ shortcut (OC ∷ OD) iff
   = shortcutC OC iff 
   ∷ shortcut OD iff  
 
-shortcutC (𝟙 j′ x₁) iff = 𝟙 (λ pv → {!still need a ⟦ toDesc OC ⟧C (~~ μ E ~~) ⇶ ~~ μ E ~~ like object here!}) {!!}
+shortcutC (𝟙 j′ x₁) iff = 𝟙 (λ pv → {!still need a ⟦ toDesc OC ⟧C (~~ μ E ~~) →₃ ~~ μ E ~~ like object here!}) {!!}
 shortcutC (ρ j′ h x₁ x₂ OC) iff = {!!}
 shortcutC (σ S h v′ x₁ OC) iff = {!!}
 shortcutC (δ R j t h x₁ OC) iff = {!!}

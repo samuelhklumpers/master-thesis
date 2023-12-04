@@ -21,6 +21,7 @@ private variable
 \end{code}
 
 %<*HMu>
+\AgdaTarget{Fun, HFun, HMu}
 \begin{code}
 Fun   = Type → Type
 HFun  = Fun → Fun
@@ -32,6 +33,7 @@ data HMu (H : HFun) (A : Type) : Type where
 %</HMu>
 
 %<*HRandom>
+\AgdaTarget{HRandom}
 \begin{code}
 data HRandom (F : Fun) (A : Type) : Type where
   Zero  :                       HRandom F A
@@ -109,15 +111,16 @@ private variable
 %<*Random>
 \begin{code}
 RandomD : U-nest (∅ ▷ λ _ → Type) ⊤
-RandomD  = 𝟙 _
-         ∷ σ (λ { ((_ , A) , _) → A })
-         ( ρ _ (λ { (_ , A) → (_ , A × A) })
-         ( 𝟙 _ ))
-         ∷ σ (λ { ((_ , A) , _) → A })
-         ( σ (λ { ((_ , A) , _) → A })
-         ( ρ _ (λ { (_ , A) → (_ , A × A) })
-         ( 𝟙 _ )))
-         ∷ []
+RandomD  = ZeroD ∷ OneD ∷ TwoD ∷ []
+  where
+  ZeroD  = 𝟙 _                                -- : Random A
+  OneD   = σ (λ { ((_ , A) , _) → A })        -- : A
+         ( ρ _ (λ { (_ , A) → (_ , A × A) })  -- → Random (A × A)
+         ( 𝟙 _ ))                             -- → Random A
+  TwoD   = σ (λ { ((_ , A) , _) → A })        -- : A
+         ( σ (λ { ((_ , A) , _) → A })        -- → A
+         ( ρ _ (λ { (_ , A) → (_ , A × A) })  -- → Random (A × A) 
+         ( 𝟙 _ )))                            -- → Random A
 \end{code}
 %</Random>
 

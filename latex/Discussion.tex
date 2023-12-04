@@ -8,11 +8,13 @@ Due to the \AF{remember}-\AF{forget} isomorphism \cite{algorn}, we have that \AF
 
 However, it turns out that \AF{PathOD} is not so easy to define, as we can see by the following.
 
-\subsection{Σ-descriptions are more natural for expressing finite types}\label{sec:closed-universe}
+\subsection{Σ-descriptions are more natural for expressing finite types}\label{sec:sigma-desc}
 Due to our representation of types as sums of products, representing the finite types of larger number systems quickly becomes much more complex. Consider the binary numbers from before:
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{Leibniz}
 The finite type associated to \AD{Leibniz} has more constructors than \AD{Leibniz}:
 \ExecuteMetaData[Tex/Discussion/Sigma-Desc]{FinB}
+Crucially, the constructors of the finite type at (e.g.) index \AIC{1b}\ \AV{n} do not share the same structure.
+
 In general, given a description of a number system \AV{N}, the number of constructors of the finite type \AD{FinN} of \AV{N} depends directly on the interpretation of \AV{N}, preventing the construction \AD{FinN} by simple recursion on \AD{DescI} (that is, without passing around lists of constructors instead). Furthermore, since our definition of ornaments insists ornaments preserve the number of constructors, there cannot be an ornament from an arbitrary number system to its finite type. 
 
 The apparent asymmetry between number systems and finite types stems from the definition of \AIC{σ} in \AD{DescI}. In \AD{DescI} and similar sums-of-products universes \cite{practgen,sijsling}, the remainder of a constructor \AV{C} after a \AIC{σ}\ \AV{S} simply has its context extended by \AV{S}. In contrast, a universe with \emph{Σ-descriptions} \cite{effectfully,progorn,algorn} (in the terminology of \cite{sijsling}) encodes a dependent field \AV{(s : S)} by asking for a function \AV{C} assigning values \AV{s} to descriptions.

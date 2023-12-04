@@ -58,6 +58,7 @@ mutual
 \end{code}
 
 %<*OrnDesc>
+\AgdaTarget{OrnDesc}
 \begin{code}
   data OrnDesc     {Me} (Me′ : Meta) (Δ : Tel ⊤)
                    (re-par : Cxf Δ Γ) (J : Type) (re-index : J → I)
@@ -70,6 +71,7 @@ mutual
 %</OrnDesc>
 
 %<*ConOrn-preserve>
+\AgdaTarget{ConOrnDesc}
 \begin{code}
   data ConOrnDesc  (Me′ : Meta) {re-par : Cxf Δ Γ}
                    (re-var : Vxf re-par W V) (re-index : J → I)
@@ -105,6 +107,7 @@ mutual
 %</ConOrn-preserve>
 
 %<*ConOrn-extend>
+\AgdaTarget{Δσ, Δδ}
 \begin{code}
     Δσ : (S : Δ & W ⊢ Type) (h : Vxf id (W ▷ S) W′)
          (v′ : Vxf re-par W′ V)
@@ -121,6 +124,7 @@ mutual
 %</ConOrn-extend>
 
 %<*ConOrn-compose>
+\AgdaTarget{∙δ}
 \begin{code}
     ∙δ : {R : DescI If″ Θ K} {c′ : Cxf Λ Θ} {fΘ : V ⊢ ⟦ Θ ⟧tel tt}
          (fΛ : W ⊢ ⟦ Λ ⟧tel tt) {k′ : M → K} {k : V ⊢ K}
@@ -137,6 +141,7 @@ mutual
 
 
 %<*toDesc>
+\AgdaTarget{toDesc, toCon}
 \begin{code}
   toDesc  : {re-var : Cxf Δ Γ} {re-index : J → I} {D : DescI Me Γ I}
           → OrnDesc Me′ Δ re-var J re-index D → DescI Me′ Δ J
@@ -192,16 +197,17 @@ mutual
 
   ornAlg : ∀ {Δ} {Γ : Tel ⊤} {J} {I} {Me} {Me′} {re-var : Cxf Δ Γ}
            {re-index : J → I} {D : DescI Me Γ I} (OD : OrnDesc Me′ Δ re-var J re-index D) →
-         ⟦ toDesc OD ⟧D (λ p j → μ D (re-var p) (re-index j)) ⇶
+         ⟦ toDesc OD ⟧D (λ p j → μ D (re-var p) (re-index j)) →₃
          (λ p j → μ D (re-var p) (re-index j))
   ornAlg OD p i x = con (ornErase OD p i x)
 \end{code}
 
 %<*ornForget>
+\AgdaTarget{ornForget}
 \begin{code}
   ornForget : {re-var : Cxf Δ Γ} {re-index : J → I} {D : DescI Me Γ I}
             → (OD : OrnDesc Me′ Δ re-var J re-index D)
-            → μ (toDesc OD) ⇶ λ d j → μ D (re-var d) (re-index j)
+            → μ (toDesc OD) →₃ λ d j → μ D (re-var d) (re-index j)
   ornForget OD = fold (ornAlg OD)
 \end{code}
 %</ornForget>
@@ -217,6 +223,7 @@ module _ {Me′ : Meta} {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V} {re-index
 \end{code}
 
 %<*O-sigma-pm>
+\AgdaTarget{Oσ+}
 \begin{code}
   Oσ+ : (S : Γ & V ⊢ Type) {CD : ConI Me Γ V′ I} {h : Vxf _ _ _}
     → {me : Me .σi S} {me′ : Me′ .σi (S ∘ var→par re-var)}
@@ -250,27 +257,29 @@ module _ {Me′ : Meta} {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V} {re-index
 %<*VecOD>
 \begin{code}
 VecOD : OrnDesc Plain (∅ ▷ λ _ → Type) id ℕ ! ListD
-VecOD = (𝟙 (λ _ → zero) (λ _ → refl))
-      ∷ (OΔσ+ (λ _ → ℕ)
-      (  Oσ- (λ ((_ , A) , _) → A)
-      (  Oρ0 (λ (_ , (_ , n)) → n) (λ _ → refl)
-      (  𝟙 (λ (_ , (_ , n)) → suc n) (λ _ → refl)))))
-      ∷ []
+VecOD = nilOD ∷ consOD ∷ []
+  where
+  nilOD   = 𝟙 (λ _ → zero) (λ _ → refl)
+  consOD  = OΔσ+ (λ _ → ℕ)
+          ( Oσ- (λ ((_ , A) , _) → A)
+          ( Oρ0 (λ (_ , (_ , n)) → n) (λ _ → refl)
+          ( 𝟙 (λ (_ , (_ , n)) → suc n) (λ _ → refl))))
 \end{code}
 %</VecOD>
 
 %<*RandomOD>
 \begin{code}
 RandomOD : OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ id BinND
-RandomOD  = 𝟙 _ (λ _ → refl)
-          ∷  OΔσ- (λ ((_ , A) , _) → A)
-          (  ρ (λ (_ , A) → (_ , Pair A)) _ (λ _ → refl) (λ _ → refl)
-          (  𝟙 _ (λ _ → refl)))
-          ∷  OΔσ- (λ ((_ , A) , _) → A)
-          (  OΔσ- (λ ((_ , A) , _) → A)
-          (  ρ (λ (_ , A) → (_ , Pair A)) _ (λ _ → refl) (λ _ → refl) 
-          (  𝟙 _ (λ _ → refl))))
-          ∷ []
+RandomOD = ZeroOD ∷ OneOD ∷ TwoOD ∷ []
+  where
+  ZeroOD   = 𝟙 _ (λ _ → refl)
+  OneOD    =  OΔσ- (λ ((_ , A) , _) → A)
+           (  ρ (λ (_ , A) → (_ , Pair A)) _ (λ _ → refl) (λ _ → refl)
+           (  𝟙 _ (λ _ → refl)))
+  TwoOD    =  OΔσ- (λ ((_ , A) , _) → A)
+           (  OΔσ- (λ ((_ , A) , _) → A)
+           (  ρ (λ (_ , A) → (_ , Pair A)) _ (λ _ → refl) (λ _ → refl) 
+           (  𝟙 _ (λ _ → refl))))
 \end{code}
 %</RandomOD>
 
@@ -280,30 +289,32 @@ module Ignore where
 %<*DigitOD>
 \begin{code}
   DigitOD : OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ id PhalanxND
-  DigitOD = OΔσ- (λ ((_ , A) , _) → A)
-          ( 𝟙 _ (λ _ → refl))
-          ∷ OΔσ- (λ ((_ , A) , _) → A)
-          ( OΔσ- (λ ((_ , A) , _) → A)
-          ( 𝟙 _ (λ _ → refl)))
-          ∷ OΔσ- (λ ((_ , A) , _) → A)
-          ( OΔσ- (λ ((_ , A) , _) → A)
-          ( OΔσ- (λ ((_ , A) , _) → A)
-          ( 𝟙 _ (λ _ → refl))))
-          ∷ []
+  DigitOD = OneOD ∷ TwoOD ∷ ThreeOD ∷ []
+    where
+    OneOD      = OΔσ- (λ ((_ , A) , _) → A)
+               ( 𝟙 _ (λ _ → refl))
+    TwoOD      = OΔσ- (λ ((_ , A) , _) → A)
+               ( OΔσ- (λ ((_ , A) , _) → A)
+               ( 𝟙 _ (λ _ → refl)))
+    ThreeOD    = OΔσ- (λ ((_ , A) , _) → A)
+               ( OΔσ- (λ ((_ , A) , _) → A)
+               ( OΔσ- (λ ((_ , A) , _) → A)
+               ( 𝟙 _ (λ _ → refl))))
 \end{code}
 %</DigitOD>
 
 %<*FingerOD>
 \begin{code}
   FingerOD : OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ id CarpalND
-  FingerOD = 𝟙 _ (λ _ → refl)
-           ∷ OΔσ- (λ ((_ , A) , _) → A)
-           ( 𝟙 _ (λ _ → refl))
-           ∷ ∙δ (λ (p , _) → p) _ DigitOD (λ _ _ → refl) (λ _ _ → refl)
-           ( ρ (λ (_ , A) → (_ , Pair A)) _ (λ _ → refl) (λ _ → refl)
-           ( ∙δ (λ (p , _) → p) _ DigitOD (λ _ _ → refl) (λ _ _ → refl)
-           ( 𝟙 _ (λ _ → refl))))
-           ∷ []
+  FingerOD = EmptyOD ∷ SingleOD ∷ DeepOD ∷ []
+    where
+    EmptyOD    = 𝟙 _ (λ _ → refl)
+    SingleOD   = OΔσ- (λ ((_ , A) , _) → A)
+               ( 𝟙 _ (λ _ → refl))
+    DeepOD     = ∙δ (λ (p , _) → p) _ DigitOD (λ _ _ → refl) (λ _ _ → refl)
+               ( ρ (λ (_ , A) → (_ , (A × A))) _ (λ _ → refl) (λ _ → refl)
+               ( ∙δ (λ (p , _) → p) _ DigitOD (λ _ _ → refl) (λ _ _ → refl)
+               ( 𝟙 _ (λ _ → refl))))
 \end{code}
 %</FingerOD>
 

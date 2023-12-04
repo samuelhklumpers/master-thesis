@@ -18,7 +18,7 @@ private variable
 
 infixr 5 _∷_
 infixr 10 _▷_
-infixr 0 _⇶_
+infixr 0 _→₃_
 
 id : {A : Type} → A → A
 id x = x
@@ -26,8 +26,8 @@ id x = x
 _⇉_ : (X Y : A → Type) → Type
 X ⇉ Y = ∀ a → X a → Y a
 
-_⇶_ : (X Y : A → B → Type) → Type
-X ⇶ Y = ∀ a b → X a b → Y a b
+_→₃_ : (X Y : A → B → Type) → Type
+X →₃ Y = ∀ a b → X a b → Y a b
 
 liftM2 : (A → B → C) → (X → A) → (X → B) → X → C
 liftM2 f g h x = f (g x) (h x)
@@ -35,7 +35,7 @@ liftM2 f g h x = f (g x) (h x)
 ! : {A : Type} → A → ⊤
 ! _ = tt
 
-_∘₃_ : ∀ {X Y Z : A → B → Type} → X ⇶ Y → (∀ {a b} → Z a b → X a b) → Z ⇶ Y
+_∘₃_ : ∀ {X Y Z : A → B → Type} → X →₃ Y → (∀ {a b} → Z a b → X a b) → Z →₃ Y
 (g ∘₃ f) a b x = g a b (f x)
 
 data Tel (P : Type) : Type
@@ -118,7 +118,11 @@ mutual
 
 --   ⟦ []     ⟧D X p i = ⊥
 --   ⟦ C ∷ D  ⟧D X p i = (⟦ C ⟧C X (p , tt) i) ⊎ (⟦ D ⟧D X p i)
+
 %<*Intp>
+\AgdaTarget{IntpC, IntpD}
+\AgdaTarget{𝟙-i, ρ-i, σ-i, δ-i}
+\AgdaTarget{∷-il, ∷-ir}
 \begin{code}
 mutual
   data μ (D : Desc Γ I) (p : ⟦ Γ ⟧tel tt) : I → Type  where
@@ -159,17 +163,17 @@ mutual
 
 %<*fold-type>
 \begin{code}
-fold : ∀ {D : Desc Γ I} {X} → ⟦ D ⟧D X ⇶ X → μ D ⇶ X
+fold : ∀ {D : Desc Γ I} {X} → ⟦ D ⟧D X →₃ X → μ D →₃ X
 \end{code}
 %</fold-type>
 
 %<*mapFold>
 \begin{code}     
 mapDesc : ∀ {D' : Desc Γ I} (D : Desc Γ I) {X}
-        → ∀ p i  → ⟦ D' ⟧D X ⇶ X → ⟦ D ⟧D (μ D') p i → ⟦ D ⟧D X p i
+        → ∀ p i  → ⟦ D' ⟧D X →₃ X → ⟦ D ⟧D (μ D') p i → ⟦ D ⟧D X p i
         
 mapCon : ∀ {D' : Desc Γ I} {V} (C : Con Γ V I) {X}
-       → ∀ p i v → ⟦ D' ⟧D X ⇶ X → ⟦ C ⟧C (μ D') (p , v) i → ⟦ C ⟧C X (p , v) i
+       → ∀ p i v → ⟦ D' ⟧D X →₃ X → ⟦ C ⟧C (μ D') (p , v) i → ⟦ C ⟧C X (p , v) i
 
 fold f p i (con x) = f p i (mapDesc _ p i f x)
 
@@ -189,3 +193,4 @@ mapCon (δ d j R C)  p i v f
        (δ-i r  x)     = δ-i r (mapCon C p i v f x)
 \end{code}
 %</mapFold>
+

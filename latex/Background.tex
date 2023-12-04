@@ -5,7 +5,7 @@ In this section, we will explain and highlight some parts of Agda which we use i
 
 
 \subsection{Datatypes in Agda}\label{sec:background-data}
-At the level of generalized algebraic datatypes Agda is close to Haskell. In both languages, one can define objects using data declarations, and interact with them using function declarations. For example, we can define the type of booleans by declaring:
+At the level of (generalized) algebraic datatypes Agda is close to Haskell. In both languages, one can define objects using data declarations, and interact with them using function declarations. For example, we can define the type of booleans by declaring:
 \ExecuteMetaData[Tex/Background]{Bool}
 The constructors of this type state that values of \AD{Bool} are produced in exactly two ways: \AIC{false} and \AIC{true}. We can then define functions on \AD{Bool} by \emph{pattern matching}, using that a variable of \AD{Bool} is necessarily either \AIC{false} or \AIC{true}. As an example, we can define the conditional operator as:
 \ExecuteMetaData[Tex/Background]{conditional}
@@ -52,7 +52,7 @@ If \AF{lookup} is correct, then we expect the following to hold
 \ExecuteMetaData[Tex/Background]{lookup-insert-type}
 which essentially states that we find elements where we insert them.
 
-To prove \AF{lookup-insert-type}, we proceed as when defining any other function: By simultaneous induction on the position \AV{i} and vector \AV{xs}, we prove:
+To prove \AF{lookup-insert-type}, we proceed as when defining any other function. By simultaneous induction on the position \AV{i} and vector \AV{xs}, we prove:
 \ExecuteMetaData[Tex/Background]{lookup-insert}
 In the first two cases, where we \AF{lookup} the first position, \AF{insert}\ \AV{xs}\ \AIC{zero}\ \AV{y} simplifies to \AV{y}\ \AF{∷}\ \AF{xs}, so the lookup immediately returns \AV{y} as wanted. In the last case, we have to prove that \AF{lookup} is correct for \AV{x}\ \AF{∷}\ \AF{xs}, so we use that the \AF{lookup} ignores the term \AV{x}, and appeal to the correctness of \AF{lookup} on the smaller list \AV{xs} to complete the proof.
 
@@ -107,13 +107,13 @@ Then, we also have to redefine the interpretation: consider the interpretation o
 
 In the first, we use functions from \AD{Type} to \AD{Type}\footnote{We also refer to these functions as \emph{polynomial functors}, which are polynomial here because they consist of sums and products, and are functors because they have a (functorial) mapping operation, as we will see later.} to represent types with one free type variable. Interpreting a code \AV{D}, we use the free variable \AV{X} to represent ``the type D'':
 \ExecuteMetaData[Tex/Background]{int-rec}
-We can then model a recursive type by indeed setting the variable to the type itself, taking the \emph{fixpoints} of the functor:
+We can then model a recursive type by indeed setting the variable to the type itself, taking the \emph{least fixpoint} of the functor:
 \ExecuteMetaData[Tex/Background]{mu-rec}
 Recall the definition of \bN{}, which we can reinterpret as the declaration that \AD{ℕ} is the fixpoint of \AD{ℕ}\ \AD{≡}\ \AV{F}\ \AD{ℕ} for \AV{F X = ⊤ ⊎ X}. Hence, \bN{} can simply be encoded as:
 \ExecuteMetaData[Tex/Background]{NatD}
 
 \subsubsection{Sums of products}\label{ssec:background-sop}
-A downside of \AD{U-rho} is that the definitions of types do not mirror their equivalents in user-written Agda very well. Using that polynomials can always be written as \emph{sums of products}\footnote{We do not require these to be reduced, as different representations of the same polynomial represent different datatypes for us.}, we can define a similar universe which more closely resembles handwritten code.
+A downside of \AD{U-rec} is that the definitions of types do not mirror their equivalents in user-written Agda very well. Using that polynomials can always be written as \emph{sums of products}\footnote{We do not require these to be reduced, as different representations of the same polynomial represent different datatypes for us.}, we can define a similar universe which more closely resembles handwritten code.
 
 Unlike the arbitrarily shaped polynomials formed by \AIC{⊕} and \AIC{⊗}, a sum of products is analogous a datatype presented as a list of constructors. Thus, we split the descriptions into a stage in which we can form sums, equivalently datatypes
 \ExecuteMetaData[Tex/Background]{U-sop}
@@ -187,19 +187,22 @@ In the first constructor of \AF{VecD} we report an actual index of \AIC{zero}. I
 Writing the descriptions \AF{NatD}, \AF{ListD} and \AF{VecD} next to each other makes it easy to see the similarities: \AF{ListD} is the same as \AF{NatD} with a type parameter and an extra field \AIC{σ} of \AV{A}. Likewise, \AF{VecD} is the same as \AF{ListD}, but now indexing over \bN{} and with another extra field \AIC{σ} of \bN{}. In \autoref{sec:background-ornaments}, we will explain how this kind of analysis of descriptions can be performed formally inside Agda.
 
 \subsubsection{Generic Programming}\label{ssec:generic-programming}
-As a bonus, we can also use \AD{U-ix} for generic programming. For example, by a long construction which can be found in \autoref{app:gfold}, we can define the generic \AF{fold} operation:
+As a bonus, we can also use \AD{U-ix} for generic programming. For example, we can define the generic \AF{fold} operation\footnote{The full construction can be found in \ref{app:gfold}~Appendix A.}:
 \ExecuteMetaData[Tex/Background]{fold-type}
-An intuition for \AF{fold} will suffice here; \AF{fold} states that a map \AV{φ} of \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X}\ \AF{⇶}\ \AV{X} induces a map from \AD{μ-ix}\ \AV{D} to \AV{X}. In this case, we can view \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X} as a variant of \AF{μ-ix}\ \AV{D}, in which the recursive positions hold values of \AV{X} rather than other values of \AF{μ-ix}\ \AV{D}. For example, the type \AF{⟦}\ \AV{ListD}\ \AF{⟧D}\ \AV{X} reduces (up to equivalence) to \AD{⊤}\ \AD{⊎}\ (\AV{A}\ \AD{×}\ \AV{X}\ \AV{A}), substituting \AV{X}\ \AV{A} for what would usually be the recursive field.
+From the point of view of category theory, we actually get \AF{fold} for free: since \AD{μ-ix}\ \AV{D} is the least fixpoint, or initial algebra, of \AF{⟦}\ \AV{D}\ \AF{⟧D}, \AF{fold}\ \AV{f} is simply the induced map to the algebra \AV{f :}\ \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X}\ \AF{→₃}\ \AV{X}.
 
-In a sense, a term of \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X} is a kind of \AV{D}-structured set of values of \AV{X}. From this perspective, \AF{fold} roughly states that an operation \AV{φ}, collapsing \AV{D}-structured sets of \AV{X} into \AV{X}, extends to a function \AF{fold}\ \AV{φ}. This function sends a whole value of \AF{μ-ix}\ \AV{D} into \AV{X}, recursively collapsing applications of \AIC{con} from the bottom up.
+%An intuition for \AF{fold} will suffice here; \AF{fold} states that a map \AV{f} of \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X}\ \AF{→₃}\ \AV{X} induces a map from \AD{μ-ix}\ \AV{D} to \AV{X}. 
+More concretely, we can view \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X} as a variant of \AF{μ-ix}\ \AV{D}, in which the recursive positions hold values of \AV{X} rather than other values of \AF{μ-ix}\ \AV{D}. For example, the type \AF{⟦}\ \AV{ListD}\ \AF{⟧D}\ \AV{X} reduces (up to equivalence) to \AD{⊤}\ \AD{⊎}\ (\AV{A}\ \AD{×}\ \AV{X}\ \AV{A}), substituting \AV{X}\ \AV{A} for what would usually be the recursive field.
 
-As a concrete example, we can instantiate \AF{fold} to \AF{ListD}, which by the aforementioned equivalence corresponds to:
+In a sense, a term of \AF{⟦}\ \AV{D}\ \AF{⟧D}\ \AV{X} is a kind of \AV{D}-structured set of values of \AV{X}. From this perspective, \AF{fold} roughly states that an operation \AV{f}, collapsing \AV{D}-structured sets of \AV{X} into \AV{X}, extends to a function \AF{fold}\ \AV{f}. This function sends a whole value of \AF{μ-ix}\ \AV{D} into \AV{X}, recursively collapsing applications of \AIC{con} from the bottom up.
+
+As an example, we can instantiate \AF{fold} to \AF{ListD}, which, by the aforementioned equivalence, corresponds to:
 \ExecuteMetaData[Tex/Background]{foldr-type}
 Much like the familiar \AF{foldr} operation lets us consume a \AD{List}\ \AV{A} to produce a value \AV{X A}; provided we give a value \AV{X A} for the \AIC{[]} case, and a means to convert a pair \AV{A}\ \AD{×}\ \AV{X A} to \AV{X A} for the \AIC{\_∷\_} case.
 
 Do note that this version of \AF{fold} takes a polymorphic function as an argument, as opposed to the usual \AF{fold} which has the quantifiers on the outside:
 \ExecuteMetaData[Tex/Background]{usual-fold}
-Like a couple of constructions we will encounter in later sections, we can recover the usual \AF{fold} into a type \AV{C} by generalizing \AV{C} to the appropriate kind of maps into \AV{C}. For example, by letting \AV{X} be continuation-passing computations into \bN{}, we can recover
+Like a couple of constructions we will encounter in later sections, we can recover the usual \AF{fold} into a type \AV{C} by generalizing \AV{C} to the appropriate kind of maps into \AV{C}. For example, by letting \AV{X} be continuation-passing computations into \bN{}, we can recover:
 \ExecuteMetaData[Tex/Background]{foldr-sum}
 
 
@@ -255,14 +258,14 @@ If we somehow could leave out the right-hand side of ornaments, then we can also
 \ExecuteMetaData[Tex/Background]{OrnDesc}
 \ExecuteMetaData[Tex/Background]{ConOrnDesc}
 Using \AD{OrnDesc}, we can describe \AF{ListD} as a patch on \AF{NatD}, inserting a \AIC{σ} in the constructor corresponding to \AIC{suc}:
-\ExecuteMetaData[Tex/Background]{NatOD}
+\ExecuteMetaData[Tex/Background]{ListOD}
 Since an ornamental description simply represents a patch on top of a description, we can also extract the patched description and the ornament to it. To extract the description, we can use the projection applying the patch in an ornamental description
 \ExecuteMetaData[Tex/Background]{toDesc}
-which would extract \AF{ListD} out of \AF{NatOD}.
+which would extract \AF{ListD} out of \AF{ListOD}.
 
 The other projection reconstructs the ornament to the extracted description
 \ExecuteMetaData[Tex/Background]{toOrn}
-and would extract \AF{NatD-ListD} from \AF{NatOD}. As a consequence, \AD{OrnDesc} enjoys the features of both \AD{Desc} and \AD{Orn}, such as interpretation into a datatype by \AF{μ} and the conversion to the underlying type by \AF{ornForget}, by factoring through these projections.
+and would extract \AF{NatD-ListD} from \AF{ListOD}. As a consequence, \AD{OrnDesc} enjoys the features of both \AD{Desc} and \AD{Orn}, such as interpretation into a datatype by \AF{μ} and the conversion to the underlying type by \AF{ornForget}, by factoring through these projections.
 
 In later sections, we will routinely use \AD{OrnDesc} to view triples like (\AF{NatD}, \AF{ListD}, \AF{VecD}) as a base type equipped with two patches in sequence.
 % exercise to reader: show OrnDesc AD ~ Exist[ BD in Desc ] Orn AD BD  
