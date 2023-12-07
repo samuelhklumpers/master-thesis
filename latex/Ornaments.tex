@@ -17,7 +17,7 @@ Again, \AIC{Δσ} requires the relation of old and new variables.
 
 Now, if we have a description \AV{D'} with a composite field \AIC{δ}\ \AV{R}\ \AV{d}\ \AV{j}\ \AV{R}\ \AV{D} referencing \AV{R}, then we expect that a patch on \AV{R} also induces a patch on \AV{D'}. We generalize this by defining a kind of sequential composition of ornaments\footnote{As opposed to Ko's parallel composition \cite{kophd}, which composes two ornaments on the same description \AV{D}, producing something that incorporates changes from both.}, taking two ornamental descriptions, one on \AV{R} and one on \AV{D}, and producing an ornamental description on \AV{D'}:
 \ExecuteMetaData[Ornament/OrnDesc]{ConOrn-compose}
-If we try to forget \AIC{∙δ}, the parameters to \AV{R} can be computed in two ways. Namely, we can first convert back to the context of \AV{CD} according to \AV{DE} and compute the parameter for \AV{R} there with the original \AV{fΘ}, or we can first compute the parameter in the new context using the new \AV{fΛ} and then convert this back to the parameter for \AV{R} according to \AV{RR′}. We can summarize both routes in a diagram:  
+If we try to forget \AIC{∙δ}, the parameters to \AV{R} can be computed in two ways. Namely, we can first convert back to the context of \AV{CD} according to \AV{DE} and compute the parameter for \AV{R} there with the original \AV{fΘ}, or we can first compute the parameter in the new context using the new \AV{fΛ} and then convert this back to the parameter for \AV{R} according to \AV{RR′}. To avoid any ambiguity that arises from this, we require that both ways around this square are equal:
 % https://q.uiver.app/#q=WzAsNCxbMCwwLCJXIFxcJiBcXERlbHRhIl0sWzAsMSwiVlxcJiBcXEdhbW1hIl0sWzEsMCwiXFxMYW1iZGEiXSxbMSwxLCJcXFRoZXRhIl0sWzAsMSwiXFxtYXRocm17cmUtdmFyfVxcdGltZXNcXG1hdGhybXtyZS1pbmRleH0iLDJdLFswLDIsImZcXExhbWJkYSJdLFsxLDMsImZcXFRoZXRhIiwyXSxbMiwzLCJjJyJdXQ==
 \[\begin{tikzcd}
 	{W \& \Delta} & \Lambda \\
@@ -27,15 +27,26 @@ If we try to forget \AIC{∙δ}, the parameters to \AV{R} can be computed in two
 	\arrow["f\Theta"', from=2-1, to=2-2]
 	\arrow["{c'}", from=1-2, to=2-2]
 \end{tikzcd}\]
-To avoid any ambiguity that arises from this, we require that both ways around this square are equal. Using these and the other new commutativity squares, we can again define \AF{ornForget} from an ornamental algebra analogous to the one for \AD{U-ix}:
+Using these and the other new commutativity squares, we can again define \AF{ornForget} from an ornamental algebra analogous to the one for \AD{U-ix}:
 \ExecuteMetaData[Ornament/OrnDesc]{ornForget}
 The precise meaning of ornamental descriptions as descriptions is given by the conversion
 \ExecuteMetaData[Ornament/OrnDesc]{toDesc}
 which makes use of the implicit metadata fields in the constructor ornaments to reconstruct the metadata on the target description.
 
-With \AD{OrnDesc} we can reproduce the examples of the ornamental descriptions for \AD{U-ix}, and present some previously inexpressible types as ornamental descriptions. For this, we use the variants of some ornaments specialized to binding or ignoring fields, such as:
-\ExecuteMetaData[Ornament/OrnDesc]{O-sigma-pm}
-We can then give the familiar ornamental description from \AD{List} to \AD{Vec}:
+Like \AD{DescI}, the ornaments support variable transformations and nesting, of which we rarely utilize the full potential. In the common use-cases the commutativity squares the ornaments require are trivial, such as copying or adding (non-)dependent fields, and copying a uniformly recursive field. This means that we will mostly rely on the following shorthands to hide those trivial proofs:
+
+\begin{center}
+\begin{tabular}{ll|l}
+    \hline
+    \AF{Oσ+}\ \AV{S CO}   &= \AIC{σ}\ \AV{S}\ \AF{id}\ \AV{\_ (λ \_ →}\ \AIC{refl}\AV{) CO}               & copy dependent field \\
+    \AF{Oσ-}\ \AV{S CO}   &= \AIC{σ}\ \AV{S}\ \ARF{fst}\ \AV{re-var (λ \_ →}\ \AIC{refl}\AV{) CO}          & copy non-dependent "  \\
+    \AF{OΔσ+}\ \AV{S CO}  &= \AIC{Δσ}\ \AV{S}\ \AF{id}\ \AV{(re-var}\ \AF{∘}\ \ARF{fst}\AV{) (λ \_ →}\ \AIC{refl}\AV{) CO}  & insert dependent " \\
+    \AF{OΔσ-}\ \AV{S CO}  &= \AIC{Δσ}\ \AV{S}\ \ARF{fst}\ \AV{re-var (λ \_ →}\ \AIC{refl}\AV{) CO}         & insert non-dependent " \\
+    \AF{Oρ0}\ \AV{j q CO} &= \AIC{ρ}\ \AF{id}\ \AV{j (λ \_ →}\ \AIC{refl}\AV{) q CO}                & uniformly recursive " \\
+\end{tabular}
+\end{center}
+
+With \AD{OrnDesc} we can reproduce the examples of the ornamental descriptions for \AD{U-ix}, such as \AD{Vec} from \AD{List}:
 \ExecuteMetaData[Ornament/OrnDesc]{VecOD}
 Rather than defining \AD{Random} on its own, we can use the new flexibility in \AIC{ρ} and describe random access lists as an ornament from binary numbers:
 \ExecuteMetaData[Ornament/OrnDesc]{RandomOD}

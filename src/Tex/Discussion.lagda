@@ -148,6 +148,19 @@ module ∙δ′ {Me : Meta} {Me′ : Meta} {c : Cxf Δ Γ}
 \end{code}
 %</comp-delta-nabla-sigma>
 
+\begin{code}
+infix 2 _∈_
+\end{code}
+
+%<*list-membership>
+\begin{code}
+data _∈_ {A : Type} (a : A) : List A → Type where
+  here  : ∀ {as}              → a ∈ a ∷ as
+  there : ∀ {b as}  → a ∈ as  → a ∈ b ∷ as
+\end{code}
+%</list-membership>
+
+
 %<*RoseTree>
 \begin{code}
 data RoseTree (A : Type) : Type where

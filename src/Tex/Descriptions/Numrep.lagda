@@ -17,6 +17,8 @@ open import Function.Base
 
 open import Tex.Background using (ℕ; zero; suc; _≡_; refl; ⊤; ⊥; tt; _⊎_; inj₁; inj₂; _×_; fst; snd; Σ; _,_; Σ-syntax; _<_; z<s; s<s)
 
+{-# BUILTIN EQUALITY _≡_ #-}
+
 private variable
   A B C : Type
 \end{code}
@@ -171,14 +173,13 @@ postulate
 %<*Fin-def>
 \begin{code}
 Fin-def : ∀ n → Def (Σ[ m ∈ ℕ ] m < n)
-Fin-def zero    =   Σ[ m ∈ ℕ ] (m < zero)
-                ≃⟨  ⊥-strict (λ ()) ⟩
-                    ⊥ ≃-∎ use-as-def
-Fin-def (suc n) =   Σ[ m ∈ ℕ ] (m < suc n)
-                ≃⟨  <-split n ⟩
-                    (⊤ ⊎ (Σ[ m ∈ ℕ ] m < n))
-                ≃⟨  cong (⊤ ⊎_) (by-definition (Fin-def n)) ⟩
-                    (⊤ ⊎ defined-by (Fin-def n)) ≃-∎ use-as-def
+Fin-def zero             =
+  Σ[ m ∈ ℕ ] (m < zero)  ≃⟨  ⊥-strict (λ ()) ⟩
+  ⊥                      ≃-∎ use-as-def
+Fin-def (suc n)                 =
+  Σ[ m ∈ ℕ ] (m < suc n)        ≃⟨  <-split n ⟩
+  (⊤ ⊎ (Σ[ m ∈ ℕ ] m < n))      ≃⟨  cong (⊤ ⊎_) (by-definition (Fin-def n)) ⟩
+  (⊤ ⊎ defined-by (Fin-def n))  ≃-∎ use-as-def
 \end{code}
 %</Fin-def>
 
@@ -235,13 +236,12 @@ Vec-def A zero    =
   (⊥ → A)         ≃⟨ ⊥→A≃⊤ ⟩
   ⊤               ≃-∎ use-as-def
 
-Vec-def A (suc n)        =
-  (Fin (suc n) → A)      ≃⟨⟩
-  (⊤ ⊎ Fin n → A)        ≃⟨ ⊎→≃→× ⟩
-  (⊤ → A) × (Fin n → A)  ≃⟨ cong (_× (Fin n → A)) ⊤→A≃A ⟩
-  A × (Fin n → A)        ≃⟨ cong (A ×_) (by-definition (Vec-def A n)) ⟩
-  A × (defined-by (Vec-def A n))
-                         ≃-∎ use-as-def
+Vec-def A (suc n)                 =
+  (Fin (suc n) → A)               ≃⟨⟩
+  (⊤ ⊎ Fin n → A)                 ≃⟨ ⊎→≃→× ⟩
+  (⊤ → A) × (Fin n → A)           ≃⟨ cong (_× (Fin n → A)) ⊤→A≃A ⟩
+  A × (Fin n → A)                 ≃⟨ cong (A ×_) (by-definition (Vec-def A n)) ⟩
+  A × (defined-by (Vec-def A n))  ≃-∎ use-as-def
 \end{code}
 %</Vec-def>
 

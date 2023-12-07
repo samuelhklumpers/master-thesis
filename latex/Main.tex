@@ -1,17 +1,21 @@
-\documentclass[10pt, final]{article}
+\documentclass[9pt, final]{article}
 
 \usepackage[style=alphabetic]{biblatex}
 \addbibresource{refs.bib}
 
 \usepackage{comment}
 
-% \setlength{\marginparwidth}{2cm} % this makes \todo{}s explode less, remove when done
-
 \usepackage{todonotes}
 \usepackage{xcolor}
 \usepackage[toc]{appendix}
 \usepackage[hidelinks]{hyperref}
+\usepackage{geometry}
 
+\geometry{
+    paperwidth=7in,
+    left=0.75in,
+    right=0.75in
+}
 
 \usepackage{catchfilebetweentags}
 \usepackage{quiver} 
@@ -109,7 +113,7 @@
 
 \newpage
 \begin{abstract}
-The concept of numerical representations as defined by Okasaki \cite{purelyfunctional} explains how certain datastructures resemble number systems, and motivates how number systems can be used as a basis to design datastructures, which can be made precise by using McBride's ornaments \cite{algorn}. In order to study a broad spectrum of indexed and unindexed numerical representations, we encode a universe allowing the expression of nested datatypes, and the internalization of descriptions of composite types. By equipping the universe with metadata, number systems and numerical representations can be described in the same setup. Adapting ornaments to this universe allows us to define two generic ornament computing functions, generalizing well-known sequences of ornaments, such as naturals-lists-vectors, by computing the indexed and unindexed numerical representations as a sequence of ornaments on a number system.
+The concept of numerical representations as defined by Okasaki \cite{purelyfunctional} explains how certain datastructures resemble number systems, and motivates how number systems can be used as a basis to design datastructures. Using McBride's ornaments \cite{algorn}, the method of designing datastructures starting from number systems can be made precise. In order to study a broad spectrum of indexed and unindexed numerical representations, we encode a universe allowing the expression of nested datatypes, and the internalization of descriptions of composite types. By equipping the universe with metadata, number systems and numerical representations can be described in the same setup. Adapting ornaments to this universe allows us to generalize well-known sequences of ornaments, such as naturals-lists-vectors. We demonstrate this by implementing the indexed and unindexed numerical representations as ornament-computing functions, producing a sequence of ornaments on top of the number system.
 \end{abstract}
 
 
@@ -132,7 +136,7 @@ This section describes some common datatypes and their usages, exploring how dep
 
 
 \section{Descriptions}\label{part:descriptions}
-Before we can analyze number systems and their numerical representations using generic programs, we first have to ensure that these types fit into the descriptions. Some numerical representations are hard to describe using only the descriptions of parametric indexed inductive types \AD{U-ix}; in order to keep things running smoothly for the generic programmer, we present an extension of \AD{U-ix} incorporating metadata, parameter transformation, description composition, and variable transformation.
+Before we can analyze number systems and their numerical representations using generic programs, we first have to ensure that these types fit into the descriptions. Some numerical representations are hard to describe using only the descriptions of parametric indexed inductive types \AD{U-ix}. In order to keep things running smoothly for the generic programmer, we present an extension of \AD{U-ix} incorporating metadata, parameter transformation, description composition, and variable transformation.
 
 \input{Descriptions}
 
@@ -153,11 +157,14 @@ In summary, using \AD{DescI}\ \AF{Number} to represent number systems, we paraph
 \input{NumericalRepresentations}
 
 
-\section{Conclusion and Discussion}
+\section{Conclusion}
 \input{Discussion}
 
 %\section{Related work}\label{part:related}
 %summarizing why everything that is in my references is there - > merge into discussion and conclusion
+
+\section*{Acknowledgments}
+I would like to thank Wouter Swierstra for all the fun discussions, suggestions, and helpful feedback. I also want to thank Paige North for the interesting reading suggestions, and taking the time to help me with my questions about related category theory.
 
 \printbibliography
 

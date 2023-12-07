@@ -59,14 +59,13 @@ data μ-comp (D : U-comp Γ I) (p : ⟦ Γ ⟧tel tt) : I → Type where
 
 %<*delta-int>
 \begin{code}
-⟦ δ R d j C  ⟧C-comp  X pv@(p , v) i
-  = μ-comp R (d p) (j i) × ⟦ C ⟧C-comp X pv i
+⟦ δ R d j C  ⟧C-comp  X pv@(p , v) i = μ-comp R (d p) (j i) × ⟦ C ⟧C-comp X pv i
 \end{code}
 %</delta-int>
 
 \begin{code}
-⟦ []      ⟧D-comp X p i = ⊥
-⟦ C ∷ Cs  ⟧D-comp X p i = ⟦ C ⟧C-comp X (p , tt) i  ⊎ ⟦ Cs ⟧D-comp X p i
+⟦ []      ⟧D-comp X p i  = ⊥
+⟦ C ∷ Cs  ⟧D-comp X p i  = ⟦ C ⟧C-comp X (p , tt) i  ⊎ ⟦ Cs ⟧D-comp X p i
 \end{code}
 
 

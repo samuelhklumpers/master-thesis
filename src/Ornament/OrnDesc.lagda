@@ -82,16 +82,15 @@ mutual
        → ConOrnDesc Me′ re-var re-index (𝟙 {Me} {me = me} i)
 
     ρ : {g : Cxf Γ Γ} (d : Cxf Δ Δ)
-        {i : Γ & V ⊢ I} (j : Δ & W ⊢ J)
+      → {i : Γ & V ⊢ I} (j : Δ & W ⊢ J)
       → g ∘ re-par ∼ re-par ∘ d
       → re-index ∘ j ∼ i ∘ var→par re-var
       → {me : Me .ρi} {me′ : Me′ .ρi}
       → ConOrnDesc Me′ re-var re-index CD
       → ConOrnDesc Me′ re-var re-index (ρ {Me} {me = me} g i CD)
 
-    σ : (S : Γ & V ⊢ Type)
-        {g : Vxf id (V ▷ S) V′} (h : Vxf id (W ▷ (S ∘ var→par re-var)) W′)
-        (v′ : Vxf re-par W′ V′)
+    σ : (S : Γ & V ⊢ Type) {g : Vxf id (V ▷ S) V′}
+      → (h : Vxf id (W ▷ (S ∘ var→par re-var)) W′) (v′ : Vxf re-par W′ V′)
       → (∀ {p} → g ∘ Vxf-▷ re-var S ∼ v′ {p = p} ∘ h)
       → {me : Me .σi S} {me′ : Me′ .σi (S ∘ var→par re-var)}
       → ConOrnDesc Me′ v′ re-index CD
@@ -99,18 +98,16 @@ mutual
 
     δ : (R : DescI If″ Θ K) (t : Γ & V ⊢ ⟦ Θ ⟧tel tt) (j : Γ & V ⊢ K)
       → {me : Me .δi Θ K} {iff : MetaF If″ Me}
-        {me′ : Me′ .δi Θ K} {iff′ : MetaF If″ Me′}
+      → {me′ : Me′ .δi Θ K} {iff′ : MetaF If″ Me′}
       → ConOrnDesc Me′ re-var re-index CD
-      → ConOrnDesc  Me′ re-var re-index
-                    (δ {Me} {me = me} {iff = iff} t j R CD)
+      → ConOrnDesc Me′ re-var re-index (δ {Me} {me = me} {iff = iff} t j R CD)
 \end{code}
 %</ConOrn-preserve>
 
 %<*ConOrn-extend>
 \AgdaTarget{Δσ, Δδ}
 \begin{code}
-    Δσ : (S : Δ & W ⊢ Type) (h : Vxf id (W ▷ S) W′)
-         (v′ : Vxf re-par W′ V)
+    Δσ : (S : Δ & W ⊢ Type) (h : Vxf id (W ▷ S) W′) (v′ : Vxf re-par W′ V)
        → (∀ {p} → re-var ∘ fst ∼ v′ {p = p} ∘ h)
        → {me′ : Me′ .σi S}
        → ConOrnDesc Me′ v′ re-index CD
@@ -127,15 +124,13 @@ mutual
 \AgdaTarget{∙δ}
 \begin{code}
     ∙δ : {R : DescI If″ Θ K} {c′ : Cxf Λ Θ} {fΘ : V ⊢ ⟦ Θ ⟧tel tt}
-         (fΛ : W ⊢ ⟦ Λ ⟧tel tt) {k′ : M → K} {k : V ⊢ K}
-         (m : W ⊢ M) 
+       → (fΛ : W ⊢ ⟦ Λ ⟧tel tt) {k′ : M → K} {k : V ⊢ K} (m : W ⊢ M) 
        → (RR′ : OrnDesc If‴ Λ c′ M k′ R)
        → (p₁ : ∀ q w → c′ (fΛ (q , w)) ≡ fΘ (re-par q , re-var w))
        → (p₂ : ∀ q w → k′ (m (q , w))  ≡ k (re-par q , re-var w))
        → ∀ {me} {iff} {me′ : Me′ .δi Λ M} {iff′ : MetaF If‴ Me′}
        → (DE : ConOrnDesc Me′ re-var re-index CD)
-       → ConOrnDesc  Me′ re-var re-index
-                     (δ {Me} {me = me} {iff = iff} fΘ k R CD)
+       → ConOrnDesc Me′ re-var re-index (δ {Me} {me = me} {iff = iff} fΘ k R CD)
 \end{code}
 %</ConOrn-compose>
 
@@ -148,8 +143,8 @@ mutual
   toDesc []       = []
   toDesc (CO ∷ O) = toCon CO ∷ toDesc O
 
-  toCon   :  {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V}
-             {re-index : J → I} {D : ConI Me Γ V I}
+  toCon   : {re-par : Cxf Δ Γ} {re-var : Vxf re-par W V}
+          → {re-index : J → I} {D : ConI Me Γ V I}
           → ConOrnDesc Me′ re-var re-index D → ConI Me′ Δ W J
   toCon (𝟙 j _ {me′ = me})
     = 𝟙 {me = me} j

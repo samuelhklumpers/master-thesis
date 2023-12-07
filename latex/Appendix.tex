@@ -39,11 +39,11 @@ Since the interpretations are datatypes now, we can pattern match on them to def
 \subsection{Nested types as uniformly recursive indexed types}\label{app:unnested}
 Although \AD{U-ix} has no direct support for expressing nested types, we can actually give equivalent encodings for some of them.
 
-Indeed, indices are readily repurposed as parameters. If we apply this to, say, random-access lists, we can write:
+Indeed, indices are readily repurposed as parameters. If we apply this to random-access lists, we can write:
 \ExecuteMetaData[Appendix/NoNesting]{RandomD-1}
 %Suppose that we defined \AD{U-nest} as the extension of \AD{U-ix} for nested types, then we can automate this transformation:
 %\ExecuteMetaData[Appendix/NoNesting]{uniform}
-More interestingly, perhaps, the depth of a random-access list determines the types of its fields. Namely, at the highest level, \AIC{One} will ask for 1 element, one level down it asks for 2, and one more it asks for 4, and so on. Hence, in a way that vaguely resembles defunctionalization, we can define
+More interestingly, perhaps, the depth of a random-access list determines the types of its fields. Namely, \AIC{One} will ask for 1 element at the highest level, one level down it asks for 2, and one more it asks for 4, and so on. Hence, in a way that vaguely resembles defunctionalization, we can define
 \ExecuteMetaData[Appendix/NoNesting]{Pair}
 and describe a field at depth \AV{n} by \AF{power}\ \AV{n}\ \AD{Pair}\ \AV{A}. This can be applied to describe random-access lists which track their depth in their index instead:
 \ExecuteMetaData[Appendix/NoNesting]{RandomD-2}

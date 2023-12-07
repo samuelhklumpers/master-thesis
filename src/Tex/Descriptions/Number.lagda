@@ -26,9 +26,9 @@ data Bin : Type where
 \AgdaTarget{toℕ-Bin}
 \begin{code}
 toℕ-Bin : Bin → ℕ
-toℕ-Bin 0b     = 0
-toℕ-Bin (1b n) = 1 + 2 * toℕ-Bin n
-toℕ-Bin (2b n) = 2 + 2 * toℕ-Bin n
+toℕ-Bin 0b      = 0
+toℕ-Bin (1b n)  = 1 + 2 * toℕ-Bin n
+toℕ-Bin (2b n)  = 2 + 2 * toℕ-Bin n
 \end{code}
 %</Bin>
 
@@ -54,11 +54,9 @@ data Carpal : Type where
   2c : Phalanx → Carpal → Phalanx → Carpal
 
 toℕ-Carpal : Carpal → ℕ
-toℕ-Carpal 0c = 0
-toℕ-Carpal 1c = 1
-toℕ-Carpal (2c l m r)  = toℕ-Phalanx l
-                       + 2 * toℕ-Carpal m
-                       + toℕ-Phalanx r
+toℕ-Carpal 0c          = 0
+toℕ-Carpal 1c          = 1
+toℕ-Carpal (2c l m r)  = toℕ-Phalanx l + 2 * toℕ-Carpal m + toℕ-Phalanx r
 \end{code}
 %</Carpal>
 

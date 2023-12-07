@@ -22,24 +22,24 @@ open import Data.Maybe
 
 \end{code}
 
-%<*Leibniz>
+%<*Bin>
 \begin{code}
-data Leibniz : Type where
-  0b       : Leibniz
-  1b_ 2b_  : Leibniz → Leibniz
+data Bin : Type where
+  0b       : Bin
+  1b_ 2b_  : Bin → Bin
 \end{code}
-%</Leibniz>
+%</Bin>
 
 \begin{code}
 
 private variable
-  n m : Leibniz
+  n m : Bin
 
 \end{code}
 
 %<*FinB>
 \begin{code}
-data FinB : Leibniz → Type where
+data FinB : Bin → Type where
   0/1      : FinB (1b n)
   0/2 1/2  : FinB (2b n)
 
@@ -48,7 +48,18 @@ data FinB : Leibniz → Type where
 \end{code}
 %</FinB>
 
+\begin{code}
+data Three : Type where
+  one two three : Three
 
+which : Three → Bin → Bin
+which = λ { one → 1b_ ; two → 2b_ ; three → 2b_ } 
+
+data FinB? : Bin → Type where
+  0f : (i : Three)     → FinB? (which i n)
+  1f : Fin 2 → FinB? n → FinB? (1b n)
+  2f : Fin 2 → FinB? n → FinB? (2b n)
+\end{code}
 
 %<*Sigma-Desc>
 \begin{code}
@@ -61,27 +72,27 @@ data Σ-Desc (I : Type) : Type where
 
 
 
-%<*LeibnizD>
+%<*BinD>
 \begin{code}
-LeibnizΣD : Σ-Desc ⊤
-LeibnizΣD = σ (Fin 3) λ
+BinΣD : Σ-Desc ⊤
+BinΣD = σ (Fin 3) λ
   { zero              → 𝟙 _
   ; (suc zero)        → ρ _ (𝟙 _)
   ; (suc (suc zero))  → ρ _ (𝟙 _) }
 \end{code}
-%</LeibnizD>
+%</BinD>
 
 
 
 %<*FinBD>
 \begin{code}
-FinBΣD : Σ-Desc Leibniz
+FinBΣD : Σ-Desc Bin
 FinBΣD = σ (Fin 3) λ
   { zero              → σ (Fin 0) λ _ → 𝟙 0b
-  ; (suc zero)        → σ Leibniz λ n → σ (Fin 2) λ
+  ; (suc zero)        → σ Bin λ n → σ (Fin 2) λ
     { zero        → σ (Fin 1) λ _ →        𝟙 (1b n) 
     ; (suc zero)  → σ (Fin 2) λ _ → ρ n (  𝟙 (1b n)) }
-  ; (suc (suc zero))  → σ Leibniz λ n → σ (Fin 2) λ
+  ; (suc (suc zero))  → σ Bin λ n → σ (Fin 2) λ
     { zero        → σ (Fin 2) λ _ →        𝟙 (2b n) 
     ; (suc zero)  → σ (Fin 2) λ _ → ρ n (  𝟙 (2b n)) } }
 \end{code}

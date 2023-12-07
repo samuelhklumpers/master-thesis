@@ -358,7 +358,7 @@
 \begin{code}%
 \>[0]\AgdaFunction{TreeOD}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ND}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
 \AgdaFunction{Number}\AgdaSpace{}%
@@ -376,13 +376,13 @@
 \AgdaFunction{!}\AgdaSpace{}%
 \AgdaRecord{⊤}\AgdaSpace{}%
 \AgdaFunction{!}\AgdaSpace{}%
-\AgdaBound{D}\<%
+\AgdaBound{ND}\<%
 \\
 \>[0]\AgdaFunction{TreeOD}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSpace{}%
+\AgdaBound{ND}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Tree-desc}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSpace{}%
+\AgdaBound{ND}\AgdaSpace{}%
 \AgdaFunction{id-MetaF}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -425,8 +425,8 @@
 %
 \>[2]\AgdaFunction{Tree-desc}\AgdaSpace{}%
 \AgdaInductiveConstructor{[]}%
-\>[20]\AgdaBound{ϕ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
+\>[20]\AgdaBound{ϕ}%
+\>[23]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{[]}\<%
 \\
 %
@@ -434,8 +434,8 @@
 \AgdaSymbol{(}\AgdaBound{C}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{ϕ}%
+\>[23]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Tree-con}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaBound{ϕ}\AgdaSpace{}%
@@ -480,10 +480,8 @@
 \AgdaPrimitive{Type}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{W}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaGeneralizable{W}\AgdaSymbol{\}}\<%
-\\
-%
-\>[27]\AgdaSymbol{\{}\AgdaArgument{J}\AgdaSpace{}%
+\AgdaGeneralizable{W}\AgdaSymbol{\}}%
+\>[57]\AgdaSymbol{\{}\AgdaArgument{J}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaRecord{⊤}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaFunction{Plain}\AgdaSpace{}%
@@ -498,7 +496,8 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ϕ}\<%
+\AgdaBound{ϕ}%
+\>[49]\AgdaComment{--\ ...}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
@@ -514,7 +513,8 @@
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
 \AgdaSymbol{.}\AgdaField{𝟙f}\AgdaSpace{}%
-\AgdaBound{k}\AgdaSymbol{))}\<%
+\AgdaBound{k}\AgdaSymbol{))}%
+\>[49]\AgdaComment{--\ →\ Vec\ A\ k}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -523,7 +523,8 @@
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}%
+\>[49]\AgdaComment{--\ →\ Tree\ ND\ A}\<%
 \\
 \>[0]\<%
 \\
@@ -536,12 +537,13 @@
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ϕ}\<%
+\AgdaBound{ϕ}%
+\>[48]\AgdaComment{--\ ...}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{ρ}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaInductiveConstructor{ρ}%
+\>[9]\AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
@@ -553,8 +555,11 @@
 \AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
 \AgdaSymbol{.}\AgdaField{ρf}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{)))}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}%
+\>[48]\AgdaComment{--\ →\ Tree\ ND\ (Vec\ A\ k)}\<%
+\\
+%
+\>[9]\AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSymbol{)}\AgdaSpace{}%
@@ -567,7 +572,8 @@
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Tree-con}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{)}\<%
+\AgdaBound{ϕ}\AgdaSymbol{)}%
+\>[48]\AgdaComment{--\ ...}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -580,12 +586,14 @@
 \AgdaBound{f}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ϕ}\<%
+\AgdaBound{ϕ}%
+\>[58]\AgdaComment{--\ ...}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Oσ+}\AgdaSpace{}%
-\AgdaBound{S}\<%
+\AgdaBound{S}%
+\>[58]\AgdaComment{--\ →\ (s\ :\ S)\ }\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -606,13 +614,15 @@
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaBound{s}\AgdaSymbol{))}\<%
+\AgdaBound{s}\AgdaSymbol{))}%
+\>[58]\AgdaComment{--\ →\ Vec\ A\ (f\ s)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Tree-con}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{))}\<%
+\AgdaBound{ϕ}\AgdaSymbol{))}%
+\>[58]\AgdaComment{--\ ...}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -646,7 +656,8 @@
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{k}\<%
+\AgdaBound{k}%
+\>[51]\AgdaComment{--\ ...}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
@@ -665,7 +676,8 @@
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{\})}\AgdaSpace{}%
-\AgdaFunction{!}\<%
+\AgdaFunction{!}%
+\>[51]\AgdaComment{--\ →\ Tree\ R\ (Vec\ A\ k)}\<%
 \\
 %
 \>[10]\AgdaSymbol{(}\AgdaFunction{Tree-desc}\AgdaSpace{}%
@@ -690,7 +702,8 @@
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Tree-con}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{)}\<%
+\AgdaBound{ϕ}\AgdaSymbol{)}%
+\>[51]\AgdaComment{--\ ...}\<%
 \end{code}
 %</trieifyOD>
 
@@ -992,14 +1005,14 @@
 \begin{code}%
 \>[0]\AgdaFunction{TrieOD}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[665I]\AgdaSymbol{(}\AgdaBound{N}\AgdaSpace{}%
+\>[661I]\AgdaSymbol{(}\AgdaBound{N}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
 \AgdaFunction{Number}\AgdaSpace{}%
 \AgdaInductiveConstructor{∅}\AgdaSpace{}%
 \AgdaRecord{⊤}\AgdaSymbol{)}\<%
 \\
-\>[665I][@{}l@{\AgdaIndent{0}}]%
+\>[661I][@{}l@{\AgdaIndent{0}}]%
 \>[11]\AgdaSymbol{→}%
 \>[14]\AgdaDatatype{OrnDesc}\AgdaSpace{}%
 \AgdaFunction{Plain}\AgdaSpace{}%
@@ -1166,7 +1179,7 @@
 \>[13]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{Me}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{N'}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{N}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
 \AgdaBound{Me}\AgdaSpace{}%
@@ -1179,8 +1192,9 @@
 \AgdaGeneralizable{W}\AgdaSpace{}%
 \AgdaGeneralizable{V}\AgdaSymbol{\}}\<%
 \\
-\>[13][@{}l@{\AgdaIndent{0}}]%
-\>[14]\AgdaSymbol{\{}\AgdaBound{re-var′}\AgdaSpace{}%
+%
+\>[13]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{re-var′}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Vxf}\AgdaSpace{}%
 \AgdaFunction{!}\AgdaSpace{}%
@@ -1195,17 +1209,18 @@
 \AgdaRecord{⊤}\AgdaSymbol{)}\<%
 \\
 %
-\>[14]\AgdaSymbol{(}\AgdaBound{n}\AgdaSpace{}%
+\>[13]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{n}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{w}%
-\>[26]\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
+\>[27]\AgdaSymbol{→}%
+\>[30]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧C}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{μ}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{tt}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{re-var′}\AgdaSpace{}%
@@ -1217,22 +1232,23 @@
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
 %
-\>[26]\AgdaSymbol{→}\AgdaSpace{}%
+\>[30]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{μ}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSymbol{)}\<%
 \\
 %
-\>[14]\AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
+\>[13]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ϕ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{MetaF}\AgdaSpace{}%
 \AgdaBound{Me}\AgdaSpace{}%
 \AgdaFunction{Number}\AgdaSymbol{)}\<%
 \\
 %
-\>[14]\AgdaSymbol{→}%
-\>[17]\AgdaDatatype{ConOrnDesc}\AgdaSpace{}%
+\>[13]\AgdaSymbol{→}%
+\>[16]\AgdaDatatype{ConOrnDesc}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{Δ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{∅}\AgdaSpace{}%
@@ -1243,22 +1259,20 @@
 \AgdaPrimitive{Type}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{W}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaGeneralizable{W}\AgdaSymbol{\}}\<%
-\\
-\>[17][@{}l@{\AgdaIndent{0}}]%
-\>[19]\AgdaSymbol{\{}\AgdaArgument{J}\AgdaSpace{}%
+\AgdaGeneralizable{W}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{J}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaDatatype{μ}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaFunction{Plain}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{re-par}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{id}\AgdaSymbol{\}}\<%
+\AgdaFunction{Plain}\<%
 \\
 %
-\>[19]\AgdaBound{re-var}\AgdaSpace{}%
+\>[16]\AgdaSymbol{\{}\AgdaArgument{re-par}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{id}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{re-var}\AgdaSpace{}%
 \AgdaFunction{!}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{toCon}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Tree-con}\AgdaSpace{}%
@@ -1270,19 +1284,21 @@
 \\
 %
 \>[2]\AgdaFunction{Trie-con}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{j}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
-\AgdaBound{ϕ}\<%
+\AgdaBound{ϕ}%
+\>[52]\AgdaComment{--\ ...\ n\ :\ N}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Oσ-}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
+\AgdaSymbol{\AgdaUnderscore{}}%
+\>[52]\AgdaComment{--\ →\ Vec\ A\ k}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -1301,13 +1317,14 @@
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSymbol{))}\<%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{))}%
+\>[52]\AgdaComment{--\ →\ Trie\ ND\ A\ n}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{Trie-con}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ρ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1316,7 +1333,8 @@
 \AgdaBound{j}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
-\AgdaBound{ϕ}\<%
+\AgdaBound{ϕ}%
+\>[60]\AgdaComment{--\ ...\ n\ :\ N\ ×\ ⟦\ C\ ⟧C\ N\ →\ N}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
@@ -1325,9 +1343,10 @@
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{μ}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSpace{}%
-\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\<%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}%
+\>[60]\AgdaComment{--\ →\ (i\ :\ N)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -1349,7 +1368,8 @@
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{\})}\<%
+\AgdaSymbol{\})}%
+\>[60]\AgdaComment{--\ →\ Trie\ ND\ (Vec\ A\ k)\ i}\<%
 \\
 %
 \>[9]\AgdaSymbol{(λ}\AgdaSpace{}%
@@ -1364,7 +1384,7 @@
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Trie-con}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
@@ -1381,13 +1401,14 @@
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{\})}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{))}\<%
+\AgdaBound{ϕ}\AgdaSymbol{))}%
+\>[60]\AgdaComment{--\ ...\ curry\ n\ i}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{Trie-con}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{σ}\AgdaSpace{}%
 \AgdaBound{S}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
@@ -1396,7 +1417,8 @@
 \AgdaBound{h}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
-\AgdaBound{ϕ}\<%
+\AgdaBound{ϕ}%
+\>[60]\AgdaComment{--\ ...\ n\ :\ S\ ×\ ⟦\ C\ ⟧C\ N\ →\ N}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
@@ -1404,17 +1426,19 @@
 \AgdaSymbol{(}\AgdaBound{S}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaFunction{var→par}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\<%
+\AgdaSymbol{\AgdaUnderscore{})}%
+\>[60]\AgdaComment{--\ →\ (s\ :\ S)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Oσ-}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\<%
+\AgdaSymbol{\AgdaUnderscore{}}%
+\>[60]\AgdaComment{--\ →\ Vec\ A\ (f\ s)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Trie-con}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
@@ -1431,13 +1455,14 @@
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{\})}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{))}\<%
+\AgdaBound{ϕ}\AgdaSymbol{))}%
+\>[60]\AgdaComment{--\ ...\ curry\ n\ s}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{Trie-con}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{δ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1467,7 +1492,8 @@
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{k}\<%
+\AgdaBound{k}%
+\>[61]\AgdaComment{--\ ...\ n\ :\ R\ ×\ ⟦\ C\ ⟧C\ N\ →\ N}\<%
 \\
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}\AgdaSpace{}%
@@ -1478,7 +1504,8 @@
 \AgdaDatatype{μ}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaInductiveConstructor{tt}\AgdaSpace{}%
-\AgdaInductiveConstructor{tt}\AgdaSymbol{)}\<%
+\AgdaInductiveConstructor{tt}\AgdaSymbol{)}%
+\>[61]\AgdaComment{--\ →\ (r\ :\ R)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -1494,8 +1521,11 @@
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaDatatype{Vec}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{k}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))}%
+\>[61]\AgdaComment{--\ →\ Trie\ R\ (Vec\ A\ k)\ r}\<%
+\\
+%
+\>[10]\AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -1534,7 +1564,7 @@
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{Trie-con}\AgdaSpace{}%
-\AgdaBound{N'}\AgdaSpace{}%
+\AgdaBound{N}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
@@ -1542,16 +1572,17 @@
 \AgdaSymbol{(}\AgdaBound{w}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{w}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{\})}\AgdaSpace{}%
-\AgdaBound{ϕ}\AgdaSymbol{))}\<%
+\AgdaBound{ϕ}\AgdaSymbol{))}%
+\>[61]\AgdaComment{--\ ...\ curry\ n\ r}\<%
 \end{code}
 %</itrieify-con>
 

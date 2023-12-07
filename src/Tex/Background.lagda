@@ -566,8 +566,7 @@ data U-par (Γ : Tel ⊤) : Type where
 
 ⟦ 𝟙      ⟧C-par X pv          = ⊤
 ⟦ ρ C    ⟧C-par X pv          = X pv × ⟦ C ⟧C-par X pv
-⟦ σ S C  ⟧C-par X pv@(p , v)
-  = Σ[ s ∈ S pv ] ⟦ C ⟧C-par (X ∘ var→par fst) (p , v , s)
+⟦ σ S C  ⟧C-par X pv@(p , v)  = Σ[ s ∈ S pv ] ⟦ C ⟧C-par (X ∘ var→par fst) (p , v , s)
 \end{code}
 %</int-par>
 
@@ -815,8 +814,7 @@ mutual
 %<*Orn>
 \AgdaTarget{Orn}
 \begin{code}
-  data  Orn (re-par : Cxf Δ Γ) (re-index : J → I) :
-        U-ix Γ I → U-ix Δ J → Type where
+  data  Orn (re-par : Cxf Δ Γ) (re-index : J → I) : U-ix Γ I → U-ix Δ J → Type where
       []   : Orn re-par re-index [] []
       _∷_  : ConOrn re-par id re-index CD CE
            → Orn re-par re-index D E
@@ -828,9 +826,8 @@ mutual
 %<*ConOrn>
 \AgdaTarget{ConOrn}
 \begin{code}
-  data ConOrn (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V)
-              (re-index : J → I) :
-              Con-ix Γ V I → Con-ix Δ W J → Type where
+  data ConOrn (re-par : Cxf Δ Γ) (re-var : Vxf re-par W V) (re-index : J → I)
+              : Con-ix Γ V I → Con-ix Δ W J → Type where
     𝟙  : ∀ {i j}
        → re-index ∘ j ∼ i ∘ var→par re-var
        → ConOrn re-par re-var re-index (𝟙 i) (𝟙 j)
@@ -931,7 +928,8 @@ ornAlg O p j x = con (ornErase O p j x)
 
 %<*ornForget-type>
 \begin{code}
-ornForget  : ∀ {re-par re-index} → Orn re-par re-index D E
+ornForget  : ∀ {re-par re-index}
+           → Orn re-par re-index D E
            → μ-ix E →₃ bimap (μ-ix D) re-par re-index 
 \end{code}
 %</ornForget-type>
@@ -948,8 +946,7 @@ mutual
 
 %<*OrnDesc>
 \begin{code}
-  data  OrnDesc (Δ : Tel ⊤) (J : Type)
-        (re-par : Cxf Δ Γ) (re-index : J → I)
+  data  OrnDesc (Δ : Tel ⊤) (J : Type) (re-par : Cxf Δ Γ) (re-index : J → I)
         : U-ix Γ I → Type where
     []   : OrnDesc Δ J re-par re-index []
     _∷_  : ConOrnDesc Δ ∅ J re-par ! re-index CD
@@ -974,13 +971,11 @@ mutual
        → ConOrnDesc Δ W J re-par re-var re-index (ρ i CD)
 
     σ  : ∀ (S : V ⊢ Type) {CD}
-       → ConOrnDesc  Δ (W ▷ S ∘ var→par re-var)
-                     J re-par (Vxf-▷ re-var S) re-index CD
+       → ConOrnDesc  Δ (W ▷ S ∘ var→par re-var) J re-par (Vxf-▷ re-var S) re-index CD
        → ConOrnDesc Δ W J re-par re-var re-index (σ S CD)
 
     Δσ  : ∀ (S : W ⊢ Type) {CD}
-        → ConOrnDesc  Δ (W ▷ S)
-                      J re-par (re-var ∘ fst) re-index CD
+        → ConOrnDesc  Δ (W ▷ S)  J re-par (re-var ∘ fst) re-index CD
         → ConOrnDesc Δ W J re-par re-var re-index CD
 \end{code}
 %</ConOrnDesc>
@@ -1004,7 +999,8 @@ mutual
 
 %<*toDesc>
 \begin{code}
-  toDesc  : {D : U-ix Γ I} → OrnDesc Δ J re-par re-index D
+  toDesc  : {D : U-ix Γ I}
+          → OrnDesc Δ J re-par re-index D
           → U-ix Δ J
   toDesc []         = []
   toDesc (COD ∷ OD) = toCon COD ∷ toDesc OD
@@ -1026,7 +1022,7 @@ mutual
 \AgdaTarget{toOrn, toConOrn}
 \begin{code}
   toOrn  :  {D : U-ix Γ I}
-            (OD : OrnDesc Δ J re-par re-index D)
+         →  (OD : OrnDesc Δ J re-par re-index D)
          →  Orn re-par re-index D (toDesc OD)
   toOrn []         = []
   toOrn (COD ∷ OD) = toConOrn COD ∷ toOrn OD

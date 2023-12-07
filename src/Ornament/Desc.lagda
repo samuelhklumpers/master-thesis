@@ -233,19 +233,21 @@ mutual
 \AgdaTarget{ConI}
 \begin{code}
   data ConI (Me : Meta) (Γ : Tel ⊤) (V : ExTel Γ) (I : Type) : Type where
-    𝟙  : {me : Me .𝟙i} (i : Γ & V ⊢ I) → ConI Me Γ V I
+    𝟙  : {me : Me .𝟙i}
+       → (i : Γ & V ⊢ I)
+       → ConI Me Γ V I
 
     ρ  :  {me : Me .ρi}
-          (g : Cxf Γ Γ) (i : Γ & V ⊢ I) (C : ConI Me Γ V I)
+       →   (g : Cxf Γ Γ) (i : Γ & V ⊢ I) (C : ConI Me Γ V I)
        →  ConI Me Γ V I
 
     σ  :  (S : V ⊢ Type) {me : Me .σi S}
-          (w : Vxf id (V ▷ S) W) (C : ConI Me Γ W I)
+       →  (w : Vxf id (V ▷ S) W) (C : ConI Me Γ W I)
        →  ConI Me Γ V I
 
     δ  :  {me : Me .δi Δ J} {iff : MetaF Me′ Me}
-          (d : Γ & V ⊢ ⟦ Δ ⟧tel tt) (j : Γ & V ⊢ J) 
-          (R : DescI Me′ Δ J) (C : ConI Me Γ V I)
+       →  (d : Γ & V ⊢ ⟦ Δ ⟧tel tt) (j : Γ & V ⊢ J) 
+       →  (R : DescI Me′ Δ J) (C : ConI Me Γ V I)
        →  ConI Me Γ V I
 \end{code}
 %</Con>

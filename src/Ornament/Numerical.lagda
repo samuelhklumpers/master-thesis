@@ -74,38 +74,38 @@ open Meta
 %<*trieifyOD>
 \AgdaTarget{TreeOD, Tree-desc, Tree-con}
 \begin{code}
-TreeOD : (D : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ ! D
-TreeOD D = Tree-desc D id-MetaF
+TreeOD : (ND : DescI Number ∅ ⊤) → OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ ! ND
+TreeOD ND = Tree-desc ND id-MetaF
   module TreeOD where mutual
   Tree-desc  : (D : DescI Me ∅ ⊤) → MetaF Me Number
              → OrnDesc Plain (∅ ▷ λ _ → Type) ! ⊤ ! D
 
-  Tree-desc []      ϕ = []
-  Tree-desc (C ∷ D) ϕ = Tree-con C ϕ ∷ Tree-desc D ϕ
+  Tree-desc []      ϕ  = []
+  Tree-desc (C ∷ D) ϕ  = Tree-con C ϕ ∷ Tree-desc D ϕ
              
   Tree-con   : {re-var : Vxf ! W V} (C : ConI Me ∅ V ⊤) → MetaF Me Number
-             → ConOrnDesc  {Δ = ∅ ▷ λ _ → Type} {W = W}
-                           {J = ⊤} Plain re-var ! C
-  Tree-con (𝟙 {me = k} j) ϕ
-    = OΔσ- (λ ((_ , A) , _) → Vec A (ϕ .𝟙f k))
-    ( 𝟙 _ (λ _ → refl))
+             → ConOrnDesc  {Δ = ∅ ▷ λ _ → Type} {W = W}  {J = ⊤} Plain re-var ! C
+  Tree-con (𝟙 {me = k} j) ϕ                      -- ...
+    = OΔσ- (λ ((_ , A) , _) → Vec A (ϕ .𝟙f k))   -- → Vec A k
+    ( 𝟙 _ (λ _ → refl))                          -- → Tree ND A
   
-  Tree-con (ρ {me = k} _ _ C) ϕ
-    = ρ (λ (_ , A) → (_ , Vec A (ϕ .ρf k))) _ (λ _ → refl) (λ _ → refl)
-    ( Tree-con C ϕ)
+  Tree-con (ρ {me = k} _ _ C) ϕ                 -- ...
+    = ρ  (λ (_ , A) → (_ , Vec A (ϕ .ρf k))) _  -- → Tree ND (Vec A k)
+         (λ _ → refl) (λ _ → refl)              
+    ( Tree-con C ϕ)                             -- ...
 
-  Tree-con (σ S {me = f} h C) ϕ
-    = Oσ+ S
-    ( OΔσ- (λ ((_ , A) , _ , s) → Vec A (ϕ .σf _ f _ s))
-    ( Tree-con C ϕ))
+  Tree-con (σ S {me = f} h C) ϕ                           -- ...
+    = Oσ+ S                                               -- → (s : S) 
+    ( OΔσ- (λ ((_ , A) , _ , s) → Vec A (ϕ .σf _ f _ s))  -- → Vec A (f s)
+    ( Tree-con C ϕ))                                      -- ...
 
   Tree-con (δ {me = me} {iff = iff} g j R C) ϕ
     with ϕ .δf _ _ me    
-  ... | refl , refl , k
-    = ∙δ  (λ { ((_ , A) , _) → (_ , Vec A k) }) !
-          (Tree-desc R (ϕ ∘MetaF iff))
-          (λ _ _ → refl) (λ _ _ → refl)
-    ( Tree-con C ϕ)
+  ... | refl , refl , k                            -- ...
+    = ∙δ  (λ { ((_ , A) , _) → (_ , Vec A k) }) !  -- → Tree R (Vec A k)
+          (Tree-desc R (ϕ ∘MetaF iff))             
+          (λ _ _ → refl) (λ _ _ → refl)            
+    ( Tree-con C ϕ)                                -- ...
 \end{code}
 %</trieifyOD>
 
@@ -171,37 +171,37 @@ TrieOD N = Trie-desc N N (λ _ _ → con) id-MetaF
 %<*itrieify-con>
 \AgdaTarget{Trie-con}
 \begin{code}
-  Trie-con   : ∀ {Me} (N' : DescI Me ∅ ⊤) {re-var : Vxf id W V}
-              {re-var′ : Vxf ! V U} (C : ConI Me ∅ U ⊤)
-              (n : ∀ p w  → ⟦ C ⟧C (μ N') (tt , re-var′ (re-var {p = p} w)) _
-                          → μ N' tt tt)
-              (ϕ : MetaF Me Number)
-              →  ConOrnDesc {Δ = ∅ ▷ λ _ → Type} {W = W}
-                   {J = μ N' tt tt} Plain {re-par = id}
-                   re-var ! (toCon (Tree-con {re-var = re-var′} C ϕ))
-  Trie-con N' (𝟙 {me = k} j) n ϕ
-    = Oσ- _
-    ( 𝟙 (λ { (p , w) → n p w refl }) (λ _ → refl))
+  Trie-con   : ∀ {Me} (N : DescI Me ∅ ⊤) {re-var : Vxf id W V}
+             → {re-var′ : Vxf ! V U} (C : ConI Me ∅ U ⊤)
+             → (n : ∀ p w  →  ⟦ C ⟧C (μ N) (tt , re-var′ (re-var {p = p} w)) _
+                              → μ N tt tt)
+             → (ϕ : MetaF Me Number)
+             →  ConOrnDesc {Δ = ∅ ▷ λ _ → Type} {W = W} {J = μ N tt tt} Plain
+                {re-par = id} re-var ! (toCon (Tree-con {re-var = re-var′} C ϕ))
+  Trie-con N (𝟙 {me = k} j) n ϕ                     -- ... n : N
+    = Oσ- _                                         -- → Vec A k
+    ( 𝟙 (λ { (p , w) → n p w refl }) (λ _ → refl))  -- → Trie ND A n
 
-  Trie-con N' (ρ {me = k} g j C) n ϕ
-    = OΔσ+ (λ _ → μ N' tt tt)
-    ( ρ  (λ { (_ , A) → _ }) (λ { (p , w , i) → i })
-         (λ _ → refl) (λ _ → refl)
-    ( Trie-con N' C (λ { p (w , i) x → n p w (i , x) }) ϕ))
+  Trie-con N (ρ {me = k} g j C) n ϕ                         -- ... n : N × ⟦ C ⟧C N → N
+    = OΔσ+ (λ _ → μ N tt tt)                                -- → (i : N)
+    ( ρ  (λ { (_ , A) → _ }) (λ { (p , w , i) → i })        -- → Trie ND (Vec A k) i
+         (λ _ → refl) (λ _ → refl)                          
+    ( Trie-con N C (λ { p (w , i) x → n p w (i , x) }) ϕ))  -- ... curry n i
 
-  Trie-con N' (σ S {me = f} h C) n ϕ
-    = Oσ+ (S ∘ var→par _)
-    ( Oσ- _
-    ( Trie-con N' C (λ { p (w , s) x → n p w (s , x) }) ϕ))
+  Trie-con N (σ S {me = f} h C) n ϕ                         -- ... n : S × ⟦ C ⟧C N → N
+    = Oσ+ (S ∘ var→par _)                                   -- → (s : S)
+    ( Oσ- _                                                 -- → Vec A (f s)
+    ( Trie-con N C (λ { p (w , s) x → n p w (s , x) }) ϕ))  -- ... curry n s
 
-  Trie-con N' (δ {me = me} {iff = iff} g j R C) n ϕ
-    with ϕ .δf _ _ me    
-  ... | refl , refl , k
-    = OΔσ+ (λ _ → μ R tt tt)
-    ( ∙δ  (λ ((_ , A) , _) → (_ , Vec A k)) (λ { (p , w , i) → i })
+  Trie-con N (δ {me = me} {iff = iff} g j R C) n ϕ
+    with ϕ .δf _ _ me     
+  ... | refl , refl , k                                      -- ... n : R × ⟦ C ⟧C N → N
+    = OΔσ+ (λ _ → μ R tt tt)                                 -- → (r : R)
+    ( ∙δ  (λ ((_ , A) , _) → (_ , Vec A k))                  -- → Trie R (Vec A k) r
+          (λ { (p , w , i) → i })
             (Trie-desc R R (λ _ _ → con) (ϕ ∘MetaF iff))
             (λ _ _ → refl) (λ _ _ → refl)
-    ( Trie-con N' C (λ { p (w , i) x → n p w (i , x) }) ϕ))
+    ( Trie-con N C (λ { p (w , i) r → n p w (i , r) }) ϕ))   -- ... curry n r
 \end{code}
 %</itrieify-con>
 

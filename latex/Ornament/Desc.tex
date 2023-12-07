@@ -1275,15 +1275,20 @@ A DescI Me Γ I describes a PIType Γ I, augmented by the bundle Me, note that a
 \AgdaSymbol{\{}\AgdaBound{me}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Me}\AgdaSpace{}%
-\AgdaSymbol{.}\AgdaField{𝟙i}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{.}\AgdaField{𝟙i}\AgdaSymbol{\}}\<%
+\\
+%
+\>[7]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Γ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\&}}\AgdaSpace{}%
 \AgdaBound{V}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊢}}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSymbol{)}\<%
+\\
+%
+\>[7]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{ConI}\AgdaSpace{}%
 \AgdaBound{Me}\AgdaSpace{}%
 \AgdaBound{Γ}\AgdaSpace{}%
@@ -1301,7 +1306,8 @@ A DescI Me Γ I describes a PIType Γ I, augmented by the bundle Me, note that a
 \AgdaSymbol{.}\AgdaField{ρi}\AgdaSymbol{\}}\<%
 \\
 %
-\>[10]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
+\>[7]\AgdaSymbol{→}%
+\>[11]\AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Cxf}\AgdaSpace{}%
 \AgdaBound{Γ}\AgdaSpace{}%
@@ -1346,6 +1352,7 @@ A DescI Me Γ I describes a PIType Γ I, augmented by the bundle Me, note that a
 \AgdaBound{S}\AgdaSymbol{\}}\<%
 \\
 %
+\>[7]\AgdaSymbol{→}%
 \>[10]\AgdaSymbol{(}\AgdaBound{w}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Vxf}\AgdaSpace{}%
@@ -1388,6 +1395,7 @@ A DescI Me Γ I describes a PIType Γ I, augmented by the bundle Me, note that a
 \AgdaBound{Me}\AgdaSymbol{\}}\<%
 \\
 %
+\>[7]\AgdaSymbol{→}%
 \>[10]\AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Γ}\AgdaSpace{}%
@@ -1407,6 +1415,7 @@ A DescI Me Γ I describes a PIType Γ I, augmented by the bundle Me, note that a
 \AgdaGeneralizable{J}\AgdaSymbol{)}\<%
 \\
 %
+\>[7]\AgdaSymbol{→}%
 \>[10]\AgdaSymbol{(}\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{DescI}\AgdaSpace{}%
@@ -2277,7 +2286,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \>[11]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaNumber{0}\AgdaSymbol{)}%
 \>[47]\AgdaComment{--\ :\ Vec\ A\ zero}\<%
@@ -2300,7 +2309,7 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \>[11]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaFunction{σ+}%
 \>[17]\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{ℕ}\AgdaSymbol{)}%
 \>[47]\AgdaComment{--\ →\ (n\ :\ ℕ)}\<%
@@ -3060,14 +3069,14 @@ using them, we define "smart" σ and δ, where the + variant retains the last va
 \AgdaRecord{⊤}\<%
 \\
 \>[0]\AgdaFunction{NatND}%
-\>[2036I]\AgdaSymbol{=}\AgdaSpace{}%
+\>[2035I]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{𝟙}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaNumber{0}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \\
-\>[.][@{}l@{}]\<[2036I]%
+\>[.][@{}l@{}]\<[2035I]%
 \>[6]\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
 \AgdaFunction{ρ0}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{me}\AgdaSpace{}%
