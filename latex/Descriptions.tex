@@ -83,7 +83,7 @@ Uniformly recursive types then simply become the nested types which only use the
 \subsubsection{Composite types}
 In \autoref{ssec:numbers}, we defined the number system \AF{Carpal-num} as a \emph{composite type}, in the sense that its description references another concrete type \AD{Phalanx}. By the same argument as there, the description \AD{Carpal-num} which relies on \AF{toℕ-Phalanx} to describe the value of \AD{Phalanx}, turns out to be too imprecise to recover the complete numerical representation generically. 
 
-In comparison, generic programming facilities like the deriving-mechanism in Haskell allow for code like
+In comparison, generic programming facilities like the deriving-mechanism in Haskell allow for code like:
 \begin{verbatim}
 {-# LANGUAGE DeriveFunctor #-}
 
@@ -94,7 +94,7 @@ In this example, we can define lists of even numbers of elements as lists of pai
 
 Inlining the constructors of \AD{Phalanx} into \AD{Carpal} does allow generic constructions to see the structure of \AD{Phalanx}, but is undesirable in this case and in general. Here, it would yield a type with two of the original constructors of \AD{Carpal}, and 9 more constructors for each combination of constructors of \AD{Phalanx}\footnote{If working with 11 constructors sounds too feasible, consider that defining addition on types like \AD{Carpal} (or concatenation on its numerical representation) is not (yet) generic and, if fully written out, will instead demand 121 manually written cases.}.
 
-In order to make the descriptions of fields that have them visible to generics, we simply add a more specific former of fields to \AD{U-ix} and call the resulting universe \AD{U-comp} for now. The new former \AIC{δ} in \AD{U-comp} is specialized to adding \emph{composite fields} from provided descriptions
+In order to make the descriptions of fields that have them visible to generics, we simply add a more specific former of fields to \AD{U-ix} and call the resulting universe \AD{U-comp} for now. The new former \AIC{δ} in \AD{U-comp} is specialized to adding \emph{composite fields} from provided descriptions:
 \ExecuteMetaData[Tex/Descriptions/Composite]{delta}
 This former then also has to take functions \AV{d} and \AV{j} to determine the parameters and indices passed to \AV{R}. A composite field encoded by \AIC{δ} is then interpreted identically to how it would be if we used \AIC{σ} and \AD{μ} instead\footnote{The omission of \AD{μ}\ \AV{R} from the variable telescope is intentional. While adding it is workable, it also significantly complicates the treatment of ornaments.}:
 \ExecuteMetaData[Tex/Descriptions/Composite]{delta-int}
